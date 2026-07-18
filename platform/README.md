@@ -49,6 +49,7 @@ Opening `file://` HTML also works after a hard refresh when scripts change.
 | Blame & bisect | [`tools/blame-bisect/`](tools/blame-bisect/) | blame, bisect |
 | Remotes, PRs & submodules | [`tools/remotes/`](tools/remotes/) | checklist against the live sandbox |
 | Pre-push checklist, Make & env | [`tools/workflow/`](tools/workflow/) | check_ready, make, env, dry-run clean |
+| Truth-table builder | [`tools/truth-table/`](tools/truth-table/) | SOP/POS, expression fill, don’t-cares |
 
 ## Full tools catalog
 

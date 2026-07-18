@@ -109,7 +109,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Truth-table builder | `truth-table` | **Planned** | Enter minterms / expressions; see SOP/POS and live evaluation |
+| Truth-table builder | `truth-table` | **Shipped** | Enter outputs / don’t-cares; SOP/POS; fill from expression |
 | K-map minimizer (2–4 vars) | `kmap` | **Planned** | Visual grouping → minimal expression |
 | Boolean law playground | `boolean-laws` | **Planned** | Step-through De Morgan and algebra rewrites |
 
@@ -231,7 +231,7 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` / `gate-sandbox`, `radix-converter`, `verilog-literals`, `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-sandbox`, `radix-converter`, `verilog-literals`, `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
 | **C** | Datapath & memory | `rca-animator`, `alu-explorer`, `fifo-lab`, `mem-map`, `cache-walk` |
 | **D** | HDL hygiene & protocols | `latch-risk`, `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
@@ -261,8 +261,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 10 |
-| Planned | 36 |
+| Shipped | 11 |
+| Planned | 35 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).
