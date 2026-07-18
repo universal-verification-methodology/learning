@@ -42,7 +42,41 @@
 }
 
 .tt-table-wrap {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: min(70vh, 520px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.tt-table-wrap .tt-table {
+  border: none;
+}
+.tt-table-wrap .tt-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.tt-form-block pre {
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: var(--term-bg);
+  color: var(--term-fg);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 2.6rem;
+  max-height: 14rem;
+  overflow: auto;
+}
+
+.tt-hint.tt-warn {
+  color: var(--warn);
+  background: var(--warn-bg);
+  padding: 0.4rem 0.55rem;
+  border-radius: 6px;
+  margin: 0 0 0.65rem;
 }
 
 .tt-table {
@@ -110,18 +144,6 @@
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 0.3rem;
-}
-.tt-form-block pre {
-  margin: 0;
-  padding: 0.65rem 0.75rem;
-  background: var(--term-bg);
-  color: var(--term-fg);
-  border-radius: 8px;
-  font-family: var(--mono);
-  font-size: 0.84rem;
-  white-space: pre-wrap;
-  word-break: break-word;
-  min-height: 2.6rem;
 }
 
 .tt-expr-row {

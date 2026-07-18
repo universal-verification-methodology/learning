@@ -1,5 +1,7 @@
 (() => {
-  const DEFAULT_NAMES = ["A", "B", "C", "D"];
+  const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+  const MIN_N = 2;
+  const MAX_N = 10;
   const CHALLENGE = {
     n: 3,
     names: ["A", "B", "C"],
@@ -19,12 +21,18 @@
   const root = document.getElementById("tt-root");
 
   function resize(n) {
+    n = Math.max(MIN_N, Math.min(MAX_N, n | 0));
     state.n = n;
     state.names = DEFAULT_NAMES.slice(0, n).map((d, i) => state.names[i] || d);
     const rows = 1 << n;
     const next = Array(rows).fill(0);
     for (let i = 0; i < Math.min(rows, state.outs.length); i++) next[i] = state.outs[i];
     state.outs = next;
+  }
+
+  function formatForm(text, maxLen) {
+    if (text.length <= maxLen) return text;
+    return text.slice(0, maxLen) + " …";
   }
 
   function sopPos() {
@@ -192,6 +200,11 @@
   function render() {
     const forms = sopPos();
     const rows = 1 << state.n;
+    const formCap = state.n >= 7 ? 400 : 2000;
+    const nOptions = Array.from({ length: MAX_N - MIN_N + 1 }, (_, i) => {
+      const v = MIN_N + i;
+      return `<option value="${v}" ${state.n === v ? "selected" : ""}>${v} (${1 << v} rows)</option>`;
+    }).join("");
 
     root.innerHTML = `
       <div class="challenge">
@@ -210,11 +223,7 @@
             <div class="tt-controls">
               <div class="tt-field">
                 <label for="tt-n">Variables</label>
-                <select id="tt-n">
-                  <option value="2" ${state.n === 2 ? "selected" : ""}>2</option>
-                  <option value="3" ${state.n === 3 ? "selected" : ""}>3</option>
-                  <option value="4" ${state.n === 4 ? "selected" : ""}>4</option>
-                </select>
+                <select id="tt-n">${nOptions}</select>
               </div>
               <div class="tt-field">
                 <label>Names</label>
@@ -226,6 +235,11 @@
                 <button type="button" class="btn btn-ghost" id="tt-clearx">Clear X</button>
               </div>
             </div>
+            ${
+              state.n >= 7
+                ? `<p class="tt-hint tt-warn">${rows} rows — scroll the table; prefer “Fill from expression” for large n.</p>`
+                : ""
+            }
             <div class="tt-table-wrap">
               <table class="tt-table">
                 <thead>
@@ -264,13 +278,17 @@
           <div class="panel-body tt-forms">
             <div class="tt-form-block">
               <label>SOP (sum of products)</label>
-              <pre>${escapeHtml(forms.sop)}</pre>
+              <pre>${escapeHtml(formatForm(forms.sop, formCap))}</pre>
             </div>
             <div class="tt-form-block">
               <label>POS (product of sums)</label>
-              <pre>${escapeHtml(forms.pos)}</pre>
+              <pre>${escapeHtml(formatForm(forms.pos, formCap))}</pre>
             </div>
-            <p class="tt-hint">${forms.ones} minterm(s), ${forms.zeros} maxterm(s). X rows ignored.</p>
+            <p class="tt-hint">${forms.ones} minterm(s), ${forms.zeros} maxterm(s). X rows ignored.${
+              forms.sop.length > formCap || forms.pos.length > formCap
+                ? " Long forms are truncated in the display."
+                : ""
+            }</p>
           </div>
         </div>
       </div>
