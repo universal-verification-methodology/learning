@@ -1,5 +1,6 @@
-(() => {
-  const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+import { loadHdlEngine } from "../../assets/hdl-engine.js";
+
+const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
   const MIN_N = 2;
   const MAX_N = 10;
 
@@ -140,6 +141,11 @@
   };
 
   let fillTimer = null;
+  /** @type {null | { expr: string, namesKey: string, evalAll: () => Array<0|1|"X">, verilogExpr: string }} */
+  let combCache = null;
+  /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
+  let hdl = null;
+  let engineLabel = "loading…";
   const root = document.getElementById("tt-root");
   const STORAGE_KEY = "ddv-truth-table-v1";
 
@@ -210,12 +216,13 @@
     state.liveFill = true;
     state.syncExprFromTable = true;
     state.lastDriver = "expr";
+    combCache = null;
     try {
       applyExprToOuts();
     } catch {
       state.outs = [0, 0, 0, 1];
     }
-    state.msg = "Starter example: F = A & B. Edit F or the expression — both stay in sync.";
+    state.msg = "Starter example: F = A & B (HDL engine). Edit F or the expression — both stay in sync.";
     state.msgOk = true;
   }
 
@@ -326,6 +333,7 @@
     const next = Array(rows).fill(0);
     for (let i = 0; i < Math.min(rows, state.outs.length); i++) next[i] = state.outs[i];
     state.outs = next;
+    combCache = null;
   }
 
   function formatForm(text, maxLen) {
@@ -396,92 +404,26 @@
     return terms.length ? terms.join(" & ") : "1";
   }
 
-  function evalBool(s) {
-    let i = 0;
-    function peek() {
-      while (s[i] === " ") i++;
-      return s[i];
-    }
-    function orExpr() {
-      let v = andExpr();
-      while (peek() === "|") {
-        i++;
-        v = v | andExpr();
-      }
-      return v;
-    }
-    function andExpr() {
-      let v = xorExpr();
-      while (peek() === "&") {
-        i++;
-        v = v & xorExpr();
-      }
-      return v;
-    }
-    function xorExpr() {
-      let v = unary();
-      while (peek() === "^") {
-        i++;
-        v = v ^ unary();
-      }
-      return v;
-    }
-    function unary() {
-      if (peek() === "!") {
-        i++;
-        return unary() ^ 1;
-      }
-      return primary();
-    }
-    function primary() {
-      const c = peek();
-      if (c === "(") {
-        i++;
-        const v = orExpr();
-        if (peek() !== ")") throw new Error("Missing )");
-        i++;
-        return v;
-      }
-      if (c === "0" || c === "1") {
-        i++;
-        return c === "1" ? 1 : 0;
-      }
-      throw new Error(`Unexpected '${c || "EOF"}'`);
-    }
-    const v = orExpr();
-    if (peek()) throw new Error("Trailing characters");
-    return v;
-  }
-
-  function prepareExpr(expr, bits) {
-    let s = expr.trim();
-    if (!s) throw new Error("Empty expression");
-    const sorted = state.names
-      .map((name, idx) => ({ name, idx }))
-      .sort((a, b) => b.name.length - a.name.length);
-    for (const { name, idx } of sorted) {
-      const bit = String(bits[idx]);
-      const re = new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g");
-      s = s.replace(re, bit);
-    }
-    s = s.replace(/~/g, "!");
-    s = s.replace(/(\d)'/g, (_, d) => (d === "1" ? "0" : "1"));
-    s = s.replace(/!(\d)/g, (_, d) => (d === "1" ? "0" : "1"));
-    s = s.replace(/·/g, "&").replace(/\*/g, "&").replace(/\+/g, "|");
-    s = s.replace(/(\d)\s*(\d)/g, "$1&$2");
-    s = s.replace(/(\))\s*(\d)/g, "$1&$2");
-    s = s.replace(/(\d)\s*(\()/g, "$1&$2");
-    s = s.replace(/(\))\s*(\()/g, "$1&$2");
-    return s;
+  function namesKey() {
+    return state.names.slice(0, state.n).join("\0");
   }
 
   function applyExprToOuts() {
-    const rows = 1 << state.n;
-    for (let i = 0; i < rows; i++) {
-      const bits = [];
-      for (let b = 0; b < state.n; b++) bits.push((i >> (state.n - 1 - b)) & 1);
-      state.outs[i] = evalBool(prepareExpr(state.expr, bits));
+    if (!hdl || typeof hdl.createCombEvaluator !== "function") {
+      throw new Error("HDL engine not loaded");
     }
+    const names = state.names.slice(0, state.n);
+    const key = namesKey();
+    if (!combCache || combCache.expr !== state.expr || combCache.namesKey !== key) {
+      const ev = hdl.createCombEvaluator(state.expr, names);
+      combCache = {
+        expr: state.expr,
+        namesKey: key,
+        evalAll: () => ev.evalAll(),
+        verilogExpr: ev.verilogExpr,
+      };
+    }
+    state.outs = combCache.evalAll();
   }
 
   function fillFromExpr(opts = {}) {
@@ -498,7 +440,9 @@
       }
       applyExprToOuts();
       state.lastDriver = "expr";
-      state.msg = silent ? "Live update from expression." : "Table filled from expression.";
+      state.msg = silent
+        ? "Live update from HDL engine."
+        : "Table filled from expression (HDL engine).";
       state.msgOk = true;
       persist();
       render({ restoreCaret: sel });
@@ -637,7 +581,12 @@
 
     root.innerHTML = `
       <div class="starter-note no-print-hide">
-        <p><strong>Starter example:</strong> two inputs, expression <code>A &amp; B</code> fills the table. Challenges reset to a blank table when you Start.</p>
+        <p><strong>Starter example:</strong> two inputs, expression <code>A &amp; B</code> fills the table via the <strong>HDL engine</strong> (<code>assign F = …</code>). Challenges reset to a blank table when you Start.</p>
+        <p class="tt-hint">Engine: ${escapeHtml(engineLabel)}${
+          combCache && combCache.verilogExpr
+            ? ` · Verilog: <code>${escapeHtml(combCache.verilogExpr)}</code>`
+            : ""
+        }</p>
         <button type="button" class="btn btn-secondary" id="tt-starter">Load starter example</button>
       </div>
 
@@ -649,17 +598,17 @@
         </div>
         <p>${escapeHtml(ch.prompt)}</p>
         ${
-          state.challengeOn && state.challengeHint
-            ? `<p class="tt-chal-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
-            : ""
-        }
-        <div class="tool-actions">
-          <button type="button" class="btn btn-secondary" id="tt-chal-start">
-            ${state.challengeOn ? "Restart" : "Start"}
-          </button>
-          <button type="button" class="btn btn-ghost" id="tt-chal-hint" ${state.challengeOn ? "" : "disabled"}>
-            ${state.challengeHint ? "Hide hint" : "Show hint"}
-          </button>
+        state.challengeHint
+          ? `<p class="chal-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
+          : ""
+      }
+      <div class="tool-actions">
+        <button type="button" class="btn btn-secondary" id="tt-chal-start">
+          ${state.challengeOn ? "Restart" : "Start"}
+        </button>
+        <button type="button" class="btn btn-ghost" id="tt-chal-hint">
+          ${state.challengeHint ? "Hide hint" : "Show hint"}
+        </button>
           <button type="button" class="btn btn-ghost" id="tt-chal-next" ${passed ? "" : "disabled"}>
             Next challenge
           </button>
@@ -818,6 +767,7 @@
       inp.setAttribute("aria-label", `Variable ${idx + 1} name`);
       inp.addEventListener("change", () => {
         state.names[idx] = inp.value.trim() || DEFAULT_NAMES[idx];
+        combCache = null;
         if (state.lastDriver === "expr" && state.liveFill && state.expr.trim()) {
           fillFromExpr({ silent: true });
         } else if (state.syncExprFromTable) {
@@ -913,7 +863,6 @@
       render();
     });
     root.querySelector("#tt-chal-hint").addEventListener("click", () => {
-      if (!state.challengeOn) return;
       state.challengeHint = !state.challengeHint;
       render();
     });
@@ -943,8 +892,22 @@
     checkChallenge();
   }
 
-  // Boot: restore browser session, else starter example
-  if (!tryRestoreLocal()) loadStarter();
-  persist();
-  render();
-})();
+  // Boot after HDL engine loads
+  async function boot() {
+    root.innerHTML = `<p class="tt-hint">Loading HDL engine…</p>`;
+    try {
+      hdl = await loadHdlEngine();
+      engineLabel = "systemverilog-simulator (createCombEvaluator)";
+    } catch (e) {
+      engineLabel = "unavailable";
+      root.innerHTML = `<p class="tt-hint tt-warn">Could not load HDL engine: ${escapeHtml(
+        e.message || String(e)
+      )}</p>`;
+      return;
+    }
+    if (!tryRestoreLocal()) loadStarter();
+    persist();
+    render();
+  }
+
+  boot();

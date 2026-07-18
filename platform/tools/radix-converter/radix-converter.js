@@ -1,10 +1,15 @@
-(() => {
-  const MIN_W = 1;
-  const MAX_W = 32;
-  const STORAGE_KEY = "ddv-radix-converter-v1";
-  const CLEARED_KEY = "ddv-radix-converter-cleared-v1";
+import { loadHdlEngine } from "../../assets/hdl-engine.js";
 
-  function loadCleared() {
+const MIN_W = 1;
+const MAX_W = 32;
+const STORAGE_KEY = "ddv-radix-converter-v1";
+const CLEARED_KEY = "ddv-radix-converter-cleared-v1";
+
+/** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
+let hdl = null;
+let engineLabel = "loading…";
+
+function loadCleared() {
     try {
       const raw = localStorage.getItem(CLEARED_KEY);
       if (!raw) return [];
@@ -23,26 +28,29 @@
     }
   }
 
+  /** @param {bigint|number} n @param {number} w */
+  function valueOf(n, w) {
+    return hdl.Value.fromUint(n, w);
+  }
+
   function mask(w) {
-    return (1n << BigInt(w)) - 1n;
+    return valueOf((1n << BigInt(w)) - 1n, w).toUint();
   }
 
   function toSigned(u, w) {
-    const msb = 1n << BigInt(w - 1);
-    return u & msb ? u - (1n << BigInt(w)) : u;
+    return valueOf(u, w).toSigned();
   }
 
   function clampUnsigned(v, w) {
-    return v & mask(w);
+    return valueOf(v, w).toUint();
   }
 
   function padBin(u, w) {
-    return u.toString(2).padStart(w, "0");
+    return valueOf(u, w).bits;
   }
 
   function padHex(u, w) {
-    const nibbles = Math.ceil(w / 4);
-    return u.toString(16).toUpperCase().padStart(nibbles, "0");
+    return valueOf(u, w).toString(16);
   }
 
   function groupBits(bin) {
@@ -199,7 +207,12 @@
     const s = stripSep(raw);
     if (!s) throw new Error("Empty binary");
     if (!/^[01]+$/.test(s)) throw new Error("Binary allows only 0/1");
-    return BigInt("0b" + s);
+    const lit = `${state.width}'b${s}`;
+    const p = hdl.parseLiteral(lit);
+    if (!p.ok) throw new Error(p.error);
+    const v = p.value.toUint();
+    if (v == null) throw new Error("Binary contains X/Z");
+    return { v, truncated: !!p.truncated || s.length > state.width };
   }
 
   function parseHex(raw) {
@@ -207,16 +220,27 @@
     if (!s) throw new Error("Empty hex");
     if (s.startsWith("0x") || s.startsWith("0X")) s = s.slice(2);
     if (!/^[0-9a-fA-F]+$/.test(s)) throw new Error("Invalid hex digits");
-    return BigInt("0x" + s);
+    const lit = `${state.width}'h${s}`;
+    const p = hdl.parseLiteral(lit);
+    if (!p.ok) throw new Error(p.error);
+    const v = p.value.toUint();
+    if (v == null) throw new Error("Hex contains X/Z");
+    return { v, truncated: !!p.truncated };
   }
 
   function parseDec(raw, signed) {
     const s = String(raw).trim().replace(/_/g, "");
     if (!s || s === "-" || s === "+") throw new Error("Empty decimal");
     if (!/^[+-]?\d+$/.test(s)) throw new Error("Invalid decimal");
-    const v = BigInt(s);
-    if (!signed && v < 0n) throw new Error("Unsigned cannot be negative");
-    return v;
+    const w = state.width;
+    if (!signed && s.startsWith("-")) throw new Error("Unsigned cannot be negative");
+    const lit = signed ? `${w}'sd${s}` : `${w}'d${s.replace(/^\+/, "")}`;
+    const p = hdl.parseLiteral(lit);
+    if (!p.ok) throw new Error(p.error);
+    const v = p.value.toUint();
+    if (v == null) throw new Error("Decimal parse failed");
+    const asSigned = p.value.toSigned();
+    return { v, asSigned, raw: BigInt(s) };
   }
 
   function applyFrom(field) {
@@ -226,20 +250,29 @@
       let v;
       let overflow = false;
       if (field === "bin") {
-        v = parseBin(state.draft.bin);
-        if (v > maxU || state.draft.bin.replace(/[_\s]/g, "").length > w) overflow = true;
+        const r = parseBin(state.draft.bin);
+        v = r.v;
+        overflow = r.truncated || v > maxU;
       } else if (field === "hex") {
-        v = parseHex(state.draft.hex);
-        if (v > maxU) overflow = true;
+        const r = parseHex(state.draft.hex);
+        v = r.v;
+        // Also flag if unsized magnitude would exceed before size clamp
+        const full = stripSep(state.draft.hex).replace(/^0[xX]/, "");
+        if (/^[0-9a-fA-F]+$/.test(full)) {
+          const wide = BigInt("0x" + full);
+          if (wide > maxU) overflow = true;
+        }
+        overflow = overflow || r.truncated;
       } else if (field === "udec") {
-        v = parseDec(state.draft.udec, false);
-        if (v > maxU) overflow = true;
+        const r = parseDec(state.draft.udec, false);
+        v = r.v;
+        if (r.raw > maxU) overflow = true;
       } else if (field === "sdec") {
-        const s = parseDec(state.draft.sdec, true);
+        const r = parseDec(state.draft.sdec, true);
         const minS = -(1n << BigInt(w - 1));
         const maxS = (1n << BigInt(w - 1)) - 1n;
-        if (s < minS || s > maxS) overflow = true;
-        v = BigInt.asUintN(w, s);
+        if (r.raw < minS || r.raw > maxS) overflow = true;
+        v = r.v;
       } else return;
       state.fieldError[field] = "";
       setBits(v, { overflow, driver: field });
@@ -365,7 +398,7 @@
     state.lastDriver = "starter";
     syncDraftsFromBits();
     state.status =
-      "Starter example: 8-bit 42 = 0x2A = 0010_1010 (unsigned). Edit any radix or click bits.";
+      "Starter example: 8-bit 42 = 0x2A = 0010_1010 (HDL Value / parseLiteral). Edit any radix or click bits.";
     state.statusKind = "ok";
     state.msg = "";
   }
@@ -436,7 +469,8 @@
 
     root.innerHTML = `
       <div class="starter-note no-print">
-        <p><strong>Starter example:</strong> 8-bit value <code>42</code> / <code>0x2A</code>. Change width, type hex or signed decimal, or click bits — all views stay linked.</p>
+        <p><strong>Starter example:</strong> 8-bit value <code>42</code> / <code>0x2A</code> via the <strong>HDL engine</strong> (<code>Value</code> + <code>parseLiteral</code>). Change width, type hex or signed decimal, or click bits.</p>
+        <p class="rc-hint">Engine: ${escapeHtml(engineLabel)}</p>
         <button type="button" class="btn btn-secondary" id="rc-starter">Load starter example</button>
       </div>
 
@@ -448,17 +482,17 @@
         <div class="rc-chal-catalog">${chalList}</div>
         <p class="rc-chal-prompt"><strong>${escapeHtml(ch.title)}:</strong> ${escapeHtml(ch.prompt)}</p>
         ${
-          state.challengeOn && state.challengeHint
-            ? `<p class="rc-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
+          state.challengeHint
+            ? `<p class="chal-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
             : ""
         }
         <div class="tool-actions">
           <button type="button" class="btn btn-secondary" id="rc-chal-start">
             ${state.challengeOn ? "Restart" : "Start selected"}
           </button>
-          <button type="button" class="btn btn-ghost" id="rc-chal-hint" ${
-            state.challengeOn ? "" : "disabled"
-          }>${state.challengeHint ? "Hide hint" : "Show hint"}</button>
+          <button type="button" class="btn btn-ghost" id="rc-chal-hint">${
+            state.challengeHint ? "Hide hint" : "Show hint"
+          }</button>
           <button type="button" class="btn btn-ghost" id="rc-chal-next" ${passed ? "" : "disabled"}>Next</button>
           <button type="button" class="btn btn-ghost" id="rc-chal-stop" ${
             state.challengeOn ? "" : "disabled"
@@ -625,7 +659,6 @@
       render();
     });
     root.querySelector("#rc-chal-hint").addEventListener("click", () => {
-      if (!state.challengeOn) return;
       state.challengeHint = !state.challengeHint;
       render();
     });
@@ -674,6 +707,21 @@
     root.querySelector("#rc-starter-2").addEventListener("click", onStarter);
   }
 
-  if (!tryRestore()) loadStarter();
-  render();
-})();
+  async function boot() {
+    root.innerHTML = `<p class="rc-hint">Loading HDL engine…</p>`;
+    try {
+      hdl = await loadHdlEngine();
+      engineLabel = "systemverilog-simulator (Value / parseLiteral)";
+    } catch (e) {
+      engineLabel = "unavailable";
+      root.innerHTML = `<p class="rc-hint" style="color:#b00">Could not load HDL engine: ${escapeHtml(
+        e.message || String(e)
+      )}</p>`;
+      return;
+    }
+    if (!tryRestore()) loadStarter();
+    else syncDraftsFromBits();
+    render();
+  }
+
+  boot();

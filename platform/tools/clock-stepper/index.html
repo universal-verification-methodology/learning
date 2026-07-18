@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gate composer — Digital Design and Verification Platform</title>
+  <title>Clock-edge stepper — Digital Design and Verification Platform</title>
   <link rel="stylesheet" href="../../assets/site.css">
   <link rel="stylesheet" href="../../assets/tools-shared.css">
-  <link rel="stylesheet" href="gate-composer.css">
+  <link rel="stylesheet" href="clock-stepper.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -22,26 +22,25 @@
       <nav aria-label="Breadcrumb">
         <a href="../../index.html">Home</a>
         <a href="../index.html">Tools</a>
-        <span class="here">Gate composer</span>
+        <span class="here">Clock stepper</span>
       </nav>
     </div>
   </header>
   <main id="main">
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
-      <h1>Gate composer</h1>
+      <h1>Clock-edge stepper</h1>
       <p class="lead">
-        Build a small combinational net from AND, OR, XOR, and NOT.
-        The netlist is compiled to continuous <code>assign</code>s by the HDL engine.
-        Nineteen challenges from AND through 2-bit equality.
+        Drive a forever clock, poke data, and advance to the next <code>posedge</code> —
+        the same step / edge / poke idea as the HDL workbench, focused on one register or counter.
       </p>
     </section>
-    <div id="gc-root"></div>
+    <div id="cs-root"></div>
   </main>
   <footer class="site-footer">
     Digital Design and Verification Platform — client-side concept labs.
   </footer>
-  <script type="module" src="gate-composer.js"></script>
+  <script type="module" src="clock-stepper.js"></script>
   <script src="../../assets/site.js"></script>
 </body>
 </html>

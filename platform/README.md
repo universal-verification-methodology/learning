@@ -49,13 +49,17 @@ Opening `file://` HTML also works after a hard refresh when scripts change.
 | Blame & bisect | [`tools/blame-bisect/`](tools/blame-bisect/) | blame, bisect |
 | Remotes, PRs & submodules | [`tools/remotes/`](tools/remotes/) | checklist against the live sandbox |
 | Pre-push checklist, Make & env | [`tools/workflow/`](tools/workflow/) | check_ready, make, env, dry-run clean |
-| Truth-table builder | [`tools/truth-table/`](tools/truth-table/) | SOP/POS, expression fill, don’t-cares |
+| Truth-table builder | [`tools/truth-table/`](tools/truth-table/) | HDL `createCombEvaluator` |
+| Gate composer | [`tools/gate-composer/`](tools/gate-composer/) | HDL `createGateNetEvaluator` |
+| Verilog literals | [`tools/verilog-literals/`](tools/verilog-literals/) | HDL `parseLiteral` |
+| Radix converter | [`tools/radix-converter/`](tools/radix-converter/) | HDL `Value` / `parseLiteral` |
+| Clock-edge stepper | [`tools/clock-stepper/`](tools/clock-stepper/) | HDL `createSession` · Step / ↗posedge |
 
 ## Full tools catalog
 
 Shipped **and** planned labs by concept domain: **[`tools.md`](tools.md)**. Browseable list (with “Coming soon”): [`tools/index.html`](tools/index.html).
 
-Long-term **client-side teaching HDL simulator** plan: **[`simulator.md`](simulator.md)** (separate `browser-hdl-sim` repo later).
+HDL engine integration: **[`simulator.md`](simulator.md)** — public [`systemverilog-simulator`](https://github.com/universal-verification-methodology/systemverilog-simulator) `engine.mjs` (vendored under `vendor/`).
 
 ## GitHub sandbox
 
@@ -82,7 +86,8 @@ Course index: [`courses/learn_unix_git/SANDBOX.md`](../courses/learn_unix_git/SA
 platform/
 ├── index.html
 ├── tools.md          # canonical shipped + planned catalog
-├── simulator.md      # client-side teaching HDL sim plan (external repo later)
+├── simulator.md      # HDL engine integration (public systemverilog-simulator)
+├── vendor/           # pinned engine.mjs (refresh from public release)
 ├── assets/
 ├── tools/
 │   ├── index.html    # browsable domain list

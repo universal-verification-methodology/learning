@@ -222,3 +222,17 @@
 .starter-note strong {
   color: var(--ink);
 }
+
+/* Challenge “Show hint” callout (shared across labs) */
+.chal-hint {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  background: var(--warn-bg);
+  color: var(--ink);
+  border-left: 3px solid var(--signal);
+  font-size: 0.9rem;
+}
+.chal-hint strong {
+  color: var(--ink);
+}

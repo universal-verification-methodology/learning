@@ -1,31 +1,36 @@
-(() => {
-  const STORAGE_KEY = "ddv-verilog-literals-v1";
-  const CLEARED_KEY = "ddv-verilog-literals-cleared-v1";
-  const MAX_W = 64;
-  const STARTER = "8'h2A";
+import { loadHdlEngine } from "../../assets/hdl-engine.js";
 
-  const PRESETS = [
-    "4'b1010",
-    "8'hFF",
-    "8'h2A",
-    "8'H2a",
-    "16'd42",
-    "8'sd-1",
-    "8'sb1111_1111",
-    "4'shF",
-    "6'o17",
-    "12'hABC",
-    "'b1010",
-    "'o17",
-    "'d255",
-    "'hF",
-    "42",
-    "5'b10x0z",
-    "4'b10??",
-    "32'hDEAD_BEEF",
-  ];
+const STORAGE_KEY = "ddv-verilog-literals-v1";
+const CLEARED_KEY = "ddv-verilog-literals-cleared-v1";
+const STARTER = "8'h2A";
+const BASE_CHAR = { 2: "b", 8: "o", 10: "d", 16: "h" };
 
-  function loadCleared() {
+const PRESETS = [
+  "4'b1010",
+  "8'hFF",
+  "8'h2A",
+  "8'H2a",
+  "16'd42",
+  "8'sd-1",
+  "8'sb1111_1111",
+  "4'shF",
+  "6'o17",
+  "12'hABC",
+  "'b1010",
+  "'o17",
+  "'d255",
+  "'hF",
+  "42",
+  "5'b10x0z",
+  "4'b10??",
+  "32'hDEAD_BEEF",
+];
+
+/** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
+let hdl = null;
+let engineLabel = "loading…";
+
+function loadCleared() {
     try {
       const raw = localStorage.getItem(CLEARED_KEY);
       if (!raw) return [];
@@ -48,24 +53,6 @@
     return bin.replace(/(.{4})(?=.)/g, "$1_");
   }
 
-  function digitValue(ch, base) {
-    const c = ch.toLowerCase();
-    if (c === "x" || c === "z" || c === "?") return c === "?" ? "x" : c;
-    let v;
-    if (c >= "0" && c <= "9") v = c.charCodeAt(0) - 48;
-    else if (c >= "a" && c <= "f") v = c.charCodeAt(0) - 87;
-    else throw new Error(`Invalid digit '${ch}' for base`);
-    if (v >= base) throw new Error(`Digit '${ch}' out of range for base ${base}`);
-    return v;
-  }
-
-  function bitsPerDigit(base) {
-    if (base === 2) return 1;
-    if (base === 8) return 3;
-    if (base === 16) return 4;
-    return 0; // decimal handled separately
-  }
-
   function toSigned(u, w) {
     if (w <= 0) return 0n;
     const msb = 1n << BigInt(w - 1);
@@ -73,158 +60,41 @@
   }
 
   /**
-   * Parse a Verilog/SV based or simple decimal literal.
-   * Returns { ok, error, size, sized, signed, base, baseChar, digits, bits, value, truncated, extended, unsized }
-   * bits: string MSB-first of 0/1/x/z length = size (or inferred)
+   * Map engine parseLiteral result → UI shape (bits string + BigInt value).
+   * @param {ReturnType<NonNullable<typeof hdl>["parseLiteral"]>} raw
    */
-  function parseLiteral(text) {
-    const raw = String(text).trim().replace(/\s+/g, "");
-    if (!raw) return { ok: false, error: "Enter a literal" };
-
-    // Plain decimal (no ')
-    if (/^[+-]?\d+$/.test(raw)) {
-      const v = BigInt(raw);
-      const abs = v < 0n ? -v : v;
-      let width = abs.toString(2).length || 1;
-      if (v < 0n) width += 1; // sign bit at least
-      if (width > MAX_W) return { ok: false, error: `Width > ${MAX_W} bits` };
-      const u = BigInt.asUintN(width, v);
-      const bits = u.toString(2).padStart(width, "0");
-      return {
-        ok: true,
-        size: width,
-        sized: false,
-        signed: v < 0n,
-        base: 10,
-        baseChar: "d",
-        digits: raw,
-        bits,
-        value: u,
-        hasXZ: false,
-        truncated: false,
-        extended: false,
-        unsized: true,
-        note: "Unsized plain decimal — width inferred from magnitude (teaching model).",
-      };
+  function adaptParse(raw) {
+    if (!raw || !raw.ok) {
+      return { ok: false, error: (raw && raw.error) || "Parse failed" };
     }
-
-    const m = raw.match(/^(\d*)'([sS]?)([bBoOdDhH])([0-9a-fA-FxXzZ_?+-]+)$/);
-    if (!m) {
-      return {
-        ok: false,
-        error: "Expected forms like 8'hFF, 4'b1010, 8'sd-1, or plain 42",
-      };
+    const bits = String(raw.value.bits || "").toLowerCase();
+    const hasXZ = !!raw.hasXZ || /[xz]/.test(bits);
+    let value = null;
+    if (!hasXZ && bits) {
+      value = BigInt("0b" + bits);
     }
-
-    const sizeStr = m[1];
-    const signed = m[2].toLowerCase() === "s";
-    const baseChar = m[3].toLowerCase();
-    let digits = m[4].replace(/_/g, "");
-
-    const baseMap = { b: 2, o: 8, d: 10, h: 16 };
-    const base = baseMap[baseChar];
-    const sized = sizeStr.length > 0;
-    let size = sized ? Number(sizeStr) : 0;
-    if (sized && (!Number.isFinite(size) || size < 1 || size > MAX_W)) {
-      return { ok: false, error: `Size must be 1–${MAX_W}` };
-    }
-
-    // Decimal body may start with + / -
-    let decSign = 1n;
-    if (base === 10) {
-      if (digits.startsWith("-")) {
-        decSign = -1n;
-        digits = digits.slice(1);
-      } else if (digits.startsWith("+")) {
-        digits = digits.slice(1);
-      }
-      if (!digits || /[xXzZ?]/.test(digits)) {
-        return { ok: false, error: "Decimal body must be digits (optional leading +/-)" };
-      }
-      if (!/^\d+$/.test(digits)) return { ok: false, error: "Invalid decimal digits" };
-    } else if (/[+-]/.test(digits)) {
-      return { ok: false, error: "+/- only allowed in decimal ('d) bodies" };
-    }
-
-    let bitStr = "";
-    let value = 0n;
-    let hasXZ = false;
-
-    if (base === 10) {
-      value = decSign * BigInt(digits);
-      const need = sized ? size : Math.max(1, value === 0n ? 1 : value.toString(2).replace("-", "").length + (value < 0n ? 1 : 0));
-      if (!sized) size = Math.min(MAX_W, Math.max(need, signed ? need : need));
-      // Fit into size bits as Verilog would for sized decimal
-      const u = BigInt.asUintN(size, value);
-      bitStr = u.toString(2).padStart(size, "0");
-      if (bitStr.length > size) bitStr = bitStr.slice(-size);
-      value = u;
-    } else {
-      const bpd = bitsPerDigit(base);
-      for (const ch of digits) {
-        const dv = digitValue(ch, base);
-        if (typeof dv === "string") {
-          hasXZ = true;
-          bitStr += dv.repeat(bpd);
-        } else {
-          bitStr += dv.toString(2).padStart(bpd, "0");
-        }
-      }
-      if (!bitStr) return { ok: false, error: "Empty value" };
-
-      if (!sized) {
-        size = Math.min(MAX_W, Math.max(bitStr.length, 1));
-      }
-
-      let truncated = false;
-      let extended = false;
-      if (bitStr.length > size) {
-        truncated = true;
-        bitStr = bitStr.slice(bitStr.length - size);
-      } else if (bitStr.length < size) {
-        extended = true;
-        const pad = bitStr[0] === "x" || bitStr[0] === "z" ? bitStr[0] : "0";
-        bitStr = pad.repeat(size - bitStr.length) + bitStr;
-      }
-
-      if (!hasXZ) {
-        value = BigInt("0b" + bitStr);
-      }
-
-      return {
-        ok: true,
-        size,
-        sized,
-        signed,
-        base,
-        baseChar,
-        digits: m[4],
-        bits: bitStr,
-        value: hasXZ ? null : value,
-        hasXZ,
-        truncated,
-        extended,
-        unsized: !sized,
-        note: !sized ? "Unsized based literal — width taken from digits (capped)." : "",
-      };
-    }
-
     return {
       ok: true,
-      size,
-      sized,
-      signed,
-      base,
-      baseChar,
-      digits: m[4],
-      bits: bitStr,
+      size: raw.size,
+      sized: raw.sized,
+      signed: raw.signed,
+      base: raw.base,
+      baseChar: BASE_CHAR[raw.base] || "d",
+      bits,
       value,
-      hasXZ: false,
-      truncated: false,
-      extended: false,
-      unsized: !sized,
-      note: !sized ? "Unsized decimal based literal." : "",
+      hasXZ,
+      truncated: !!raw.truncated,
+      extended: !!raw.extended,
+      unsized: !!raw.unsized,
+      note: raw.note || "",
     };
+  }
+
+  function parseLiteral(text) {
+    if (!hdl || typeof hdl.parseLiteral !== "function") {
+      return { ok: false, error: "HDL engine not loaded" };
+    }
+    return adaptParse(hdl.parseLiteral(text));
   }
 
   const CHALLENGES = [
@@ -432,7 +302,7 @@
     state.challengeOn = false;
     state.challengeHint = false;
     state.text = STARTER;
-    state.msg = "Starter example loaded.";
+    state.msg = "Starter example loaded (HDL parseLiteral).";
   }
 
   function startChallenge(id) {
@@ -551,7 +421,8 @@
 
     root.innerHTML = `
       <div class="starter-note no-print">
-        <p><strong>Starter example:</strong> <code>8'h2A</code> → bits <code>0010_1010</code>, unsigned 42. Try presets or edit the literal.</p>
+        <p><strong>Starter example:</strong> <code>8'h2A</code> → bits <code>0010_1010</code>, unsigned 42 — decoded by the <strong>HDL engine</strong> (<code>parseLiteral</code>).</p>
+        <p class="vl-hint">Engine: ${escapeHtml(engineLabel)}</p>
         <button type="button" class="btn btn-secondary" id="vl-starter">Load starter example</button>
       </div>
 
@@ -563,17 +434,17 @@
         <div class="vl-chal-catalog">${chalList}</div>
         <p class="vl-chal-prompt"><strong>${escapeHtml(ch.title)}:</strong> ${escapeHtml(ch.prompt)}</p>
         ${
-          state.challengeOn && state.challengeHint
-            ? `<p class="vl-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
+          state.challengeHint
+            ? `<p class="chal-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
             : ""
         }
         <div class="tool-actions">
           <button type="button" class="btn btn-secondary" id="vl-chal-start">${
             state.challengeOn ? "Restart blank" : "Start selected"
           }</button>
-          <button type="button" class="btn btn-ghost" id="vl-chal-hint" ${
-            state.challengeOn ? "" : "disabled"
-          }>${state.challengeHint ? "Hide hint" : "Show hint"}</button>
+          <button type="button" class="btn btn-ghost" id="vl-chal-hint">${
+            state.challengeHint ? "Hide hint" : "Show hint"
+          }</button>
           <button type="button" class="btn btn-ghost" id="vl-chal-next" ${passed ? "" : "disabled"}>Next</button>
           <button type="button" class="btn btn-ghost" id="vl-chal-stop" ${
             state.challengeOn ? "" : "disabled"
@@ -686,7 +557,6 @@
       render();
     });
     root.querySelector("#vl-chal-hint").addEventListener("click", () => {
-      if (!state.challengeOn) return;
       state.challengeHint = !state.challengeHint;
       render();
     });
@@ -742,7 +612,7 @@
     });
   }
 
-  // Quick self-check in console-less env
+  // Quick self-check once engine is ready
   function assertParse() {
     const samples = [
       ["8'h2A", "00101010", 0x2an],
@@ -758,8 +628,22 @@
       }
     }
   }
-  assertParse();
 
-  if (!tryRestore()) loadStarter();
-  render();
-})();
+  async function boot() {
+    root.innerHTML = `<p class="vl-hint">Loading HDL engine…</p>`;
+    try {
+      hdl = await loadHdlEngine();
+      engineLabel = "systemverilog-simulator (parseLiteral)";
+      assertParse();
+    } catch (e) {
+      engineLabel = "unavailable";
+      root.innerHTML = `<p class="vl-hint" style="color:#b00">Could not load HDL engine: ${escapeHtml(
+        e.message || String(e)
+      )}</p>`;
+      return;
+    }
+    if (!tryRestore()) loadStarter();
+    render();
+  }
+
+  boot();

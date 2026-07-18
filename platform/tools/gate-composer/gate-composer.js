@@ -1,13 +1,14 @@
-(() => {
-  const PRIMARY = ["A", "B", "C", "D"];
+import { loadHdlEngine } from "../../assets/hdl-engine.js";
+
+const PRIMARY = ["A", "B", "C", "D"];
   const GATE_DEFS = {
-    NOT: { arity: 1, label: "NOT", eval: (a) => (a ? 0 : 1) },
-    AND: { arity: 2, label: "AND", eval: (a, b) => (a && b ? 1 : 0) },
-    OR: { arity: 2, label: "OR", eval: (a, b) => (a || b ? 1 : 0) },
-    XOR: { arity: 2, label: "XOR", eval: (a, b) => (a ^ b ? 1 : 0) },
-    NAND: { arity: 2, label: "NAND", eval: (a, b) => (a && b ? 0 : 1) },
-    NOR: { arity: 2, label: "NOR", eval: (a, b) => (a || b ? 0 : 1) },
-    XNOR: { arity: 2, label: "XNOR", eval: (a, b) => (a ^ b ? 0 : 1) },
+    NOT: { arity: 1, label: "NOT" },
+    AND: { arity: 2, label: "AND" },
+    OR: { arity: 2, label: "OR" },
+    XOR: { arity: 2, label: "XOR" },
+    NAND: { arity: 2, label: "NAND" },
+    NOR: { arity: 2, label: "NOR" },
+    XNOR: { arity: 2, label: "XNOR" },
   };
 
   const STORAGE_KEY = "ddv-gate-composer-v1";
@@ -286,6 +287,11 @@
   };
 
   const root = document.getElementById("gc-root");
+  /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
+  let hdl = null;
+  let engineLabel = "loading…";
+  /** @type {null | { key: string, ev: { evalBitMap: Function, source?: string } }} */
+  let gateCache = null;
 
   function inputs() {
     return PRIMARY.slice(0, state.n);
@@ -367,23 +373,37 @@
   }
 
   function evalNet(bitMap) {
-    const topo = topoOrder();
-    if (!topo.ok) return { ok: false, error: topo.error, values: { ...bitMap } };
-    const values = { ...bitMap };
-    const byId = Object.fromEntries(state.gates.map((g) => [g.id, g]));
-    for (const id of topo.order) {
-      const g = byId[id];
-      const def = GATE_DEFS[g.type];
-      const args = g.ins.slice(0, def.arity).map((s) => {
-        if (!(s in values)) throw new Error(`Missing signal ${s}`);
-        return values[s];
+    if (!hdl || typeof hdl.createGateNetEvaluator !== "function") {
+      return { ok: false, error: "HDL engine not loaded", values: { ...bitMap } };
+    }
+    try {
+      const key = JSON.stringify({
+        n: state.n,
+        gates: state.gates,
+        output: state.output,
       });
-      values[id] = def.eval(...args);
+      if (!gateCache || gateCache.key !== key) {
+        gateCache = {
+          key,
+          ev: hdl.createGateNetEvaluator({
+            names: inputs(),
+            gates: state.gates.map((g) => ({
+              id: g.id,
+              type: g.type,
+              ins: [...g.ins],
+            })),
+            output: state.output,
+          }),
+        };
+      }
+      return gateCache.ev.evalBitMap(bitMap);
+    } catch (e) {
+      return {
+        ok: false,
+        error: e.message || String(e),
+        values: { ...bitMap },
+      };
     }
-    if (!(state.output in values)) {
-      return { ok: false, error: `Output ${state.output} not found`, values };
-    }
-    return { ok: true, values, f: values[state.output] };
   }
 
   function truthColumn() {
@@ -490,7 +510,7 @@
     state.challengeHint = false;
     applyPreset("and2");
     state.msg =
-      "Starter example: one AND gate, F = A & B. Probe the truth table or add more gates.";
+      "Starter example: one AND gate, F = A & B (HDL gate-net evaluator). Probe the truth table or add more gates.";
     state.msgOk = true;
   }
 
@@ -878,7 +898,8 @@
 
     root.innerHTML = `
       <div class="starter-note no-print">
-        <p><strong>Starter example:</strong> a single AND (F = A &amp; B) with live schematic and truth table. Click a challenge card to build from scratch.</p>
+        <p><strong>Starter example:</strong> a single AND (F = A &amp; B) evaluated by the <strong>HDL engine</strong> (<code>createGateNetEvaluator</code>). Click a challenge card to build from scratch.</p>
+        <p class="gc-hint">Engine: ${escapeHtml(engineLabel)}</p>
         <button type="button" class="btn btn-secondary" id="gc-starter">Load starter example</button>
       </div>
 
@@ -890,17 +911,17 @@
         <div class="gc-chal-catalog">${challengeListHtml}</div>
         <p class="gc-chal-active-prompt"><strong>${escapeHtml(ch.title)}:</strong> ${escapeHtml(ch.prompt)}</p>
         ${
-          state.challengeOn && state.challengeHint
-            ? `<p class="gc-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
+          state.challengeHint
+            ? `<p class="chal-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
             : ""
         }
         <div class="tool-actions">
           <button type="button" class="btn btn-secondary" id="gc-chal-start">${
             state.challengeOn && state.challengeId === ch.id ? "Restart blank" : "Start selected"
           }</button>
-          <button type="button" class="btn btn-ghost" id="gc-chal-hint" ${
-            state.challengeOn ? "" : "disabled"
-          }>${state.challengeHint ? "Hide hint" : "Show hint"}</button>
+          <button type="button" class="btn btn-ghost" id="gc-chal-hint">${
+            state.challengeHint ? "Hide hint" : "Show hint"
+          }</button>
           <button type="button" class="btn btn-ghost" id="gc-chal-next" ${passed ? "" : "disabled"}>
             Next challenge
           </button>
@@ -1076,7 +1097,6 @@
       render();
     });
     root.querySelector("#gc-chal-hint").addEventListener("click", () => {
-      if (!state.challengeOn) return;
       state.challengeHint = !state.challengeHint;
       render();
     });
@@ -1144,6 +1164,20 @@
     root.querySelector("#gc-starter-2").addEventListener("click", onStarter);
   }
 
-  if (!tryRestoreLocal()) loadStarter();
-  render();
-})();
+  async function boot() {
+    root.innerHTML = `<p class="gc-hint">Loading HDL engine…</p>`;
+    try {
+      hdl = await loadHdlEngine();
+      engineLabel = "systemverilog-simulator (createGateNetEvaluator)";
+    } catch (e) {
+      engineLabel = "unavailable";
+      root.innerHTML = `<p class="gc-hint" style="color:#b00">Could not load HDL engine: ${escapeHtml(
+        e.message || String(e)
+      )}</p>`;
+      return;
+    }
+    if (!tryRestoreLocal()) loadStarter();
+    render();
+  }
+
+  boot();
