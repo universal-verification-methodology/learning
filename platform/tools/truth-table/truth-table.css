@@ -171,13 +171,41 @@
   font-size: 0.82rem;
 }
 
-.tt-msg {
-  margin: 0.5rem 0 0;
-  font-size: 0.88rem;
-  min-height: 1.2em;
+.tt-chal-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.75rem;
+  align-items: center;
+  margin: 0 0 0.65rem;
 }
-.tt-msg.err { color: var(--err); }
-.tt-msg.ok { color: var(--ok); }
+.tt-chal-pick label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tt-chal-pick select {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: min(100%, 18rem);
+}
+.tt-chal-hint {
+  margin: 0.35rem 0 0.65rem;
+  padding: 0.5rem 0.65rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+.tt-chal-hint strong {
+  color: var(--accent);
+}
 
 .tt-toggles {
   display: flex;

@@ -109,7 +109,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Truth-table builder | `truth-table` | **Shipped** | 2–10 vars; live SOP/POS sync; save/load/print/CSV |
+| Truth-table builder | `truth-table` | **Shipped** | 2–10 vars; live SOP/POS; 10 challenges; save/print/CSV |
 | K-map minimizer (2–4 vars) | `kmap` | **Planned** | Visual grouping → minimal expression |
 | Boolean law playground | `boolean-laws` | **Planned** | Step-through De Morgan and algebra rewrites |
 

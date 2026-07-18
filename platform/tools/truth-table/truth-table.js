@@ -2,12 +2,124 @@
   const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
   const MIN_N = 2;
   const MAX_N = 10;
-  const CHALLENGE = {
-    n: 3,
-    names: ["A", "B", "C"],
-    target: [0, 0, 0, 1, 0, 1, 1, 1],
-    prompt: "Set F so it is 1 when at least two of A,B,C are 1 (3-input majority).",
-  };
+
+  /** Build a 0/1 target column from a predicate over variable bits (MSB = first name). */
+  function targetFrom(n, pred) {
+    const t = [];
+    for (let i = 0; i < 1 << n; i++) {
+      const bits = [];
+      for (let b = 0; b < n; b++) bits.push((i >> (n - 1 - b)) & 1);
+      t.push(pred(...bits) ? 1 : 0);
+    }
+    return t;
+  }
+
+  const CHALLENGES = [
+    {
+      id: "and2",
+      title: "AND (2)",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 only when both A and B are 1.",
+      hint: "Expression: A & B",
+      target: targetFrom(2, (a, b) => a & b),
+    },
+    {
+      id: "xor2",
+      title: "XOR / difference (2)",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 when A and B differ (exclusive-OR).",
+      hint: "Expression: A ^ B",
+      target: targetFrom(2, (a, b) => a ^ b),
+    },
+    {
+      id: "implies",
+      title: "Implication A → B",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 when A implies B (false only when A=1 and B=0).",
+      hint: "Expression: ~A | B",
+      target: targetFrom(2, (a, b) => !a || b),
+    },
+    {
+      id: "majority3",
+      title: "Majority (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 when at least two of A, B, C are 1 (3-input majority).",
+      hint: "Expression: (A&B) | (A&C) | (B&C)",
+      target: targetFrom(3, (a, b, c) => a + b + c >= 2),
+    },
+    {
+      id: "parity3",
+      title: "Odd parity (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 when an odd number of inputs are 1 (3-bit XOR / odd parity).",
+      hint: "Expression: A ^ B ^ C",
+      target: targetFrom(3, (a, b, c) => a ^ b ^ c),
+    },
+    {
+      id: "exactly1",
+      title: "Exactly one (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 when exactly one of A, B, C is 1 (one-hot detect).",
+      hint: "Expression: (A&~B&~C) | (~A&B&~C) | (~A&~B&C)",
+      target: targetFrom(3, (a, b, c) => a + b + c === 1),
+    },
+    {
+      id: "mux21",
+      title: "2:1 mux",
+      level: "Core",
+      n: 3,
+      names: ["S", "D0", "D1"],
+      prompt: "Treat S as select: F = D0 when S=0, F = D1 when S=1.",
+      hint: "Expression: (~S & D0) | (S & D1)",
+      target: targetFrom(3, (s, d0, d1) => (s ? d1 : d0)),
+    },
+    {
+      id: "fa-sum",
+      title: "Full-adder SUM",
+      level: "HDL",
+      n: 3,
+      names: ["A", "B", "Cin"],
+      prompt: "Full adder: set F to the SUM bit (A ⊕ B ⊕ Cin).",
+      hint: "Expression: A ^ B ^ Cin",
+      target: targetFrom(3, (a, b, cin) => a ^ b ^ cin),
+    },
+    {
+      id: "fa-cout",
+      title: "Full-adder Cout",
+      level: "HDL",
+      n: 3,
+      names: ["A", "B", "Cin"],
+      prompt: "Full adder: set F to the carry-out (majority of A, B, Cin).",
+      hint: "Expression: (A&B) | (A&Cin) | (B&Cin)",
+      target: targetFrom(3, (a, b, cin) => a + b + cin >= 2),
+    },
+    {
+      id: "eq2",
+      title: "2-bit equality",
+      level: "Stretch",
+      n: 4,
+      names: ["A1", "A0", "B1", "B0"],
+      prompt: "Set F = 1 when the 2-bit values A and B are equal (A1A0 == B1B0).",
+      hint: "Expression: ~(A1^B1) & ~(A0^B0)",
+      target: targetFrom(4, (a1, a0, b1, b0) => a1 === b1 && a0 === b0),
+    },
+  ];
+
+  function challengeById(id) {
+    return CHALLENGES.find((c) => c.id === id) || CHALLENGES[0];
+  }
 
   const state = {
     n: 2,
@@ -15,6 +127,8 @@
     outs: Array(4).fill(0),
     expr: "A & B",
     challengeOn: false,
+    challengeId: "majority3",
+    challengeHint: false,
     /** When true, typing the expression live-updates the table. */
     liveFill: true,
     /** When true, editing F updates the expression from SOP automatically. */
@@ -423,6 +537,38 @@
     render();
   }
 
+  function activeChallenge() {
+    return challengeById(state.challengeId);
+  }
+
+  function challengePassed() {
+    const ch = activeChallenge();
+    if (!state.challengeOn || state.n !== ch.n) return false;
+    if (state.outs.length !== ch.target.length) return false;
+    return ch.target.every((t, i) => state.outs[i] === t);
+  }
+
+  function loadChallenge(id, { announce } = { announce: true }) {
+    const ch = challengeById(id);
+    state.challengeId = ch.id;
+    state.challengeOn = true;
+    state.challengeHint = false;
+    resize(ch.n);
+    state.names = [...ch.names];
+    state.outs = Array(1 << ch.n).fill(0);
+    state.expr = "";
+    state.lastDriver = "table";
+    if (announce) {
+      state.msg = `Challenge “${ch.title}” loaded — fill F or type an expression.`;
+      state.msgOk = true;
+    }
+  }
+
+  function nextChallengeId() {
+    const i = CHALLENGES.findIndex((c) => c.id === state.challengeId);
+    return CHALLENGES[(i + 1) % CHALLENGES.length].id;
+  }
+
   function checkChallenge() {
     const el = root.querySelector("#tt-challenge-status");
     if (!el) return;
@@ -431,13 +577,14 @@
       el.className = "challenge-status idle";
       return;
     }
-    if (state.n !== CHALLENGE.n) {
-      el.textContent = "Set variables to 3";
+    const ch = activeChallenge();
+    if (state.n !== ch.n) {
+      el.textContent = `Set variables to ${ch.n}`;
       el.className = "challenge-status fail";
       return;
     }
-    const ok = CHALLENGE.target.every((t, i) => state.outs[i] === t);
-    el.textContent = ok ? "Pass — majority" : "Not yet";
+    const ok = challengePassed();
+    el.textContent = ok ? `Pass — ${ch.title}` : "Not yet";
     el.className = "challenge-status " + (ok ? "pass" : "fail");
   }
 
@@ -460,12 +607,41 @@
       return `<option value="${v}" ${state.n === v ? "selected" : ""}>${v} (${1 << v} rows)</option>`;
     }).join("");
 
+    const ch = activeChallenge();
+    const chalOptions = CHALLENGES.map(
+      (c) =>
+        `<option value="${escapeAttr(c.id)}" ${c.id === state.challengeId ? "selected" : ""}>${escapeHtml(
+          c.level
+        )} — ${escapeHtml(c.title)}</option>`
+    ).join("");
+    const passed = challengePassed();
+
     root.innerHTML = `
       <div class="challenge">
-        <h2>Challenge</h2>
-        <p>${CHALLENGE.prompt}</p>
+        <h2>Challenges</h2>
+        <div class="tt-chal-pick">
+          <label for="tt-chal-sel">Pick one</label>
+          <select id="tt-chal-sel">${chalOptions}</select>
+        </div>
+        <p>${escapeHtml(ch.prompt)}</p>
+        ${
+          state.challengeOn && state.challengeHint
+            ? `<p class="tt-chal-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
+            : ""
+        }
         <div class="tool-actions">
-          <button type="button" class="btn btn-secondary" id="tt-chal">${state.challengeOn ? "Hide challenge" : "Load challenge"}</button>
+          <button type="button" class="btn btn-secondary" id="tt-chal-start">
+            ${state.challengeOn ? "Restart" : "Start"}
+          </button>
+          <button type="button" class="btn btn-ghost" id="tt-chal-hint" ${state.challengeOn ? "" : "disabled"}>
+            ${state.challengeHint ? "Hide hint" : "Show hint"}
+          </button>
+          <button type="button" class="btn btn-ghost" id="tt-chal-next" ${passed ? "" : "disabled"}>
+            Next challenge
+          </button>
+          <button type="button" class="btn btn-ghost" id="tt-chal-hide" ${state.challengeOn ? "" : "disabled"}>
+            Stop checking
+          </button>
           <span class="challenge-status idle" id="tt-challenge-status">Idle</span>
         </div>
       </div>
@@ -694,17 +870,31 @@
       state.msgOk = true;
       render();
     });
-    root.querySelector("#tt-chal").addEventListener("click", () => {
-      state.challengeOn = !state.challengeOn;
-      if (state.challengeOn) {
-        resize(CHALLENGE.n);
-        state.names = [...CHALLENGE.names];
-        state.outs = Array(1 << CHALLENGE.n).fill(0);
-        state.expr = "";
-        state.lastDriver = "table";
-        state.msg = "Challenge loaded — set F, or type an expression.";
-        state.msgOk = true;
-      }
+    root.querySelector("#tt-chal-sel").addEventListener("change", (e) => {
+      state.challengeId = e.target.value;
+      state.challengeHint = false;
+      if (state.challengeOn) loadChallenge(state.challengeId);
+      render();
+    });
+    root.querySelector("#tt-chal-start").addEventListener("click", () => {
+      loadChallenge(state.challengeId);
+      render();
+    });
+    root.querySelector("#tt-chal-hint").addEventListener("click", () => {
+      if (!state.challengeOn) return;
+      state.challengeHint = !state.challengeHint;
+      render();
+    });
+    root.querySelector("#tt-chal-next").addEventListener("click", () => {
+      if (!challengePassed()) return;
+      loadChallenge(nextChallengeId());
+      render();
+    });
+    root.querySelector("#tt-chal-hide").addEventListener("click", () => {
+      state.challengeOn = false;
+      state.challengeHint = false;
+      state.msg = "Challenge checking stopped (table kept).";
+      state.msgOk = true;
       render();
     });
 
