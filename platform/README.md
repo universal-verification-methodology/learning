@@ -55,6 +55,8 @@ Opening `file://` HTML also works after a hard refresh when scripts change.
 
 Shipped **and** planned labs by concept domain: **[`tools.md`](tools.md)**. Browseable list (with “Coming soon”): [`tools/index.html`](tools/index.html).
 
+Long-term **client-side teaching HDL simulator** plan: **[`simulator.md`](simulator.md)** (separate `browser-hdl-sim` repo later).
+
 ## GitHub sandbox
 
 | Local tree | GitHub |
@@ -80,6 +82,7 @@ Course index: [`courses/learn_unix_git/SANDBOX.md`](../courses/learn_unix_git/SA
 platform/
 ├── index.html
 ├── tools.md          # canonical shipped + planned catalog
+├── simulator.md      # client-side teaching HDL sim plan (external repo later)
 ├── assets/
 ├── tools/
 │   ├── index.html    # browsable domain list

@@ -3,7 +3,8 @@
 Canonical list of **browser labs** for the learning monorepo. Tools are organized by **concept domain**, not by course or module. Course repos may link here; this catalog does not mirror any syllabus numbering.
 
 **Live site:** [https://universal-verification-methodology.github.io/learning/tools/](https://universal-verification-methodology.github.io/learning/tools/)  
-**Local:** `platform/tools/` (see [README.md](README.md))
+**Local:** `platform/tools/` (see [README.md](README.md))  
+**Simulator plan:** [simulator.md](simulator.md) (client-side teaching HDL sim — separate repo later)
 
 ## Principles
 
