@@ -32,6 +32,7 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `truth-table` | 2 vars, expression `A & B` fills the table |
 | `gate-composer` | Single AND gate, `F = A & B` |
 | `radix-converter` | Width 8, value `42` / `0x2A` / `0010_1010` |
+| `verilog-literals` | `8'h2A` → bits `0010_1010`, unsigned 42 |
 | Shell / Git tools | Sample VFS, sample repo, or guided checklist (where already present); bring any that open empty up to this rule when touched |
 
 ### Status legend
@@ -122,7 +123,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Radix / bit-width converter | `radix-converter` | **Shipped** | Starter `0x2A`; bin/hex/signed; overflow; challenges |
-| Verilog literal decoder | `verilog-literals` | **Planned** | Parse `4'b1010`, `8'hFF`, signed widths → bit vectors |
+| Verilog literal decoder | `verilog-literals` | **Shipped** | Starter `8'h2A`; sized/unsized/`'s`; X/Z; truncate/extend |
 
 ## Boolean algebra & minimization
 
@@ -250,7 +251,7 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals`, `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
 | **C** | Datapath & memory | `rca-animator`, `alu-explorer`, `fifo-lab`, `mem-map`, `cache-walk` |
 | **D** | HDL hygiene & protocols | `latch-risk`, `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
@@ -280,8 +281,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 13 |
-| Planned | 33 |
+| Shipped | 14 |
+| Planned | 32 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).
