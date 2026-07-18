@@ -117,7 +117,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Gate sandbox | `gate-sandbox` | **Planned** | Wire AND/OR/XOR/NOT (small nets); live truth table |
+| Gate composer | `gate-composer` | **Shipped** | Wire AND/OR/XOR/NOT (+NAND/NOR/XNOR); schematic + live table |
 | Mux / decoder / encoder explorer | `mux-decoder` | **Planned** | Select lines → data / one-hot outputs |
 | Priority encoder & comparator | `priority-compare` | **Planned** | Priority resolution; signed vs unsigned compare |
 
@@ -231,7 +231,7 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-sandbox`, `radix-converter`, `verilog-literals`, `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter`, `verilog-literals`, `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
 | **C** | Datapath & memory | `rca-animator`, `alu-explorer`, `fifo-lab`, `mem-map`, `cache-walk` |
 | **D** | HDL hygiene & protocols | `latch-risk`, `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
@@ -261,8 +261,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 11 |
-| Planned | 35 |
+| Shipped | 12 |
+| Planned | 34 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).
