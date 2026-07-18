@@ -171,6 +171,24 @@
   font-size: 0.82rem;
 }
 
+.tt-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
+  margin-top: 0.65rem;
+}
+.tt-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+.tt-check input {
+  accent-color: var(--accent);
+}
+
 .tt-msg {
   margin: 0.5rem 0 0;
   font-size: 0.88rem;

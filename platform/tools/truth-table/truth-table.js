@@ -5,7 +5,6 @@
   const CHALLENGE = {
     n: 3,
     names: ["A", "B", "C"],
-    // majority: at least two 1s
     target: [0, 0, 0, 1, 0, 1, 1, 1],
     prompt: "Set F so it is 1 when at least two of A,B,C are 1 (3-input majority).",
   };
@@ -16,8 +15,17 @@
     outs: Array(4).fill(0),
     expr: "A & B",
     challengeOn: false,
+    /** When true, typing the expression live-updates the table. */
+    liveFill: true,
+    /** When true, editing F updates the expression from SOP automatically. */
+    syncExprFromTable: true,
+    /** Last driver: "expr" | "table" — avoids fighting loops. */
+    lastDriver: "expr",
+    msg: "",
+    msgOk: true,
   };
 
+  let fillTimer = null;
   const root = document.getElementById("tt-root");
 
   function resize(n) {
@@ -65,6 +73,37 @@
       ones: sopTerms.length,
       zeros: posTerms.length,
     };
+  }
+
+  /** Machine-friendly expression from current F column (for the expression box). */
+  function exprFromSop() {
+    const { n, names, outs } = state;
+    const terms = [];
+    for (let i = 0; i < 1 << n; i++) {
+      if (outs[i] !== 1) continue;
+      const parts = [];
+      for (let b = 0; b < n; b++) {
+        const bit = (i >> (n - 1 - b)) & 1;
+        parts.push(bit ? names[b] : `~${names[b]}`);
+      }
+      terms.push(parts.length === 1 ? parts[0] : `(${parts.join(" & ")})`);
+    }
+    return terms.length ? terms.join(" | ") : "0";
+  }
+
+  function exprFromPos() {
+    const { n, names, outs } = state;
+    const terms = [];
+    for (let i = 0; i < 1 << n; i++) {
+      if (outs[i] !== 0) continue;
+      const parts = [];
+      for (let b = 0; b < n; b++) {
+        const bit = (i >> (n - 1 - b)) & 1;
+        parts.push(bit ? `~${names[b]}` : names[b]);
+      }
+      terms.push(`(${parts.join(" | ")})`);
+    }
+    return terms.length ? terms.join(" & ") : "1";
   }
 
   function evalBool(s) {
@@ -146,32 +185,87 @@
     return s;
   }
 
-  function fillFromExpr() {
-    const msg = root.querySelector("#tt-msg");
-    try {
-      const rows = 1 << state.n;
-      for (let i = 0; i < rows; i++) {
-        const bits = [];
-        for (let b = 0; b < state.n; b++) bits.push((i >> (state.n - 1 - b)) & 1);
-        state.outs[i] = evalBool(prepareExpr(state.expr, bits));
-      }
-      msg.textContent = "Table filled from expression.";
-      msg.className = "tt-msg ok";
-      render();
-    } catch (e) {
-      msg.textContent = e.message || String(e);
-      msg.className = "tt-msg err";
+  function applyExprToOuts() {
+    const rows = 1 << state.n;
+    for (let i = 0; i < rows; i++) {
+      const bits = [];
+      for (let b = 0; b < state.n; b++) bits.push((i >> (state.n - 1 - b)) & 1);
+      state.outs[i] = evalBool(prepareExpr(state.expr, bits));
     }
+  }
+
+  function fillFromExpr(opts = {}) {
+    const { keepFocus = false, silent = false } = opts;
+    const sel = keepFocus ? saveExprCaret() : null;
+    try {
+      if (!state.expr.trim()) {
+        if (!silent) {
+          state.msg = "Type an expression to fill the table.";
+          state.msgOk = false;
+          render({ restoreCaret: sel });
+        }
+        return;
+      }
+      applyExprToOuts();
+      state.lastDriver = "expr";
+      state.msg = silent ? "Live update from expression." : "Table filled from expression.";
+      state.msgOk = true;
+      render({ restoreCaret: sel });
+    } catch (e) {
+      state.msg = e.message || String(e);
+      state.msgOk = false;
+      render({ restoreCaret: sel });
+    }
+  }
+
+  function saveExprCaret() {
+    const el = root.querySelector("#tt-expr");
+    if (!el) return null;
+    return { start: el.selectionStart, end: el.selectionEnd };
+  }
+
+  function scheduleLiveFill() {
+    if (!state.liveFill) return;
+    clearTimeout(fillTimer);
+    fillTimer = setTimeout(() => fillFromExpr({ keepFocus: true, silent: true }), 280);
+  }
+
+  function afterTableEdit() {
+    state.lastDriver = "table";
+    if (state.syncExprFromTable) {
+      state.expr = exprFromSop();
+      state.msg = "Expression updated from table (SOP).";
+      state.msgOk = true;
+    }
+    render();
   }
 
   function cycleOut(i) {
     const cur = state.outs[i];
     state.outs[i] = cur === 0 ? 1 : cur === 1 ? "X" : 0;
+    afterTableEdit();
+  }
+
+  function useCanonical(kind) {
+    state.expr = kind === "pos" ? exprFromPos() : exprFromSop();
+    state.lastDriver = "expr";
+    state.msg =
+      kind === "pos"
+        ? "Loaded POS into expression (and refreshed table)."
+        : "Loaded SOP into expression (and refreshed table).";
+    state.msgOk = true;
+    try {
+      applyExprToOuts();
+    } catch (e) {
+      state.msg = e.message || String(e);
+      state.msgOk = false;
+    }
     render();
   }
 
   function checkChallenge() {
     const el = root.querySelector("#tt-challenge-status");
+    if (!el) return;
     if (!state.challengeOn) {
       el.textContent = "Idle";
       el.className = "challenge-status idle";
@@ -197,7 +291,7 @@
     return escapeHtml(s).replace(/"/g, "&quot;");
   }
 
-  function render() {
+  function render(opts = {}) {
     const forms = sopPos();
     const rows = 1 << state.n;
     const formCap = state.n >= 7 ? 400 : 2000;
@@ -237,7 +331,7 @@
             </div>
             ${
               state.n >= 7
-                ? `<p class="tt-hint tt-warn">${rows} rows — scroll the table; prefer “Fill from expression” for large n.</p>`
+                ? `<p class="tt-hint tt-warn">${rows} rows — scroll the table; prefer the expression box for large n.</p>`
                 : ""
             }
             <div class="tt-table-wrap">
@@ -269,7 +363,9 @@
                 </tbody>
               </table>
             </div>
-            <p class="tt-hint">Click <strong>F</strong> to cycle 0 → 1 → X.</p>
+            <p class="tt-hint">Click <strong>F</strong> to cycle 0 → 1 → X.${
+              state.syncExprFromTable ? " Expression auto-updates from SOP." : ""
+            }</p>
           </div>
         </div>
 
@@ -279,14 +375,20 @@
             <div class="tt-form-block">
               <label>SOP (sum of products)</label>
               <pre>${escapeHtml(formatForm(forms.sop, formCap))}</pre>
+              <div class="tool-actions" style="margin-top:0.45rem">
+                <button type="button" class="btn btn-secondary" id="tt-use-sop">Use SOP as expression</button>
+              </div>
             </div>
             <div class="tt-form-block">
               <label>POS (product of sums)</label>
               <pre>${escapeHtml(formatForm(forms.pos, formCap))}</pre>
+              <div class="tool-actions" style="margin-top:0.45rem">
+                <button type="button" class="btn btn-secondary" id="tt-use-pos">Use POS as expression</button>
+              </div>
             </div>
             <p class="tt-hint">${forms.ones} minterm(s), ${forms.zeros} maxterm(s). X rows ignored.${
               forms.sop.length > formCap || forms.pos.length > formCap
-                ? " Long forms are truncated in the display."
+                ? " Display may be truncated; Use SOP/POS still loads the full form."
                 : ""
             }</p>
           </div>
@@ -294,18 +396,28 @@
       </div>
 
       <div class="panel" style="margin-top:1rem">
-        <div class="panel-head"><h2>Fill from expression</h2></div>
+        <div class="panel-head"><h2>Expression</h2></div>
         <div class="panel-body">
           <div class="tt-expr-row">
             <input id="tt-expr" type="text" spellcheck="false" value="${escapeAttr(state.expr)}"
               aria-label="Boolean expression" placeholder="e.g. A & B | ~C">
             <button type="button" class="btn btn-primary" id="tt-fill">Fill table</button>
           </div>
+          <div class="tt-toggles">
+            <label class="tt-check">
+              <input type="checkbox" id="tt-live" ${state.liveFill ? "checked" : ""}>
+              Live-fill table while typing
+            </label>
+            <label class="tt-check">
+              <input type="checkbox" id="tt-sync" ${state.syncExprFromTable ? "checked" : ""}>
+              Sync expression from table (SOP)
+            </label>
+          </div>
           <p class="tt-hint">
             Operators: <code>&amp;</code> <code>|</code> <code>^</code> <code>!</code>/<code>~</code>/<code>'</code>
             · also <code>+</code> <code>*</code>. Example: <code>(A|B) &amp; ~C</code>
           </p>
-          <p class="tt-msg" id="tt-msg"></p>
+          <p class="tt-msg ${state.msgOk ? "ok" : "err"}" id="tt-msg">${escapeHtml(state.msg)}</p>
         </div>
       </div>
     `;
@@ -320,34 +432,61 @@
       inp.setAttribute("aria-label", `Variable ${idx + 1} name`);
       inp.addEventListener("change", () => {
         state.names[idx] = inp.value.trim() || DEFAULT_NAMES[idx];
-        render();
+        if (state.lastDriver === "expr" && state.liveFill && state.expr.trim()) {
+          fillFromExpr({ silent: true });
+        } else if (state.syncExprFromTable) {
+          afterTableEdit();
+        } else {
+          render();
+        }
       });
       namesEl.appendChild(inp);
     });
 
     root.querySelector("#tt-n").addEventListener("change", (e) => {
       resize(Number(e.target.value));
-      render();
+      if (state.lastDriver === "expr" && state.expr.trim()) fillFromExpr({ silent: true });
+      else if (state.syncExprFromTable) {
+        state.expr = exprFromSop();
+        render();
+      } else render();
     });
     root.querySelector("#tt-all0").addEventListener("click", () => {
       state.outs = state.outs.map(() => 0);
-      render();
+      afterTableEdit();
     });
     root.querySelector("#tt-all1").addEventListener("click", () => {
       state.outs = state.outs.map(() => 1);
-      render();
+      afterTableEdit();
     });
     root.querySelector("#tt-clearx").addEventListener("click", () => {
       state.outs = state.outs.map((v) => (v === "X" ? 0 : v));
-      render();
+      afterTableEdit();
     });
     root.querySelectorAll(".out-btn").forEach((btn) => {
       btn.addEventListener("click", () => cycleOut(Number(btn.dataset.row)));
     });
-    root.querySelector("#tt-expr").addEventListener("input", (e) => {
+
+    const exprEl = root.querySelector("#tt-expr");
+    exprEl.addEventListener("input", (e) => {
       state.expr = e.target.value;
+      state.lastDriver = "expr";
+      scheduleLiveFill();
     });
-    root.querySelector("#tt-fill").addEventListener("click", fillFromExpr);
+    root.querySelector("#tt-fill").addEventListener("click", () => fillFromExpr());
+    root.querySelector("#tt-live").addEventListener("change", (e) => {
+      state.liveFill = e.target.checked;
+      if (state.liveFill) scheduleLiveFill();
+    });
+    root.querySelector("#tt-sync").addEventListener("change", (e) => {
+      state.syncExprFromTable = e.target.checked;
+      if (state.syncExprFromTable && state.lastDriver === "table") {
+        state.expr = exprFromSop();
+        render();
+      }
+    });
+    root.querySelector("#tt-use-sop").addEventListener("click", () => useCanonical("sop"));
+    root.querySelector("#tt-use-pos").addEventListener("click", () => useCanonical("pos"));
     root.querySelector("#tt-chal").addEventListener("click", () => {
       state.challengeOn = !state.challengeOn;
       if (state.challengeOn) {
@@ -355,12 +494,33 @@
         state.names = [...CHALLENGE.names];
         state.outs = Array(1 << CHALLENGE.n).fill(0);
         state.expr = "";
+        state.lastDriver = "table";
+        state.msg = "Challenge loaded — set F, or type an expression.";
+        state.msgOk = true;
       }
       render();
     });
 
+    if (opts.restoreCaret && exprEl) {
+      exprEl.focus();
+      const { start, end } = opts.restoreCaret;
+      try {
+        exprEl.setSelectionRange(start, end);
+      } catch {
+        /* ignore */
+      }
+    }
+
     checkChallenge();
   }
 
+  // Initial: apply default expression once
+  try {
+    applyExprToOuts();
+    state.msg = "Table follows the expression (live fill on).";
+    state.msgOk = true;
+  } catch {
+    /* keep zeros */
+  }
   render();
 })();
