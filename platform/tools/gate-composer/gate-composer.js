@@ -11,6 +11,26 @@
   };
 
   const STORAGE_KEY = "ddv-gate-composer-v1";
+  const CLEARED_KEY = "ddv-gate-composer-cleared-v1";
+
+  function loadCleared() {
+    try {
+      const raw = localStorage.getItem(CLEARED_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr.map(String) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCleared() {
+    try {
+      localStorage.setItem(CLEARED_KEY, JSON.stringify(state.clearedIds));
+    } catch {
+      /* ignore */
+    }
+  }
 
   function targetFrom(n, pred) {
     const t = [];
@@ -260,6 +280,7 @@
     challengeOn: false,
     challengeId: "majority",
     challengeHint: false,
+    clearedIds: loadCleared(),
     msg: "",
     msgOk: true,
   };
@@ -510,6 +531,24 @@
     return ch.target.every((t, i) => col[i] === t);
   }
 
+  function noteClearedIfPassed() {
+    if (!challengePassed()) return;
+    if (!state.clearedIds.includes(state.challengeId)) {
+      state.clearedIds = [...state.clearedIds, state.challengeId];
+      saveCleared();
+    }
+  }
+
+  function challengesByLevel() {
+    const order = ["Intro", "Core", "HDL", "Stretch"];
+    const groups = new Map(order.map((l) => [l, []]));
+    for (const c of CHALLENGES) {
+      if (!groups.has(c.level)) groups.set(c.level, []);
+      groups.get(c.level).push(c);
+    }
+    return [...groups.entries()].filter(([, list]) => list.length);
+  }
+
   function checkChallenge() {
     const el = root.querySelector("#gc-chal-status");
     if (!el) return;
@@ -745,12 +784,33 @@
       .map(([k, p]) => `<option value="${escapeAttr(k)}">${escapeHtml(p.title)}</option>`)
       .join("");
 
-    const chalOptions = CHALLENGES.map(
-      (c) =>
-        `<option value="${escapeAttr(c.id)}" ${c.id === state.challengeId ? "selected" : ""}>${escapeHtml(
-          c.level
-        )} — ${escapeHtml(c.title)}</option>`
-    ).join("");
+    noteClearedIfPassed();
+    const clearedCount = state.clearedIds.filter((id) => CHALLENGES.some((c) => c.id === id)).length;
+    const challengeListHtml = challengesByLevel()
+      .map(([level, list]) => {
+        const items = list
+          .map((c) => {
+            const active = c.id === state.challengeId && state.challengeOn;
+            const cleared = state.clearedIds.includes(c.id);
+            return `
+              <button type="button" class="gc-chal-item${active ? " is-active" : ""}${
+              cleared ? " is-cleared" : ""
+            }" data-chal="${escapeAttr(c.id)}" aria-pressed="${active ? "true" : "false"}">
+                <span class="gc-chal-mark" aria-hidden="true">${cleared ? "✓" : "○"}</span>
+                <span class="gc-chal-item-text">
+                  <span class="gc-chal-item-title">${escapeHtml(c.title)}</span>
+                  <span class="gc-chal-item-meta">${c.n} in · ${escapeHtml(c.prompt)}</span>
+                </span>
+              </button>`;
+          })
+          .join("");
+        return `
+          <div class="gc-chal-group">
+            <h3>${escapeHtml(level)}</h3>
+            <div class="gc-chal-grid">${items}</div>
+          </div>`;
+      })
+      .join("");
 
     const gateCards = state.gates
       .map((g) => {
@@ -808,12 +868,12 @@
 
     root.innerHTML = `
       <div class="challenge">
-        <h2>Challenges</h2>
-        <div class="gc-chal-pick">
-          <label for="gc-chal-sel">Pick one</label>
-          <select id="gc-chal-sel">${chalOptions}</select>
+        <div class="gc-chal-head">
+          <h2>Challenges</h2>
+          <span class="gc-chal-progress">${clearedCount} / ${CHALLENGES.length} cleared</span>
         </div>
-        <p>${escapeHtml(ch.prompt)}</p>
+        <div class="gc-chal-catalog">${challengeListHtml}</div>
+        <p class="gc-chal-active-prompt"><strong>${escapeHtml(ch.title)}:</strong> ${escapeHtml(ch.prompt)}</p>
         ${
           state.challengeOn && state.challengeHint
             ? `<p class="gc-hint"><strong>Hint:</strong> ${escapeHtml(ch.hint)}</p>`
@@ -821,7 +881,7 @@
         }
         <div class="tool-actions">
           <button type="button" class="btn btn-secondary" id="gc-chal-start">${
-            state.challengeOn ? "Restart blank" : "Start"
+            state.challengeOn && state.challengeId === ch.id ? "Restart blank" : "Start selected"
           }</button>
           <button type="button" class="btn btn-ghost" id="gc-chal-hint" ${
             state.challengeOn ? "" : "disabled"
@@ -832,6 +892,7 @@
           <button type="button" class="btn btn-ghost" id="gc-chal-stop" ${
             state.challengeOn ? "" : "disabled"
           }>Stop checking</button>
+          <button type="button" class="btn btn-ghost" id="gc-chal-reset-progress">Reset progress</button>
           <span class="challenge-status idle" id="gc-chal-status">Idle</span>
           ${passed ? `<span class="challenge-status pass">Matched target table</span>` : ""}
         </div>
@@ -987,10 +1048,12 @@
       });
     });
 
-    root.querySelector("#gc-chal-sel").addEventListener("change", (e) => {
-      state.challengeId = e.target.value;
-      state.challengeHint = false;
-      render();
+    root.querySelectorAll("[data-chal]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-chal");
+        startChallenge(id);
+        render();
+      });
     });
     root.querySelector("#gc-chal-start").addEventListener("click", () => {
       startChallenge(state.challengeId);
@@ -1010,6 +1073,13 @@
       state.challengeOn = false;
       state.challengeHint = false;
       state.msg = "Challenge checking stopped.";
+      state.msgOk = true;
+      render();
+    });
+    root.querySelector("#gc-chal-reset-progress").addEventListener("click", () => {
+      state.clearedIds = [];
+      saveCleared();
+      state.msg = "Cleared challenge progress marks.";
       state.msgOk = true;
       render();
     });

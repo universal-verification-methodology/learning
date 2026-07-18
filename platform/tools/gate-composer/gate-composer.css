@@ -192,24 +192,100 @@
   color: var(--muted);
 }
 
-.gc-chal-pick {
+.gc-chal-head {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem 0.75rem;
-  align-items: center;
-  margin: 0 0 0.55rem;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
 }
-.gc-chal-pick label {
-  font-size: 0.75rem;
-  font-weight: 600;
+.gc-chal-head h2 {
+  margin: 0;
+}
+.gc-chal-progress {
+  font-family: var(--mono);
+  font-size: 0.82rem;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
-.gc-chal-pick select {
-  font-family: var(--font);
+.gc-chal-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+  max-height: min(42vh, 420px);
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+.gc-chal-group h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.gc-chal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.4rem;
+}
+.gc-chal-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.gc-chal-item:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.gc-chal-item.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.gc-chal-item.is-cleared .gc-chal-mark {
+  color: var(--ok);
+}
+.gc-chal-mark {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.gc-chal-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.gc-chal-item-title {
+  font-weight: 650;
+  font-size: 0.9rem;
+}
+.gc-chal-item-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gc-chal-active-prompt {
+  margin: 0 0 0.65rem;
   font-size: 0.92rem;
-  min-width: min(100%, 16rem);
+  color: var(--ink);
 }
 
 .gc-file-btn {
