@@ -117,7 +117,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Gate composer | `gate-composer` | **Shipped** | Wire AND/OR/XOR/NOT (+NAND/NOR/XNOR); schematic + live table |
+| Gate composer | `gate-composer` | **Shipped** | Netlist + schematic; 19 challenges; live table / JSON |
 | Mux / decoder / encoder explorer | `mux-decoder` | **Planned** | Select lines → data / one-hot outputs |
 | Priority encoder & comparator | `priority-compare` | **Planned** | Priority resolution; signed vs unsigned compare |
 

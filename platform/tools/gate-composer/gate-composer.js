@@ -83,19 +83,72 @@
       title: "AND (2)",
       level: "Intro",
       n: 2,
-      prompt: "Compose F = A AND B using gates (no cheating with a single wrong type).",
+      prompt: "Compose F = A AND B.",
       hint: "One AND gate with inputs A and B.",
       target: targetFrom(2, (a, b) => a & b),
-      requireType: "AND",
+    },
+    {
+      id: "or2",
+      title: "OR (2)",
+      level: "Intro",
+      n: 2,
+      prompt: "Compose F = A OR B.",
+      hint: "One OR gate with inputs A and B.",
+      target: targetFrom(2, (a, b) => a | b),
+    },
+    {
+      id: "not1",
+      title: "Inverter",
+      level: "Intro",
+      n: 2,
+      prompt: "Ignore B: set F = NOT A (F follows ~A for every row).",
+      hint: "One NOT gate on A; set F to that gate.",
+      target: targetFrom(2, (a) => !a),
+    },
+    {
+      id: "nand2",
+      title: "NAND (2)",
+      level: "Intro",
+      n: 2,
+      prompt: "Compose F = A NAND B (NOT of AND).",
+      hint: "One NAND, or AND then NOT.",
+      target: targetFrom(2, (a, b) => !(a & b)),
+    },
+    {
+      id: "implies",
+      title: "Implication A → B",
+      level: "Intro",
+      n: 2,
+      prompt: "F = 1 except when A=1 and B=0 (material implication).",
+      hint: "~A | B, or NAND(A, ~B).",
+      target: targetFrom(2, (a, b) => !a || !!b),
     },
     {
       id: "xor2",
-      title: "XOR from basics",
+      title: "XOR (2)",
       level: "Intro",
       n: 2,
-      prompt: "Build A ⊕ B. You may use XOR, or AND/OR/NOT only.",
+      prompt: "Build A ⊕ B (F=1 when A and B differ).",
       hint: "XOR gate, or (A|B) & ~(A&B).",
       target: targetFrom(2, (a, b) => a ^ b),
+    },
+    {
+      id: "xnor2",
+      title: "Equality / XNOR",
+      level: "Intro",
+      n: 2,
+      prompt: "F = 1 when A equals B.",
+      hint: "XNOR, or ~(A^B).",
+      target: targetFrom(2, (a, b) => !(a ^ b)),
+    },
+    {
+      id: "exactly1-2",
+      title: "Exactly one (2)",
+      level: "Core",
+      n: 2,
+      prompt: "F = 1 when exactly one of A,B is 1 (same as XOR).",
+      hint: "XOR, or (A&~B)|(~A&B).",
+      target: targetFrom(2, (a, b) => a + b === 1),
     },
     {
       id: "majority",
@@ -105,6 +158,24 @@
       prompt: "F = 1 when at least two of A,B,C are 1.",
       hint: "OR of the three pairwise ANDs.",
       target: targetFrom(3, (a, b, c) => a + b + c >= 2),
+    },
+    {
+      id: "exactly1-3",
+      title: "Exactly one (3)",
+      level: "Core",
+      n: 3,
+      prompt: "F = 1 when exactly one of A,B,C is 1 (one-hot detect).",
+      hint: "(A&~B&~C)|(~A&B&~C)|(~A&~B&C).",
+      target: targetFrom(3, (a, b, c) => a + b + c === 1),
+    },
+    {
+      id: "all-or-none",
+      title: "All or none (3)",
+      level: "Core",
+      n: 3,
+      prompt: "F = 1 when all inputs are 0, or all are 1.",
+      hint: "(~A&~B&~C) | (A&B&C), or XNOR cascade ideas.",
+      target: targetFrom(3, (a, b, c) => a === b && b === c),
     },
     {
       id: "mux",
@@ -123,6 +194,60 @@
       prompt: "F = A ⊕ B ⊕ C.",
       hint: "Cascade two XOR gates.",
       target: targetFrom(3, (a, b, c) => a ^ b ^ c),
+    },
+    {
+      id: "fa-sum",
+      title: "Full-adder SUM",
+      level: "HDL",
+      n: 3,
+      prompt: "Full adder SUM bit: F = A ⊕ B ⊕ C (C = Cin).",
+      hint: "Two XOR gates in series.",
+      target: targetFrom(3, (a, b, c) => a ^ b ^ c),
+    },
+    {
+      id: "fa-cout",
+      title: "Full-adder Cout",
+      level: "HDL",
+      n: 3,
+      prompt: "Full adder carry-out: majority of A, B, Cin.",
+      hint: "(A&B)|(A&C)|(B&C) — same as majority.",
+      target: targetFrom(3, (a, b, c) => a + b + c >= 2),
+    },
+    {
+      id: "aoi",
+      title: "AOI22 fragment",
+      level: "HDL",
+      n: 4,
+      prompt: "F = ~((A&B) | (C&D)) — AND-OR-INVERT style.",
+      hint: "Two ANDs into an OR, then NOT (or NOR of the ANDs).",
+      target: targetFrom(4, (a, b, c, d) => !((a & b) | (c & d))),
+    },
+    {
+      id: "demux-sel",
+      title: "Active-high decode bit0",
+      level: "Stretch",
+      n: 2,
+      prompt: "F = 1 only for A=0,B=0 (decode address 00).",
+      hint: "~A & ~B, or NOR(A,B).",
+      target: targetFrom(2, (a, b) => !a && !b),
+    },
+    {
+      id: "eq2",
+      title: "2-bit equality",
+      level: "Stretch",
+      n: 4,
+      prompt: "Treat A,B as one 2-bit value and C,D as another: F=1 when equal (A==C and B==D).",
+      hint: "~(A^C) & ~(B^D).",
+      target: targetFrom(4, (a, b, c, d) => a === c && b === d),
+    },
+    {
+      id: "gt1bit",
+      title: "1-bit greater-than",
+      level: "Stretch",
+      n: 2,
+      prompt: "F = 1 when A > B (unsigned 1-bit).",
+      hint: "A & ~B.",
+      target: targetFrom(2, (a, b) => a > b),
     },
   ];
 
@@ -147,6 +272,25 @@
 
   function challengeById(id) {
     return CHALLENGES.find((c) => c.id === id) || CHALLENGES[0];
+  }
+
+  function nextChallengeId() {
+    const i = CHALLENGES.findIndex((c) => c.id === state.challengeId);
+    return CHALLENGES[(i + 1) % CHALLENGES.length].id;
+  }
+
+  function startChallenge(id) {
+    const ch = challengeById(id);
+    state.challengeId = ch.id;
+    state.challengeOn = true;
+    state.challengeHint = false;
+    state.n = ch.n;
+    state.gates = [];
+    state.output = inputs()[0];
+    state.nextId = 1;
+    state.probeRow = 0;
+    state.msg = `Challenge “${ch.title}” — build the net from scratch.`;
+    state.msgOk = true;
   }
 
   function gateLabel(id) {
@@ -682,6 +826,9 @@
           <button type="button" class="btn btn-ghost" id="gc-chal-hint" ${
             state.challengeOn ? "" : "disabled"
           }>${state.challengeHint ? "Hide hint" : "Show hint"}</button>
+          <button type="button" class="btn btn-ghost" id="gc-chal-next" ${passed ? "" : "disabled"}>
+            Next challenge
+          </button>
           <button type="button" class="btn btn-ghost" id="gc-chal-stop" ${
             state.challengeOn ? "" : "disabled"
           }>Stop checking</button>
@@ -846,21 +993,17 @@
       render();
     });
     root.querySelector("#gc-chal-start").addEventListener("click", () => {
-      const ch = challengeById(state.challengeId);
-      state.challengeOn = true;
-      state.challengeHint = false;
-      state.n = ch.n;
-      state.gates = [];
-      state.output = inputs()[0];
-      state.nextId = 1;
-      state.probeRow = 0;
-      state.msg = `Challenge “${ch.title}” — build the net from scratch.`;
-      state.msgOk = true;
+      startChallenge(state.challengeId);
       render();
     });
     root.querySelector("#gc-chal-hint").addEventListener("click", () => {
       if (!state.challengeOn) return;
       state.challengeHint = !state.challengeHint;
+      render();
+    });
+    root.querySelector("#gc-chal-next").addEventListener("click", () => {
+      if (!challengePassed()) return;
+      startChallenge(nextChallengeId());
       render();
     });
     root.querySelector("#gc-chal-stop").addEventListener("click", () => {
