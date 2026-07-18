@@ -4,3 +4,21 @@
 [submodule "courses/learn_digital_verilog"]
 	path = courses/learn_digital_verilog
 	url = https://github.com/universal-verification-methodology/learn_digital_verilog
+[submodule "courses/learn_verilog_systemverilog"]
+	path = courses/learn_verilog_systemverilog
+	url = git@github.com:universal-verification-methodology/learn_verilog_systemverilog.git
+[submodule "courses/learn_verilator_iverilog"]
+	path = courses/learn_verilator_iverilog
+	url = git@github.com:universal-verification-methodology/learn_verilator_iverilog.git
+[submodule "courses/learn_uart_spi_i2c"]
+	path = courses/learn_uart_spi_i2c
+	url = git@github.com:universal-verification-methodology/learn_uart_spi_i2c.git
+[submodule "courses/learn_uvm_pyuvm"]
+	path = courses/learn_uvm_pyuvm
+	url = git@github.com:universal-verification-methodology/learn_uvm_pyuvm.git
+[submodule "courses/verification_planning_management"]
+	path = courses/verification_planning_management
+	url = git@github.com:universal-verification-methodology/verification_planning_management.git
+[submodule "courses/learn_uvm2017_sv_verilator"]
+	path = courses/learn_uvm2017_sv_verilator
+	url = git@github.com:universal-verification-methodology/learn_uvm2017_sv_verilator.git

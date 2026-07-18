@@ -240,7 +240,8 @@ main {
   text-decoration: none;
 }
 .pillar-card h2,
-.chapter-list a {
+.chapter-list a,
+.chapter-list .tool-title {
   font-size: 1.05rem;
   font-weight: 650;
   margin: 0 0 0.35rem;
@@ -251,6 +252,35 @@ main {
   font-size: 0.9rem;
   color: var(--muted);
   font-weight: 450;
+}
+
+.chapter-list .is-planned {
+  display: block;
+  background: var(--surface2);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  color: var(--muted);
+  box-shadow: none;
+}
+.chapter-list .is-planned .tool-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--ink);
+}
+.pill-soon {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--warn);
+  background: var(--warn-bg);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
 }
 
 .tools-stage {
