@@ -1,0 +1,265 @@
+.tt-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.tt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.tt-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tt-field select,
+.tt-field input[type="text"] {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 4.5rem;
+}
+.tt-field input.var-name {
+  width: 3.2rem;
+  text-align: center;
+}
+
+.tt-var-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.tt-table-wrap {
+  overflow: auto;
+  max-height: min(70vh, 520px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.tt-table-wrap .tt-table {
+  border: none;
+}
+.tt-table-wrap .tt-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.tt-form-block pre {
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: var(--term-bg);
+  color: var(--term-fg);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 2.6rem;
+  max-height: 14rem;
+  overflow: auto;
+}
+
+.tt-hint.tt-warn {
+  color: var(--warn);
+  background: var(--warn-bg);
+  padding: 0.4rem 0.55rem;
+  border-radius: 6px;
+  margin: 0 0 0.65rem;
+}
+
+.tt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+}
+.tt-table th,
+.tt-table td {
+  border: 1px solid var(--line);
+  padding: 0.4rem 0.55rem;
+  text-align: center;
+}
+.tt-table th {
+  background: var(--surface2);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+.tt-table td.row-idx {
+  color: var(--muted);
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.35);
+}
+.tt-table .out-btn {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  min-width: 2.4rem;
+  padding: 0.25rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--ink);
+}
+.tt-table .out-btn.v1 {
+  background: var(--ok-bg);
+  color: var(--ok);
+  border-color: #b7dfc6;
+}
+.tt-table .out-btn.v0 {
+  background: var(--err-bg);
+  color: var(--err);
+  border-color: #e8c4c4;
+}
+.tt-table .out-btn.vx {
+  background: var(--warn-bg);
+  color: var(--warn);
+  border-color: #e6d7a8;
+}
+.tt-table .out-btn:hover {
+  border-color: var(--accent);
+}
+
+.tt-forms {
+  display: grid;
+  gap: 0.75rem;
+}
+.tt-form-block label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.tt-expr-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+.tt-expr-row input {
+  flex: 1 1 12rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.tt-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.tt-hint code {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.tt-chal-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.75rem;
+  align-items: center;
+  margin: 0 0 0.65rem;
+}
+.tt-chal-pick label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tt-chal-pick select {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: min(100%, 18rem);
+}
+.tt-chal-hint {
+  margin: 0.35rem 0 0.65rem;
+  padding: 0.5rem 0.65rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+.tt-chal-hint strong {
+  color: var(--accent);
+}
+
+.tt-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
+  margin-top: 0.65rem;
+}
+.tt-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+.tt-check input {
+  accent-color: var(--accent);
+}
+
+.tt-file-btn {
+  cursor: pointer;
+  margin: 0;
+}
+
+@media print {
+  .site-header,
+  .skip-link,
+  .site-footer,
+  .challenge,
+  .tt-export,
+  .tt-toggles,
+  .tool-actions,
+  .tt-controls .tool-actions,
+  .hero .lead {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  .tt-table-wrap {
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+  }
+  .tt-form-block pre {
+    max-height: none !important;
+    color: #000 !important;
+    background: #f5f5f5 !important;
+  }
+  .panel {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+  .out-btn {
+    border: 1px solid #333 !important;
+  }
+}

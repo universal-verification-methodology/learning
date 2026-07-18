@@ -1,0 +1,100 @@
+.git-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.git-controls input {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-width: 140px;
+}
+
+.git-status {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  margin-bottom: 0.85rem;
+  white-space: pre-wrap;
+}
+
+#git-svg {
+  width: 100%;
+  height: 340px;
+  background: var(--term-bg);
+  border-radius: var(--radius);
+  display: block;
+}
+
+.commit-node {
+  cursor: pointer;
+}
+.commit-node circle {
+  fill: #1f7a4c;
+  stroke: #f3efe6;
+  stroke-width: 2;
+}
+.commit-node.head circle {
+  fill: #9a6b12;
+}
+.commit-node text {
+  fill: #f3efe6;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.branch-label {
+  fill: #5ecfad;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.edge {
+  stroke: #3a463f;
+  stroke-width: 2;
+  fill: none;
+}
+
+.log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  max-height: 340px;
+  overflow: auto;
+}
+
+.log-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.log-list .hash {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.log-list .msg {
+  color: var(--ink);
+}
+
+.log-list .meta {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.msg-box {
+  font-size: 0.88rem;
+  margin: 0.5rem 0 0;
+  min-height: 1.3em;
+}
+.msg-box.err { color: var(--err); }
+.msg-box.ok { color: var(--ok); }

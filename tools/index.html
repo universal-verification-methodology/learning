@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tools — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../index.html">Home</a>
+        <a href="index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="here">Tools</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Tools</div>
+    <section class="hero">
+      <h1>Interactive labs</h1>
+      <p class="lead">
+        Concept labs in the browser — organized by idea, not by course or module.
+        Shipped tools are ready to use; planned tools are listed until they ship.
+        Spec: <a href="../tools.md">tools.md</a>.
+      </p>
+    </section>
+
+    <section class="tools-stage" id="shell-filesystem">
+      <h2>Shell &amp; filesystem</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="vfs-terminal/index.html">Virtual filesystem terminal</a>
+          <div class="chapter-meta">pwd, ls/-a, globs, less, man, ln -s, head/tail/wc</div>
+        </li>
+        <li>
+          <a href="permissions/index.html">Permissions, umask, PATH &amp; ownership</a>
+          <div class="chapter-meta">rwx · umask · which/PATH · owner/group · export</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="processes-text">
+      <h2>Processes &amp; text</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="pipes/index.html">Pipes, redirection, xargs &amp; jobs</a>
+          <div class="chapter-meta">| · &gt; tee · xargs · background jobs / kill</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="scripting">
+      <h2>Scripting</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="scripting/index.html">Script exit codes &amp; control flow</a>
+          <div class="chapter-meta">args · if · for · case · alias · functions · read · set -e</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="projects-archives">
+      <h2>Projects &amp; archives</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="project-archives/index.html">Project layout, archives, sed &amp; diff</a>
+          <div class="chapter-meta">tree · find/grep · tar · sed · diff/patch</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="version-control">
+      <h2>Version control</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="git-graph/index.html">Git graph, staging, stash &amp; rebase</a>
+          <div class="chapter-meta">add/commit · merge/rebase · cherry-pick · stash · tags · ignore · reflog</div>
+        </li>
+        <li>
+          <a href="git-conflicts/index.html">Merge conflict resolver</a>
+          <div class="chapter-meta">markers · ours/theirs/manual</div>
+        </li>
+        <li>
+          <a href="blame-bisect/index.html">Blame &amp; bisect</a>
+          <div class="chapter-meta">line attribution · binary search for first bad commit</div>
+        </li>
+        <li>
+          <a href="remotes/index.html">Remotes, PRs &amp; submodules</a>
+          <div class="chapter-meta">real GitHub sandbox · clone · Make · push · PR · submodule</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="workflow">
+      <h2>Workflow &amp; submission</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="workflow/index.html">Pre-push checklist, Make &amp; env</a>
+          <div class="chapter-meta">check_ready · make test · .env · dry-run clean</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="number-systems">
+      <h2>Number systems &amp; representation</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="radix-converter/index.html">Radix / bit-width converter</a>
+          <div class="chapter-meta">binary · hex · unsigned/signed · overflow · challenges</div>
+        </li>
+        <li>
+          <a href="verilog-literals/index.html">Verilog literal decoder</a>
+          <div class="chapter-meta">18 challenges · b/o/d/h · 's · X/Z/? · unsized</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="boolean">
+      <h2>Boolean algebra &amp; minimization</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="truth-table/index.html">Truth-table builder</a>
+          <div class="chapter-meta">2–10 vars · SOP/POS · fill from expression · don’t-cares</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">K-map minimizer (2–4 vars) <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">visual grouping → minimal expression</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Boolean law playground <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">De Morgan · algebra rewrites</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="gates">
+      <h2>Gates &amp; combinational blocks</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="gate-composer/index.html">Gate composer</a>
+          <div class="chapter-meta">AND/OR/XOR/NOT · schematic · 19 challenges · live table</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Mux / decoder / encoder explorer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">select lines · one-hot outputs</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Priority encoder &amp; comparator <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">priority · signed vs unsigned</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="hdl-structure">
+      <h2>HDL structure &amp; operators</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Module / port diagram <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">hierarchy · named ports</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Operator playground <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">bitwise vs logical · concat · reduction</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Parameter / width explorer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">#(.WIDTH(N)) · bus widths</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="combo-hygiene">
+      <h2>Combinational design hygiene</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Combo style / latch-risk checker <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">assign vs always · missing defaults</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Sensitivity-list explorer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">which signals trigger recomputation</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="clocks">
+      <h2>Clocks, registers &amp; timing</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Clock-edge stepper <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">D-FF · register · counter</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Blocking vs non-blocking animator <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">= vs &lt;= in the same cycle</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Reset strategy timelines <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">sync vs async reset</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Setup / hold explainer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">annotated timing (conceptual)</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="waveforms">
+      <h2>Waveforms &amp; debug literacy</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Mini waveform viewer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">synthetic / small VCD · signal naming</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Testbench anatomy explorer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">DUT vs tb · $display / $finish</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="fsm">
+      <h2>FSM &amp; control</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">FSM designer + stepper <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">Moore/Mealy · state table · input stream</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">State encoding lab <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">binary · one-hot · Gray</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Sequence detector playground <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">e.g. detect 1011</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="arithmetic">
+      <h2>Arithmetic &amp; datapath</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Ripple-carry adder animator <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">carry bit-by-bit</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">CLA generate/propagate visualizer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">G/P tree · small widths</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Array multiplier grid <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">partial products</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">ALU operation explorer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">opcode · Z/C/V flags</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="memory">
+      <h2>Memory, FIFO &amp; cache</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">RAM / ROM address map <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">read/write · $readmemh concept</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">FIFO pointer &amp; flags <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">full/empty · sync FIFO</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Cache hit/miss walkthrough <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">tag/index/offset · direct-mapped</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="hierarchy">
+      <h2>Hierarchy, buses &amp; integration</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Block-diagram integrator <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">CPU / datapath / memory blocks</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Bus handshake animator <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">valid/ready timing</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="synth-lint">
+      <h2>Coding standards &amp; synthesizability</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Synthesizability linter <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">#delay · latch patterns · rule-based</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Naming / style checker <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">clk_ · rst_n_ · section order</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="protocols">
+      <h2>Protocols (conceptual)</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">UART frame animator <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">start/data/parity/stop</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">SPI transaction stepper <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">SCLK · MOSI/MISO · CS</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">I²C start/addr/ack explorer <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">start · address+R/W · ACK/NACK</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="verif-plan">
+      <h2>Verification planning (lightweight)</h2>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Coverage / plan checklist <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">feature → scenario → coverage item</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Testbench layer diagram <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">agent / env / scoreboard sketch</div>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <footer class="site-footer">
+    Digital Design and Verification Platform — client-side concept labs. Full catalog in <a href="../tools.md">tools.md</a>.
+  </footer>
+  <script src="../assets/site.js"></script>
+</body>
+</html>
