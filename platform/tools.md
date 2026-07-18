@@ -102,7 +102,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Radix / bit-width converter | `radix-converter` | **Planned** | Binary / hex / decimal / two’s complement; overflow for a chosen width |
+| Radix / bit-width converter | `radix-converter` | **Shipped** | Bin/hex/unsigned/signed; clickable bits; overflow; challenges |
 | Verilog literal decoder | `verilog-literals` | **Planned** | Parse `4'b1010`, `8'hFF`, signed widths → bit vectors |
 
 ## Boolean algebra & minimization
@@ -231,7 +231,7 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter`, `verilog-literals`, `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals`, `fsm-lab`, `clock-stepper`, `blocking-nba`, `waveform-mini` |
 | **C** | Datapath & memory | `rca-animator`, `alu-explorer`, `fifo-lab`, `mem-map`, `cache-walk` |
 | **D** | HDL hygiene & protocols | `latch-risk`, `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
@@ -261,8 +261,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 12 |
-| Planned | 34 |
+| Shipped | 13 |
+| Planned | 33 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).
