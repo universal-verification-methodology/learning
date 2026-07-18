@@ -27,6 +27,163 @@
 
   let fillTimer = null;
   const root = document.getElementById("tt-root");
+  const STORAGE_KEY = "ddv-truth-table-v1";
+
+  function snapshot() {
+    const forms = sopPos();
+    return {
+      version: 1,
+      savedAt: new Date().toISOString(),
+      n: state.n,
+      names: [...state.names],
+      outs: [...state.outs],
+      expr: state.expr,
+      liveFill: state.liveFill,
+      syncExprFromTable: state.syncExprFromTable,
+      sop: forms.sop,
+      pos: forms.pos,
+      sopExpr: exprFromSop(),
+      posExpr: exprFromPos(),
+    };
+  }
+
+  function persist() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot()));
+    } catch {
+      /* quota / private mode */
+    }
+  }
+
+  function restoreFromObject(data) {
+    if (!data || typeof data !== "object") throw new Error("Invalid file");
+    const n = Number(data.n);
+    if (!Number.isFinite(n) || n < MIN_N || n > MAX_N) throw new Error("n must be 2–10");
+    if (!Array.isArray(data.outs) || data.outs.length !== 1 << n) {
+      throw new Error("outs length must be 2^n");
+    }
+    resize(n);
+    if (Array.isArray(data.names) && data.names.length >= n) {
+      state.names = data.names.slice(0, n).map((x, i) => String(x || DEFAULT_NAMES[i]));
+    }
+    state.outs = data.outs.map((v) => (v === "X" || v === "x" ? "X" : v ? 1 : 0));
+    if (typeof data.expr === "string") state.expr = data.expr;
+    if (typeof data.liveFill === "boolean") state.liveFill = data.liveFill;
+    if (typeof data.syncExprFromTable === "boolean") state.syncExprFromTable = data.syncExprFromTable;
+    state.lastDriver = "table";
+  }
+
+  function tryRestoreLocal() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      restoreFromObject(JSON.parse(raw));
+      state.msg = "Restored last session from this browser.";
+      state.msgOk = true;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function downloadBlob(filename, text, mime) {
+    const blob = new Blob([text], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function stamp() {
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`;
+  }
+
+  function exportJson() {
+    downloadBlob(`truth-table-${stamp()}.json`, JSON.stringify(snapshot(), null, 2), "application/json");
+    state.msg = "Downloaded JSON snapshot.";
+    state.msgOk = true;
+    persist();
+    render();
+  }
+
+  function exportCsv() {
+    const { n, names, outs } = state;
+    const rows = 1 << n;
+    const lines = [["#", ...names, "F"].join(",")];
+    for (let i = 0; i < rows; i++) {
+      const bits = [];
+      for (let b = 0; b < n; b++) bits.push((i >> (n - 1 - b)) & 1);
+      const f = outs[i] === "X" ? "X" : outs[i];
+      lines.push([i, ...bits, f].join(","));
+    }
+    downloadBlob(`truth-table-${stamp()}.csv`, lines.join("\n") + "\n", "text/csv");
+    state.msg = "Downloaded CSV table.";
+    state.msgOk = true;
+    render();
+  }
+
+  function exportMarkdown() {
+    const forms = sopPos();
+    const { n, names, outs } = state;
+    const rows = 1 << n;
+    let md = `# Truth table\n\n`;
+    md += `- Variables (${n}): ${names.join(", ")}\n`;
+    md += `- Expression: \`${state.expr || "(none)"}\`\n`;
+    md += `- SOP: \`${forms.sop}\`\n`;
+    md += `- POS: \`${forms.pos}\`\n`;
+    md += `- Saved: ${new Date().toISOString()}\n\n`;
+    md += `| # | ${names.join(" | ")} | F |\n`;
+    md += `| --- | ${names.map(() => "---").join(" | ")} | --- |\n`;
+    for (let i = 0; i < rows; i++) {
+      const bits = [];
+      for (let b = 0; b < n; b++) bits.push((i >> (n - 1 - b)) & 1);
+      const f = outs[i] === "X" ? "X" : outs[i];
+      md += `| ${i} | ${bits.join(" | ")} | ${f} |\n`;
+    }
+    downloadBlob(`truth-table-${stamp()}.md`, md, "text/markdown");
+    state.msg = "Downloaded Markdown report.";
+    state.msgOk = true;
+    render();
+  }
+
+  async function copyText(label, text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      state.msg = `Copied ${label} to clipboard.`;
+      state.msgOk = true;
+    } catch {
+      state.msg = `Could not copy ${label}.`;
+      state.msgOk = false;
+    }
+    render();
+  }
+
+  function printSheet() {
+    persist();
+    window.print();
+  }
+
+  function onLoadFile(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        restoreFromObject(JSON.parse(String(reader.result)));
+        state.msg = `Loaded ${file.name}.`;
+        state.msgOk = true;
+        persist();
+        render();
+      } catch (e) {
+        state.msg = e.message || "Load failed";
+        state.msgOk = false;
+        render();
+      }
+    };
+    reader.readAsText(file);
+  }
 
   function resize(n) {
     n = Math.max(MIN_N, Math.min(MAX_N, n | 0));
@@ -210,6 +367,7 @@
       state.lastDriver = "expr";
       state.msg = silent ? "Live update from expression." : "Table filled from expression.";
       state.msgOk = true;
+      persist();
       render({ restoreCaret: sel });
     } catch (e) {
       state.msg = e.message || String(e);
@@ -237,6 +395,7 @@
       state.msg = "Expression updated from table (SOP).";
       state.msgOk = true;
     }
+    persist();
     render();
   }
 
@@ -256,6 +415,7 @@
     state.msgOk = true;
     try {
       applyExprToOuts();
+      persist();
     } catch (e) {
       state.msg = e.message || String(e);
       state.msgOk = false;
@@ -420,6 +580,31 @@
           <p class="tt-msg ${state.msgOk ? "ok" : "err"}" id="tt-msg">${escapeHtml(state.msg)}</p>
         </div>
       </div>
+
+      <div class="panel tt-export no-print-hide" style="margin-top:1rem">
+        <div class="panel-head"><h2>Save, load &amp; print</h2></div>
+        <div class="panel-body">
+          <div class="tool-actions">
+            <button type="button" class="btn btn-secondary" id="tt-print">Print</button>
+            <button type="button" class="btn btn-secondary" id="tt-json">Download JSON</button>
+            <button type="button" class="btn btn-secondary" id="tt-csv">Download CSV</button>
+            <button type="button" class="btn btn-secondary" id="tt-md">Download Markdown</button>
+            <label class="btn btn-ghost tt-file-btn">
+              Load JSON
+              <input type="file" id="tt-load" accept="application/json,.json" hidden>
+            </label>
+          </div>
+          <div class="tool-actions" style="margin-top:0.55rem">
+            <button type="button" class="btn btn-ghost" id="tt-copy-expr">Copy expression</button>
+            <button type="button" class="btn btn-ghost" id="tt-copy-sop">Copy SOP</button>
+            <button type="button" class="btn btn-ghost" id="tt-copy-pos">Copy POS</button>
+            <button type="button" class="btn btn-ghost" id="tt-clear-storage">Clear saved session</button>
+          </div>
+          <p class="tt-hint">
+            Session auto-saves in this browser. JSON restores the full lab; CSV/Markdown are for notes and hand-ins.
+          </p>
+        </div>
+      </div>
     `;
 
     const namesEl = root.querySelector("#tt-names");
@@ -487,6 +672,28 @@
     });
     root.querySelector("#tt-use-sop").addEventListener("click", () => useCanonical("sop"));
     root.querySelector("#tt-use-pos").addEventListener("click", () => useCanonical("pos"));
+    root.querySelector("#tt-print").addEventListener("click", printSheet);
+    root.querySelector("#tt-json").addEventListener("click", exportJson);
+    root.querySelector("#tt-csv").addEventListener("click", exportCsv);
+    root.querySelector("#tt-md").addEventListener("click", exportMarkdown);
+    root.querySelector("#tt-load").addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) onLoadFile(file);
+      e.target.value = "";
+    });
+    root.querySelector("#tt-copy-expr").addEventListener("click", () => copyText("expression", state.expr || ""));
+    root.querySelector("#tt-copy-sop").addEventListener("click", () => copyText("SOP", sopPos().sop));
+    root.querySelector("#tt-copy-pos").addEventListener("click", () => copyText("POS", sopPos().pos));
+    root.querySelector("#tt-clear-storage").addEventListener("click", () => {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* ignore */
+      }
+      state.msg = "Cleared saved session (current table kept).";
+      state.msgOk = true;
+      render();
+    });
     root.querySelector("#tt-chal").addEventListener("click", () => {
       state.challengeOn = !state.challengeOn;
       if (state.challengeOn) {
@@ -514,13 +721,16 @@
     checkChallenge();
   }
 
-  // Initial: apply default expression once
-  try {
-    applyExprToOuts();
-    state.msg = "Table follows the expression (live fill on).";
-    state.msgOk = true;
-  } catch {
-    /* keep zeros */
+  // Boot: restore browser session, else apply default expression
+  if (!tryRestoreLocal()) {
+    try {
+      applyExprToOuts();
+      state.msg = "Table follows the expression (live fill on). Session will auto-save.";
+      state.msgOk = true;
+    } catch {
+      /* keep zeros */
+    }
   }
+  persist();
   render();
 })();
