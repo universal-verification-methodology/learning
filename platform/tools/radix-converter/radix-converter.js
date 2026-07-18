@@ -347,12 +347,27 @@
       state.width = w;
       state.bits = clampUnsigned(BigInt(data.bits || "0"), w);
       syncDraftsFromBits();
-      state.status = "Restored last value from this browser.";
+      state.status = "Restored last value from this browser. Use Load starter example anytime.";
       state.statusKind = "ok";
       return true;
     } catch {
       return false;
     }
+  }
+
+  /** Worked first example — see tools.md “Starter example”. */
+  function loadStarter() {
+    state.challengeOn = false;
+    state.challengeHint = false;
+    state.width = 8;
+    state.bits = 0x2an;
+    state.lastOverflow = false;
+    state.lastDriver = "starter";
+    syncDraftsFromBits();
+    state.status =
+      "Starter example: 8-bit 42 = 0x2A = 0010_1010 (unsigned). Edit any radix or click bits.";
+    state.statusKind = "ok";
+    state.msg = "";
   }
 
   function escapeHtml(s) {
@@ -420,6 +435,11 @@
     }).join("");
 
     root.innerHTML = `
+      <div class="starter-note no-print">
+        <p><strong>Starter example:</strong> 8-bit value <code>42</code> / <code>0x2A</code>. Change width, type hex or signed decimal, or click bits — all views stay linked.</p>
+        <button type="button" class="btn btn-secondary" id="rc-starter">Load starter example</button>
+      </div>
+
       <div class="challenge">
         <div class="rc-chal-head">
           <h2>Challenges</h2>
@@ -522,6 +542,7 @@
               <button type="button" class="btn btn-ghost" id="rc-copy-lit">Copy HDL lines</button>
               <button type="button" class="btn btn-ghost" id="rc-print">Print</button>
               <button type="button" class="btn btn-ghost" id="rc-clear-store">Clear saved</button>
+              <button type="button" class="btn btn-ghost" id="rc-starter-2">Load starter example</button>
             </div>
             ${state.msg ? `<p class="rc-hint">${escapeHtml(state.msg)}</p>` : ""}
           </div>
@@ -644,12 +665,15 @@
       state.msg = "Cleared saved session.";
       render();
     });
+    const onStarter = () => {
+      loadStarter();
+      persist();
+      render();
+    };
+    root.querySelector("#rc-starter").addEventListener("click", onStarter);
+    root.querySelector("#rc-starter-2").addEventListener("click", onStarter);
   }
 
-  if (!tryRestore()) {
-    syncDraftsFromBits();
-    state.status = "Try editing hex, decimal, or click bits. Out-of-range values wrap.";
-    state.statusKind = "ok";
-  }
+  if (!tryRestore()) loadStarter();
   render();
 })();

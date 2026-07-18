@@ -484,6 +484,16 @@
     state.msgOk = true;
   }
 
+  /** Worked first example — see tools.md “Starter example”. */
+  function loadStarter() {
+    state.challengeOn = false;
+    state.challengeHint = false;
+    applyPreset("and2");
+    state.msg =
+      "Starter example: one AND gate, F = A & B. Probe the truth table or add more gates.";
+    state.msgOk = true;
+  }
+
   function addGate(type) {
     const def = GATE_DEFS[type];
     if (!def) return;
@@ -609,7 +619,7 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return false;
       restoreFromObject(JSON.parse(raw));
-      state.msg = "Restored last net from this browser.";
+      state.msg = "Restored last net from this browser. Use Load starter example anytime.";
       state.msgOk = true;
       return true;
     } catch {
@@ -867,6 +877,11 @@
       .join("");
 
     root.innerHTML = `
+      <div class="starter-note no-print">
+        <p><strong>Starter example:</strong> a single AND (F = A &amp; B) with live schematic and truth table. Click a challenge card to build from scratch.</p>
+        <button type="button" class="btn btn-secondary" id="gc-starter">Load starter example</button>
+      </div>
+
       <div class="challenge">
         <div class="gc-chal-head">
           <h2>Challenges</h2>
@@ -958,6 +973,7 @@
                 <input type="file" id="gc-load" accept="application/json,.json" hidden>
               </label>
               <button type="button" class="btn btn-ghost" id="gc-clear-store">Clear saved session</button>
+              <button type="button" class="btn btn-ghost" id="gc-starter-2">Load starter example</button>
             </div>
           </div>
         </div>
@@ -1119,12 +1135,15 @@
       state.msgOk = true;
       render();
     });
+    const onStarter = () => {
+      loadStarter();
+      persist();
+      render();
+    };
+    root.querySelector("#gc-starter").addEventListener("click", onStarter);
+    root.querySelector("#gc-starter-2").addEventListener("click", onStarter);
   }
 
-  if (!tryRestoreLocal()) {
-    applyPreset("and2");
-    state.msg = "Start from a preset, or add gates and wire them.";
-    state.msgOk = true;
-  }
+  if (!tryRestoreLocal()) loadStarter();
   render();
 })();

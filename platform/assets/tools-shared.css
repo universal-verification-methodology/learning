@@ -197,3 +197,28 @@
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* First-run worked example (see tools.md → Starter example) */
+.starter-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem 0.85rem;
+  margin-bottom: 1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--signal);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.starter-note p {
+  margin: 0;
+  flex: 1 1 14rem;
+  color: var(--muted);
+}
+.starter-note strong {
+  color: var(--ink);
+}

@@ -192,12 +192,31 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return false;
       restoreFromObject(JSON.parse(raw));
-      state.msg = "Restored last session from this browser.";
+      state.msg = "Restored last session from this browser. Use Load starter example anytime.";
       state.msgOk = true;
       return true;
     } catch {
       return false;
     }
+  }
+
+  /** Worked first example — see tools.md “Starter example”. */
+  function loadStarter() {
+    state.challengeOn = false;
+    state.challengeHint = false;
+    resize(2);
+    state.names = ["A", "B"];
+    state.expr = "A & B";
+    state.liveFill = true;
+    state.syncExprFromTable = true;
+    state.lastDriver = "expr";
+    try {
+      applyExprToOuts();
+    } catch {
+      state.outs = [0, 0, 0, 1];
+    }
+    state.msg = "Starter example: F = A & B. Edit F or the expression — both stay in sync.";
+    state.msgOk = true;
   }
 
   function downloadBlob(filename, text, mime) {
@@ -617,6 +636,11 @@
     const passed = challengePassed();
 
     root.innerHTML = `
+      <div class="starter-note no-print-hide">
+        <p><strong>Starter example:</strong> two inputs, expression <code>A &amp; B</code> fills the table. Challenges reset to a blank table when you Start.</p>
+        <button type="button" class="btn btn-secondary" id="tt-starter">Load starter example</button>
+      </div>
+
       <div class="challenge">
         <h2>Challenges</h2>
         <div class="tt-chal-pick">
@@ -775,6 +799,7 @@
             <button type="button" class="btn btn-ghost" id="tt-copy-sop">Copy SOP</button>
             <button type="button" class="btn btn-ghost" id="tt-copy-pos">Copy POS</button>
             <button type="button" class="btn btn-ghost" id="tt-clear-storage">Clear saved session</button>
+            <button type="button" class="btn btn-ghost" id="tt-starter-2">Load starter example</button>
           </div>
           <p class="tt-hint">
             Session auto-saves in this browser. JSON restores the full lab; CSV/Markdown are for notes and hand-ins.
@@ -870,6 +895,13 @@
       state.msgOk = true;
       render();
     });
+    const loadStarterBtn = () => {
+      loadStarter();
+      persist();
+      render();
+    };
+    root.querySelector("#tt-starter").addEventListener("click", loadStarterBtn);
+    root.querySelector("#tt-starter-2").addEventListener("click", loadStarterBtn);
     root.querySelector("#tt-chal-sel").addEventListener("change", (e) => {
       state.challengeId = e.target.value;
       state.challengeHint = false;
@@ -911,16 +943,8 @@
     checkChallenge();
   }
 
-  // Boot: restore browser session, else apply default expression
-  if (!tryRestoreLocal()) {
-    try {
-      applyExprToOuts();
-      state.msg = "Table follows the expression (live fill on). Session will auto-save.";
-      state.msgOk = true;
-    } catch {
-      /* keep zeros */
-    }
-  }
+  // Boot: restore browser session, else starter example
+  if (!tryRestoreLocal()) loadStarter();
   persist();
   render();
 })();

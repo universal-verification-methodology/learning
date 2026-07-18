@@ -14,6 +14,25 @@ Canonical list of **browser labs** for the learning monorepo. Tools are organize
 | Browser = hard-to-see | Visualize structures and timing intuition in-tab |
 | Offline = fidelity | Real iverilog, Verilator, GTKWave, UVM, synthesis stay in course repos / local toolchains |
 | Client-side only | No upload server; work stays in the browser (except links out to GitHub sandboxes) |
+| **Starter example** | Every tool opens on a small **worked first example** so the UI is obvious before challenges |
+
+### Starter example (required for new tools)
+
+When shipping or extending a tool, follow this pattern so learners see how it works immediately:
+
+1. **First visit** — load a concrete starter (not an empty canvas). Keep it tiny and correct (e.g. `F = A & B`, one AND gate, `8'h2A` / decimal 42).
+2. **Visible caption** — a short “Starter example: …” note at the top (shared class `.starter-note` in `assets/tools-shared.css`).
+3. **Reload button** — always offer **Load starter example** (even after `localStorage` restore).
+4. **Session restore** — returning visitors may get their last session; the starter button must still reset to the worked example.
+5. **Challenges** — **Start** / challenge cards may clear to a blank or constrained state; that is intentional. Do **not** auto-start a challenge on page load.
+6. **Document the starter** — when a tool ships, note its starter in the catalog “What it teaches” cell or a one-line comment in the tool JS (`loadStarter()`).
+
+| Tool | Starter (current) |
+|------|-------------------|
+| `truth-table` | 2 vars, expression `A & B` fills the table |
+| `gate-composer` | Single AND gate, `F = A & B` |
+| `radix-converter` | Width 8, value `42` / `0x2A` / `0010_1010` |
+| Shell / Git tools | Sample VFS, sample repo, or guided checklist (where already present); bring any that open empty up to this rule when touched |
 
 ### Status legend
 
@@ -102,14 +121,14 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Radix / bit-width converter | `radix-converter` | **Shipped** | Bin/hex/unsigned/signed; clickable bits; overflow; challenges |
+| Radix / bit-width converter | `radix-converter` | **Shipped** | Starter `0x2A`; bin/hex/signed; overflow; challenges |
 | Verilog literal decoder | `verilog-literals` | **Planned** | Parse `4'b1010`, `8'hFF`, signed widths → bit vectors |
 
 ## Boolean algebra & minimization
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Truth-table builder | `truth-table` | **Shipped** | 2–10 vars; live SOP/POS; 10 challenges; save/print/CSV |
+| Truth-table builder | `truth-table` | **Shipped** | Starter `A & B`; live SOP/POS; challenges; save/print |
 | K-map minimizer (2–4 vars) | `kmap` | **Planned** | Visual grouping → minimal expression |
 | Boolean law playground | `boolean-laws` | **Planned** | Step-through De Morgan and algebra rewrites |
 
@@ -117,7 +136,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Gate composer | `gate-composer` | **Shipped** | Netlist + schematic; 19 challenges; live table / JSON |
+| Gate composer | `gate-composer` | **Shipped** | Starter AND; schematic; 19 challenges; JSON |
 | Mux / decoder / encoder explorer | `mux-decoder` | **Planned** | Select lines → data / one-hot outputs |
 | Priority encoder & comparator | `priority-compare` | **Planned** | Priority resolution; signed vs unsigned compare |
 
