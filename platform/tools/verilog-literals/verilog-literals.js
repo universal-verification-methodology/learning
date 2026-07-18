@@ -8,12 +8,20 @@
     "4'b1010",
     "8'hFF",
     "8'h2A",
-    "8'sb1111_1111",
-    "8'sd-1",
+    "8'H2a",
     "16'd42",
+    "8'sd-1",
+    "8'sb1111_1111",
+    "4'shF",
+    "6'o17",
     "12'hABC",
+    "'b1010",
+    "'o17",
+    "'d255",
     "'hF",
+    "42",
     "5'b10x0z",
+    "4'b10??",
     "32'hDEAD_BEEF",
   ];
 
@@ -226,24 +234,50 @@
       level: "Intro",
       prompt: "Enter a literal whose bits are exactly 1010 (width 4).",
       hint: "4'b1010",
-      check: (p, text) => p.ok && p.size === 4 && p.bits === "1010",
+      check: (p) => p.ok && p.size === 4 && p.bits === "1010",
     },
     {
       id: "hex-ff",
       title: "Hex FF",
       level: "Intro",
       prompt: "Decode 8'hFF — unsigned should be 255.",
-      hint: "Type 8'hFF",
+      hint: "Type 8'hFF (or 8'HFF).",
       check: (p) => p.ok && !p.hasXZ && p.size === 8 && p.value === 255n,
+    },
+    {
+      id: "sized-dec",
+      title: "Sized decimal 'd",
+      level: "Intro",
+      prompt: "Enter 16'd42 — unsigned should be 42, width 16.",
+      hint: "16'd42",
+      check: (p) => p.ok && p.base === 10 && p.size === 16 && p.value === 42n && p.sized,
+    },
+    {
+      id: "plain-dec",
+      title: "Plain decimal 42",
+      level: "Intro",
+      prompt: "Enter plain unsized decimal 42 (no quote).",
+      hint: "Just type 42",
+      check: (p, text) =>
+        p.ok && p.unsized && p.base === 10 && /^\s*42\s*$/.test(text) && p.value === 42n,
     },
     {
       id: "signed-neg1",
       title: "Signed −1",
       level: "Intro",
-      prompt: "Enter 8'sb1111_1111 or 8'sd-1. Signed interpretation should be −1.",
-      hint: "8'sd-1 or 8'shFF with signed flag.",
+      prompt: "Enter 8'sb1111_1111 or 8'sd-1. Signed value should be −1.",
+      hint: "8'sd-1 or 8'shFF with 's.",
       check: (p) =>
         p.ok && !p.hasXZ && p.size === 8 && p.signed && toSigned(p.value, 8) === -1n,
+    },
+    {
+      id: "uppercase-base",
+      title: "Uppercase base",
+      level: "Core",
+      prompt: "Enter 8'H2A (capital H). Same bits as 8'h2A.",
+      hint: "8'H2A",
+      check: (p, text) =>
+        p.ok && p.size === 8 && p.value === 0x2an && /'H2[Aa]/.test(text.replace(/\s/g, "")),
     },
     {
       id: "underscore",
@@ -258,7 +292,7 @@
       title: "Truncation warn",
       level: "Core",
       prompt: "Enter 4'hFF so the tool truncates to 4 bits and warns.",
-      hint: "4'hFF → bits 1111, truncated flag.",
+      hint: "4'hFF → bits 1111, truncated.",
       check: (p) => p.ok && p.size === 4 && p.truncated && p.bits === "1111",
     },
     {
@@ -278,6 +312,41 @@
       check: (p) => p.ok && p.base === 8 && p.size === 6 && p.bits === "001111",
     },
     {
+      id: "unsized-bin",
+      title: "Unsized binary",
+      level: "Core",
+      prompt: "Enter 'b1010 (unsized). Bits should be 1010.",
+      hint: "'b1010",
+      check: (p, text) =>
+        p.ok && p.unsized && p.base === 2 && p.bits === "1010" && /'b1010/i.test(text.replace(/\s/g, "")),
+    },
+    {
+      id: "unsized-oct",
+      title: "Unsized octal",
+      level: "Core",
+      prompt: "Enter 'o17 (unsized). Bits should be 001_111.",
+      hint: "'o17",
+      check: (p, text) =>
+        p.ok && p.unsized && p.base === 8 && p.bits === "001111" && /'o17/i.test(text.replace(/\s/g, "")),
+    },
+    {
+      id: "unsized-dec",
+      title: "Unsized 'd",
+      level: "HDL",
+      prompt: "Enter 'd255 — unsized decimal based literal.",
+      hint: "'d255",
+      check: (p, text) =>
+        p.ok && p.unsized && p.base === 10 && p.value === 255n && /'d255/i.test(text.replace(/\s/g, "")),
+    },
+    {
+      id: "unsized-hex",
+      title: "Unsized hex",
+      level: "HDL",
+      prompt: "Enter 'hF (unsized). Tool should still show a bit vector.",
+      hint: "'hF",
+      check: (p, text) => p.ok && p.unsized && /'hF/i.test(text.replace(/\s/g, "")),
+    },
+    {
       id: "xz",
       title: "X / Z digits",
       level: "HDL",
@@ -286,12 +355,25 @@
       check: (p) => p.ok && p.hasXZ && p.bits.toLowerCase() === "10xz",
     },
     {
-      id: "unsized",
-      title: "Unsized hex",
+      id: "question",
+      title: "? as unknown",
       level: "HDL",
-      prompt: "Enter 'hF (unsized). Tool should still show a bit vector.",
-      hint: "'hF",
-      check: (p, text) => p.ok && p.unsized && /'hF/i.test(text.replace(/\s/g, "")),
+      prompt: "Enter 4'b10?? — '?' should show as X in the bit strip.",
+      hint: "4'b10?? → 10xx",
+      check: (p) => p.ok && p.hasXZ && p.bits.toLowerCase() === "10xx",
+    },
+    {
+      id: "signed-trunc",
+      title: "Signed + truncate",
+      level: "Stretch",
+      prompt: "Enter 4'shF — signed nibble, truncated from hex F, signed value −1.",
+      hint: "4'shF → bits 1111, signed −1.",
+      check: (p) =>
+        p.ok &&
+        p.size === 4 &&
+        p.signed &&
+        p.bits === "1111" &&
+        toSigned(p.value, 4) === -1n,
     },
     {
       id: "starter-match",

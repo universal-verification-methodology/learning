@@ -123,7 +123,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Radix / bit-width converter | `radix-converter` | **Shipped** | Starter `0x2A`; bin/hex/signed; overflow; challenges |
-| Verilog literal decoder | `verilog-literals` | **Shipped** | Starter `8'h2A`; sized/unsized/`'s`; X/Z; truncate/extend |
+| Verilog literal decoder | `verilog-literals` | **Shipped** | Starter `8'h2A`; 18 challenges; b/o/d/h, `'s`, X/Z/? |
 
 ## Boolean algebra & minimization
 
