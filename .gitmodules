@@ -1,0 +1,3 @@
+[submodule "courses/learn_unix_git"]
+	path = courses/learn_unix_git
+	url = git@github.com:universal-verification-methodology/learn_unix_git.git
