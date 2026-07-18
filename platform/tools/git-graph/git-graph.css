@@ -17,7 +17,7 @@
 .git-status {
   font-family: var(--mono);
   font-size: 0.82rem;
-  background: #eef2f5;
+  background: var(--surface2);
   border-radius: 8px;
   padding: 0.65rem 0.8rem;
   margin-bottom: 0.85rem;
@@ -36,28 +36,28 @@
   cursor: pointer;
 }
 .commit-node circle {
-  fill: #1e9e6a;
-  stroke: #d7e4ef;
+  fill: #1f7a4c;
+  stroke: #f3efe6;
   stroke-width: 2;
 }
 .commit-node.head circle {
-  fill: #c45c26;
+  fill: #9a6b12;
 }
 .commit-node text {
-  fill: #d7e4ef;
+  fill: #f3efe6;
   font-family: var(--mono);
   font-size: 11px;
 }
 
 .branch-label {
-  fill: #7ec8ff;
+  fill: #5ecfad;
   font-family: var(--mono);
   font-size: 11px;
   font-weight: 600;
 }
 
 .edge {
-  stroke: #3a5166;
+  stroke: #3a463f;
   stroke-width: 2;
   fill: none;
 }

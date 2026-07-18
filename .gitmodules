@@ -1,3 +1,6 @@
 [submodule "courses/learn_unix_git"]
 	path = courses/learn_unix_git
 	url = git@github.com:universal-verification-methodology/learn_unix_git.git
+[submodule "courses/learn_digital_verilog"]
+	path = courses/learn_digital_verilog
+	url = https://github.com/universal-verification-methodology/learn_digital_verilog

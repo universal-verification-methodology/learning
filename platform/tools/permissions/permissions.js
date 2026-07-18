@@ -67,6 +67,68 @@
         <div class="result-box" id="umask-out"></div>
       </div>
     </div>
+
+    <div class="panel" style="margin-top:1rem">
+      <div class="panel-head"><h2>PATH &amp; environment</h2></div>
+      <div class="panel-body">
+        <p style="margin:0 0 0.75rem;color:var(--muted);font-size:0.9rem">
+          Edit PATH entries. Which looks up first wins — missing dirs explain “command not found”.
+        </p>
+        <div class="umask-row">
+          <label style="flex:1">PATH (colon-separated)
+            <input id="path-in" value="/usr/local/bin:/usr/bin:/bin:/home/student/bin" style="min-width:100%">
+          </label>
+          <label>lookup command
+            <input id="which-in" value="simv">
+          </label>
+        </div>
+        <div class="result-box" id="path-out"></div>
+        <ul class="hint-list" style="margin-top:0.75rem">
+          <li>Lab fake binaries: <code>/usr/bin/ls</code>, <code>/usr/bin/git</code>, <code>/home/student/bin/simv</code></li>
+          <li><code>export PATH="$HOME/bin:$PATH"</code> puts your tools first</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:1rem">
+      <div class="panel-head"><h2>Ownership, groups &amp; export</h2></div>
+      <div class="panel-body">
+        <div class="umask-row">
+          <label>File owner
+            <select id="owner-in">
+              <option value="student">student</option>
+              <option value="root">root</option>
+              <option value="ta">ta</option>
+            </select>
+          </label>
+          <label>File group
+            <select id="group-in">
+              <option value="students">students</option>
+              <option value="staff">staff</option>
+              <option value="root">root</option>
+            </select>
+          </label>
+          <label>You are
+            <select id="you-user">
+              <option value="student">student</option>
+              <option value="ta">ta</option>
+              <option value="root">root</option>
+            </select>
+          </label>
+          <label>Your groups (comma)
+            <input id="you-groups" value="students">
+          </label>
+        </div>
+        <div class="result-box" id="owner-out"></div>
+        <div class="umask-row" style="margin-top:0.85rem">
+          <label style="flex:1">export NAME=value (dotfile / shell)
+            <input id="export-in" value="export TOOLS=/opt/eda" style="min-width:100%">
+          </label>
+          <button type="button" class="btn btn-secondary" id="btn-export">Apply</button>
+        </div>
+        <div class="result-box" id="env-out"></div>
+      </div>
+    </div>
   `;
 
   const tbody = root.querySelector("#bit-table tbody");
@@ -130,6 +192,7 @@
       .join("");
 
     renderUmask();
+    if (document.getElementById("owner-out")) renderOwner();
   }
 
   function parseOctal(s) {
@@ -158,6 +221,83 @@
   document.getElementById("create-type").addEventListener("change", renderUmask);
   document.getElementById("umask-in").addEventListener("input", renderUmask);
 
+  const FAKE_BINS = {
+    "/usr/bin/ls": true,
+    "/usr/bin/git": true,
+    "/bin/bash": true,
+    "/home/student/bin/simv": true,
+    "/usr/local/bin/vcs": true,
+  };
+
+  function renderPath() {
+    const pathVal = document.getElementById("path-in").value;
+    const cmd = document.getElementById("which-in").value.trim() || "simv";
+    const dirs = pathVal.split(":").filter(Boolean);
+    const lines = dirs.map((d, i) => `${i + 1}. ${d}`);
+    let found = null;
+    for (const d of dirs) {
+      const candidate = (d.replace(/\/$/, "") + "/" + cmd).replace(/\/+/g, "/");
+      if (FAKE_BINS[candidate]) {
+        found = candidate;
+        break;
+      }
+    }
+    const out = document.getElementById("path-out");
+    out.innerHTML =
+      `<div>PATH search order:</div><pre style="margin:0.4rem 0 0;white-space:pre-wrap">${lines.join("\n") || "(empty PATH)"}</pre>` +
+      (found
+        ? `<div style="margin-top:0.55rem">which ${cmd} → <strong>${found}</strong></div>`
+        : `<div style="margin-top:0.55rem;color:var(--err)">which ${cmd} → not found (add a dir that contains it, or use full path)</div>`);
+  }
+
+  document.getElementById("path-in").addEventListener("input", renderPath);
+  document.getElementById("which-in").addEventListener("input", renderPath);
+
+  const env = { HOME: "/home/student", USER: "student", PATH: "/usr/local/bin:/usr/bin:/bin" };
+
+  function classForYou() {
+    const owner = document.getElementById("owner-in").value;
+    const group = document.getElementById("group-in").value;
+    const you = document.getElementById("you-user").value;
+    const groups = document.getElementById("you-groups").value.split(",").map((s) => s.trim()).filter(Boolean);
+    if (you === "root" || you === owner) return { which: "owner", shift: 6 };
+    if (groups.includes(group)) return { which: "group", shift: 3 };
+    return { which: "other", shift: 0 };
+  }
+
+  function renderOwner() {
+    const cls = classForYou();
+    const bits = (mode >> cls.shift) & 7;
+    const canR = Boolean(bits & 4);
+    const canW = Boolean(bits & 2);
+    const canX = Boolean(bits & 1);
+    document.getElementById("owner-out").innerHTML =
+      `You match <strong>${cls.which}</strong> class → bits ${bits.toString(8)} · ` +
+      `read ${canR ? "yes" : "no"} · write ${canW ? "yes" : "no"} · exec ${canX ? "yes" : "no"}` +
+      `<div style="margin-top:0.35rem;color:var(--muted)">ls -l style: ${document.getElementById("owner-in").value} ${document.getElementById("group-in").value}  file.txt</div>`;
+  }
+
+  function renderEnv() {
+    document.getElementById("env-out").textContent = Object.entries(env)
+      .map(([k, v]) => `${k}=${v}`)
+      .join("\n");
+  }
+
+  ["owner-in", "group-in", "you-user", "you-groups"].forEach((id) => {
+    document.getElementById(id).addEventListener("change", renderOwner);
+    document.getElementById(id).addEventListener("input", renderOwner);
+  });
+  document.getElementById("btn-export").addEventListener("click", () => {
+    const line = document.getElementById("export-in").value.trim();
+    const m = line.match(/^export\s+([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!m) {
+      document.getElementById("env-out").textContent = "Expected: export NAME=value";
+      return;
+    }
+    env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    renderEnv();
+  });
+
   const presets = [
     ["644", 0o644],
     ["755", 0o755],
@@ -178,4 +318,7 @@
   });
 
   render();
+  renderPath();
+  renderEnv();
+  renderOwner();
 })();

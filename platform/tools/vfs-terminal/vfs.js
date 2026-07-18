@@ -11,7 +11,9 @@
             type: "dir",
             mode: 0o755,
             children: {
-              "notes.txt": { type: "file", mode: 0o644, content: "Welcome to the Unix lab.\nTry: ls, cd, mkdir, touch\n" },
+              "notes.txt": { type: "file", mode: 0o644, content: "Welcome to the Unix lab.\nTry: ls, cd, mkdir, touch\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine 9\nLine 10\nLine 11\nLine 12\n" },
+              ".bashrc": { type: "file", mode: 0o644, content: "export PATH=\"$HOME/bin:$PATH\"\nalias ll='ls -l'\n" },
+              "rtl": { type: "symlink", mode: 0o777, target: "project/src" },
               project: {
                 type: "dir",
                 mode: 0o755,
@@ -104,15 +106,30 @@
     return normalize(state.cwd + "/" + path);
   }
 
-  function resolveNode(root, absPath) {
+  function resolveNode(root, absPath, opts = {}) {
+    const follow = opts.follow !== false;
     const path = normalize(absPath);
     if (path === "/") return root;
     let node = root;
-    for (const part of path.split("/").filter(Boolean)) {
-      if (!node || node.type !== "dir" || !node.children[part]) return null;
-      node = node.children[part];
+    const parts = path.split("/").filter(Boolean);
+    for (let i = 0; i < parts.length; i++) {
+      if (!node || node.type !== "dir" || !node.children[parts[i]]) return null;
+      node = node.children[parts[i]];
+      if (node.type === "symlink" && follow) {
+        const target = node.target.startsWith("/")
+          ? node.target
+          : normalize("/" + parts.slice(0, i).join("/") + "/" + node.target);
+        // resolve remaining path under symlink target
+        const rest = parts.slice(i + 1);
+        const next = normalize(target + (rest.length ? "/" + rest.join("/") : ""));
+        return resolveNode(root, next, opts);
+      }
     }
     return node;
+  }
+
+  function resolveLink(root, absPath) {
+    return resolveNode(root, absPath, { follow: false });
   }
 
   function parentPath(absPath) {
@@ -133,16 +150,99 @@
     const u = perms[(mode >> 6) & 7];
     const g = perms[(mode >> 3) & 7];
     const o = perms[mode & 7];
-    return (type === "dir" ? "d" : "-") + u + g + o;
+    const t = type === "dir" ? "d" : type === "symlink" ? "l" : "-";
+    return t + u + g + o;
   }
 
-  function listNames(dir, long) {
-    const names = Object.keys(dir.children).sort();
-    if (!long) return names.join("  ") || "";
+  const MAN = {
+    ls: "ls — list directory contents\n  ls [-l] [path|glob]\n  Lab: supports -l and simple globs.",
+    cd: "cd — change directory\n  cd [path]\n  Special: ~ . ..",
+    pwd: "pwd — print working directory",
+    mkdir: "mkdir — create directories\n  mkdir [-p] path",
+    cat: "cat — concatenate / print files\n  cat file",
+    less: "less — page through a file (lab)\n  less file\n  Lab: prints with ---- more ---- every 8 lines.",
+    head: "head — first lines\n  head [-n N] file",
+    tail: "tail — last lines\n  tail [-n N] file",
+    ln: "ln — make links\n  ln -s target link_name",
+    man: "man — manual pages (lab)\n  man COMMAND",
+    help: "help — list lab commands",
+    wc: "wc — word/line/byte count\n  wc [-l|-w|-c] file",
+    cp: "cp — copy files\n  cp src dst",
+    mv: "mv — move/rename\n  mv src dst",
+    rm: "rm — remove\n  rm [-r] path",
+    touch: "touch — create empty file / update timestamp",
+    tree: "tree — show directory tree (lab)",
+    echo: "echo — print arguments",
+  };
+
+  function globToRegExp(pattern) {
+    let re = "^";
+    for (let i = 0; i < pattern.length; i++) {
+      const ch = pattern[i];
+      if (ch === "*") re += ".*";
+      else if (ch === "?") re += ".";
+      else if (ch === "[") {
+        const end = pattern.indexOf("]", i + 1);
+        if (end === -1) re += "\\[";
+        else {
+          re += pattern.slice(i, end + 1);
+          i = end;
+        }
+      } else if (/[.+^${}()|\\]/.test(ch)) re += "\\" + ch;
+      else re += ch;
+    }
+    return new RegExp(re + "$");
+  }
+
+  function expandGlobs(patterns, dirPath) {
+    const dir = resolveNode(state.root, dirPath);
+    if (!dir || dir.type !== "dir") return [];
+    const names = Object.keys(dir.children);
+    const out = [];
+    for (const pat of patterns) {
+      if (!/[*?\[]/.test(pat)) {
+        out.push(pat);
+        continue;
+      }
+      const re = globToRegExp(pat);
+      const hits = names.filter((n) => re.test(n)).sort();
+      if (!hits.length) out.push(pat);
+      else out.push(...hits);
+    }
+    return out;
+  }
+
+  function readFileText(pathArg) {
+    const node = resolveNode(state.root, expand(pathArg));
+    if (!node) throw new Error(`${pathArg}: No such file or directory`);
+    if (node.type === "symlink") {
+      const t = resolveNode(state.root, expand(pathArg));
+      if (!t || t.type !== "file") throw new Error(`${pathArg}: Is a directory`);
+      return t.content;
+    }
+    if (node.type !== "file") throw new Error(`${pathArg}: Is a directory`);
+    return node.content;
+  }
+
+  function listNames(dir, long, filterNames, nameFilter) {
+    let names = Object.keys(dir.children).sort();
+    if (nameFilter) names = nameFilter(names);
+    if (filterNames) names = names.filter((n) => filterNames.includes(n));
+    if (!long) {
+      return names
+        .map((n) => {
+          const c = dir.children[n];
+          if (c.type === "dir") return n + "/";
+          if (c.type === "symlink") return n + "@";
+          return n;
+        })
+        .join("  ");
+    }
     return names
       .map((n) => {
         const c = dir.children[n];
-        return `${modeStr(c.mode, c.type)}  ${n}${c.type === "dir" ? "/" : ""}`;
+        const arrow = c.type === "symlink" ? ` -> ${c.target}` : "";
+        return `${modeStr(c.mode, c.type)}  ${n}${arrow}`;
       })
       .join("\n");
   }
@@ -157,8 +257,11 @@
           const child = node.children[name];
           const full = path === "/" ? "/" + name : path + "/" + name;
           const mark = full === state.cwd ? "  <- cwd" : "";
-          const prefix = child.type === "dir" ? "[dir]  " : "[file] ";
-          lines.push("  ".repeat(depth) + prefix + name + mark);
+          let prefix = "[file] ";
+          if (child.type === "dir") prefix = "[dir]  ";
+          else if (child.type === "symlink") prefix = "[link] ";
+          const extra = child.type === "symlink" ? ` -> ${child.target}` : "";
+          lines.push("  ".repeat(depth) + prefix + name + extra + mark);
           if (child.type === "dir") walk(child, full, depth + 1);
         });
     }
@@ -196,11 +299,16 @@
           return {
             out: [
               "Lab commands:",
-              "  pwd · ls [-l] [path] · cd [path] · mkdir [-p] path",
-              "  touch path · cat path · cp src dst · mv src dst · rm [-r] path",
-              "  tree · clear · help · challenge",
+              "  pwd · ls [-l] [path|glob] · cd [path] · mkdir [-p] path",
+              "  touch · cat · less · head/tail · wc · ln -s · man · echo",
+              "  cp · mv · rm [-r] · tree · clear · help · challenge",
             ].join("\n"),
           };
+        case "man": {
+          const topic = (args[0] || "").replace(/^\(/, "");
+          if (!topic) return { out: "What manual page do you want?\nTry: man ls", err: true };
+          return { out: MAN[topic] || `No manual entry for ${topic} in this lab` };
+        }
         case "pwd":
           return { out: state.cwd };
         case "clear":
@@ -211,21 +319,86 @@
           if (!node) return { out: `cd: no such file or directory: ${args[0] || "~"}`, err: true };
           if (node.type !== "dir") return { out: `cd: not a directory: ${args[0]}`, err: true };
           state.cwd = normalize(target);
+          // if we followed a symlink, keep logical path as requested when possible
+          const link = resolveLink(state.root, target);
+          if (link && link.type === "symlink") {
+            /* cwd stays at expanded target path from resolve — use real path */
+            const real = (() => {
+              // re-resolve to get canonical by walking without keeping symlink name
+              let n = state.root;
+              let acc = "";
+              // simpler: set cwd to expand of symlink target from parent
+              const parent = parentPath(target);
+              const absTarget = link.target.startsWith("/")
+                ? normalize(link.target)
+                : normalize(parent + "/" + link.target);
+              return absTarget;
+            })();
+            state.cwd = real;
+          }
           return { out: "" };
+        }
+        case "ln": {
+          if (args[0] !== "-s" || args.length < 3) {
+            return { out: "ln: lab supports only: ln -s target link_name", err: true };
+          }
+          const target = args[1];
+          const linkAbs = expand(args[2]);
+          if (resolveLink(state.root, linkAbs)) {
+            return { out: `ln: failed to create symbolic link '${args[2]}': File exists`, err: true };
+          }
+          const parent = resolveNode(state.root, parentPath(linkAbs));
+          if (!parent || parent.type !== "dir") {
+            return { out: `ln: failed to create symbolic link '${args[2]}': No such file`, err: true };
+          }
+          parent.children[baseName(linkAbs)] = { type: "symlink", mode: 0o777, target };
+          return { out: "" };
+        }
+        case "less": {
+          if (!args[0]) return { out: "less: missing file", err: true };
+          try {
+            const text = readFileText(args[0]);
+            const lines = text.replace(/\n$/, "").split("\n");
+            const pages = [];
+            for (let i = 0; i < lines.length; i += 8) {
+              pages.push(lines.slice(i, i + 8).join("\n"));
+            }
+            return {
+              out: pages.join("\n---- more (lab) ----\n") + "\n(END) q to quit — already closed in lab",
+            };
+          } catch (e) {
+            return { out: `less: ${e.message}`, err: true };
+          }
         }
         case "ls": {
           let long = false;
+          let all = false;
           const paths = [];
           for (const a of args) {
-            if (a === "-l" || a === "-la" || a === "-al") long = true;
+            if (a === "-l" || a === "-la" || a === "-al" || a === "-al") {
+              long = true;
+              if (a.includes("a")) all = true;
+            } else if (a === "-a") all = true;
             else if (!a.startsWith("-")) paths.push(a);
           }
-          const target = expand(paths[0] || ".");
-          const node = resolveNode(state.root, target);
-          if (!node) return { out: `ls: cannot access '${paths[0] || "."}': No such file`, err: true };
           state._lastLs = true;
-          if (node.type === "file") return { out: baseName(target) };
-          return { out: listNames(node, long) };
+          const filterDot = (names) => (all ? names : names.filter((n) => !n.startsWith(".")));
+          if (!paths.length) {
+            const node = resolveNode(state.root, state.cwd);
+            return { out: listNames(node, long, null, filterDot) };
+          }
+          if (paths.some((p) => /[*?\[]/.test(p))) {
+            const hits = expandGlobs(paths, state.cwd);
+            const dir = resolveNode(state.root, state.cwd);
+            const existing = hits.filter((n) => dir.children[n]);
+            if (!existing.length) return { out: `ls: cannot access '${paths[0]}': No such file`, err: true };
+            return { out: listNames(dir, long, existing) };
+          }
+          const target = expand(paths[0]);
+          const node = resolveNode(state.root, target);
+          if (!node) return { out: `ls: cannot access '${paths[0]}': No such file`, err: true };
+          if (node.type === "file" || node.type === "symlink") return { out: baseName(target) };
+          return { out: listNames(node, long, null, filterDot) };
         }
         case "mkdir": {
           let parents = false;
@@ -328,6 +501,49 @@
           }
           return { out: "" };
         }
+        case "head":
+        case "tail": {
+          let n = 10;
+          const paths = [];
+          for (let i = 0; i < args.length; i++) {
+            if (args[i] === "-n") n = Number(args[++i]) || 10;
+            else if (/^-\d+$/.test(args[i])) n = Math.abs(Number(args[i]));
+            else paths.push(args[i]);
+          }
+          if (!paths[0]) return { out: `${cmd}: missing file operand`, err: true };
+          try {
+            const lines = readFileText(paths[0]).replace(/\n$/, "").split("\n");
+            const slice = cmd === "head" ? lines.slice(0, n) : lines.slice(-n);
+            return { out: slice.join("\n") };
+          } catch (e) {
+            return { out: `${cmd}: ${e.message}`, err: true };
+          }
+        }
+        case "wc": {
+          let mode = "all";
+          const paths = [];
+          for (const a of args) {
+            if (a === "-l") mode = "l";
+            else if (a === "-w") mode = "w";
+            else if (a === "-c") mode = "c";
+            else if (!a.startsWith("-")) paths.push(a);
+          }
+          if (!paths[0]) return { out: "wc: missing file operand", err: true };
+          try {
+            const text = readFileText(paths[0]);
+            const lines = text === "" ? 0 : text.replace(/\n$/, "").split("\n").length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const chars = text.length;
+            if (mode === "l") return { out: String(lines) };
+            if (mode === "w") return { out: String(words) };
+            if (mode === "c") return { out: String(chars) };
+            return { out: `${lines} ${words} ${chars} ${paths[0]}` };
+          } catch (e) {
+            return { out: `wc: ${e.message}`, err: true };
+          }
+        }
+        case "echo":
+          return { out: args.join(" ") };
         case "tree":
           return { out: renderTree() };
         case "challenge":
@@ -385,9 +601,9 @@
       <div class="panel-head"><h2>Hints</h2></div>
       <div class="panel-body">
         <ul class="hint-list">
-          <li><code>cd project/src</code> then <code>ls -l</code></li>
-          <li><code>~</code> is <code>/home/student</code>; <code>..</code> goes up one level</li>
-          <li><code>mkdir -p docs</code> · <code>touch docs/todo.txt</code> · <code>cp project/tb/test_main.v /tmp/</code></li>
+          <li><code>man ls</code> · <code>less notes.txt</code> · <code>ls -l</code> (see <code>rtl -&gt; project/src</code>)</li>
+          <li><code>ln -s project/src src-link</code> · <code>cd rtl</code> follows the symlink</li>
+          <li><code>ls *.txt</code> · <code>head -n 2 notes.txt</code> · <code>wc -l notes.txt</code></li>
         </ul>
       </div>
     </div>
@@ -496,7 +712,7 @@
     showChallenge();
   });
 
-  const quick = ["help", "pwd", "ls -l", "cd project", "cd ..", "tree"];
+  const quick = ["help", "man ls", "ls -la", "cd rtl", "less notes.txt", "ln -s project/tb tb-link", "tree"];
   const quickEl = document.getElementById("quick-cmds");
   quick.forEach((q) => {
     const b = document.createElement("button");

@@ -69,7 +69,7 @@
   border-radius: 6px;
   display: inline-block;
 }
-.challenge-status.idle { background: #eef2f5; color: var(--muted); }
+.challenge-status.idle { background: var(--surface2); color: var(--muted); }
 .challenge-status.pass { background: var(--ok-bg); color: var(--ok); }
 .challenge-status.fail { background: var(--err-bg); color: var(--err); }
 
@@ -87,7 +87,7 @@
   line-height: 1.55;
   border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid #1c2c3a;
+  border: 1px solid #2a3531;
   box-shadow: var(--shadow);
 }
 
@@ -96,7 +96,7 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.45rem 0.75rem;
-  background: #162433;
+  background: #141a18;
   color: var(--term-muted);
   font-size: 0.75rem;
 }
@@ -105,7 +105,7 @@
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 50%;
-  background: #3a5166;
+  background: #3a463f;
 }
 .term-dot.r { background: #c45c5c; }
 .term-dot.y { background: #c4a03a; }
@@ -132,7 +132,7 @@
   align-items: center;
   gap: 0.45rem;
   padding: 0.55rem 1rem 0.85rem;
-  border-top: 1px solid #1c2c3a;
+  border-top: 1px solid #2a3531;
 }
 
 .term-form .prompt {
@@ -160,7 +160,7 @@
 .hint-list code {
   font-family: var(--mono);
   font-size: 0.82rem;
-  background: #eef2f5;
+  background: var(--surface2);
   padding: 0.05rem 0.3rem;
   border-radius: 4px;
 }
@@ -189,7 +189,7 @@
   padding: 0.28rem 0.5rem;
   border-radius: 5px;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--surface);
   color: var(--ink);
   cursor: pointer;
 }

@@ -1,0 +1,35 @@
+.conflict-editor {
+  width: 100%;
+  min-height: 280px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--term-bg);
+  color: var(--term-fg);
+  resize: vertical;
+}
+.marker-ours { color: #7ec8ff; }
+.sides {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+@media (min-width: 720px) {
+  .sides { grid-template-columns: 1fr 1fr; }
+}
+.side-box {
+  background: #eef2f5;
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+.side-box h3 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font);
+  font-size: 0.85rem;
+}

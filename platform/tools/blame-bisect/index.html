@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pipes playground — Unix &amp; Git Lab</title>
+  <title>Blame &amp; bisect — Unix &amp; Git Lab</title>
   <link rel="stylesheet" href="../../assets/site.css">
   <link rel="stylesheet" href="../../assets/tools-shared.css">
-  <link rel="stylesheet" href="pipes.css">
+  <link rel="stylesheet" href="blame-bisect.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -22,25 +22,23 @@
       <nav aria-label="Breadcrumb">
         <a href="../../index.html">Home</a>
         <a href="../index.html">Tools</a>
-        <span class="here">Pipes</span>
+        <span class="here">Blame &amp; bisect</span>
       </nav>
     </div>
   </header>
   <main id="main">
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
-      <h1>Pipes, filters &amp; redirection</h1>
+      <h1>Blame &amp; bisect</h1>
       <p class="lead">
-        Compose pipelines and redirects on a sample design log. See each stage’s
-        stdout and files written by <code>&gt;</code> / <code>tee</code>.
+        See who last touched each line, then binary-search history to find the
+        commit that introduced a bug — without a real remote.
       </p>
     </section>
-    <div id="pipes-root"></div>
+    <div id="bb-root"></div>
   </main>
-  <footer class="site-footer">
-    Companion platform for the learn_unix_git course. Client-side labs only.
-  </footer>
-  <script src="pipes.js"></script>
+  <footer class="site-footer">Companion platform for learn_unix_git. Client-side labs only.</footer>
+  <script src="blame-bisect.js"></script>
   <script src="../../assets/site.js"></script>
 </body>
 </html>
