@@ -1,0 +1,180 @@
+.rca-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.rca-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.rca-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.rca-field select,
+.rca-field input {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 4.5rem;
+}
+
+.bit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0.55rem;
+}
+.bit-btn {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  min-width: 3rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--ink);
+}
+.bit-btn.on {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.step-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  margin: 0.75rem 0 1rem;
+}
+.step-bar .step-label {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  margin-left: 0.35rem;
+  color: var(--muted);
+}
+
+.fa-chain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.fa-stage {
+  flex: 0 0 auto;
+  width: 7.2rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.55rem 0.5rem;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.fa-stage.revealed {
+  opacity: 1;
+}
+.fa-stage.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+  opacity: 1;
+}
+.fa-stage h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
+.fa-stage .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin: 0.15rem 0;
+}
+.fa-stage .carry-in {
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+.fa-stage .sum {
+  margin-top: 0.35rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.fa-stage .cout {
+  margin-top: 0.25rem;
+  text-align: center;
+  font-size: 0.78rem;
+}
+.fa-stage .cout.on {
+  color: var(--ok, #1b7a3d);
+  font-weight: 700;
+}
+
+.ripple-arrow {
+  align-self: center;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  writing-mode: horizontal-tb;
+  flex: 0 0 auto;
+  width: 1.2rem;
+  text-align: center;
+  opacity: 0.35;
+}
+.ripple-arrow.revealed {
+  opacity: 1;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.result-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface2);
+}
+.result-strip .big {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.eq-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.delay-note {
+  margin: 0.75rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.delay-note strong {
+  color: var(--ink);
+  font-weight: 600;
+}

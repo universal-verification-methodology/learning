@@ -1,0 +1,168 @@
+.cla-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.cla-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.cla-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cla-field select,
+.cla-field input {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 4.5rem;
+}
+
+.bit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0.55rem;
+}
+.bit-btn {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  min-width: 3rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--ink);
+}
+.bit-btn.on {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.gp-wrap {
+  overflow: auto;
+  margin: 0.75rem 0;
+}
+
+.gp-table {
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0 auto;
+}
+.gp-table th,
+.gp-table td {
+  border: 1px solid var(--line);
+  min-width: 2.4rem;
+  height: 2.1rem;
+  text-align: center;
+  padding: 0.2rem 0.35rem;
+}
+.gp-table th {
+  background: var(--surface2);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+.gp-table td.lab {
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+}
+.gp-table td.on {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+  font-weight: 700;
+}
+.gp-table td.dim {
+  color: var(--muted);
+}
+.gp-table tr.highlight td {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.carry-eqs {
+  list-style: none;
+  margin: 0.5rem 0 0.85rem;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+.carry-eqs li {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 0.35rem;
+  background: var(--surface);
+}
+.carry-eqs li.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+}
+.carry-eqs li .val {
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+.carry-eqs li .val.one {
+  color: var(--ok, #1b7a3d);
+}
+
+.step-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  margin: 0.5rem 0 0.85rem;
+}
+.step-bar .step-label {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-left: 0.35rem;
+}
+
+.result-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface2);
+}
+.result-strip .big {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.cla-meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.tree-note {
+  margin: 0.75rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}

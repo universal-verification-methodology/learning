@@ -49,6 +49,7 @@ Set `HDL_ENGINE_SPEC.prefer = "public"` in `assets/hdl-engine.js` once Pages ser
 | `clock-stepper` | `createSession` (step / runToEdge / poke) | **Done** |
 | `blocking-vs-nonblocking` | twin `createSession` (`=` vs `<=`) | **Done** |
 | `waveform-mini` / `fsm-lab` | session + waves | Planned |
+| `synth-lint` | `lintSynthesizability` / `SYNTH_LINT_RULES` | **Done** |
 
 ---
 

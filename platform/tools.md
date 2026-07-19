@@ -47,6 +47,13 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `mem-map` | 16×8 RAM with `DE AD BE EF` via `$readmemh`-style dump |
 | `array-mult` | 4-bit unsigned `5 × 3` partial-product grid → 15 |
 | `sensitivity-list` | `Y = A & B` with `always @(A or B)` — both inputs wake the block |
+| `state-encoding` | 4 states, binary (2 FFs); compare one-hot / Gray Hamming on the ring |
+| `ripple-carry-adder-animator` | 4-bit `5 + 3` — step carry through full adders → 8 |
+| `carry-look-ahead-adder-propagate-and-generate` | 4-bit `5 + 3` — G/P table + expanded C₁…C₄ |
+| `synth-lint` | Clean `assign y = a & b`; engine `lintSynthesizability` |
+| `cache-walk` | Cold cache, addr `0x14` → miss + install; second access → hit |
+| `fifo-lab` | Depth-4 empty FIFO — push `0xA5` → count=1, empty clears |
+| `seq-detector` | Mealy overlap detect `1011` — step stream → Z=`0001` |
 
 ### Status legend
 
@@ -190,15 +197,15 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | FSM designer + stepper | `fsm-lab` | **Planned** | Draw states/transitions; Moore/Mealy; step input stream; state table |
-| State encoding lab | `state-encoding` | **Planned** | Binary vs one-hot vs Gray; FF count and transition glitches |
-| Sequence detector playground | `seq-detector` | **Planned** | e.g. detect `1011` with stepped inputs |
+| State encoding lab | `state-encoding` | **Shipped** | Binary / one-hot / Gray; FF count + transition Hamming; 22 challenges |
+| Sequence detector playground | `seq-detector` | **Shipped** | Step bit stream; Mealy/Moore; overlap; pattern `1011`; 22 challenges |
 
 ## Arithmetic & datapath
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Ripple-carry adder animator | `rca-animator` | **Planned** | Carry ripples bit-by-bit |
-| CLA generate/propagate visualizer | `cla-gp` | **Planned** | G/P tree for small widths |
+| Ripple-carry adder animator | `ripple-carry-adder-animator` | **Shipped** | FA chain, step carry LSB→MSB; 4/8-bit; 22 challenges |
+| Carry-lookahead generate & propagate | `carry-look-ahead-adder-propagate-and-generate` | **Shipped** | Gᵢ/Pᵢ table + expanded carries; 4/8-bit; 22 challenges |
 | Array multiplier grid | `array-mult` | **Shipped** | Partial-product AND grid + product; 3×3 / 4×4; 22 challenges |
 | ALU operation explorer | `alu-explorer` | **Shipped** | Opcode → Y plus flags Z/N/C/V; 4/8-bit; 22 challenges |
 
@@ -207,8 +214,8 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | RAM / ROM address map | `mem-map` | **Shipped** | 16×8 map; R/W highlights; `$readmemh`-style load; 22 challenges |
-| FIFO pointer & flags | `fifo-lab` | **Planned** | Full/empty; sync FIFO behavioral model |
-| Cache hit/miss walkthrough | `cache-walk` | **Planned** | Tag/index/offset; small direct-mapped set |
+| FIFO pointer & flags | `fifo-lab` | **Shipped** | Sync FIFO: wr/rd pointers, count, empty/full; depth 4/8; 22 challenges |
+| Cache hit/miss walkthrough | `cache-walk` | **Shipped** | Direct-mapped tag/index/offset; hit/miss + install; 22 challenges |
 
 ## Hierarchy, buses & integration
 
@@ -221,7 +228,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Synthesizability linter (static) | `synth-lint` | **Planned** | Flag `#delay`, bad initials, latch patterns (rule-based) |
+| Synthesizability linter (static) | `synth-lint` | **Shipped** | HDL engine `lintSynthesizability`; `#delay` / latch / FF style; 22 challenges |
 | Naming / style checker | `hdl-style` | **Planned** | Prefixes (`clk_`, `rst_n_`), section order heuristics |
 
 ## Protocols (conceptual)
@@ -264,9 +271,9 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `fsm-lab`, `waveform-mini` |
-| **C** | Datapath & memory | `alu-explorer` (**shipped**), `mem-map` (**shipped**), `array-mult` (**shipped**), `rca-animator`, `fifo-lab`, `cache-walk` |
-| **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `state-encoding` (**shipped**), `seq-detector` (**shipped**), `fsm-lab`, `waveform-mini` |
+| **C** | Datapath & memory | `alu-explorer` (**shipped**), `mem-map` (**shipped**), `array-mult` (**shipped**), `ripple-carry-adder-animator` (**shipped**), `carry-look-ahead-adder-propagate-and-generate` (**shipped**), `cache-walk` (**shipped**), `fifo-lab` (**shipped**) |
+| **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint` (**shipped**), `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
 
 Phases are planning aids only; the public catalog stays domain-based.
@@ -294,8 +301,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 26 |
-| Planned | 20 |
+| Shipped | 33 |
+| Planned | 13 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).
