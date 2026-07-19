@@ -36,6 +36,8 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `verilog-literals` | `8'h2A` → bits via HDL `parseLiteral` |
 | `clock-stepper` | D-FF starter; Step / ↗posedge / poke via `createSession` |
 | `blocking-vs-nonblocking` | Register-swap starter; side-by-side `=` vs `<=` via twin `createSession`s |
+| `kmap` | 2-var XOR (`A'B + AB'`) with two highlighted groups |
+| `mux-decoder` | 2:1 mux, S=0, D0=1, D1=0 → Y=1 |
 
 ### Status legend
 
@@ -132,7 +134,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Truth-table builder | `truth-table` | **Shipped** | Fills via public HDL `createCombEvaluator`; starter `A & B`; SOP/POS; 22 challenges |
-| K-map minimizer (2–4 vars) | `kmap` | **Planned** | Visual grouping → minimal expression |
+| K-map minimizer (2–6 vars) | `kmap` | **Shipped** | Gray-coded map; 5–6 var MSB planes; 0/1/X; auto groups + minimal SOP; 26 challenges |
 | Boolean law playground | `boolean-laws` | **Planned** | Step-through De Morgan and algebra rewrites |
 
 ## Gates & combinational blocks
@@ -140,7 +142,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Gate composer | `gate-composer` | **Shipped** | HDL `createGateNetEvaluator`; schematic; 29 challenges |
-| Mux / decoder / encoder explorer | `mux-decoder` | **Planned** | Select lines → data / one-hot outputs |
+| Mux / decoder / encoder explorer | `mux-decoder` | **Shipped** | Mux 2:1–16:1; decode 2→4–4→16; priority encode 4→2 / 8→3; 28 challenges |
 | Priority encoder & comparator | `priority-compare` | **Planned** | Priority resolution; signed vs unsigned compare |
 
 ## HDL structure & operators
@@ -253,7 +255,7 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `fsm-lab`, `waveform-mini` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `fsm-lab`, `waveform-mini` |
 | **C** | Datapath & memory | `rca-animator`, `alu-explorer`, `fifo-lab`, `mem-map`, `cache-walk` |
 | **D** | HDL hygiene & protocols | `latch-risk`, `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
@@ -283,8 +285,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 15 |
-| Planned | 31 |
+| Shipped | 17 |
+| Planned | 29 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).

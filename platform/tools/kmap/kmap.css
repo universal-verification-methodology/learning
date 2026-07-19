@@ -1,0 +1,203 @@
+.kmap-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.kmap-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.kmap-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.kmap-field select {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.kmap-grid-wrap {
+  overflow: auto;
+  padding: 0.25rem 0;
+}
+
+.kmap-planes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.kmap-plane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.plane-label {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--muted);
+  padding: 0.15rem 0.25rem;
+}
+
+.kmap-table {
+  border-collapse: collapse;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+}
+
+.kmap-table th,
+.kmap-table td {
+  border: 1px solid var(--line);
+  text-align: center;
+  min-width: 3.2rem;
+  height: 3.2rem;
+  position: relative;
+}
+
+.kmap-table th {
+  background: var(--surface2);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.5rem;
+}
+
+.kmap-table th.corner {
+  background: transparent;
+  border-color: transparent;
+  min-width: 4.5rem;
+}
+
+.kmap-cell {
+  cursor: pointer;
+  background: var(--surface);
+  user-select: none;
+  font-weight: 700;
+  font-size: 1.15rem;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.kmap-cell:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+.kmap-cell.val-1 {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  color: var(--ink);
+}
+.kmap-cell.val-x {
+  background: color-mix(in srgb, var(--muted) 14%, var(--surface));
+  color: var(--muted);
+}
+.kmap-cell .mt {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.kmap-cell .group-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 8px;
+  border: 2.5px solid transparent;
+  pointer-events: none;
+}
+.kmap-cell.g0 .group-ring { border-color: #c45c26; }
+.kmap-cell.g1 .group-ring { border-color: #2a6f6f; }
+.kmap-cell.g2 .group-ring { border-color: #6b4c9a; }
+.kmap-cell.g3 .group-ring { border-color: #3d6b2f; }
+.kmap-cell.g4 .group-ring { border-color: #8b3a4a; }
+.kmap-cell.g5 .group-ring { border-color: #1f5f8b; }
+
+.kmap-expr {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  word-break: break-word;
+}
+
+.kmap-meta {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.group-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.85rem;
+  margin-top: 0.65rem;
+  font-size: 0.85rem;
+  font-family: var(--mono);
+}
+.group-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.group-swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 3px;
+  border: 2.5px solid;
+}
+.group-swatch.g0 { border-color: #c45c26; }
+.group-swatch.g1 { border-color: #2a6f6f; }
+.group-swatch.g2 { border-color: #6b4c9a; }
+.group-swatch.g3 { border-color: #3d6b2f; }
+.group-swatch.g4 { border-color: #8b3a4a; }
+.group-swatch.g5 { border-color: #1f5f8b; }
+
+.sop-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.sop-choices label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.sop-choices label:has(input:checked) {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.locked-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
