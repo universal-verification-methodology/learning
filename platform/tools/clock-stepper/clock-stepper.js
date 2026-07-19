@@ -278,11 +278,127 @@ const CHALLENGES = [
     hint: "Set LOAD=1, D=1010 or 10, Apply poke, ↗posedge.",
     check: (st) => st.presetId === "loadreg" && st.peek.q === "1010",
   },
+  {
+    id: "en-capture-1",
+    title: "Enable then load 1",
+    preset: "reg_en",
+    prompt: "Enable register: EN=1, D=1, Apply poke, ↗posedge so Q becomes 1.",
+    hint: "Unlike the gate challenge, EN must be 1 to capture D.",
+    check: (st) => st.presetId === "reg_en" && st.peek.en === "1" && st.peek.q === "1",
+  },
+  {
+    id: "count-five",
+    title: "Count to 5",
+    preset: "counter",
+    prompt: "Counter: clear (RST=1 + posedge), RST=0, advance until Q is 0101.",
+    hint: "Reset edge, then five count posedges from 0000 → 0101.",
+    check: (st) => st.presetId === "counter" && st.peek.q === "0101",
+  },
+  {
+    id: "count-seven",
+    title: "Count to 7",
+    preset: "counter",
+    prompt: "Counter: after clear, count up until Q is 0111 (decimal 7).",
+    hint: "RST=1 → posedge → RST=0 → Apply poke → ↗posedge ×7.",
+    check: (st) => st.presetId === "counter" && st.peek.q === "0111",
+  },
+  {
+    id: "updown-wrap",
+    title: "Count down after clear",
+    preset: "updown",
+    prompt: "Up/down: clear, set DIR=0, one posedge from 0000 — Q wraps to 1111.",
+    hint: "RST=1 → posedge → RST=0, DIR=0 → Apply poke → ↗posedge.",
+    check: (st) =>
+      st.presetId === "updown" && st.peek.dir === "0" && st.peek.q === "1111" && st.edgeCount >= 2,
+  },
+  {
+    id: "shift-all-ones",
+    title: "Shift 1111",
+    preset: "shift4",
+    prompt: "Shift register: clear, then shift DIN=1 four times (MSB first) until Q is 1111.",
+    hint: "After reset, four posedges each with DIN=1.",
+    check: (st) => st.presetId === "shift4" && st.peek.q === "1111",
+  },
+  {
+    id: "shift-lsb-one",
+    title: "Shift 0001",
+    preset: "shift4",
+    prompt: "Shift register: clear, then shift DIN bits 0,0,0,1 (MSB first) so Q is 0001.",
+    hint: "Three zeros then a one — the 1 lands in the LSB.",
+    check: (st) => st.presetId === "shift4" && st.peek.q === "0001",
+  },
+  {
+    id: "pipe-q1-only",
+    title: "Pipeline Q1 first",
+    preset: "pipeline2",
+    prompt: "Pipeline: D=1, one posedge — Q1 should be 1 while Q2 is still 0.",
+    hint: "First stage captures D; second stage is one cycle behind.",
+    check: (st) =>
+      st.presetId === "pipeline2" && st.peek.q1 === "1" && st.peek.q2 === "0" && st.edgeCount >= 1,
+  },
+  {
+    id: "load-zero",
+    title: "Load 0000",
+    preset: "loadreg",
+    prompt: "Loadable register: LOAD=1, D=0000, posedge so Q is 0000.",
+    hint: "Explicit zero load — useful after unknown startup state.",
+    check: (st) => st.presetId === "loadreg" && st.peek.load === "1" && st.peek.q === "0000",
+  },
+  {
+    id: "load-hold",
+    title: "Hold without load",
+    preset: "loadreg",
+    prompt: "Load 1010 with LOAD=1, then LOAD=0 and D=1111; posedge must leave Q at 1010.",
+    hint: "When LOAD=0 the register holds — D changes do not matter.",
+    check: (st) =>
+      st.presetId === "loadreg" && st.peek.load === "0" && st.peek.q === "1010" && st.edgeCount >= 2,
+  },
+  {
+    id: "tff-hold",
+    title: "T=0 holds",
+    preset: "tff",
+    prompt: "T flip-flop: clear with RST, then T=0 — posedge must leave Q at 0.",
+    hint: "RST=1 → posedge → RST=0, T=0 → ↗posedge — no toggle.",
+    check: (st) =>
+      st.presetId === "tff" && st.peek.rst === "0" && st.peek.t === "0" && st.peek.q === "0" && st.edgeCount >= 2,
+  },
+  {
+    id: "en-hold-one",
+    title: "Enable off holds",
+    preset: "reg_en",
+    prompt: "Enable register: capture D=1 with EN=1, then EN=0 and D=0; Q must stay 1.",
+    hint: "EN=1, D=1 → posedge → EN=0, D=0 → posedge — Q holds.",
+    check: (st) =>
+      st.presetId === "reg_en" && st.peek.en === "0" && st.peek.q === "1" && st.edgeCount >= 2,
+  },
+  {
+    id: "updown-up-3",
+    title: "Up/down count to 3",
+    preset: "updown",
+    prompt: "Up/down: clear, DIR=1, count up until Q is 0011.",
+    hint: "Same reset dance as the counter lab, but on the up/down preset with DIR=1.",
+    check: (st) => st.presetId === "updown" && st.peek.dir === "1" && st.peek.q === "0011",
+  },
+  {
+    id: "tff-toggle-once",
+    title: "Toggle once",
+    preset: "tff",
+    prompt: "T flip-flop: after reset, T=1 and one posedge so Q becomes 1.",
+    hint: "RST=1 → posedge → RST=0, T=1 → ↗posedge.",
+    check: (st) => st.presetId === "tff" && st.peek.t === "1" && st.peek.q === "1" && st.edgeCount >= 2,
+  },
+  {
+    id: "counter-fifteen",
+    title: "Count to 15",
+    preset: "counter",
+    prompt: "Counter: after clear, count up until Q is 1111 (decimal 15).",
+    hint: "Fifteen posedges after releasing reset.",
+    check: (st) => st.presetId === "counter" && st.peek.q === "1111",
+  },
 ];
 
 /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
 let hdl = null;
-let engineLabel = "loading…";
 
 const state = {
   presetId: "dff",
@@ -632,7 +748,6 @@ function render() {
   root.innerHTML = `
     <div class="starter-note no-print">
       <p><strong>Starter example:</strong> D flip-flop with a forever <code>#5</code> clock. Poke <code>D</code>, then <strong>↗posedge clk</strong> (same idea as the HDL Simulator toolbar).</p>
-      <p class="cs-hint">Engine: ${escapeHtml(engineLabel)}</p>
       <button type="button" class="btn btn-secondary" id="cs-starter">Load starter example</button>
     </div>
 
@@ -808,9 +923,7 @@ async function boot() {
     if (typeof hdl.createSession !== "function") {
       throw new Error("createSession missing from engine.mjs — run scripts/build-engine-vendor.mjs");
     }
-    engineLabel = "systemverilog-simulator (createSession)";
   } catch (e) {
-    engineLabel = "unavailable";
     root.innerHTML = `<p class="cs-hint" style="color:#b00">Could not load HDL engine: ${escapeHtml(
       e.message || String(e)
     )}</p>`;

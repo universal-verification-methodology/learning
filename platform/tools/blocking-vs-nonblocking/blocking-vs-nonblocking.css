@@ -1,0 +1,267 @@
+.bn-scenario-grid {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.bn-scenario-grid button {
+  text-align: left;
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.bn-scenario-grid button:hover,
+.bn-scenario-grid button.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.bn-scenario-grid .title {
+  display: block;
+  font-weight: 650;
+  font-size: 0.9rem;
+}
+
+.bn-scenario-grid .meta {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.bn-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.bn-toolbar .btn {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.bn-meta {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+}
+
+.bn-meta strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.bn-poke-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: end;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.bn-field label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.bn-field input {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  min-width: 4.5rem;
+}
+
+.bn-compare {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 860px) {
+  .bn-compare {
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+}
+
+.bn-col .panel {
+  height: 100%;
+}
+
+.bn-col-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.35rem;
+}
+
+.bn-col-label code {
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.bn-sigs {
+  display: grid;
+  gap: 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  margin: 0.65rem 0;
+}
+
+.bn-sig {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.4rem 0.55rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.bn-sig .name {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.bn-sig .bits {
+  letter-spacing: 0.08em;
+}
+
+.bn-sig.is-diff {
+  border-color: var(--signal);
+  background: var(--warn-bg);
+}
+
+.bn-code {
+  margin: 0.5rem 0 0;
+  padding: 0.65rem 0.75rem;
+  background: var(--term-bg);
+  color: var(--term-fg);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.bn-outcome {
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 8px;
+  background: var(--surface2);
+  border-left: 3px solid var(--accent);
+  font-size: 0.92rem;
+}
+
+.bn-outcome strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.bn-msg {
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0;
+}
+
+.bn-msg.ok {
+  color: var(--ok);
+}
+
+.bn-msg.err {
+  color: var(--err);
+}
+
+.bn-hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0.35rem 0 0;
+}
+
+.bn-chal-catalog {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.5rem 0 0.75rem;
+  max-height: 11rem;
+  overflow-y: auto;
+}
+
+.bn-chal-item {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.bn-chal-item:hover,
+.bn-chal-item.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.bn-chal-item.is-cleared .bn-chal-mark {
+  color: var(--ok);
+}
+
+.bn-chal-mark {
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+
+.bn-chal-title {
+  display: block;
+  font-weight: 650;
+  font-size: 0.88rem;
+}
+
+.bn-chal-meta {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+
+.bn-chal-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.bn-chal-head h2 {
+  margin: 0;
+}
+
+.bn-chal-progress {
+  font-size: 0.85rem;
+  color: var(--muted);
+}

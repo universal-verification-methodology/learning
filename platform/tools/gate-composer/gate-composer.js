@@ -270,6 +270,96 @@ const PRIMARY = ["A", "B", "C", "D"];
       hint: "A & ~B.",
       target: targetFrom(2, (a, b) => a > b),
     },
+    {
+      id: "nor2",
+      title: "NOR (2)",
+      level: "Intro",
+      n: 2,
+      prompt: "Compose F = A NOR B.",
+      hint: "One NOR, or OR then NOT.",
+      target: targetFrom(2, (a, b) => !(a | b)),
+    },
+    {
+      id: "and3",
+      title: "AND (3)",
+      level: "Core",
+      n: 3,
+      prompt: "F = A AND B AND C.",
+      hint: "Two ANDs: g1=A&B, F=g1&C.",
+      target: targetFrom(3, (a, b, c) => !!(a & b & c)),
+    },
+    {
+      id: "or3",
+      title: "OR (3)",
+      level: "Core",
+      n: 3,
+      prompt: "F = A OR B OR C.",
+      hint: "Cascade two OR gates.",
+      target: targetFrom(3, (a, b, c) => !!(a | b | c)),
+    },
+    {
+      id: "a-and-not-b",
+      title: "A and not B",
+      level: "Core",
+      n: 2,
+      prompt: "F = A & ~B.",
+      hint: "NOT on B, then AND with A.",
+      target: targetFrom(2, (a, b) => !!(a && !b)),
+    },
+    {
+      id: "ha-sum",
+      title: "Half-adder SUM",
+      level: "HDL",
+      n: 2,
+      prompt: "Half adder sum: F = A ⊕ B.",
+      hint: "One XOR.",
+      target: targetFrom(2, (a, b) => a ^ b),
+    },
+    {
+      id: "ha-carry",
+      title: "Half-adder carry",
+      level: "HDL",
+      n: 2,
+      prompt: "Half adder carry: F = A & B.",
+      hint: "One AND.",
+      target: targetFrom(2, (a, b) => !!(a & b)),
+    },
+    {
+      id: "decode01",
+      title: "Decode 01",
+      level: "Stretch",
+      n: 2,
+      prompt: "F = 1 only for A=0, B=1.",
+      hint: "~A & B.",
+      target: targetFrom(2, (a, b) => !a && !!b),
+    },
+    {
+      id: "decode10",
+      title: "Decode 10",
+      level: "Stretch",
+      n: 2,
+      prompt: "F = 1 only for A=1, B=0.",
+      hint: "A & ~B.",
+      target: targetFrom(2, (a, b) => !!a && !b),
+    },
+    {
+      id: "decode11",
+      title: "Decode 11",
+      level: "Stretch",
+      n: 2,
+      prompt: "F = 1 only for A=1, B=1 (same as AND).",
+      hint: "A & B.",
+      target: targetFrom(2, (a, b) => !!(a & b)),
+    },
+    {
+      id: "le1bit",
+      title: "1-bit ≤",
+      level: "Stretch",
+      n: 2,
+      prompt: "F = 1 when A ≤ B (unsigned 1-bit).",
+      hint: "~A | B, or ~(A & ~B).",
+      target: targetFrom(2, (a, b) => a <= b),
+    },
   ];
 
   const state = {
@@ -289,7 +379,6 @@ const PRIMARY = ["A", "B", "C", "D"];
   const root = document.getElementById("gc-root");
   /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
   let hdl = null;
-  let engineLabel = "loading…";
   /** @type {null | { key: string, ev: { evalBitMap: Function, source?: string } }} */
   let gateCache = null;
 
@@ -898,8 +987,7 @@ const PRIMARY = ["A", "B", "C", "D"];
 
     root.innerHTML = `
       <div class="starter-note no-print">
-        <p><strong>Starter example:</strong> a single AND (F = A &amp; B) evaluated by the <strong>HDL engine</strong> (<code>createGateNetEvaluator</code>). Click a challenge card to build from scratch.</p>
-        <p class="gc-hint">Engine: ${escapeHtml(engineLabel)}</p>
+        <p><strong>Starter example:</strong> a single AND (F = A &amp; B). Click a challenge card to build from scratch.</p>
         <button type="button" class="btn btn-secondary" id="gc-starter">Load starter example</button>
       </div>
 
@@ -1168,9 +1256,7 @@ const PRIMARY = ["A", "B", "C", "D"];
     root.innerHTML = `<p class="gc-hint">Loading HDL engine…</p>`;
     try {
       hdl = await loadHdlEngine();
-      engineLabel = "systemverilog-simulator (createGateNetEvaluator)";
     } catch (e) {
-      engineLabel = "unavailable";
       root.innerHTML = `<p class="gc-hint" style="color:#b00">Could not load HDL engine: ${escapeHtml(
         e.message || String(e)
       )}</p>`;

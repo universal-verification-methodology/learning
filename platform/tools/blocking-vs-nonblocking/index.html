@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gate composer — Digital Design and Verification Platform</title>
+  <title>Blocking vs non-blocking — Digital Design and Verification Platform</title>
   <link rel="stylesheet" href="../../assets/site.css">
   <link rel="stylesheet" href="../../assets/tools-shared.css">
-  <link rel="stylesheet" href="gate-composer.css">
+  <link rel="stylesheet" href="blocking-vs-nonblocking.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -22,26 +22,26 @@
       <nav aria-label="Breadcrumb">
         <a href="../../index.html">Home</a>
         <a href="../index.html">Tools</a>
-        <span class="here">Gate composer</span>
+        <span class="here">Blocking vs non-blocking</span>
       </nav>
     </div>
   </header>
   <main id="main">
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
-      <h1>Gate composer</h1>
+      <h1>Blocking vs non-blocking</h1>
       <p class="lead">
-        Build a small combinational net from AND, OR, XOR, and NOT.
-        The netlist is compiled to continuous <code>assign</code>s by the HDL engine.
-        Twenty-nine challenges from AND through 2-bit equality and decode.
+        Same clock edge, two always blocks: blocking <code>=</code> updates immediately;
+        non-blocking <code>&lt;=</code> schedules updates for the end of the time step.
+        Watch the registers diverge side by side.
       </p>
     </section>
-    <div id="gc-root"></div>
+    <div id="bn-root"></div>
   </main>
   <footer class="site-footer">
     Digital Design and Verification Platform — client-side concept labs.
   </footer>
-  <script type="module" src="gate-composer.js"></script>
+  <script type="module" src="blocking-vs-nonblocking.js"></script>
   <script src="../../assets/site.js"></script>
 </body>
 </html>

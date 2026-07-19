@@ -35,6 +35,7 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `radix-converter` | Width 8, value `42` / `0x2A` via HDL `Value` + `parseLiteral` |
 | `verilog-literals` | `8'h2A` → bits via HDL `parseLiteral` |
 | `clock-stepper` | D-FF starter; Step / ↗posedge / poke via `createSession` |
+| `blocking-vs-nonblocking` | Register-swap starter; side-by-side `=` vs `<=` via twin `createSession`s |
 
 ### Status legend
 
@@ -81,20 +82,20 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Virtual filesystem terminal | `vfs-terminal` | **Shipped** | `pwd`, `ls`/`-a`, globs, `less`, `man`, `ln -s`, `head`/`tail`/`wc` |
-| Permissions, umask, PATH & ownership | `permissions` | **Shipped** | Modes, umask, `which`/PATH, owner/group, `export` |
+| Virtual filesystem terminal | `vfs-terminal` | **Shipped** | `pwd`, `ls`/`-a`, globs, `less`, `man`, `ln -s`, `head`/`tail`/`wc`; 22 challenges |
+| Permissions, umask, PATH & ownership | `permissions` | **Shipped** | Modes, umask, `which`/PATH, owner/group, `export`; 22 challenges |
 
 ## Processes & text
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Pipes, redirection, xargs & jobs | `pipes` | **Shipped** | `\|`, redirects, `tee`, `xargs`, background jobs / `kill` |
+| Pipes, redirection, xargs & jobs | `pipes` | **Shipped** | `\|`, redirects, `tee`, `xargs`, jobs; 22 graded challenges |
 
 ## Scripting
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Script exit codes & control flow | `scripting` | **Shipped** | Args, `if`/`for`/`case`, alias, functions, `read`, `set -e` |
+| Script exit codes & control flow | `scripting` | **Shipped** | Args, `if`/`for`/`case`, alias, functions, `read`, `set -e`; 23 challenges |
 
 ## Projects & archives
 
@@ -107,7 +108,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Git graph, staging, stash & rebase | `git-graph` | **Shipped** | Status, add/commit, merge/rebase, cherry-pick, stash, tags, ignore, reflog |
-| Merge conflict resolver | `git-conflicts` | **Shipped** | Conflict markers; ours / theirs / manual |
+| Merge conflict resolver | `git-conflicts` | **Shipped** | Conflict markers; ours / theirs / manual; 22 scenarios |
 | Blame & bisect | `blame-bisect` | **Shipped** | Line attribution; binary search for first bad commit |
 | Remotes, PRs & submodules | `remotes` | **Shipped** | Checklist against live GitHub sandbox (clone, Make, push, PR, submodule) |
 
@@ -123,14 +124,14 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Radix / bit-width converter | `radix-converter` | **Shipped** | HDL `Value` / `parseLiteral`; starter `0x2A`; overflow; challenges |
-| Verilog literal decoder | `verilog-literals` | **Shipped** | HDL `parseLiteral`; starter `8'h2A`; 18 challenges; X/Z/? |
+| Radix / bit-width converter | `radix-converter` | **Shipped** | HDL `Value` / `parseLiteral`; starter `0x2A`; overflow; 22 challenges |
+| Verilog literal decoder | `verilog-literals` | **Shipped** | HDL `parseLiteral`; starter `8'h2A`; 28 challenges; X/Z/? |
 
 ## Boolean algebra & minimization
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Truth-table builder | `truth-table` | **Shipped** | Fills via public HDL `createCombEvaluator`; starter `A & B`; SOP/POS; challenges |
+| Truth-table builder | `truth-table` | **Shipped** | Fills via public HDL `createCombEvaluator`; starter `A & B`; SOP/POS; 22 challenges |
 | K-map minimizer (2–4 vars) | `kmap` | **Planned** | Visual grouping → minimal expression |
 | Boolean law playground | `boolean-laws` | **Planned** | Step-through De Morgan and algebra rewrites |
 
@@ -138,7 +139,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Gate composer | `gate-composer` | **Shipped** | HDL `createGateNetEvaluator`; schematic; 19 challenges |
+| Gate composer | `gate-composer` | **Shipped** | HDL `createGateNetEvaluator`; schematic; 29 challenges |
 | Mux / decoder / encoder explorer | `mux-decoder` | **Planned** | Select lines → data / one-hot outputs |
 | Priority encoder & comparator | `priority-compare` | **Planned** | Priority resolution; signed vs unsigned compare |
 
@@ -161,8 +162,8 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Clock-edge stepper | `clock-stepper` | **Shipped** | 8 labs (D-FF · T-FF · enable · counters · shift · pipeline · load); signal trace; 8 challenges |
-| Blocking vs non-blocking animator | `blocking-nba` | **Planned** | Side-by-side `=` vs `<=` in the same cycle |
+| Clock-edge stepper | `clock-stepper` | **Shipped** | 8 labs (D-FF · T-FF · enable · counters · shift · pipeline · load); signal trace; 22 challenges |
+| Blocking vs non-blocking | `blocking-vs-nonblocking` | **Shipped** | Side-by-side `=` vs `<=` (swap · pipeline · chain · RHS · 3-stage); 20 challenges |
 | Reset strategy timelines | `reset-timelines` | **Planned** | Sync vs async reset on a simple timeline |
 | Setup / hold explainer | `setup-hold` | **Planned** | Annotated timing diagram (conceptual; not SPICE) |
 
@@ -252,7 +253,7 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `fsm-lab`, `blocking-nba`, `waveform-mini` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `fsm-lab`, `waveform-mini` |
 | **C** | Datapath & memory | `rca-animator`, `alu-explorer`, `fifo-lab`, `mem-map`, `cache-walk` |
 | **D** | HDL hygiene & protocols | `latch-risk`, `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |

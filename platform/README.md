@@ -54,6 +54,7 @@ Opening `file://` HTML also works after a hard refresh when scripts change.
 | Verilog literals | [`tools/verilog-literals/`](tools/verilog-literals/) | HDL `parseLiteral` |
 | Radix converter | [`tools/radix-converter/`](tools/radix-converter/) | HDL `Value` / `parseLiteral` |
 | Clock-edge stepper | [`tools/clock-stepper/`](tools/clock-stepper/) | HDL `createSession` · Step / ↗posedge |
+| Blocking vs non-blocking | [`tools/blocking-vs-nonblocking/`](tools/blocking-vs-nonblocking/) | Twin sessions · `=` vs `<=` |
 
 ## Full tools catalog
 

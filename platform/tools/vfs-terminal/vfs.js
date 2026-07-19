@@ -78,6 +78,192 @@
         return "Missing /tmp/test_main.v";
       },
     },
+    {
+      id: 4,
+      title: "Where am I?",
+      prompt: "cd to your home directory and confirm with pwd (cwd should be /home/student).",
+      check: (s) =>
+        s.cwd === "/home/student" ? true : "cd ~ or cd /home/student, then pwd",
+    },
+    {
+      id: 5,
+      title: "Read the welcome note",
+      prompt: "cat ~/notes.txt (file must still exist).",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/notes.txt");
+        if (f && f.type === "file") return true;
+        return "Keep notes.txt under ~ and cat it";
+      },
+    },
+    {
+      id: 6,
+      title: "Follow the rtl symlink",
+      prompt: "cd through the rtl symlink so cwd is /home/student/project/src.",
+      check: (s) =>
+        s.cwd === "/home/student/project/src"
+          ? true
+          : "cd ~/rtl (symlink to project/src)",
+    },
+    {
+      id: 7,
+      title: "Create logs/",
+      prompt: "mkdir ~/logs",
+      check: (s) => {
+        const d = resolveNode(s.root, "/home/student/logs");
+        if (d && d.type === "dir") return true;
+        return "mkdir ~/logs";
+      },
+    },
+    {
+      id: 8,
+      title: "Touch a run log",
+      prompt: "Create ~/logs/run.log (mkdir logs first if needed).",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/logs/run.log");
+        if (f && f.type === "file") return true;
+        return "mkdir -p style: mkdir ~/logs then touch ~/logs/run.log";
+      },
+    },
+    {
+      id: 9,
+      title: "Copy README to tmp",
+      prompt: "cp ~/project/README.md /tmp/README.md",
+      check: (s) => {
+        const f = resolveNode(s.root, "/tmp/README.md");
+        if (f && f.type === "file") return true;
+        return "cp project/README.md /tmp/README.md";
+      },
+    },
+    {
+      id: 10,
+      title: "Rename in tmp",
+      prompt: "Put a file at /tmp/lab_note.txt (create or mv/cp into place).",
+      check: (s) => {
+        const f = resolveNode(s.root, "/tmp/lab_note.txt");
+        if (f && f.type === "file") return true;
+        return "touch /tmp/lab_note.txt or cp/mv something there";
+      },
+    },
+    {
+      id: 11,
+      title: "Nested build dir",
+      prompt: "Create ~/project/build/obj as a directory tree.",
+      check: (s) => {
+        const d = resolveNode(s.root, "/home/student/project/build/obj");
+        if (d && d.type === "dir") return true;
+        return "mkdir ~/project/build then mkdir ~/project/build/obj";
+      },
+    },
+    {
+      id: 12,
+      title: "Scratch file in src",
+      prompt: "Create ~/project/src/scratch.v",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/project/src/scratch.v");
+        if (f && f.type === "file") return true;
+        return "touch ~/project/src/scratch.v";
+      },
+    },
+    {
+      id: 13,
+      title: "Remove scratch",
+      prompt: "Delete ~/project/src/scratch.v if present — challenge passes when it is gone.",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/project/src/scratch.v");
+        if (!f) return true;
+        return "rm ~/project/src/scratch.v";
+      },
+    },
+    {
+      id: 14,
+      title: "Backup main.v",
+      prompt: "Copy main.v to ~/project/src/main.v.bak",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/project/src/main.v.bak");
+        if (f && f.type === "file") return true;
+        return "cp ~/project/src/main.v ~/project/src/main.v.bak";
+      },
+    },
+    {
+      id: 15,
+      title: "Move bak to tmp",
+      prompt: "Move main.v.bak to /tmp/main.v.bak (create bak first if needed).",
+      check: (s) => {
+        const f = resolveNode(s.root, "/tmp/main.v.bak");
+        const left = resolveNode(s.root, "/home/student/project/src/main.v.bak");
+        if (f && f.type === "file" && !left) return true;
+        return "cp/mv so /tmp/main.v.bak exists and src no longer has main.v.bak";
+      },
+    },
+    {
+      id: 16,
+      title: "List the tb folder",
+      prompt: "cd to ~/project/tb and run ls.",
+      check: (s) =>
+        s.cwd === "/home/student/project/tb" && s._lastLs
+          ? true
+          : "cd ~/project/tb && ls",
+    },
+    {
+      id: 17,
+      title: "Hidden bashrc still there",
+      prompt: "Confirm ~/.bashrc still exists (do not delete it).",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/.bashrc");
+        if (f && f.type === "file") return true;
+        return "~/.bashrc should remain";
+      },
+    },
+    {
+      id: 18,
+      title: "Work dir under tmp",
+      prompt: "mkdir /tmp/work and touch /tmp/work/out.txt",
+      check: (s) => {
+        const d = resolveNode(s.root, "/tmp/work");
+        const f = resolveNode(s.root, "/tmp/work/out.txt");
+        if (d && d.type === "dir" && f && f.type === "file") return true;
+        return "mkdir /tmp/work; touch /tmp/work/out.txt";
+      },
+    },
+    {
+      id: 19,
+      title: "Echo into a file",
+      prompt: "Create ~/hello.txt (touch is enough for this lab).",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/hello.txt");
+        if (f && f.type === "file") return true;
+        return "touch ~/hello.txt";
+      },
+    },
+    {
+      id: 20,
+      title: "Clean hello",
+      prompt: "Remove ~/hello.txt so it no longer exists.",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/hello.txt");
+        if (!f) return true;
+        return "rm ~/hello.txt";
+      },
+    },
+    {
+      id: 21,
+      title: "Stay in project root",
+      prompt: "End with cwd = /home/student/project and run ls there.",
+      check: (s) =>
+        s.cwd === "/home/student/project" && s._lastLs
+          ? true
+          : "cd ~/project && ls",
+    },
+    {
+      id: 22,
+      title: "main.v still present",
+      prompt: "Confirm ~/project/src/main.v still exists after your experiments.",
+      check: (s) => {
+        const f = resolveNode(s.root, "/home/student/project/src/main.v");
+        if (f && f.type === "file") return true;
+        return "Do not delete main.v — restore from .bak if needed";
+      },
+    },
   ];
 
   const state = {

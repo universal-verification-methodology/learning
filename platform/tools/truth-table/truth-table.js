@@ -27,6 +27,36 @@ const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
       target: targetFrom(2, (a, b) => a & b),
     },
     {
+      id: "or2",
+      title: "OR (2)",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 when at least one of A or B is 1.",
+      hint: "Expression: A | B",
+      target: targetFrom(2, (a, b) => a | b),
+    },
+    {
+      id: "nand2",
+      title: "NAND (2)",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 except when both A and B are 1 (NAND).",
+      hint: "Expression: ~(A & B)",
+      target: targetFrom(2, (a, b) => !(a & b)),
+    },
+    {
+      id: "nor2",
+      title: "NOR (2)",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 only when both A and B are 0 (NOR).",
+      hint: "Expression: ~(A | B)",
+      target: targetFrom(2, (a, b) => !(a | b)),
+    },
+    {
       id: "xor2",
       title: "XOR / difference (2)",
       level: "Intro",
@@ -37,6 +67,16 @@ const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
       target: targetFrom(2, (a, b) => a ^ b),
     },
     {
+      id: "xnor2",
+      title: "XNOR / equivalence (2)",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 when A and B are equal (XNOR / equivalence).",
+      hint: "Expression: ~(A ^ B)",
+      target: targetFrom(2, (a, b) => a === b),
+    },
+    {
       id: "implies",
       title: "Implication A → B",
       level: "Intro",
@@ -45,6 +85,86 @@ const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
       prompt: "Set F = 1 when A implies B (false only when A=1 and B=0).",
       hint: "Expression: ~A | B",
       target: targetFrom(2, (a, b) => !a || b),
+    },
+    {
+      id: "decode00",
+      title: "Decode 00",
+      level: "Intro",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 only when A = 0 and B = 0 (2-bit decode of pattern 00).",
+      hint: "Expression: ~A & ~B",
+      target: targetFrom(2, (a, b) => !a && !b),
+    },
+    {
+      id: "lt1bit",
+      title: "A < B (1-bit)",
+      level: "Core",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 when A is less than B (unsigned 1-bit compare).",
+      hint: "Expression: ~A & B",
+      target: targetFrom(2, (a, b) => a < b),
+    },
+    {
+      id: "ge1bit",
+      title: "A ≥ B (1-bit)",
+      level: "Core",
+      n: 2,
+      names: ["A", "B"],
+      prompt: "Set F = 1 when A is greater than or equal to B (unsigned 1-bit compare).",
+      hint: "Expression: A | ~B",
+      target: targetFrom(2, (a, b) => a >= b),
+    },
+    {
+      id: "and3",
+      title: "AND (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 only when A, B, and C are all 1.",
+      hint: "Expression: A & B & C",
+      target: targetFrom(3, (a, b, c) => a & b & c),
+    },
+    {
+      id: "at-least-one-3",
+      title: "At least one (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 when at least one of A, B, C is 1 (3-input OR).",
+      hint: "Expression: A | B | C",
+      target: targetFrom(3, (a, b, c) => a | b | c),
+    },
+    {
+      id: "all-equal-3",
+      title: "All equal (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 when all three inputs are equal (all 0 or all 1).",
+      hint: "Expression: (A & B & C) | (~A & ~B & ~C)",
+      target: targetFrom(3, (a, b, c) => a === b && b === c),
+    },
+    {
+      id: "nor3",
+      title: "NOR (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 only when A, B, and C are all 0 (3-input NOR).",
+      hint: "Expression: ~(A | B | C)",
+      target: targetFrom(3, (a, b, c) => !(a | b | c)),
+    },
+    {
+      id: "even-parity-3",
+      title: "Even parity (3)",
+      level: "Core",
+      n: 3,
+      names: ["A", "B", "C"],
+      prompt: "Set F = 1 when an even number of inputs are 1 (even parity / XNOR of three bits).",
+      hint: "Expression: ~(A ^ B ^ C)",
+      target: targetFrom(3, (a, b, c) => (a + b + c) % 2 === 0),
     },
     {
       id: "majority3",
@@ -145,7 +265,6 @@ const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
   let combCache = null;
   /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
   let hdl = null;
-  let engineLabel = "loading…";
   const root = document.getElementById("tt-root");
   const STORAGE_KEY = "ddv-truth-table-v1";
 
@@ -581,12 +700,12 @@ const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
     root.innerHTML = `
       <div class="starter-note no-print-hide">
-        <p><strong>Starter example:</strong> two inputs, expression <code>A &amp; B</code> fills the table via the <strong>HDL engine</strong> (<code>assign F = …</code>). Challenges reset to a blank table when you Start.</p>
-        <p class="tt-hint">Engine: ${escapeHtml(engineLabel)}${
+        <p><strong>Starter example:</strong> two inputs, expression <code>A &amp; B</code> fills the table. Challenges reset to a blank table when you Start.</p>
+        ${
           combCache && combCache.verilogExpr
-            ? ` · Verilog: <code>${escapeHtml(combCache.verilogExpr)}</code>`
+            ? `<p class="tt-hint">Verilog: <code>${escapeHtml(combCache.verilogExpr)}</code></p>`
             : ""
-        }</p>
+        }
         <button type="button" class="btn btn-secondary" id="tt-starter">Load starter example</button>
       </div>
 
@@ -897,9 +1016,7 @@ const DEFAULT_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
     root.innerHTML = `<p class="tt-hint">Loading HDL engine…</p>`;
     try {
       hdl = await loadHdlEngine();
-      engineLabel = "systemverilog-simulator (createCombEvaluator)";
     } catch (e) {
-      engineLabel = "unavailable";
       root.innerHTML = `<p class="tt-hint tt-warn">Could not load HDL engine: ${escapeHtml(
         e.message || String(e)
       )}</p>`;

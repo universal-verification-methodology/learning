@@ -48,10 +48,197 @@ echo "got $name"
 echo "running"
 exit 1
 `,
+    "exit-zero": `#!/usr/bin/env bash
+echo "ok"
+exit 0
+`,
+    "for-count": `#!/usr/bin/env bash
+for i in 1 2 3 4; do
+  echo "n=$i"
+done
+`,
+    "nargs": `#!/usr/bin/env bash
+echo "argc=$#"
+echo "arg1=$1"
+echo "arg2=$2"
+`,
+    "true-ok": `#!/usr/bin/env bash
+true
+echo "still running"
+exit 0
+`,
+    "false-continue": `#!/usr/bin/env bash
+false
+echo "after false (no set -e)"
+exit 0
+`,
+    "require-arg": `#!/usr/bin/env bash
+set -e
+if [ -z "$1" ]; then
+  echo "need an argument"
+  exit 2
+else
+  echo "got $1"
+fi
+`,
+    "require-two": `#!/usr/bin/env bash
+if [ -z "$2" ]; then
+  echo "need \$1 and \$2"
+  exit 2
+else
+  echo "pair $1 $2"
+fi
+`,
+    "case-tool": `#!/usr/bin/env bash
+tool="$1"
+case "$tool" in
+  iverilog) echo "sim" ;;
+  verilator) echo "lint" ;;
+  *) echo "unknown"; exit 2 ;;
+esac
+`,
+    "case-phase": `#!/usr/bin/env bash
+phase="$1"
+case "$phase" in
+  elab) echo "elaborate" ;;
+  run) echo "run" ;;
+  wave) echo "waves" ;;
+  *) echo "usage: elab|run|wave"; exit 2 ;;
+esac
+`,
+    "alias-sim": `#!/usr/bin/env bash
+alias sim="echo run_sim"
+sim
+`,
+    "fn-greet2": `#!/usr/bin/env bash
+hi() {
+  echo "welcome $1"
+}
+hi class
+`,
+    "read-echo": `#!/usr/bin/env bash
+read who
+echo "hello $who"
+`,
+    "loop-dirs": `#!/usr/bin/env bash
+for d in rtl tb sim docs; do
+  echo "scan $d"
+done
+`,
+    "early-exit": `#!/usr/bin/env bash
+echo "start"
+exit 2
+echo "never"
+`,
+    "set-e-true": `#!/usr/bin/env bash
+set -e
+true
+echo "passed true"
+exit 0
+`,
+    "for-bits": `#!/usr/bin/env bash
+for b in 0 1; do
+  echo "bit $b"
+done
+`,
+    "case-empty": `#!/usr/bin/env bash
+mode="$1"
+case "$mode" in
+  "") echo "empty mode"; exit 2 ;;
+  ok) echo "ready" ;;
+  *) echo "bad"; exit 1 ;;
+esac
+`,
+    "fn-twice": `#!/usr/bin/env bash
+say() {
+  echo "$1"
+}
+say one
+say two
+`,
+    "alias-chain": `#!/usr/bin/env bash
+alias a="echo alpha"
+alias b="echo beta"
+a
+b
+`,
+    "exit-three": `#!/usr/bin/env bash
+echo "failing intentionally"
+exit 3
+`,
   };
+
+  const CLEARED_KEY = "ddv-scripting-cleared-v1";
+
+  function loadCleared() {
+    try {
+      const raw = localStorage.getItem(CLEARED_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr.map(String) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCleared(ids) {
+    try {
+      localStorage.setItem(CLEARED_KEY, JSON.stringify(ids));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const CHALLENGES = [
+    { id: "hello-alice", title: "Hello alice", prompt: "With safe-args and arg alice, exit 0 and greet alice.", hint: "Load safe-args, args=alice, Run.", preset: "safe-args", args: "alice", stdin: "", expectExit: 0, expectStdoutIncludes: "hello, alice" },
+    { id: "missing-arg", title: "Missing arg → 2", prompt: "Run safe-args with no args; expect exit 2.", hint: "Clear the args field.", preset: "safe-args", args: "", stdin: "", expectExit: 2 },
+    { id: "set-e-stops", title: "set -e stops", prompt: "Load set-e-trap, honor set -e, Run — must abort before step 2.", hint: "Keep honor set -e checked.", preset: "set-e-trap", args: "", stdin: "", expectExit: 1, expectStdoutIncludes: "step 1", expectTraceIncludes: "set -e: aborting" },
+    { id: "loop-done", title: "Loop done", prompt: "loop-files should print done and exit 0.", hint: "Load loop-files, Run.", preset: "loop-files", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "done" },
+    { id: "case-build", title: "case build", prompt: "case-mode with arg build → building, exit 0.", hint: "args=build", preset: "case-mode", args: "build", stdin: "", expectExit: 0, expectStdoutIncludes: "building" },
+    { id: "case-bad", title: "case usage", prompt: "case-mode with arg foo → exit 2.", hint: "args=foo", preset: "case-mode", args: "foo", stdin: "", expectExit: 2 },
+    { id: "alias-list", title: "alias ll", prompt: "alias-fn should print LIST and hi lab.", hint: "Load alias-fn, Run.", preset: "alias-fn", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "LIST" },
+    { id: "read-bob", title: "read bob", prompt: "read-input with stdin bob → got bob.", hint: "stdin=bob", preset: "read-input", args: "", stdin: "bob", expectExit: 0, expectStdoutIncludes: "got bob" },
+    { id: "exit-one", title: "exit 1", prompt: "exit-codes preset should exit 1.", hint: "Load exit-codes.", preset: "exit-codes", args: "", stdin: "", expectExit: 1 },
+    { id: "exit-ok", title: "exit 0", prompt: "exit-zero → exit 0 and stdout ok.", hint: "Load exit-zero.", preset: "exit-zero", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "ok" },
+    { id: "for-count", title: "for 1..4", prompt: "for-count should print n=4.", hint: "Load for-count.", preset: "for-count", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "n=4" },
+    { id: "nargs-2", title: "argc=2", prompt: "nargs with a b → argc=2.", hint: "args=a b", preset: "nargs", args: "a b", stdin: "", expectExit: 0, expectStdoutIncludes: "argc=2" },
+    { id: "true-ok", title: "true then echo", prompt: "true-ok exits 0 with still running.", hint: "Load true-ok.", preset: "true-ok", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "still running" },
+    { id: "false-ok", title: "false without -e", prompt: "false-continue still prints after false and exits 0.", hint: "Honor set -e can be off; preset has no set -e.", preset: "false-continue", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "after false" },
+    { id: "require-arg-ok", title: "require arg ok", prompt: "require-arg with x → got x, exit 0.", hint: "args=x", preset: "require-arg", args: "x", stdin: "", expectExit: 0, expectStdoutIncludes: "got x" },
+    { id: "require-two", title: "need two args", prompt: "require-two with only one arg → exit 2.", hint: "args=only", preset: "require-two", args: "only", stdin: "", expectExit: 2 },
+    { id: "iverilog", title: "case iverilog", prompt: "case-tool iverilog → sim.", hint: "args=iverilog", preset: "case-tool", args: "iverilog", stdin: "", expectExit: 0, expectStdoutIncludes: "sim" },
+    { id: "phase-wave", title: "phase wave", prompt: "case-phase wave → waves.", hint: "args=wave", preset: "case-phase", args: "wave", stdin: "", expectExit: 0, expectStdoutIncludes: "waves" },
+    { id: "alias-sim", title: "alias sim", prompt: "alias-sim prints run_sim.", hint: "Load alias-sim.", preset: "alias-sim", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "run_sim" },
+    { id: "fn-class", title: "fn greet", prompt: "fn-greet2 → welcome class.", hint: "Load fn-greet2.", preset: "fn-greet2", args: "", stdin: "", expectExit: 0, expectStdoutIncludes: "welcome class" },
+    { id: "read-echo", title: "read who", prompt: "read-echo stdin Ada → hello Ada.", hint: "stdin=Ada", preset: "read-echo", args: "", stdin: "Ada", expectExit: 0, expectStdoutIncludes: "hello Ada" },
+    { id: "early-exit", title: "early exit 2", prompt: "early-exit stops with exit 2 (never runs).", hint: "Load early-exit.", preset: "early-exit", args: "", stdin: "", expectExit: 2, expectStdoutIncludes: "start" },
+    { id: "exit-three", title: "exit 3", prompt: "exit-three → exit 3.", hint: "Load exit-three.", preset: "exit-three", args: "", stdin: "", expectExit: 3 },
+  ];
+
+  let lastRun = { exitCode: 0, stdout: [], traceText: "" };
+  let challengeIdx = 0;
+  let clearedIds = loadCleared();
+  let showHint = false;
 
   const root = document.getElementById("script-root");
   root.innerHTML = `
+    <div class="starter-note no-print">
+      <p><strong>Starter example:</strong> <code>safe-args</code> with <code>$1=alice</code> → <code>hello, alice</code>, exit 0.</p>
+      <button type="button" class="btn btn-secondary" id="script-starter">Load starter example</button>
+    </div>
+    <div class="challenge">
+      <h2>Challenges <span id="chal-progress" style="font-weight:500;color:var(--muted);font-size:0.9rem"></span></h2>
+      <p id="chal-prompt"></p>
+      <p class="chal-hint" id="chal-hint" hidden></p>
+      <div class="tool-actions">
+        <button type="button" class="btn btn-secondary" id="chal-load">Load challenge setup</button>
+        <button type="button" class="btn btn-ghost" id="chal-hint-btn">Show hint</button>
+        <button type="button" class="btn btn-primary" id="chal-check">Run &amp; Check</button>
+        <button type="button" class="btn btn-ghost" id="chal-next">Next</button>
+        <span class="challenge-status idle" id="chal-status">Idle</span>
+      </div>
+      <div class="kbd-row" id="chal-catalog" style="margin-top:0.75rem"></div>
+    </div>
     <div class="challenge">
       <h2>Presets</h2>
       <p>Load a script, set args, Run. Watch the step trace and final exit code.</p>
@@ -121,6 +308,7 @@ exit 1
     let stdinIdx = 0;
     const lines = document.getElementById("script").value.split("\n");
     const trace = [];
+    const stdout = [];
     let exitCode = 0;
     let setE = false;
     let i = 0;
@@ -155,6 +343,7 @@ exit 1
       if (line.startsWith("echo ")) {
         const msg = expand(line.slice(5).replace(/^"|"$/g, ""));
         trace.push({ text: `stdout: ${msg}`, ok: true });
+        stdout.push(msg);
         exitCode = 0;
         continue;
       }
@@ -179,7 +368,6 @@ exit 1
         break;
       }
       if (line.startsWith("if ")) {
-        // if [ -z "$1" ]; then
         const cond = line;
         let body = [];
         while (i < lines.length && lines[i].trim() !== "fi") {
@@ -192,7 +380,7 @@ exit 1
           }
           body.push(l);
         }
-        i++; // skip fi
+        i++;
         const m = cond.match(/\[\s*-z\s+"?\$(\d+)"?\s*\]/);
         let takeThen = true;
         if (m) {
@@ -207,7 +395,6 @@ exit 1
         const block = takeThen
           ? elseIdx >= 0 ? body.slice(0, elseIdx) : body
           : elseIdx >= 0 ? body.slice(elseIdx + 1) : [];
-        // splice block as upcoming lines
         lines.splice(i, 0, ...block);
         continue;
       }
@@ -230,14 +417,12 @@ exit 1
           body.push(lines[i]);
           i++;
         }
-        i++; // }
+        i++;
         funcs[name] = body;
         trace.push({ text: `function ${name}()`, ok: true });
         continue;
       }
       if (line.startsWith("case ")) {
-        const m = line.match(/^case\s+"?\$?(\w+|"?\$\d+"?)"?\s+in$/);
-        // simpler: case "$mode" in
         const cm = line.match(/^case\s+"([^"]+)"\s+in$/) || line.match(/^case\s+(\S+)\s+in$/);
         let val = "";
         if (cm) val = expand(cm[1]).replace(/^"|"$/g, "");
@@ -246,7 +431,7 @@ exit 1
           arms.push(lines[i]);
           i++;
         }
-        i++; // esac
+        i++;
         let chosen = null;
         let buf = [];
         let pat = null;
@@ -285,16 +470,13 @@ exit 1
       if (line === "read name" || line.startsWith("read ")) {
         const varName = line.split(/\s+/)[1] || "REPLY";
         const got = stdinLines[stdinIdx++] ?? "";
-        // store via expand hack
         aliases["__" + varName] = got;
         trace.push({ text: `read ${varName} ← "${got}"`, ok: true });
-        // rewrite later echoes of $name
         for (let j = i; j < lines.length; j++) {
           lines[j] = lines[j].replace(new RegExp("\\$" + varName + "\\b", "g"), got);
         }
         continue;
       }
-      // alias / function call
       {
         const call = line.match(/^(\w+)(?:\s+(.*))?$/);
         if (call && aliases[call[1]] && !line.startsWith("alias ")) {
@@ -320,14 +502,7 @@ exit 1
           loopBody.push(lines[i]);
           i++;
         }
-        i++; // done
-        const expanded = [];
-        for (const item of items) {
-          for (const bl of loopBody) {
-            expanded.push(bl.replace(new RegExp("\\$" + m[1] + "\\b", "g"), item).replace(m[1], item));
-          }
-        }
-        // simpler: replace $var in echo lines
+        i++;
         const inject = [];
         for (const item of items) {
           for (const bl of loopBody) {
@@ -351,8 +526,107 @@ exit 1
     const badge = document.getElementById("exit");
     badge.textContent = `exit ${exitCode}`;
     badge.className = "exit-badge " + (exitCode === 0 ? "zero" : "nonzero");
+    lastRun = {
+      exitCode,
+      stdout,
+      traceText: trace.map((t) => t.text).join("\n"),
+    };
+    return lastRun;
+  }
+
+  function loadChallengeSetup() {
+    const ch = CHALLENGES[challengeIdx];
+    document.getElementById("script").value = PRESETS[ch.preset];
+    document.getElementById("set-e").checked = PRESETS[ch.preset].includes("set -e");
+    document.getElementById("args").value = ch.args ?? "";
+    document.getElementById("stdin-in").value = ch.stdin ?? "";
+  }
+
+  function setChalStatus(kind, msg) {
+    const el = document.getElementById("chal-status");
+    el.className = "challenge-status " + kind;
+    el.textContent = msg;
+  }
+
+  function renderChallenge() {
+    const ch = CHALLENGES[challengeIdx];
+    const cleared = clearedIds.filter((id) => CHALLENGES.some((c) => c.id === id)).length;
+    document.getElementById("chal-progress").textContent = `${cleared} / ${CHALLENGES.length} cleared`;
+    document.getElementById("chal-prompt").innerHTML = `<strong>${ch.title}:</strong> ${ch.prompt}`;
+    const hintEl = document.getElementById("chal-hint");
+    if (showHint) {
+      hintEl.hidden = false;
+      hintEl.innerHTML = `<strong>Hint:</strong> ${ch.hint}`;
+    } else {
+      hintEl.hidden = true;
+    }
+    document.getElementById("chal-hint-btn").textContent = showHint ? "Hide hint" : "Show hint";
+    const cat = document.getElementById("chal-catalog");
+    cat.innerHTML = "";
+    CHALLENGES.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = (clearedIds.includes(c.id) ? "✓ " : "") + c.title;
+      if (i === challengeIdx) b.style.outline = "2px solid var(--accent)";
+      b.addEventListener("click", () => {
+        challengeIdx = i;
+        showHint = false;
+        setChalStatus("idle", "Idle");
+        renderChallenge();
+      });
+      cat.appendChild(b);
+    });
+  }
+
+  function checkChallenge() {
+    loadChallengeSetup();
+    const ch = CHALLENGES[challengeIdx];
+    const r = runScript();
+    if (r.exitCode !== ch.expectExit) {
+      setChalStatus("fail", `Expected exit ${ch.expectExit}, got ${r.exitCode}`);
+      return;
+    }
+    const joined = r.stdout.join("\n");
+    if (ch.expectStdoutIncludes && !joined.includes(ch.expectStdoutIncludes)) {
+      setChalStatus("fail", `Missing stdout: ${ch.expectStdoutIncludes}`);
+      return;
+    }
+    if (ch.expectTraceIncludes && !r.traceText.includes(ch.expectTraceIncludes)) {
+      setChalStatus("fail", `Missing trace: ${ch.expectTraceIncludes}`);
+      return;
+    }
+    if (!clearedIds.includes(ch.id)) {
+      clearedIds = [...clearedIds, ch.id];
+      saveCleared(clearedIds);
+    }
+    setChalStatus("pass", "Pass");
+    renderChallenge();
   }
 
   document.getElementById("run").addEventListener("click", runScript);
+  document.getElementById("script-starter").addEventListener("click", () => {
+    document.getElementById("script").value = PRESETS["safe-args"];
+    document.getElementById("args").value = "alice";
+    document.getElementById("stdin-in").value = "bob";
+    document.getElementById("set-e").checked = true;
+    runScript();
+  });
+  document.getElementById("chal-load").addEventListener("click", () => {
+    loadChallengeSetup();
+    setChalStatus("idle", "Loaded — Run & Check");
+  });
+  document.getElementById("chal-hint-btn").addEventListener("click", () => {
+    showHint = !showHint;
+    renderChallenge();
+  });
+  document.getElementById("chal-check").addEventListener("click", checkChallenge);
+  document.getElementById("chal-next").addEventListener("click", () => {
+    challengeIdx = (challengeIdx + 1) % CHALLENGES.length;
+    showHint = false;
+    setChalStatus("idle", "Idle");
+    renderChallenge();
+  });
+
   runScript();
+  renderChallenge();
 })();

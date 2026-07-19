@@ -12,9 +12,118 @@
 
   let mode = 0o644;
   let isDir = false;
+  let challengeIdx = 0;
+  let clearedIds = [];
+  let showHint = false;
+  const CLEARED_KEY = "ddv-permissions-cleared-v1";
+  try {
+    const raw = localStorage.getItem(CLEARED_KEY);
+    if (raw) clearedIds = JSON.parse(raw).map(String);
+  } catch {
+    /* ignore */
+  }
+
+  const CHALLENGES = [
+    { id: "mode-644", title: "Mode 644", prompt: "Set file mode to 644 (rw-r--r--).", hint: "Use preset 644 or clear write for group/other.", check: () => (mode & 0o777) === 0o644 && !isDir },
+    { id: "mode-755", title: "Mode 755", prompt: "Set executable script/dir style 755.", hint: "Preset 755.", check: () => (mode & 0o777) === 0o755 },
+    { id: "mode-600", title: "Private 600", prompt: "Owner read/write only (600).", hint: "Preset 600.", check: () => (mode & 0o777) === 0o600 },
+    { id: "mode-700", title: "Private dir 700", prompt: "Owner-only rwx (700).", hint: "Preset 700.", check: () => (mode & 0o777) === 0o700 },
+    { id: "as-dir", title: "Directory bit", prompt: "Mark as Directory so the symbol starts with d.", hint: "Check Directory.", check: () => isDir },
+    { id: "dir-755", title: "d755", prompt: "Directory with mode 755.", hint: "Directory + 755.", check: () => isDir && (mode & 0o777) === 0o755 },
+    { id: "umask-022-file", title: "umask 022 file", prompt: "File create with umask 022 → result mode 644.", hint: "create=file, umask=022.", check: () => {
+      const um = parseOctal(document.getElementById("umask-in").value);
+      const createType = document.getElementById("create-type").value;
+      return createType === "file" && um === 0o022 && ((0o666 & ~um) & 0o777) === 0o644;
+    }},
+    { id: "umask-022-dir", title: "umask 022 dir", prompt: "Directory create with umask 022 → 755.", hint: "create=directory, umask=022.", check: () => {
+      const um = parseOctal(document.getElementById("umask-in").value);
+      const createType = document.getElementById("create-type").value;
+      return createType === "dir" && um === 0o022 && ((0o777 & ~um) & 0o777) === 0o755;
+    }},
+    { id: "umask-077", title: "umask 077", prompt: "File with umask 077 → 600.", hint: "umask 077, file.", check: () => {
+      const um = parseOctal(document.getElementById("umask-in").value);
+      return document.getElementById("create-type").value === "file" && um === 0o077 && ((0o666 & ~um) & 0o777) === 0o600;
+    }},
+    { id: "which-simv", title: "which simv", prompt: "PATH finds /home/student/bin/simv for command simv.", hint: "Keep student/bin in PATH; lookup simv.", check: () => whichCmd() === "/home/student/bin/simv" },
+    { id: "which-ls", title: "which ls", prompt: "Lookup ls → /usr/bin/ls.", hint: "which-in = ls", check: () => {
+      document.getElementById("which-in").value = "ls";
+      return whichCmd() === "/usr/bin/ls";
+    }},
+    { id: "which-git", title: "which git", prompt: "Lookup git → /usr/bin/git.", hint: "which-in = git", check: () => {
+      document.getElementById("which-in").value = "git";
+      return whichCmd() === "/usr/bin/git";
+    }},
+    { id: "which-vcs", title: "which vcs", prompt: "Lookup vcs → /usr/local/bin/vcs.", hint: "Keep /usr/local/bin first.", check: () => {
+      document.getElementById("which-in").value = "vcs";
+      return whichCmd() === "/usr/local/bin/vcs";
+    }},
+    { id: "which-missing", title: "not found", prompt: "Lookup nosuch → not found (empty PATH or unknown cmd).", hint: "Set which-in to nosuch.", check: () => {
+      document.getElementById("which-in").value = "nosuch";
+      return whichCmd() === null;
+    }},
+    { id: "owner-student", title: "Owner class", prompt: "You are student owning the file → match owner class.", hint: "owner=student, you=student.", check: () => {
+      return document.getElementById("owner-in").value === "student" &&
+        document.getElementById("you-user").value === "student" &&
+        classForYou().which === "owner";
+    }},
+    { id: "group-match", title: "Group class", prompt: "You are ta, file group staff, your groups include staff → group class.", hint: "you=ta, group=staff, your groups=staff.", check: () => {
+      document.getElementById("you-user").value = "ta";
+      document.getElementById("owner-in").value = "student";
+      document.getElementById("group-in").value = "staff";
+      document.getElementById("you-groups").value = "staff";
+      return classForYou().which === "group";
+    }},
+    { id: "other-class", title: "Other class", prompt: "You don't own and aren't in group → other.", hint: "you=ta, owner=student, group=students, your groups empty or students≠staff.", check: () => {
+      document.getElementById("you-user").value = "ta";
+      document.getElementById("owner-in").value = "student";
+      document.getElementById("group-in").value = "students";
+      document.getElementById("you-groups").value = "staff";
+      return classForYou().which === "other";
+    }},
+    { id: "export-tools", title: "export TOOLS", prompt: "Apply export TOOLS=/opt/eda so env shows TOOLS=/opt/eda.", hint: "Click Apply on the export line.", check: () => env.TOOLS === "/opt/eda" },
+    { id: "export-custom", title: "export LAB", prompt: "export LAB=1 and Apply.", hint: "Change export line to export LAB=1, Apply.", check: () => env.LAB === "1" },
+    { id: "no-other-write", title: "No other write", prompt: "Mode where other cannot write (other write bit clear).", hint: "644 or 755 works.", check: () => ((mode >> 0) & 2) === 0 },
+    { id: "owner-exec", title: "Owner execute", prompt: "Owner has execute bit set.", hint: "755 or 700.", check: () => ((mode >> 6) & 1) === 1 },
+    { id: "world-read", title: "World readable", prompt: "Other has read (e.g. 644).", hint: "644.", check: () => ((mode >> 0) & 4) === 4 },
+  ];
+
+  const FAKE_BINS = {
+    "/usr/bin/ls": true,
+    "/usr/bin/git": true,
+    "/bin/bash": true,
+    "/home/student/bin/simv": true,
+    "/usr/local/bin/vcs": true,
+  };
+
+  function whichCmd() {
+    const pathVal = document.getElementById("path-in").value;
+    const cmd = document.getElementById("which-in").value.trim() || "simv";
+    const dirs = pathVal.split(":").filter(Boolean);
+    for (const d of dirs) {
+      const candidate = (d.replace(/\/$/, "") + "/" + cmd).replace(/\/+/g, "/");
+      if (FAKE_BINS[candidate]) return candidate;
+    }
+    return null;
+  }
 
   const root = document.getElementById("perm-root");
   root.innerHTML = `
+    <div class="starter-note no-print">
+      <p><strong>Starter example:</strong> mode <code>644</code> (−rw-r--r--), umask <code>022</code> → new files <code>644</code>.</p>
+      <button type="button" class="btn btn-secondary" id="perm-starter">Load starter example</button>
+    </div>
+    <div class="challenge">
+      <h2>Challenges <span id="chal-progress" style="font-weight:500;color:var(--muted);font-size:0.9rem"></span></h2>
+      <p id="chal-prompt"></p>
+      <p class="chal-hint" id="chal-hint" hidden></p>
+      <div class="tool-actions">
+        <button type="button" class="btn btn-ghost" id="chal-hint-btn">Show hint</button>
+        <button type="button" class="btn btn-secondary" id="chal-check">Check</button>
+        <button type="button" class="btn btn-ghost" id="chal-next">Next</button>
+        <span class="challenge-status idle" id="chal-status">Idle</span>
+      </div>
+      <div class="kbd-row" id="chal-catalog" style="margin-top:0.75rem"></div>
+    </div>
     <div class="perm-grid">
       <div class="panel">
         <div class="panel-head">
@@ -221,14 +330,6 @@
   document.getElementById("create-type").addEventListener("change", renderUmask);
   document.getElementById("umask-in").addEventListener("input", renderUmask);
 
-  const FAKE_BINS = {
-    "/usr/bin/ls": true,
-    "/usr/bin/git": true,
-    "/bin/bash": true,
-    "/home/student/bin/simv": true,
-    "/usr/local/bin/vcs": true,
-  };
-
   function renderPath() {
     const pathVal = document.getElementById("path-in").value;
     const cmd = document.getElementById("which-in").value.trim() || "simv";
@@ -321,4 +422,89 @@
   renderPath();
   renderEnv();
   renderOwner();
+
+  function setChalStatus(kind, msg) {
+    const el = document.getElementById("chal-status");
+    el.className = "challenge-status " + kind;
+    el.textContent = msg;
+  }
+
+  function renderChallenge() {
+    const ch = CHALLENGES[challengeIdx];
+    const cleared = clearedIds.filter((id) => CHALLENGES.some((c) => c.id === id)).length;
+    document.getElementById("chal-progress").textContent = `${cleared} / ${CHALLENGES.length} cleared`;
+    document.getElementById("chal-prompt").innerHTML = `<strong>${ch.title}:</strong> ${ch.prompt}`;
+    const hintEl = document.getElementById("chal-hint");
+    if (showHint) {
+      hintEl.hidden = false;
+      hintEl.innerHTML = `<strong>Hint:</strong> ${ch.hint}`;
+    } else {
+      hintEl.hidden = true;
+    }
+    document.getElementById("chal-hint-btn").textContent = showHint ? "Hide hint" : "Show hint";
+    const cat = document.getElementById("chal-catalog");
+    cat.innerHTML = "";
+    CHALLENGES.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = (clearedIds.includes(c.id) ? "✓ " : "") + c.title;
+      if (i === challengeIdx) b.style.outline = "2px solid var(--accent)";
+      b.addEventListener("click", () => {
+        challengeIdx = i;
+        showHint = false;
+        setChalStatus("idle", "Idle");
+        renderChallenge();
+      });
+      cat.appendChild(b);
+    });
+  }
+
+  document.getElementById("perm-starter").addEventListener("click", () => {
+    mode = 0o644;
+    isDir = false;
+    document.getElementById("as-dir").checked = false;
+    document.getElementById("create-type").value = "file";
+    document.getElementById("umask-in").value = "022";
+    document.getElementById("path-in").value = "/usr/local/bin:/usr/bin:/bin:/home/student/bin";
+    document.getElementById("which-in").value = "simv";
+    render();
+    renderPath();
+  });
+  document.getElementById("chal-hint-btn").addEventListener("click", () => {
+    showHint = !showHint;
+    renderChallenge();
+  });
+  document.getElementById("chal-check").addEventListener("click", () => {
+    const ch = CHALLENGES[challengeIdx];
+    render();
+    renderPath();
+    renderOwner();
+    let ok = false;
+    try {
+      ok = !!ch.check();
+    } catch {
+      ok = false;
+    }
+    if (ok) {
+      if (!clearedIds.includes(ch.id)) {
+        clearedIds = [...clearedIds, ch.id];
+        try {
+          localStorage.setItem(CLEARED_KEY, JSON.stringify(clearedIds));
+        } catch {
+          /* ignore */
+        }
+      }
+      setChalStatus("pass", "Pass");
+      renderChallenge();
+    } else {
+      setChalStatus("fail", "Not yet");
+    }
+  });
+  document.getElementById("chal-next").addEventListener("click", () => {
+    challengeIdx = (challengeIdx + 1) % CHALLENGES.length;
+    showHint = false;
+    setChalStatus("idle", "Idle");
+    renderChallenge();
+  });
+  renderChallenge();
 })();

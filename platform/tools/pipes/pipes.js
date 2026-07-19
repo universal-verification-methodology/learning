@@ -130,6 +130,8 @@ INFO  scoreboard: pkt 3 fail
           })
           .join("\n");
       }
+      case "echo":
+        return args.join(" ");
       default:
         throw new Error(`${name}: not in lab filter set`);
     }
@@ -209,11 +211,229 @@ INFO  scoreboard: pkt 3 fail
     return results;
   }
 
+  const CLEARED_KEY = "ddv-pipes-cleared-v1";
+
+  function loadCleared() {
+    try {
+      const raw = localStorage.getItem(CLEARED_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr.map(String) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCleared(ids) {
+    try {
+      localStorage.setItem(CLEARED_KEY, JSON.stringify(ids));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  /** Graded challenges — Run the pipeline, then Check. */
+  const CHALLENGES = [
+    {
+      id: "grep-error",
+      title: "Grep ERROR",
+      prompt: "Show only ERROR lines from sim.log.",
+      hint: "cat sim.log | grep ERROR",
+      expectOut:
+        "ERROR drv: timeout waiting for ready\nERROR mon: unexpected X on data\nERROR drv: retry limit exceeded",
+    },
+    {
+      id: "count-errors",
+      title: "Count ERROR lines",
+      prompt: "How many ERROR lines are in sim.log? (stdout should be 3)",
+      hint: "cat sim.log | grep ERROR | wc -l",
+      expectOut: "3",
+    },
+    {
+      id: "redirect-errors",
+      title: "Redirect to file",
+      prompt: "Write ERROR lines into errors.txt (stdout may be empty).",
+      hint: "cat sim.log | grep ERROR > errors.txt",
+      expectFile: {
+        name: "errors.txt",
+        includes: "ERROR drv: timeout waiting for ready",
+      },
+      expectOut: "",
+    },
+    {
+      id: "tee-count",
+      title: "tee + count",
+      prompt: "Save ERROR lines with tee to errors.txt and print the line count (3).",
+      hint: "cat sim.log | grep ERROR | tee errors.txt | wc -l",
+      expectOut: "3",
+      expectFile: { name: "errors.txt", includes: "ERROR mon:" },
+    },
+    {
+      id: "grep-warn",
+      title: "Grep WARN",
+      prompt: "Show only WARN lines.",
+      hint: "cat sim.log | grep WARN",
+      expectOut: "WARN  clk: jitter 0.2ns\nWARN  cov: bin uncovered [idle]",
+    },
+    {
+      id: "info-only",
+      title: "INFO only",
+      prompt: "Drop ERROR and WARN lines — keep INFO.",
+      hint: "cat sim.log | grep -v ERROR | grep -v WARN",
+      expectOut:
+        "INFO  sim: starting test_main\nINFO  scoreboard: pkt 1 ok\nINFO  scoreboard: pkt 2 ok\nINFO  sim: finishing\nINFO  scoreboard: pkt 3 fail",
+    },
+    {
+      id: "wc-lines",
+      title: "Line count",
+      prompt: "Count all lines in sim.log (should be 10).",
+      hint: "cat sim.log | wc -l",
+      expectOut: "10",
+    },
+    {
+      id: "head3",
+      title: "First 3 lines",
+      prompt: "Print the first 3 lines of sim.log.",
+      hint: "cat sim.log | head -n 3",
+      expectOut:
+        "INFO  sim: starting test_main\nWARN  clk: jitter 0.2ns\nERROR drv: timeout waiting for ready",
+    },
+    {
+      id: "tail3",
+      title: "Last 3 lines",
+      prompt: "Print the last 3 lines of sim.log.",
+      hint: "cat sim.log | tail -n 3",
+      expectOut:
+        "INFO  sim: finishing\nERROR drv: retry limit exceeded\nINFO  scoreboard: pkt 3 fail",
+    },
+    {
+      id: "scoreboard",
+      title: "Scoreboard lines",
+      prompt: "Show lines mentioning scoreboard.",
+      hint: "cat sim.log | grep scoreboard",
+      expectOut:
+        "INFO  scoreboard: pkt 1 ok\nINFO  scoreboard: pkt 2 ok\nINFO  scoreboard: pkt 3 fail",
+    },
+    {
+      id: "drv-errors",
+      title: "Driver errors",
+      prompt: "Show lines containing drv.",
+      hint: "cat sim.log | grep drv",
+      expectOut:
+        "ERROR drv: timeout waiting for ready\nERROR drv: retry limit exceeded",
+    },
+    {
+      id: "timeout",
+      title: "Find timeout",
+      prompt: "Find the line about timeout.",
+      hint: "cat sim.log | grep timeout",
+      expectOut: "ERROR drv: timeout waiting for ready",
+    },
+    {
+      id: "finishing",
+      title: "Find finishing",
+      prompt: "Find the sim finishing line.",
+      hint: "cat sim.log | grep finishing",
+      expectOut: "INFO  sim: finishing",
+    },
+    {
+      id: "non-info-head",
+      title: "Non-INFO head",
+      prompt: "Drop INFO, then take the first 5 remaining lines.",
+      hint: "cat sim.log | grep -v INFO | head -n 5",
+      expectOut:
+        "WARN  clk: jitter 0.2ns\nERROR drv: timeout waiting for ready\nERROR mon: unexpected X on data\nWARN  cov: bin uncovered [idle]\nERROR drv: retry limit exceeded",
+    },
+    {
+      id: "error-head2",
+      title: "First two ERRORs",
+      prompt: "Show only the first two ERROR lines.",
+      hint: "cat sim.log | grep ERROR | head -n 2",
+      expectOut:
+        "ERROR drv: timeout waiting for ready\nERROR mon: unexpected X on data",
+    },
+    {
+      id: "tee-filtered",
+      title: "tee filtered log",
+      prompt: "Drop INFO and tee the rest to filtered.txt (stdout = same content).",
+      hint: "cat sim.log | grep -v INFO | tee filtered.txt",
+      expectOut:
+        "WARN  clk: jitter 0.2ns\nERROR drv: timeout waiting for ready\nERROR mon: unexpected X on data\nWARN  cov: bin uncovered [idle]\nERROR drv: retry limit exceeded",
+      expectFile: { name: "filtered.txt", includes: "WARN  clk:" },
+    },
+    {
+      id: "xargs-check",
+      title: "xargs check files",
+      prompt: "Echo two paths into xargs -n 1 echo check.",
+      hint: "echo src/main.v src/alu.v | xargs -n 1 echo check",
+      expectOut: "check src/main.v\ncheck src/alu.v",
+    },
+    {
+      id: "xargs-item",
+      title: "xargs item",
+      prompt: "Turn a b c into three “item …” lines.",
+      hint: "echo a b c | xargs -n 1 echo item",
+      expectOut: "item a\nitem b\nitem c",
+    },
+    {
+      id: "sort-uniq",
+      title: "Sorted unique",
+      prompt: "Sort sim.log and uniq (alphabetically unique lines).",
+      hint: "cat sim.log | sort | uniq",
+      expectOut:
+        "ERROR drv: retry limit exceeded\nERROR drv: timeout waiting for ready\nERROR mon: unexpected X on data\nINFO  scoreboard: pkt 1 ok\nINFO  scoreboard: pkt 2 ok\nINFO  scoreboard: pkt 3 fail\nINFO  sim: finishing\nINFO  sim: starting test_main\nWARN  clk: jitter 0.2ns\nWARN  cov: bin uncovered [idle]",
+    },
+    {
+      id: "job-bg",
+      title: "Background job",
+      prompt: "Use start sim & so at least one job is Running.",
+      hint: "Click “start sim &” in Jobs.",
+      checkJobs: (j) => j.some((x) => x.state === "Running"),
+    },
+    {
+      id: "job-kill",
+      title: "Kill a job",
+      prompt: "Have a job in Done (killed) state.",
+      hint: "start sim &, then kill %1.",
+      checkJobs: (j) => j.some((x) => x.state === "Done (killed)"),
+    },
+    {
+      id: "mon-x",
+      title: "Unexpected X",
+      prompt: "Show the monitor unexpected-X ERROR line only.",
+      hint: "cat sim.log | grep unexpected",
+      expectOut: "ERROR mon: unexpected X on data",
+    },
+  ];
+
+  let lastResults = [];
+  let jobs = [];
+  let nextPid = 2000;
+  let challengeIdx = 0;
+  let clearedIds = loadCleared();
+  let showHint = false;
+
   const root = document.getElementById("pipes-root");
   root.innerHTML = `
+    <div class="starter-note no-print">
+      <p><strong>Starter example:</strong> <code>cat sim.log | grep ERROR | tee errors.txt | wc -l</code> — count ERROR lines while saving a copy.</p>
+      <button type="button" class="btn btn-secondary" id="pipe-starter">Load starter example</button>
+    </div>
+    <div class="challenge" id="chal-box">
+      <h2>Challenges <span id="chal-progress" style="font-weight:500;color:var(--muted);font-size:0.9rem"></span></h2>
+      <p id="chal-prompt"></p>
+      <p class="chal-hint" id="chal-hint" hidden></p>
+      <div class="tool-actions">
+        <button type="button" class="btn btn-ghost" id="chal-hint-btn">Show hint</button>
+        <button type="button" class="btn btn-secondary" id="chal-check">Check</button>
+        <button type="button" class="btn btn-ghost" id="chal-next">Next</button>
+        <span class="challenge-status idle" id="chal-status">Idle</span>
+      </div>
+      <div class="kbd-row" id="chal-catalog" style="margin-top:0.75rem"></div>
+    </div>
     <div class="challenge">
-      <h2>Try these</h2>
-      <p>Pipes <code>|</code> and redirection <code>&gt;</code> <code>&gt;&gt;</code> <code>2&gt;&amp;1</code> · <code>tee</code> saves a copy mid-pipe.</p>
+      <h2>Recipe shortcuts</h2>
+      <p>Click to fill the pipeline box (still Run + Check for challenges).</p>
       <div class="kbd-row" id="recipes"></div>
     </div>
     <div class="tool-layout split-wide">
@@ -255,9 +475,6 @@ INFO  scoreboard: pkt 3 fail
     </div>
   `;
 
-  let jobs = [];
-  let nextPid = 2000;
-
   function renderJobs() {
     if (!jobs.length) {
       document.getElementById("jobs-view").textContent = "No jobs. Try: start sim &";
@@ -291,9 +508,23 @@ INFO  scoreboard: pkt 3 fail
     "cat sim.log | grep ERROR",
     "cat sim.log | grep ERROR > errors.txt",
     "cat sim.log | grep ERROR | tee errors.txt | wc -l",
-    "cat sim.log | cut -d' ' -f1 | sort | uniq -c",
     "echo src/main.v src/alu.v | xargs -n 1 echo check",
     "cat sim.log | grep -v INFO | head -n 5",
+    "cat sim.log | grep WARN",
+    "cat sim.log | grep -v ERROR | grep -v WARN",
+    "cat sim.log | wc -l",
+    "cat sim.log | head -n 3",
+    "cat sim.log | tail -n 3",
+    "cat sim.log | grep scoreboard",
+    "cat sim.log | grep ERROR | wc -l",
+    "cat sim.log | sort | uniq",
+    "cat sim.log | grep drv",
+    "cat sim.log | grep -v INFO | tee filtered.txt",
+    "cat sim.log | grep ERROR | head -n 2",
+    "echo a b c | xargs -n 1 echo item",
+    "cat sim.log | grep finishing",
+    "cat sim.log | grep timeout",
+    "cat sim.log | grep unexpected",
   ];
   const recipesEl = document.getElementById("recipes");
   recipes.forEach((r) => {
@@ -315,14 +546,13 @@ INFO  scoreboard: pkt 3 fail
   }
 
   function render() {
-    // reset generated files except sim.log
     Object.keys(files).forEach((k) => {
       if (k !== "sim.log") delete files[k];
     });
     const text = document.getElementById("pipe-input").value;
-    const results = runPipeline(text);
+    lastResults = runPipeline(text);
     const el = document.getElementById("stages");
-    el.innerHTML = results
+    el.innerHTML = lastResults
       .map((r, i) => {
         const writeNote = (r.writes || [])
           .map((w) => (w.file ? `wrote ${w.op} ${w.file}` : w.note))
@@ -337,10 +567,105 @@ INFO  scoreboard: pkt 3 fail
     renderFiles();
   }
 
+  function setChalStatus(kind, msg) {
+    const el = document.getElementById("chal-status");
+    el.className = "challenge-status " + kind;
+    el.textContent = msg;
+  }
+
+  function renderChallenge() {
+    const ch = CHALLENGES[challengeIdx];
+    const cleared = clearedIds.filter((id) => CHALLENGES.some((c) => c.id === id)).length;
+    document.getElementById("chal-progress").textContent = `${cleared} / ${CHALLENGES.length} cleared`;
+    document.getElementById("chal-prompt").innerHTML =
+      `<strong>${ch.title}:</strong> ${ch.prompt}`;
+    const hintEl = document.getElementById("chal-hint");
+    if (showHint) {
+      hintEl.hidden = false;
+      hintEl.innerHTML = `<strong>Hint:</strong> ${ch.hint}`;
+    } else {
+      hintEl.hidden = true;
+      hintEl.textContent = "";
+    }
+    document.getElementById("chal-hint-btn").textContent = showHint ? "Hide hint" : "Show hint";
+    const cat = document.getElementById("chal-catalog");
+    cat.innerHTML = "";
+    CHALLENGES.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = (clearedIds.includes(c.id) ? "✓ " : "") + c.title;
+      if (i === challengeIdx) b.style.outline = "2px solid var(--accent)";
+      b.addEventListener("click", () => {
+        challengeIdx = i;
+        showHint = false;
+        setChalStatus("idle", "Idle");
+        renderChallenge();
+      });
+      cat.appendChild(b);
+    });
+  }
+
+  function checkChallenge() {
+    const ch = CHALLENGES[challengeIdx];
+    if (ch.checkJobs) {
+      if (ch.checkJobs(jobs)) {
+        if (!clearedIds.includes(ch.id)) {
+          clearedIds = [...clearedIds, ch.id];
+          saveCleared(clearedIds);
+        }
+        setChalStatus("pass", "Pass");
+        renderChallenge();
+        return;
+      }
+      setChalStatus("fail", "Not yet — use the Jobs buttons");
+      return;
+    }
+    render();
+    const last = lastResults[lastResults.length - 1];
+    if (!last || last.err) {
+      setChalStatus("fail", "Pipeline error — fix the command and Run");
+      return;
+    }
+    if (ch.expectOut != null && last.out !== ch.expectOut) {
+      setChalStatus("fail", "Stdout does not match yet — Run after editing");
+      return;
+    }
+    if (ch.expectFile) {
+      const body = files[ch.expectFile.name] || "";
+      if (!body.includes(ch.expectFile.includes)) {
+        setChalStatus("fail", `Missing expected content in ${ch.expectFile.name}`);
+        return;
+      }
+    }
+    if (!clearedIds.includes(ch.id)) {
+      clearedIds = [...clearedIds, ch.id];
+      saveCleared(clearedIds);
+    }
+    setChalStatus("pass", "Pass");
+    renderChallenge();
+  }
+
   document.getElementById("pipe-form").addEventListener("submit", (e) => {
     e.preventDefault();
     render();
   });
+  document.getElementById("pipe-starter").addEventListener("click", () => {
+    document.getElementById("pipe-input").value =
+      "cat sim.log | grep ERROR | tee errors.txt | wc -l";
+    render();
+  });
+  document.getElementById("chal-hint-btn").addEventListener("click", () => {
+    showHint = !showHint;
+    renderChallenge();
+  });
+  document.getElementById("chal-check").addEventListener("click", checkChallenge);
+  document.getElementById("chal-next").addEventListener("click", () => {
+    challengeIdx = (challengeIdx + 1) % CHALLENGES.length;
+    showHint = false;
+    setChalStatus("idle", "Idle");
+    renderChallenge();
+  });
 
   render();
+  renderChallenge();
 })();

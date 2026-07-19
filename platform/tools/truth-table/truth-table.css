@@ -195,18 +195,6 @@
   color: var(--ink);
   min-width: min(100%, 18rem);
 }
-.tt-chal-hint {
-  margin: 0.35rem 0 0.65rem;
-  padding: 0.5rem 0.65rem;
-  background: var(--surface2);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  color: var(--ink);
-}
-.tt-chal-hint strong {
-  color: var(--accent);
-}
-
 .tt-toggles {
   display: flex;
   flex-wrap: wrap;

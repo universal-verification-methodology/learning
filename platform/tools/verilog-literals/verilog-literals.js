@@ -28,7 +28,6 @@ const PRESETS = [
 
 /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
 let hdl = null;
-let engineLabel = "loading…";
 
 function loadCleared() {
     try {
@@ -253,6 +252,89 @@ function loadCleared() {
       hint: "8'h2A",
       check: (p) => p.ok && p.size === 8 && p.value === 0x2an,
     },
+    {
+      id: "hex-aa",
+      title: "Hex AA",
+      level: "Intro",
+      prompt: "Enter 8'hAA — unsigned 170, bits 1010_1010.",
+      hint: "8'hAA",
+      check: (p) => p.ok && p.size === 8 && p.value === 0xaan && p.bits === "10101010",
+    },
+    {
+      id: "bin8-ones",
+      title: "Eight ones",
+      level: "Intro",
+      prompt: "Enter 8'b1111_1111 — unsigned 255.",
+      hint: "8'b1111_1111 or 8'hFF",
+      check: (p) => p.ok && p.size === 8 && !p.hasXZ && p.value === 255n,
+    },
+    {
+      id: "signed-pos",
+      title: "Signed +42",
+      level: "Core",
+      prompt: "Enter 8'sd42 — signed positive 42.",
+      hint: "8'sd42",
+      check: (p) =>
+        p.ok && p.size === 8 && p.signed && toSigned(p.value, 8) === 42n,
+    },
+    {
+      id: "underscore-bin",
+      title: "Binary underscores",
+      level: "Core",
+      prompt: "Enter 8'b1010_1100 — bits 10101100.",
+      hint: "8'b1010_1100",
+      check: (p) => p.ok && p.size === 8 && p.bits === "10101100",
+    },
+    {
+      id: "wide-ff",
+      title: "16-bit 00FF",
+      level: "Core",
+      prompt: "Enter 16'h00FF — width 16, value 255.",
+      hint: "16'h00FF or 16'hFF (zero-extended).",
+      check: (p) => p.ok && p.size === 16 && p.value === 255n,
+    },
+    {
+      id: "octal-sized",
+      title: "Sized octal 12",
+      level: "HDL",
+      prompt: "Enter 6'o12 — bits 001_010.",
+      hint: "6'o12 → 001010",
+      check: (p) => p.ok && p.base === 8 && p.size === 6 && p.bits === "001010",
+    },
+    {
+      id: "z-nibble",
+      title: "High-Z nibble",
+      level: "HDL",
+      prompt: "Enter 4'bzzzz — all Z in the bit strip.",
+      hint: "4'bzzzz or 4'hz",
+      check: (p) => p.ok && p.hasXZ && p.bits.toLowerCase() === "zzzz",
+    },
+    {
+      id: "x-byte",
+      title: "Unknown byte",
+      level: "HDL",
+      prompt: "Enter 8'hxx — eight X digits.",
+      hint: "8'hxx",
+      check: (p) => p.ok && p.size === 8 && p.hasXZ && /^x+$/i.test(p.bits),
+    },
+    {
+      id: "signed-hex-80",
+      title: "Signed hex 80",
+      level: "Stretch",
+      prompt: "Enter 8'sh80 — signed −128.",
+      hint: "8'sh80 → MSB set → −128.",
+      check: (p) =>
+        p.ok && p.size === 8 && p.signed && toSigned(p.value, 8) === -128n,
+    },
+    {
+      id: "plain-zero",
+      title: "Plain zero",
+      level: "Intro",
+      prompt: "Enter plain unsized decimal 0.",
+      hint: "Just type 0",
+      check: (p, text) =>
+        p.ok && p.unsized && p.base === 10 && /^\s*0\s*$/.test(text) && p.value === 0n,
+    },
   ];
 
   const state = {
@@ -302,7 +384,7 @@ function loadCleared() {
     state.challengeOn = false;
     state.challengeHint = false;
     state.text = STARTER;
-    state.msg = "Starter example loaded (HDL parseLiteral).";
+    state.msg = "Starter example loaded.";
   }
 
   function startChallenge(id) {
@@ -421,8 +503,7 @@ function loadCleared() {
 
     root.innerHTML = `
       <div class="starter-note no-print">
-        <p><strong>Starter example:</strong> <code>8'h2A</code> → bits <code>0010_1010</code>, unsigned 42 — decoded by the <strong>HDL engine</strong> (<code>parseLiteral</code>).</p>
-        <p class="vl-hint">Engine: ${escapeHtml(engineLabel)}</p>
+        <p><strong>Starter example:</strong> <code>8'h2A</code> → bits <code>0010_1010</code>, unsigned 42.</p>
         <button type="button" class="btn btn-secondary" id="vl-starter">Load starter example</button>
       </div>
 
@@ -633,10 +714,8 @@ function loadCleared() {
     root.innerHTML = `<p class="vl-hint">Loading HDL engine…</p>`;
     try {
       hdl = await loadHdlEngine();
-      engineLabel = "systemverilog-simulator (parseLiteral)";
       assertParse();
     } catch (e) {
-      engineLabel = "unavailable";
       root.innerHTML = `<p class="vl-hint" style="color:#b00">Could not load HDL engine: ${escapeHtml(
         e.message || String(e)
       )}</p>`;

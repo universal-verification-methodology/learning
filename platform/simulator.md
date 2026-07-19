@@ -47,7 +47,8 @@ Set `HDL_ENGINE_SPEC.prefer = "public"` in `assets/hdl-engine.js` once Pages ser
 | `gate-composer` | `createGateNetEvaluator` | **Done** |
 | `radix-converter` | `Value` / `parseLiteral` | **Done** |
 | `clock-stepper` | `createSession` (step / runToEdge / poke) | **Done** |
-| `blocking-nba` / `waveform-mini` / `fsm-lab` | session + waves | Planned |
+| `blocking-vs-nonblocking` | twin `createSession` (`=` vs `<=`) | **Done** |
+| `waveform-mini` / `fsm-lab` | session + waves | Planned |
 
 ---
 

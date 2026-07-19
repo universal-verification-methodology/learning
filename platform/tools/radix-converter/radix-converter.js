@@ -7,7 +7,6 @@ const CLEARED_KEY = "ddv-radix-converter-cleared-v1";
 
 /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
 let hdl = null;
-let engineLabel = "loading…";
 
 function loadCleared() {
     try {
@@ -142,6 +141,123 @@ function loadCleared() {
       prompt: "Width 8: enter signed 200 (out of range). Pattern should wrap; note the warning.",
       check: (s) => s.width === 8 && s.bits === 0xc8n && s.lastOverflow,
       hint: "BigInt.asUintN(8, 200n) → 0xC8 (200).",
+    },
+    {
+      id: "hex-2a",
+      title: "Hex 0x2A",
+      level: "Intro",
+      width: 8,
+      prompt: "Width 8: enter hex 2A. Unsigned decimal should be 42.",
+      check: (s) => s.width === 8 && s.bits === 0x2an,
+      hint: "0x2A = 32 + 10 = 42.",
+    },
+    {
+      id: "bin-10101010",
+      title: "Binary 10101010",
+      level: "Intro",
+      width: 8,
+      prompt: "Width 8: enter binary 1010_1010. Pattern is 0xAA (unsigned 170).",
+      check: (s) => s.width === 8 && s.bits === 0xaan,
+      hint: "Alternating bits: 128+32+8+2 = 170.",
+    },
+    {
+      id: "udec-42",
+      title: "Decimal 42",
+      level: "Intro",
+      width: 8,
+      prompt: "Width 8: enter unsigned decimal 42. Hex should read 2A.",
+      check: (s) => s.width === 8 && s.bits === 0x2an,
+      hint: "Same starter value — any radix view confirms 42.",
+    },
+    {
+      id: "signed-max-7f",
+      title: "Max signed +127",
+      level: "Core",
+      width: 8,
+      prompt: "Width 8: set hex 7F. Signed decimal is +127 (largest positive 8-bit).",
+      check: (s) => s.width === 8 && s.bits === 0x7fn && toSigned(s.bits, 8) === 127n,
+      hint: "0111_1111₂ — MSB 0, all lower bits 1 → 127.",
+    },
+    {
+      id: "signed-8000-16",
+      title: "16-bit −32768",
+      level: "Core",
+      width: 16,
+      prompt: "Width 16: enter hex 8000. Signed value is −32768 (min 16-bit).",
+      check: (s) => s.width === 16 && s.bits === 0x8000n && toSigned(s.bits, 16) === -32768n,
+      hint: "Only MSB set in 16 bits → −2¹⁵.",
+    },
+    {
+      id: "udec-255",
+      title: "Unsigned 255",
+      level: "Core",
+      width: 8,
+      prompt: "Width 8: enter unsigned decimal 255. All bits should be 1 (0xFF).",
+      check: (s) => s.width === 8 && s.bits === 0xffn,
+      hint: "2⁸ − 1 = 255 = 0xFF.",
+    },
+    {
+      id: "nibble-f",
+      title: "Nibble 0xF",
+      level: "Core",
+      width: 4,
+      prompt: "Width 4: set hex F. Unsigned decimal is 15.",
+      check: (s) => s.width === 4 && s.bits === 0xfn,
+      hint: "1111₂ = 15 unsigned at width 4.",
+    },
+    {
+      id: "bin-1111-neg1",
+      title: "4-bit −1",
+      level: "Core",
+      width: 4,
+      prompt: "Width 4: enter binary 1111. Signed decimal is −1.",
+      check: (s) => s.width === 4 && s.bits === 0xfn && toSigned(s.bits, 4) === -1n,
+      hint: "All ones in any width is −1 signed.",
+    },
+    {
+      id: "pow2-64",
+      title: "Power of two",
+      level: "Core",
+      width: 8,
+      prompt: "Width 8: enter unsigned decimal 64. Binary is 0100_0000 (one hot bit 6).",
+      check: (s) => s.width === 8 && s.bits === 0x40n,
+      hint: "64 = 2⁶ → bit 6 set.",
+    },
+    {
+      id: "shrink-ff",
+      title: "Shrink width",
+      level: "Core",
+      width: 4,
+      prompt: "Enter 0xFF at width 8, then change width to 4. Pattern truncates to 1111.",
+      check: (s) => s.width === 4 && s.bits === 0xfn,
+      hint: "Widening/narrowing keeps low bits; 0xFF → low nibble F.",
+    },
+    {
+      id: "grow-0101",
+      title: "Grow width",
+      level: "Core",
+      width: 8,
+      prompt: "At width 4 set unsigned 5 (0101), then widen to 8 bits — value stays 0000_0101.",
+      check: (s) => s.width === 8 && s.bits === 0x5n,
+      hint: "Zero-extend on widen: 4'b0101 → 8'b0000_0101.",
+    },
+    {
+      id: "signed-neg128-dec",
+      title: "Enter −128",
+      level: "HDL",
+      width: 8,
+      prompt: "Width 8: type signed decimal −128. Hex should be 80.",
+      check: (s) => s.width === 8 && s.bits === 0x80n && toSigned(s.bits, 8) === -128n,
+      hint: "Minimum 8-bit signed; pattern 1000_0000.",
+    },
+    {
+      id: "uoverflow-8",
+      title: "8-bit unsigned wrap",
+      level: "Stretch",
+      width: 8,
+      prompt: "Width 8: enter unsigned decimal 300. Should wrap to 44 (0x2C) with overflow warning.",
+      check: (s) => s.width === 8 && s.bits === 0x2cn && s.lastOverflow,
+      hint: "300 mod 256 = 44.",
     },
   ];
 
@@ -343,7 +459,7 @@ function loadCleared() {
     state.challengeId = ch.id;
     state.challengeOn = true;
     state.challengeHint = false;
-    setWidth(ch.width);
+    if (ch.width != null) setWidth(ch.width);
     setBits(0n, { overflow: false, driver: "challenge" });
     state.status = `Challenge “${ch.title}” — follow the prompt.`;
     state.statusKind = "ok";
@@ -398,7 +514,7 @@ function loadCleared() {
     state.lastDriver = "starter";
     syncDraftsFromBits();
     state.status =
-      "Starter example: 8-bit 42 = 0x2A = 0010_1010 (HDL Value / parseLiteral). Edit any radix or click bits.";
+      "Starter example: 8-bit 42 = 0x2A = 0010_1010. Edit any radix or click bits.";
     state.statusKind = "ok";
     state.msg = "";
   }
@@ -469,8 +585,7 @@ function loadCleared() {
 
     root.innerHTML = `
       <div class="starter-note no-print">
-        <p><strong>Starter example:</strong> 8-bit value <code>42</code> / <code>0x2A</code> via the <strong>HDL engine</strong> (<code>Value</code> + <code>parseLiteral</code>). Change width, type hex or signed decimal, or click bits.</p>
-        <p class="rc-hint">Engine: ${escapeHtml(engineLabel)}</p>
+        <p><strong>Starter example:</strong> 8-bit value <code>42</code> / <code>0x2A</code>. Change width, type hex or signed decimal, or click bits.</p>
         <button type="button" class="btn btn-secondary" id="rc-starter">Load starter example</button>
       </div>
 
@@ -711,9 +826,7 @@ function loadCleared() {
     root.innerHTML = `<p class="rc-hint">Loading HDL engine…</p>`;
     try {
       hdl = await loadHdlEngine();
-      engineLabel = "systemverilog-simulator (Value / parseLiteral)";
     } catch (e) {
-      engineLabel = "unavailable";
       root.innerHTML = `<p class="rc-hint" style="color:#b00">Could not load HDL engine: ${escapeHtml(
         e.message || String(e)
       )}</p>`;
