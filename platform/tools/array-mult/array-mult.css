@@ -1,0 +1,141 @@
+.am-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.am-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.am-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.am-field select,
+.am-field input {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 5rem;
+}
+
+.bit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0.65rem;
+}
+.bit-btn {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  min-width: 3rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.bit-btn.on {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.pp-wrap {
+  overflow: auto;
+  margin: 0.75rem 0;
+}
+
+.pp-table {
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0 auto;
+}
+.pp-table th,
+.pp-table td {
+  border: 1px solid var(--line);
+  width: 2.1rem;
+  height: 2.1rem;
+  text-align: center;
+  padding: 0;
+}
+.pp-table th {
+  background: var(--surface2);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+.pp-table td.pp1 {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+  font-weight: 700;
+}
+.pp-table td.pp0 {
+  color: var(--muted);
+}
+.pp-table td.sum {
+  background: color-mix(in srgb, var(--ink) 8%, var(--surface));
+  font-weight: 700;
+}
+.pp-table td.row-lab {
+  background: var(--surface2);
+  font-size: 0.72rem;
+  color: var(--muted);
+  width: 4.5rem;
+  padding: 0 0.35rem;
+  white-space: nowrap;
+}
+
+.result-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--surface)), var(--surface) 55%);
+  font-family: var(--mono);
+}
+.result-card .eq {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+.am-meta {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-family: var(--sans, inherit);
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.quiz-choices label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.quiz-choices label:has(input:checked) {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}

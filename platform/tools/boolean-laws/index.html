@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boolean law playground — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="boolean-laws.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Tools</a>
+        <span class="here">Boolean laws</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Interactive tool</div>
+    <section class="hero">
+      <h1>Boolean law playground</h1>
+      <p class="lead">
+        Rewrite expressions one law at a time — De Morgan, absorption, complements, and more.
+        Starter walks <code>~(A·B)</code> to <code>A'+B'</code>. Challenges mix identify-the-law and
+        pick-the-rewrite.
+      </p>
+    </section>
+    <div id="bl-root"></div>
+  </main>
+  <footer class="site-footer">
+    Digital Design and Verification Platform — client-side concept labs.
+  </footer>
+  <script src="boolean-laws.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

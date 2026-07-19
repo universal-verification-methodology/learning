@@ -1,0 +1,201 @@
+.pc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.pc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.pc-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pc-field select,
+.pc-field input[type="text"] {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 5rem;
+}
+
+.bit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.45rem 0 0.75rem;
+}
+
+.bit-btn {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  min-width: 3.4rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.bit-btn.on {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.block-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface) 55%),
+    var(--surface);
+  padding: 1rem;
+}
+
+.block-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3.4rem, 1fr));
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+.chip {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.35rem 0.3rem;
+  text-align: center;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  color: var(--muted);
+}
+.chip strong {
+  font-size: 1rem;
+  color: var(--ink);
+}
+.chip.active {
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.chip.winner {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.flag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+.flag {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface2);
+  color: var(--muted);
+}
+.flag.on {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  border-color: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.compare-split {
+  display: grid;
+  gap: 0.85rem;
+}
+@media (min-width: 720px) {
+  .compare-split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.compare-pane {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: var(--surface);
+}
+.compare-pane h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.88rem;
+}
+.compare-pane.disagree {
+  border-color: color-mix(in srgb, var(--err, #b33) 45%, var(--line));
+  background: color-mix(in srgb, var(--err, #b33) 6%, var(--surface));
+}
+
+.formula {
+  font-family: var(--mono);
+  font-size: 0.92rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  word-break: break-word;
+}
+
+.pc-meta {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.quiz-choices label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.quiz-choices label:has(input:checked) {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.tool-layout.pc-split {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 900px) {
+  .tool-layout.pc-split {
+    grid-template-columns: 1.35fr 1fr;
+    align-items: start;
+  }
+}

@@ -1,0 +1,118 @@
+.expr-stage {
+  font-family: var(--mono);
+  font-size: 1.35rem;
+  font-weight: 650;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--surface)), var(--surface) 55%);
+  text-align: center;
+  word-break: break-word;
+  margin-bottom: 0.75rem;
+}
+
+.step-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+}
+.step-list li {
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+.step-list li strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.rewrite-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.rewrite-btn {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.rewrite-btn:hover {
+  border-color: var(--accent);
+}
+.rewrite-btn .law {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.law-ref {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+.law-chip {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+}
+.law-chip strong {
+  color: var(--ink);
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.quiz-choices label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.quiz-choices label:has(input:checked) {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.bl-meta {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.bl-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}

@@ -1,0 +1,136 @@
+.mm-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.mm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.mm-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mm-field select,
+.mm-field input,
+.mm-field textarea {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.mm-field textarea {
+  min-width: min(100%, 22rem);
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.mem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  gap: 0.4rem;
+  margin: 0.75rem 0;
+}
+
+.mem-cell {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.4rem 0.45rem;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+.mem-cell .addr {
+  display: block;
+  color: var(--muted);
+  font-size: 0.7rem;
+  margin-bottom: 0.15rem;
+}
+.mem-cell .val {
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+.mem-cell.active {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.mem-cell.flash-rd {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: var(--accent);
+}
+.mem-cell.flash-wr {
+  background: color-mix(in srgb, #c45c26 28%, var(--surface));
+  border-color: #c45c26;
+  transform: scale(1.03);
+}
+.mem-cell.rom-locked .val {
+  color: var(--muted);
+}
+
+.bus-bar {
+  font-family: var(--mono);
+  font-size: 0.92rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--surface)), var(--surface) 55%);
+  margin-bottom: 0.75rem;
+}
+
+.mm-meta {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.quiz-choices label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.quiz-choices label:has(input:checked) {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  max-height: 7rem;
+  overflow: auto;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface2);
+  color: var(--muted);
+  white-space: pre-wrap;
+}

@@ -1,0 +1,135 @@
+.op-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.op-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.op-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.op-field select,
+.op-field input {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 7rem;
+}
+
+.op-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.5rem 0 0.85rem;
+}
+.op-btns button {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--ink);
+}
+.op-btns button.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  font-weight: 700;
+}
+
+.result-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--surface)), var(--surface) 55%);
+  font-family: var(--mono);
+}
+.result-card .expr {
+  font-size: 1.15rem;
+  font-weight: 650;
+  margin: 0 0 0.5rem;
+  word-break: break-word;
+}
+.result-card .bits {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.result-card .note {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-family: var(--sans, inherit);
+}
+
+.compare-row {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+@media (min-width: 640px) {
+  .compare-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.compare-pane {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 0.88rem;
+}
+.compare-pane strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.compare-pane.diff {
+  border-color: color-mix(in srgb, var(--err, #b33) 40%, var(--line));
+  background: color-mix(in srgb, var(--err, #b33) 6%, var(--surface));
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.quiz-choices label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.quiz-choices label:has(input:checked) {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.op-meta {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}

@@ -1,0 +1,114 @@
+.pw-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.pw-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.pw-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pw-field select,
+.pw-field input {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 5.5rem;
+}
+
+.code-block {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface2);
+  overflow: auto;
+  white-space: pre;
+}
+
+.bus-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.75rem 0;
+}
+.bus-chip {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.bus-chip strong {
+  color: var(--accent);
+}
+
+.pw-meta {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.param-stage {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface) 55%);
+  margin-bottom: 0.85rem;
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.quiz-choices label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.quiz-choices label:has(input:checked) {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.split-code {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 860px) {
+  .split-code {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.split-code h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.88rem;
+}

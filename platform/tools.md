@@ -38,6 +38,15 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `blocking-vs-nonblocking` | Register-swap starter; side-by-side `=` vs `<=` via twin `createSession`s |
 | `kmap` | 2-var XOR (`A'B + AB'`) with two highlighted groups |
 | `mux-decoder` | 2:1 mux, S=0, D0=1, D1=0 → Y=1 |
+| `priority-compare` | 4-input high-first encoder, I0=I2=1 → winner I2 |
+| `boolean-laws` | `~(A·B)` → apply De Morgan → `A'+B'` |
+| `sv-operators` | `4'b1010 & 4'b1100` → `1000` (vs `&&` → `1`) |
+| `alu-explorer` | 4-bit ADD, A=5, B=3 → Y=8 with Z/N/C/V |
+| `latch-risk` | 2:1 mux as `assign` (OK) vs incomplete `if` (latch) |
+| `param-width` | `#(.WIDTH(8))` → `logic [7:0]` data ports |
+| `mem-map` | 16×8 RAM with `DE AD BE EF` via `$readmemh`-style dump |
+| `array-mult` | 4-bit unsigned `5 × 3` partial-product grid → 15 |
+| `sensitivity-list` | `Y = A & B` with `always @(A or B)` — both inputs wake the block |
 
 ### Status legend
 
@@ -135,7 +144,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 |------|---------|--------|-----------------|
 | Truth-table builder | `truth-table` | **Shipped** | Fills via public HDL `createCombEvaluator`; starter `A & B`; SOP/POS; 22 challenges |
 | K-map minimizer (2–6 vars) | `kmap` | **Shipped** | Gray-coded map; 5–6 var MSB planes; 0/1/X; auto groups + minimal SOP; 26 challenges |
-| Boolean law playground | `boolean-laws` | **Planned** | Step-through De Morgan and algebra rewrites |
+| Boolean law playground | `boolean-laws` | **Shipped** | Step-through De Morgan & algebra rewrites; starter `~(A·B)`; 22 challenges |
 
 ## Gates & combinational blocks
 
@@ -143,22 +152,22 @@ Folder name under `platform/tools/` when built (kebab-case).
 |------|---------|--------|-----------------|
 | Gate composer | `gate-composer` | **Shipped** | HDL `createGateNetEvaluator`; schematic; 29 challenges |
 | Mux / decoder / encoder explorer | `mux-decoder` | **Shipped** | Mux 2:1–16:1; decode 2→4–4→16; priority encode 4→2 / 8→3; 28 challenges |
-| Priority encoder & comparator | `priority-compare` | **Planned** | Priority resolution; signed vs unsigned compare |
+| Priority encoder & comparator | `priority-compare` | **Shipped** | High/low priority + EI/EO cascade; unsigned vs signed compare flags; 22 challenges |
 
 ## HDL structure & operators
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Module / port diagram | `module-diagram` | **Planned** | Template or paste → hierarchy and named ports |
-| Operator playground | `sv-operators` | **Planned** | Bitwise vs logical, concat/replicate, reduction |
-| Parameter / width explorer | `param-width` | **Planned** | `#(.WIDTH(N))` effect on buses |
+| Operator playground | `sv-operators` | **Shipped** | Bitwise vs logical, concat/replicate, reduction, shifts; HDL `parseLiteral`; 22 challenges |
+| Parameter / width explorer | `param-width` | **Shipped** | `#(.WIDTH(N))`, `$clog2(DEPTH)`, derived buses; 22 challenges |
 
 ## Combinational design hygiene
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Combo style / latch-risk checker | `latch-risk` | **Planned** | Same function as `assign` vs `always`/`case`; flag missing defaults |
-| Sensitivity-list explorer | `sensitivity-list` | **Planned** | Which signals trigger recomputation (teaching model) |
+| Combo style / latch-risk checker | `latch-risk` | **Shipped** | `assign` vs incomplete `always`/`case`; inferred latch verdict; 22 challenges |
+| Sensitivity-list explorer | `sensitivity-list` | **Shipped** | Teaching model: poke signals → run/skip log; `@(*)` vs incomplete vs posedge/async; 22 challenges |
 
 ## Clocks, registers & timing
 
@@ -190,14 +199,14 @@ Folder name under `platform/tools/` when built (kebab-case).
 |------|---------|--------|-----------------|
 | Ripple-carry adder animator | `rca-animator` | **Planned** | Carry ripples bit-by-bit |
 | CLA generate/propagate visualizer | `cla-gp` | **Planned** | G/P tree for small widths |
-| Array multiplier grid | `array-mult` | **Planned** | Partial-product visualization |
-| ALU operation explorer | `alu-explorer` | **Planned** | Opcode → result and flags (Z/C/V) |
+| Array multiplier grid | `array-mult` | **Shipped** | Partial-product AND grid + product; 3×3 / 4×4; 22 challenges |
+| ALU operation explorer | `alu-explorer` | **Shipped** | Opcode → Y plus flags Z/N/C/V; 4/8-bit; 22 challenges |
 
 ## Memory, FIFO & cache
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| RAM / ROM address map | `mem-map` | **Planned** | Read/write highlights; `$readmemh` concept |
+| RAM / ROM address map | `mem-map` | **Shipped** | 16×8 map; R/W highlights; `$readmemh`-style load; 22 challenges |
 | FIFO pointer & flags | `fifo-lab` | **Planned** | Full/empty; sync FIFO behavioral model |
 | Cache hit/miss walkthrough | `cache-walk` | **Planned** | Tag/index/offset; small direct-mapped set |
 
@@ -256,8 +265,8 @@ Suggested delivery order (platform rebrand, then digital concepts):
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
 | **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `fsm-lab`, `waveform-mini` |
-| **C** | Datapath & memory | `rca-animator`, `alu-explorer`, `fifo-lab`, `mem-map`, `cache-walk` |
-| **D** | HDL hygiene & protocols | `latch-risk`, `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
+| **C** | Datapath & memory | `alu-explorer` (**shipped**), `mem-map` (**shipped**), `array-mult` (**shipped**), `rca-animator`, `fifo-lab`, `cache-walk` |
+| **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint`, `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
 
 Phases are planning aids only; the public catalog stays domain-based.
@@ -285,8 +294,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 17 |
-| Planned | 29 |
+| Shipped | 26 |
+| Planned | 20 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).
