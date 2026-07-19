@@ -273,14 +273,366 @@
     return positions;
   }
 
+  const CLEARED_KEY = "ddv-git-graph-cleared-v1";
+  let clearedIds = [];
+  try {
+    const raw = localStorage.getItem(CLEARED_KEY);
+    if (raw) clearedIds = JSON.parse(raw).map(String);
+  } catch {
+    /* ignore */
+  }
+  let challengeIdx = 0;
+  let showHint = false;
+
+  function wt(path, content) {
+    repo.worktree[path] = content.endsWith("\n") ? content : content + "\n";
+  }
+
+  const CHALLENGES = [
+    {
+      id: "clean-main",
+      title: "Clean on main",
+      prompt: "Be on <code>main</code> with a clean working tree (use Reset repo if needed).",
+      hint: "Reset repo → Check.",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        const st = status();
+        return !repo.detached && repo.HEAD === "main" && !st.staged.length && !st.modified.length && !st.untracked.length;
+      },
+    },
+    {
+      id: "modify",
+      title: "Modify a file",
+      prompt: "Edit <code>src/main.v</code> so it shows as modified (not staged).",
+      hint: "Set path to src/main.v, change contents, click edit file.",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        const st = status();
+        return st.modified.includes("src/main.v") && !st.staged.includes("src/main.v");
+      },
+    },
+    {
+      id: "stage",
+      title: "Stage a change",
+      prompt: "Stage the dirty <code>src/main.v</code> (Changes to be committed).",
+      hint: "add with path src/main.v",
+      setup() {
+        repo = freshRepo();
+        wt("src/main.v", "module main;\n// dirty\nendmodule\n");
+      },
+      check() {
+        return status().staged.includes("src/main.v");
+      },
+    },
+    {
+      id: "commit",
+      title: "Commit",
+      prompt: "Commit the staged change. Working tree should be clean afterward.",
+      hint: "commit with any message.",
+      setup() {
+        repo = freshRepo();
+        wt("src/main.v", "module main;\n// v2\nendmodule\n");
+        add("src/main.v");
+      },
+      check() {
+        const st = status();
+        return Object.keys(repo.commits).length >= 2 && !st.staged.length && !st.modified.length;
+      },
+    },
+    {
+      id: "branch-feature",
+      title: "Create feature",
+      prompt: "Create a branch named <code>feature</code> (stay on main).",
+      hint: "branch-in = feature → branch",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        return !!repo.branches.feature && repo.HEAD === "main" && !repo.detached;
+      },
+    },
+    {
+      id: "checkout-feature",
+      title: "Checkout feature",
+      prompt: "Switch to the existing <code>feature</code> branch.",
+      hint: "checkout feature",
+      setup() {
+        repo = freshRepo();
+        branch("feature");
+      },
+      check() {
+        return repo.HEAD === "feature" && !repo.detached;
+      },
+    },
+    {
+      id: "commit-on-feature",
+      title: "Commit on feature",
+      prompt: "On <code>feature</code>, commit so <code>feature</code> and <code>main</code> point at different commits.",
+      hint: "edit → add → commit while on feature.",
+      setup() {
+        repo = freshRepo();
+        branch("feature");
+        checkout("feature");
+        wt("src/main.v", "module main;\n// feature\nendmodule\n");
+        add("src/main.v");
+      },
+      check() {
+        return repo.HEAD === "feature" && repo.branches.feature !== repo.branches.main;
+      },
+    },
+    {
+      id: "back-to-main",
+      title: "Back to main",
+      prompt: "Checkout <code>main</code> from the feature tip.",
+      hint: "checkout main",
+      setup() {
+        repo = freshRepo();
+        branch("feature");
+        checkout("feature");
+        wt("src/main.v", "module main;\n// feat\nendmodule\n");
+        add("src/main.v");
+        commit("feat work");
+      },
+      check() {
+        return repo.HEAD === "main" && !repo.detached;
+      },
+    },
+    {
+      id: "ff-merge",
+      title: "Fast-forward merge",
+      prompt: "On <code>main</code>, merge <code>feature</code> (should fast-forward).",
+      hint: "merge feature while on main.",
+      setup() {
+        repo = freshRepo();
+        branch("feature");
+        checkout("feature");
+        wt("src/main.v", "module main;\n// ahead\nendmodule\n");
+        add("src/main.v");
+        commit("ahead on feature");
+        checkout("main");
+      },
+      check() {
+        return repo.HEAD === "main" && repo.branches.main === repo.branches.feature;
+      },
+    },
+    {
+      id: "untracked",
+      title: "Untracked file",
+      prompt: "Create an untracked file <code>notes.txt</code> (edit, do not add).",
+      hint: "path notes.txt → edit file; leave unstaged.",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        return status().untracked.includes("notes.txt");
+      },
+    },
+    {
+      id: "stage-dot",
+      title: "Stage all",
+      prompt: "Stage every change with path <code>.</code> (or <code>-A</code>).",
+      hint: "file path = . then add",
+      setup() {
+        repo = freshRepo();
+        wt("src/main.v", "module main;\n// a\nendmodule\n");
+        wt("notes.txt", "todo\n");
+      },
+      check() {
+        const st = status();
+        return st.staged.includes("src/main.v") && st.staged.includes("notes.txt") && !st.untracked.length;
+      },
+    },
+    {
+      id: "two-commits",
+      title: "Two commits",
+      prompt: "Make two new commits on <code>main</code> (repo should have ≥3 commits total).",
+      hint: "edit/add/commit twice.",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        return repo.HEAD === "main" && Object.keys(repo.commits).length >= 3;
+      },
+    },
+    {
+      id: "stash",
+      title: "Stash WIP",
+      prompt: "Stash the dirty working tree so status is clean and stash has an entry.",
+      hint: "stash button",
+      setup() {
+        repo = freshRepo();
+        wt("src/main.v", "module main;\n// wip\nendmodule\n");
+      },
+      check() {
+        const st = status();
+        return repo.stash.length >= 1 && !st.modified.length && !st.staged.length;
+      },
+    },
+    {
+      id: "stash-pop",
+      title: "Stash pop",
+      prompt: "Pop the stash so <code>src/main.v</code> is modified again and stash is empty.",
+      hint: "stash pop",
+      setup() {
+        repo = freshRepo();
+        wt("src/main.v", "module main;\n// wip\nendmodule\n");
+        repo.stash.unshift({
+          worktree: { ...repo.worktree },
+          staged: {},
+          msg: "WIP on main",
+        });
+        repo.worktree = { ...headTree() };
+        repo.staged = {};
+      },
+      check() {
+        return !repo.stash.length && status().modified.includes("src/main.v");
+      },
+    },
+    {
+      id: "tag",
+      title: "Create tag",
+      prompt: "Create tag <code>v0.1</code> on HEAD.",
+      hint: "tag-in = v0.1 → tag",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        return repo.tags["v0.1"] === headCommit();
+      },
+    },
+    {
+      id: "ignore-pat",
+      title: "Ignore pattern",
+      prompt: "Add ignore pattern <code>*.vcd</code>.",
+      hint: "ignore-in = *.vcd → add ignore",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        return repo.ignore.includes("*.vcd");
+      },
+    },
+    {
+      id: "ignore-hides",
+      title: "Ignored untracked",
+      prompt: "With <code>*.vcd</code> ignored, create <code>wave.vcd</code> — it must not appear as untracked.",
+      hint: "add ignore *.vcd, then edit wave.vcd",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        return repo.ignore.includes("*.vcd") && "wave.vcd" in repo.worktree && !status().untracked.includes("wave.vcd");
+      },
+    },
+    {
+      id: "merge-commit",
+      title: "Merge commit",
+      prompt: "On <code>main</code>, merge divergent <code>feature</code> so HEAD has two parents.",
+      hint: "merge feature (histories already diverge).",
+      setup() {
+        repo = freshRepo();
+        branch("feature");
+        checkout("feature");
+        wt("src/main.v", "module main;\n// feature side\nendmodule\n");
+        add("src/main.v");
+        commit("feature change");
+        checkout("main");
+        wt("README.md", "# demo\nmain line\n");
+        add("README.md");
+        commit("main change");
+      },
+      check() {
+        const c = repo.commits[headCommit()];
+        return repo.HEAD === "main" && c && c.parents.length === 2;
+      },
+    },
+    {
+      id: "cherry-pick",
+      title: "Cherry-pick",
+      prompt: "On <code>main</code>, cherry-pick the tip of <code>feature</code>.",
+      hint: "branch-in = feature → cherry-pick",
+      setup() {
+        repo = freshRepo();
+        branch("feature");
+        checkout("feature");
+        wt("src/main.v", "module main;\n// cherry\nendmodule\n");
+        add("src/main.v");
+        commit("cherry me");
+        checkout("main");
+      },
+      check() {
+        const msgs = logList().map((c) => c.message);
+        return repo.HEAD === "main" && msgs.includes("cherry me") && repo.branches.main !== repo.branches.feature;
+      },
+    },
+    {
+      id: "rebase-onto",
+      title: "Rebase onto main",
+      prompt: "On <code>feature</code>, rebase onto <code>main</code> so feature’s tip is a descendant of main.",
+      hint: "branch-in = main → rebase onto (while on feature).",
+      setup() {
+        repo = freshRepo();
+        const init = headCommit();
+        wt("README.md", "# demo\nmain line\n");
+        add("README.md");
+        commit("main ahead");
+        repo.branches.feature = init;
+        checkout("feature");
+        wt("src/main.v", "module main;\n// only feature\nendmodule\n");
+        add("src/main.v");
+        commit("feature tip");
+      },
+      check() {
+        return repo.HEAD === "feature" && isAncestor(repo.branches.main, repo.branches.feature);
+      },
+    },
+    {
+      id: "detached",
+      title: "Detached HEAD",
+      prompt: "Checkout a commit id (not a branch) so HEAD is detached.",
+      hint: "Put a commit hash from the graph into branch-in → checkout",
+      setup() {
+        repo = freshRepo();
+        wt("src/main.v", "module main;\n// c2\nendmodule\n");
+        add("src/main.v");
+        commit("second");
+      },
+      check() {
+        return !!repo.detached;
+      },
+    },
+    {
+      id: "reflog",
+      title: "Reflog grows",
+      prompt: "After at least one new commit, confirm reflog has 2+ entries.",
+      hint: "commit once; reflog is listed under status.",
+      setup() {
+        repo = freshRepo();
+      },
+      check() {
+        return repo.reflog.length >= 2 && Object.keys(repo.commits).length >= 2;
+      },
+    },
+  ];
+
   const root = document.getElementById("git-root");
   root.innerHTML = `
     <div class="challenge">
-      <h2>Lab scenario</h2>
-      <p>Edit a file → <code>add</code> → <code>commit</code>. Branch, commit again, checkout main, merge or rebase.</p>
+      <h2>Challenge <span id="chal-progress" style="font-weight:500;color:var(--muted);font-size:0.9rem"></span></h2>
+      <p id="chal-prompt"></p>
+      <p class="chal-hint" id="chal-hint" hidden></p>
       <div class="tool-actions">
-        <button type="button" class="btn btn-ghost" id="git-reset">Reset repo</button>
+        <button type="button" class="btn btn-ghost" id="chal-hint-btn">Show hint</button>
+        <button type="button" class="btn btn-secondary" id="chal-check">Check</button>
+        <button type="button" class="btn btn-ghost" id="chal-next">Next</button>
+        <button type="button" class="btn btn-ghost" id="git-reset">Reset challenge</button>
+        <span class="challenge-status idle" id="chal-status">Idle</span>
       </div>
+      <div class="kbd-row" id="chal-catalog" style="margin-top:0.75rem"></div>
     </div>
     <div class="tool-layout split-wide">
       <div>
@@ -526,10 +878,85 @@
     });
   });
   document.getElementById("git-reset").addEventListener("click", () => {
-    repo = freshRepo();
-    setMsg("Repository reset", true);
-    render();
+    applyChallengeSetup();
+    setMsg("Challenge reset", true);
+    setChalStatus("idle", "Idle");
   });
 
-  render();
+  function setChalStatus(kind, msg) {
+    const el = document.getElementById("chal-status");
+    el.className = "challenge-status " + kind;
+    el.textContent = msg;
+  }
+
+  function applyChallengeSetup() {
+    const ch = CHALLENGES[challengeIdx];
+    ch.setup();
+    render();
+  }
+
+  function renderChallenge() {
+    const ch = CHALLENGES[challengeIdx];
+    const cleared = clearedIds.filter((id) => CHALLENGES.some((c) => c.id === id)).length;
+    document.getElementById("chal-progress").textContent = `${cleared} / ${CHALLENGES.length} cleared`;
+    document.getElementById("chal-prompt").innerHTML = `<strong>${ch.title}:</strong> ${ch.prompt}`;
+    const hintEl = document.getElementById("chal-hint");
+    if (showHint) {
+      hintEl.hidden = false;
+      hintEl.innerHTML = `<strong>Hint:</strong> ${ch.hint}`;
+    } else hintEl.hidden = true;
+    document.getElementById("chal-hint-btn").textContent = showHint ? "Hide hint" : "Show hint";
+    const cat = document.getElementById("chal-catalog");
+    cat.innerHTML = "";
+    CHALLENGES.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = (clearedIds.includes(c.id) ? "✓ " : "") + c.title;
+      if (i === challengeIdx) b.style.outline = "2px solid var(--accent)";
+      b.addEventListener("click", () => {
+        challengeIdx = i;
+        showHint = false;
+        setChalStatus("idle", "Idle");
+        applyChallengeSetup();
+        renderChallenge();
+      });
+      cat.appendChild(b);
+    });
+  }
+
+  document.getElementById("chal-hint-btn").addEventListener("click", () => {
+    showHint = !showHint;
+    renderChallenge();
+  });
+  document.getElementById("chal-check").addEventListener("click", () => {
+    const ch = CHALLENGES[challengeIdx];
+    let ok = false;
+    try {
+      ok = !!ch.check();
+    } catch {
+      ok = false;
+    }
+    if (ok) {
+      if (!clearedIds.includes(ch.id)) {
+        clearedIds = [...clearedIds, ch.id];
+        try {
+          localStorage.setItem(CLEARED_KEY, JSON.stringify(clearedIds));
+        } catch {
+          /* ignore */
+        }
+      }
+      setChalStatus("pass", "Pass");
+      renderChallenge();
+    } else setChalStatus("fail", "Not yet");
+  });
+  document.getElementById("chal-next").addEventListener("click", () => {
+    challengeIdx = (challengeIdx + 1) % CHALLENGES.length;
+    showHint = false;
+    setChalStatus("idle", "Idle");
+    applyChallengeSetup();
+    renderChallenge();
+  });
+
+  applyChallengeSetup();
+  renderChallenge();
 })();

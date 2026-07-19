@@ -101,22 +101,22 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Project layout, archives, sed & diff | `project-archives` | **Shipped** | Tree, find/grep, tar, sed, diff/patch |
+| Project layout, archives, sed & diff | `project-archives` | **Shipped** | Tree, find/grep, tar, sed, diff/patch; 22 challenges |
 
 ## Version control
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Git graph, staging, stash & rebase | `git-graph` | **Shipped** | Status, add/commit, merge/rebase, cherry-pick, stash, tags, ignore, reflog |
+| Git graph, staging, stash & rebase | `git-graph` | **Shipped** | Status, add/commit, merge/rebase, cherry-pick, stash, tags, ignore; 22 challenges |
 | Merge conflict resolver | `git-conflicts` | **Shipped** | Conflict markers; ours / theirs / manual; 22 scenarios |
-| Blame & bisect | `blame-bisect` | **Shipped** | Line attribution; binary search for first bad commit |
-| Remotes, PRs & submodules | `remotes` | **Shipped** | Checklist against live GitHub sandbox (clone, Make, push, PR, submodule) |
+| Blame & bisect | `blame-bisect` | **Shipped** | Line attribution; binary search for first bad commit; 22 challenges |
+| Remotes, PRs & submodules | `remotes` | **Shipped** | 22-question concept quiz + live GitHub checklist (clone, Make, push, PR, submodule) |
 
 ## Workflow & submission
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Pre-push checklist, Make & env | `workflow` | **Shipped** | `check_ready`, `make test`, `.env`, dry-run clean |
+| Pre-push checklist, Make & env | `workflow` | **Shipped** | `check_ready`, `make test`, `.env`, dry-run clean; 22 challenges |
 
 ---
 

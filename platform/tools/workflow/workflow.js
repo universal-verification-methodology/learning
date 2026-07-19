@@ -8,10 +8,97 @@
     { id: "scriptOk", label: "./scripts/run_demo.sh exits 0", good: true },
     { id: "readme", label: "README mentions how to run", good: true },
     { id: "branch", label: "On expected branch (lab1 / main)", good: true },
+    { id: "testsPass", label: "Unit / smoke tests pass", good: true },
+    { id: "noSecrets", label: "No secrets or .env committed", good: true },
+    { id: "fmtOk", label: "Formatter / style check clean", good: true },
+    { id: "licenseOk", label: "LICENSE present if required", good: true },
+    { id: "submoduleOk", label: "Submodules initialized", good: true },
+    { id: "noLarge", label: "No large binaries staged", good: true },
+    { id: "msgOk", label: "Commit message is descriptive", good: true },
+    { id: "remoteSet", label: "origin remote configured", good: true },
+    { id: "aheadOk", label: "Not accidentally force-pushing main", good: true },
+    { id: "ciLocal", label: "Local CI script (check_ready) green", good: true },
+    { id: "docsOk", label: "Docs updated if API changed", good: true },
+    { id: "reviewReady", label: "Self-reviewed diff before push", good: true },
+    { id: "envFile", label: ".env.example committed (not .env)", good: true },
+    { id: "makeHelp", label: "make help documents targets", good: true },
+  ];
+
+  const CLEARED_KEY = "ddv-workflow-cleared-v1";
+  let clearedIds = [];
+  try {
+    const raw = localStorage.getItem(CLEARED_KEY);
+    if (raw) clearedIds = JSON.parse(raw).map(String);
+  } catch {
+    /* ignore */
+  }
+  let challengeIdx = 0;
+  let showHint = false;
+
+  const CHALLENGES = [
+    { id: "all-green", title: "All green", prompt: "Make every flag good, then Run checks — score must be full.", hint: "Set all good.", check: () => FLAGS.every((f) => state[f.id]) },
+    { id: "messy-then-fix", title: "Fix messy", prompt: "Click Set messy workspace, then repair until all checks pass.", hint: "Messy then Set all good (or toggle).", check: () => FLAGS.every((f) => state[f.id]) },
+    { id: "clean-only", title: "Need clean tree", prompt: "Ensure “Working tree clean” is checked (true).", hint: "Toggle clean on.", check: () => !!state.clean },
+    { id: "no-build", title: "No build staged", prompt: "noBuild must be true.", hint: "Toggle noBuild on.", check: () => !!state.noBuild },
+    { id: "no-logs", title: "No logs committed", prompt: "noLogs true.", hint: "Toggle noLogs.", check: () => !!state.noLogs },
+    { id: "gitignore", title: "gitignore ok", prompt: "gitignore flag true.", hint: "Toggle gitignore.", check: () => !!state.gitignore },
+    { id: "script", title: "Script ok", prompt: "scriptOk true (or make test with env).", hint: "Toggle scriptOk or pass make test.", check: () => !!state.scriptOk },
+    { id: "branch-lab", title: "On branch", prompt: "branch flag true.", hint: "Toggle branch.", check: () => !!state.branch },
+    { id: "secrets", title: "No secrets", prompt: "noSecrets true.", hint: "Toggle noSecrets.", check: () => !!state.noSecrets },
+    { id: "submodule", title: "Submodules", prompt: "submoduleOk true.", hint: "Toggle submoduleOk.", check: () => !!state.submoduleOk },
+    { id: "remote", title: "Remote set", prompt: "remoteSet true.", hint: "Toggle remoteSet.", check: () => !!state.remoteSet },
+    { id: "ci", title: "CI local", prompt: "ciLocal true.", hint: "Toggle ciLocal.", check: () => !!state.ciLocal },
+    { id: "review", title: "Self-reviewed", prompt: "reviewReady true.", hint: "Toggle reviewReady.", check: () => !!state.reviewReady },
+    { id: "env-example", title: ".env.example", prompt: "envFile true.", hint: "Toggle envFile.", check: () => !!state.envFile },
+    { id: "make-help", title: "make help", prompt: "makeHelp true.", hint: "Toggle makeHelp.", check: () => !!state.makeHelp },
+    { id: "make-pass", title: "make test pass", prompt: "With env-ok and make-ok checked, run make test so scriptOk becomes true.", hint: "Check both boxes, click make test.", check: () => {
+      document.getElementById("env-ok").checked = true;
+      document.getElementById("make-ok").checked = true;
+      document.getElementById("btn-make").click();
+      return !!state.scriptOk;
+    }},
+    { id: "make-fail", title: "make fails without env", prompt: "Uncheck env-ok, run make test — scriptOk should become false.", hint: "Uncheck env, make test.", check: () => {
+      document.getElementById("env-ok").checked = false;
+      document.getElementById("make-ok").checked = true;
+      document.getElementById("btn-make").click();
+      return !state.scriptOk;
+    }},
+    { id: "dry-clean", title: "Dry-run clean", prompt: "Prefer dry-run, click clean build/ — output mentions dry-run.", hint: "Check Prefer dry-run, then clean.", check: () => {
+      document.getElementById("clean-dry").checked = true;
+      document.getElementById("btn-clean").click();
+      return document.getElementById("make-out").textContent.includes("dry-run");
+    }},
+    { id: "show-env", title: "Show env", prompt: "With env-ok checked, show env — should mention TOOLS=.", hint: "env-ok on, show env.", check: () => {
+      document.getElementById("env-ok").checked = true;
+      document.getElementById("btn-env").click();
+      return document.getElementById("make-out").textContent.includes("TOOLS=");
+    }},
+    { id: "score-half", title: "At least half", prompt: "At least half the FLAGS true, then Run checks.", hint: "Set all good is easiest.", check: () => {
+      const n = FLAGS.filter((f) => state[f.id]).length;
+      return n >= Math.ceil(FLAGS.length / 2);
+    }},
+    { id: "commits-on", title: "Have commits", prompt: "commits flag true.", hint: "Toggle commits.", check: () => !!state.commits },
+    { id: "fmt", title: "Formatter clean", prompt: "fmtOk true.", hint: "Toggle fmtOk.", check: () => !!state.fmtOk },
   ];
 
   const root = document.getElementById("wf-root");
   root.innerHTML = `
+    <div class="starter-note no-print">
+      <p><strong>Starter example:</strong> Set all good → Run checks → ready to push.</p>
+      <button type="button" class="btn btn-secondary" id="wf-starter">Load starter example</button>
+    </div>
+    <div class="challenge">
+      <h2>Challenges <span id="chal-progress" style="font-weight:500;color:var(--muted);font-size:0.9rem"></span></h2>
+      <p id="chal-prompt"></p>
+      <p class="chal-hint" id="chal-hint" hidden></p>
+      <div class="tool-actions">
+        <button type="button" class="btn btn-ghost" id="chal-hint-btn">Show hint</button>
+        <button type="button" class="btn btn-secondary" id="chal-check">Check</button>
+        <button type="button" class="btn btn-ghost" id="chal-next">Next</button>
+        <span class="challenge-status idle" id="chal-status">Idle</span>
+      </div>
+      <div class="kbd-row" id="chal-catalog" style="margin-top:0.75rem"></div>
+    </div>
     <div class="challenge">
       <h2>Workspace knobs</h2>
       <p>Toggle the state of your simulated project, then Run checks — fix reds before “push”.</p>
@@ -64,8 +151,6 @@
       </div>
     </div>
   `;
-
-  // inject make panel styles rely on existing; source-pre may not exist on workflow - using inline style
 
   const state = {};
   const toggles = document.getElementById("toggles");
@@ -138,6 +223,10 @@
     state.gitignore = false;
     state.readme = true;
     state.branch = true;
+    state.testsPass = false;
+    state.noSecrets = false;
+    state.fmtOk = false;
+    state.ciLocal = false;
     syncToggles();
     run();
   });
@@ -147,8 +236,7 @@
     document.getElementById("make-out").textContent = ok
       ? "make test\ncc src/main.c -o build/main\n./build/main\nPASS\nmake: exit 0"
       : "make test\nmake: TOOLS not set (source .env)\nmake: *** [test] Error 2";
-    if (ok) state.scriptOk = true;
-    else state.scriptOk = false;
+    state.scriptOk = ok;
     syncToggles();
   });
   document.getElementById("btn-env").addEventListener("click", () => {
@@ -163,5 +251,79 @@
       : "rm -rf build/\nremoved build/";
   });
 
+  function setChalStatus(kind, msg) {
+    const el = document.getElementById("chal-status");
+    el.className = "challenge-status " + kind;
+    el.textContent = msg;
+  }
+
+  function renderChallenge() {
+    const ch = CHALLENGES[challengeIdx];
+    const cleared = clearedIds.filter((id) => CHALLENGES.some((c) => c.id === id)).length;
+    document.getElementById("chal-progress").textContent = `${cleared} / ${CHALLENGES.length} cleared`;
+    document.getElementById("chal-prompt").innerHTML = `<strong>${ch.title}:</strong> ${ch.prompt}`;
+    const hintEl = document.getElementById("chal-hint");
+    if (showHint) {
+      hintEl.hidden = false;
+      hintEl.innerHTML = `<strong>Hint:</strong> ${ch.hint}`;
+    } else hintEl.hidden = true;
+    document.getElementById("chal-hint-btn").textContent = showHint ? "Hide hint" : "Show hint";
+    const cat = document.getElementById("chal-catalog");
+    cat.innerHTML = "";
+    CHALLENGES.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = (clearedIds.includes(c.id) ? "✓ " : "") + c.title;
+      if (i === challengeIdx) b.style.outline = "2px solid var(--accent)";
+      b.addEventListener("click", () => {
+        challengeIdx = i;
+        showHint = false;
+        setChalStatus("idle", "Idle");
+        renderChallenge();
+      });
+      cat.appendChild(b);
+    });
+  }
+
+  document.getElementById("wf-starter").addEventListener("click", () => {
+    FLAGS.forEach((f) => {
+      state[f.id] = true;
+    });
+    syncToggles();
+    run();
+  });
+  document.getElementById("chal-hint-btn").addEventListener("click", () => {
+    showHint = !showHint;
+    renderChallenge();
+  });
+  document.getElementById("chal-check").addEventListener("click", () => {
+    const ch = CHALLENGES[challengeIdx];
+    let ok = false;
+    try {
+      ok = !!ch.check();
+    } catch {
+      ok = false;
+    }
+    if (ok) {
+      if (!clearedIds.includes(ch.id)) {
+        clearedIds = [...clearedIds, ch.id];
+        try {
+          localStorage.setItem(CLEARED_KEY, JSON.stringify(clearedIds));
+        } catch {
+          /* ignore */
+        }
+      }
+      setChalStatus("pass", "Pass");
+      renderChallenge();
+    } else setChalStatus("fail", "Not yet");
+  });
+  document.getElementById("chal-next").addEventListener("click", () => {
+    challengeIdx = (challengeIdx + 1) % CHALLENGES.length;
+    showHint = false;
+    setChalStatus("idle", "Idle");
+    renderChallenge();
+  });
+
   run();
+  renderChallenge();
 })();
