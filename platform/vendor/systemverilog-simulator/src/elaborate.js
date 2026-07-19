@@ -1,42 +1,20 @@
 import { parseLiteral } from "./literal.js";
 import { Value } from "./value.js";
 import { MAX_W } from "./literal.js";
-import { isHandle, makeHandle, NULL_HANDLE, handleEq } from "./handle.js";
+import { NULL_HANDLE } from "./handle.js";
 import { createStdPackageAst } from "./std-package.js";
-import { applyStdCtor, isStdNativeClass, tryStdFunction } from "./std-runtime.js";
-import {
-  isSvString,
-  makeSvString,
-  isNewArray,
-  makeNewArray,
-  isCollectionSlot,
-  evalCollectionMethod,
-  execCollectionMethod,
-  resizeDynArray,
-  copyCollection,
-  indexRead,
-  indexWrite,
-} from "./sv-array.js";
+import { isSvString, makeSvString } from "./sv-array.js";
 import { timeLiteralToFs, normalizeTimeCtx } from "./time.js";
 import {
-  bitwiseBin,
-  bitwiseNot,
-  reduceAnd,
-  reduceOr,
-  reduceXor,
-  concatValues,
-  logicalToBit,
-  arithBin,
-  shiftLeft,
-  shiftRight,
-  shiftRightArith,
-  compare,
-  strengthPairFromKeywords,
   STRENGTH_LEVEL,
-  DEFAULT_STRENGTH,
   DEFAULT_CHARGE,
   emptyRails,
 } from "./value.js";
+import { createGateAssignLowering, isNetDeclKind } from "./elab-gates.js";
+import { createUdpLowering } from "./elab-udp.js";
+
+/** Re-export runtime eval for callers that historically imported from elaborate. */
+export { evalExpr, applyLValue, execBlocking } from "./eval-expr.js";
 
 /**
  * Elaborate a parsed design into a flat runnable netlist.
@@ -76,6 +54,8 @@ export function elaborate(design, opts = {}) {
   const classTable = new Map();
   /** full signal name → class type name */
   const handleVars = new Map();
+  /** @type {Map<string, object>} UDP name → compiled def */
+  const udps = new Map();
 
   function typesFor(path) {
     const key = path || "";
@@ -417,312 +397,6 @@ export function elaborate(design, opts = {}) {
   function fullName(path, name) {
     if (name && String(name).includes("::")) return name;
     return path ? `${path}.${name}` : name;
-  }
-
-  /**
-   * Lower gate primitive to continuous assign(s).
-   * @param {object} item
-   * @param {string} declPath path for instance naming (unused for nets)
-   * @param {string} refPath path for signal refs
-   */
-  function resolveItemStrength(item) {
-    if (!item.strength) return DEFAULT_STRENGTH;
-    if (item.strength.single) {
-      return strengthPairFromKeywords(item.strength.s1, null, { single: true });
-    }
-    return strengthPairFromKeywords(item.strength.s1, item.strength.s0);
-  }
-
-  function isNetDeclKind(kind) {
-    return (
-      kind === "wire" ||
-      kind === "tri" ||
-      kind === "wand" ||
-      kind === "wor" ||
-      kind === "triand" ||
-      kind === "trior" ||
-      kind === "tri0" ||
-      kind === "tri1" ||
-      kind === "supply0" ||
-      kind === "supply1" ||
-      kind === "pull0" ||
-      kind === "pull1" ||
-      kind === "trireg"
-    );
-  }
-
-  /** Convert a gate output expression to an LValue. */
-  function termToLValue(term) {
-    if (term.type === "Ident") {
-      return { type: "LValue", name: term.name, select: term.select || null };
-    }
-    if (term.type === "BitSelect" && term.expr.type === "Ident") {
-      return {
-        type: "LValue",
-        name: term.expr.name,
-        select: { type: "Bit", index: term.index },
-      };
-    }
-    if (term.type === "PartSelect" && term.expr.type === "Ident") {
-      return {
-        type: "LValue",
-        name: term.expr.name,
-        select: { type: "Part", hi: term.hi, lo: term.lo },
-      };
-    }
-    throw new Error("Gate/switch output must be a net identifier (optional bit select)");
-  }
-
-  function bitSelectTerm(expr, bitIndex) {
-    if (expr.type === "Ident" && !expr.select) {
-      return {
-        type: "BitSelect",
-        expr,
-        index: { type: "Number", value: bitIndex },
-      };
-    }
-    // Scalars / complex exprs are shared across array instances
-    return expr;
-  }
-
-  function expandAndPushGate(item, declPath, refPath, portMap, params) {
-    if (item.type === "GateList") {
-      for (const inst of item.instances) {
-        if (inst.range) {
-          const msb = evalConstInt(inst.range.msb, params);
-          const lsb = evalConstInt(inst.range.lsb, params);
-          const step = msb >= lsb ? -1 : 1;
-          for (let i = msb; ; i += step) {
-            const terminals = inst.terminals.map((t) => bitSelectTerm(t, i));
-            pushGateAssign(
-              {
-                type: "Gate",
-                gate: item.gate,
-                delay: item.delay,
-                strength: item.strength,
-                name: inst.name ? `${inst.name}[${i}]` : null,
-                terminals,
-              },
-              declPath,
-              refPath,
-              portMap,
-              params
-            );
-            if (i === lsb) break;
-          }
-        } else {
-          pushGateAssign(
-            {
-              type: "Gate",
-              gate: item.gate,
-              delay: item.delay,
-              strength: item.strength,
-              name: inst.name,
-              terminals: inst.terminals,
-            },
-            declPath,
-            refPath,
-            portMap,
-            params
-          );
-        }
-      }
-      return;
-    }
-    pushGateAssign(item, declPath, refPath, portMap, params);
-  }
-
-  function pushContinuousAssign(item, path, portMap, params) {
-    if (item.type === "ContinuousAssignList") {
-      for (const a of item.assigns) {
-        assigns.push({
-          lhs: rewriteLValue(a.lhs, path, portMap, params),
-          rhs: rewriteExpr(a.rhs, path, portMap, params),
-          delay: item.delay || 0,
-          strength: resolveItemStrength(item),
-        });
-      }
-      return;
-    }
-    assigns.push({
-      lhs: rewriteLValue(item.lhs, path, portMap, params),
-      rhs: rewriteExpr(item.rhs, path, portMap, params),
-      delay: item.delay || 0,
-      strength: resolveItemStrength(item),
-    });
-  }
-
-  function pushGateAssign(item, declPath, refPath, portMap, params) {
-    const terms = item.terminals.map((t) => rewriteExpr(t, refPath, portMap, params));
-    const g = item.gate;
-    let strength = resolveItemStrength(item);
-
-    // Bidirectional tran*: two SwitchPass assigns
-    if (
-      g === "tran" ||
-      g === "rtran" ||
-      g === "tranif0" ||
-      g === "tranif1" ||
-      g === "rtranif0" ||
-      g === "rtranif1"
-    ) {
-      const a = terms[0];
-      const b = terms[1];
-      if (a.type !== "Ident" || b.type !== "Ident") {
-        throw new Error(`${g} terminals must be net identifiers`);
-      }
-      const resistive = g.startsWith("r");
-      let en = null;
-      let sense = "always";
-      if (g === "tranif1" || g === "rtranif1") {
-        en = terms[2];
-        sense = "n";
-      } else if (g === "tranif0" || g === "rtranif0") {
-        en = terms[2];
-        sense = "p";
-      }
-      const mk = (lhsName, dataExpr) => ({
-        lhs: { type: "LValue", name: lhsName, select: null },
-        rhs: {
-          type: "SwitchPass",
-          data: dataExpr,
-          en,
-          sense,
-          resistive,
-        },
-        delay: item.delay || 0,
-        strength: DEFAULT_STRENGTH,
-        switchPass: true,
-      });
-      assigns.push(mk(a.name, b));
-      assigns.push(mk(b.name, a));
-      return;
-    }
-
-    // buf / not: one or more outputs, last terminal is input
-    if (g === "buf" || g === "not") {
-      if (terms.length < 2) throw new Error(`${g} requires output(s) and one input`);
-      const inputs = terms.slice(0, -1);
-      const dataIn = terms[terms.length - 1];
-      const rhs =
-        g === "not" ? { type: "Unary", op: "~", expr: dataIn } : dataIn;
-      for (const outTerm of inputs) {
-        const lhs = termToLValue(outTerm);
-        assigns.push({ lhs, rhs, delay: item.delay || 0, strength });
-      }
-      return;
-    }
-
-    const out = terms[0];
-    const inputs = terms.slice(1);
-    const lhs = termToLValue(out);
-    let rhs;
-    if (g === "pullup") {
-      if (inputs.length) throw new Error("pullup takes a single net");
-      rhs = { type: "Literal", raw: "1'b1" };
-      if (!item.strength) strength = { one: STRENGTH_LEVEL.pull, zero: STRENGTH_LEVEL.highz };
-      else if (item.strength.single) {
-        strength = strengthPairFromKeywords(item.strength.s1, null, { single: true });
-      }
-    } else if (g === "pulldown") {
-      if (inputs.length) throw new Error("pulldown takes a single net");
-      rhs = { type: "Literal", raw: "1'b0" };
-      if (!item.strength) strength = { one: STRENGTH_LEVEL.highz, zero: STRENGTH_LEVEL.pull };
-      else if (item.strength.single) {
-        strength = strengthPairFromKeywords(item.strength.s1, null, { single: true });
-      }
-    } else if (g === "bufif0" || g === "bufif1" || g === "notif0" || g === "notif1") {
-      if (inputs.length !== 2) throw new Error(`${g} requires data and control`);
-      const data = inputs[0];
-      const ctrl = inputs[1];
-      rhs = {
-        type: "TriBuf",
-        data,
-        ctrl,
-        invertData: g === "notif0" || g === "notif1",
-        activeLow: g === "bufif0" || g === "notif0",
-      };
-    } else if (g === "nmos" || g === "pmos" || g === "rnmos" || g === "rpmos") {
-      if (inputs.length !== 2) throw new Error(`${g} requires data and control`);
-      rhs = {
-        type: "SwitchPass",
-        data: inputs[0],
-        en: inputs[1],
-        sense: g.includes("pmos") ? "p" : "n",
-        resistive: g.startsWith("r"),
-      };
-    } else if (g === "cmos" || g === "rcmos") {
-      if (inputs.length !== 3) throw new Error(`${g} requires data, n-control, p-control`);
-      const resistive = g === "rcmos";
-      assigns.push({
-        lhs,
-        rhs: {
-          type: "SwitchPass",
-          data: inputs[0],
-          en: inputs[1],
-          sense: "n",
-          resistive,
-        },
-        delay: item.delay || 0,
-        strength: DEFAULT_STRENGTH,
-        switchPass: true,
-      });
-      assigns.push({
-        lhs,
-        rhs: {
-          type: "SwitchPass",
-          data: inputs[0],
-          en: inputs[2],
-          sense: "p",
-          resistive,
-        },
-        delay: item.delay || 0,
-        strength: DEFAULT_STRENGTH,
-        switchPass: true,
-      });
-      return;
-    } else {
-      if (!inputs.length) throw new Error(`${g} requires inputs`);
-      const op =
-        g === "and" || g === "nand"
-          ? "&"
-          : g === "or" || g === "nor"
-            ? "|"
-            : g === "xor" || g === "xnor"
-              ? "^"
-              : null;
-      if (!op) throw new Error(`Unsupported gate ${g}`);
-      rhs = inputs[0];
-      for (let i = 1; i < inputs.length; i++) {
-        rhs = { type: "Binary", op, left: rhs, right: inputs[i] };
-      }
-      if (g === "nand" || g === "nor" || g === "xnor") {
-        rhs = { type: "Unary", op: "~", expr: rhs };
-      }
-    }
-    assigns.push({
-      lhs,
-      rhs,
-      delay: item.delay || 0,
-      strength,
-      switchPass: rhs.type === "SwitchPass",
-    });
-  }
-
-  function addNetDeclAssigns(item, path, portMap, params) {
-    if (!isNetDeclKind(item.kind)) return;
-    const w = resolveWidth(item.width, item.range, params);
-    for (const d of item.decls) {
-      if (!d.init) continue;
-      const key = fullName(path, d.name);
-      assigns.push({
-        lhs: { type: "LValue", name: key, select: null },
-        rhs: rewriteExpr(d.init, path, portMap, params),
-        delay: item.delay || 0,
-        strength: DEFAULT_STRENGTH,
-      });
-      void w;
-    }
   }
 
   function addSignal(path, name, width, kind, init = null, memInfo = null, unpacked = null, netExtras = null) {
@@ -1229,6 +903,7 @@ export function elaborate(design, opts = {}) {
         };
       case "WaitFork":
       case "DisableFork":
+      case "Disable":
         return stmt;
       case "Wait":
         return { ...stmt, expr: rewriteExpr(stmt.expr, path, portMap, params) };
@@ -1403,6 +1078,10 @@ export function elaborate(design, opts = {}) {
       expandAndPushGate(item, genPath, modPath, portMap, params);
       return;
     }
+    if (item.type === "CellInst") {
+      elaborateCellInst(item, genPath, modPath, portMap, params, true);
+      return;
+    }
     if (item.type === "VarDecl") {
       const w = resolveWidth(item.width, item.range, params);
       for (const d of item.decls) {
@@ -1493,6 +1172,71 @@ export function elaborate(design, opts = {}) {
     throw new Error(`Unsupported generate item ${item.type}`);
   }
 
+
+  const {
+    expandAndPushGate,
+    pushContinuousAssign,
+    addNetDeclAssigns,
+  } = createGateAssignLowering({
+    assigns,
+    signals,
+    fullName,
+    rewriteExpr,
+    rewriteLValue,
+    evalConstInt,
+    resolveWidth,
+  });
+
+  const { registerUdps, expandAndPushUdp } = createUdpLowering({
+    assigns,
+    udps,
+    signals,
+    fullName,
+    rewriteExpr,
+    rewriteLValue,
+    evalConstInt,
+  });
+
+  function cellInstAsModuleInstances(item) {
+    /** @type {object[]} */
+    const out = [];
+    for (const inst of item.instances) {
+      if (!inst.name) {
+        throw new Error(`Module instance '${item.cell}' requires an instance name`);
+      }
+      let params = item.params || [];
+      // Gate-style `#10 name` stored delay+params; modules use params
+      if (!params.length && item.delay != null && item.delay !== 0) {
+        const d = item.delay;
+        const n = typeof d === "number" ? d : d.typ ?? d.rise ?? 0;
+        params = [{ type: "Positional", expr: { type: "Number", value: n } }];
+      }
+      out.push({
+        type: "Instance",
+        module: item.cell,
+        name: inst.name,
+        params,
+        conns: inst.conns,
+      });
+    }
+    return out;
+  }
+
+  function elaborateCellInst(item, declPath, refPath, portMap, params, genMode = false) {
+    if (udps.has(item.cell)) {
+      expandAndPushUdp(item, declPath, refPath, portMap, params);
+      return;
+    }
+    if (byName.has(item.cell)) {
+      for (const inst of cellInstAsModuleInstances(item)) {
+        if (genMode) elaborateGenItem(inst, declPath, refPath, portMap, params);
+        else elaborateItem(inst, declPath, portMap, params);
+      }
+      return;
+    }
+    throw new Error(`Unknown cell '${item.cell}' (not a module or UDP)`);
+  }
+
   function elaborateItem(item, path, portMap, params) {
     if (item.type === "Typedef") {
       registerTypedef(item, typesFor(path), params);
@@ -1551,6 +1295,8 @@ export function elaborate(design, opts = {}) {
       pushContinuousAssign(item, path, portMap, params);
     } else if (item.type === "Gate" || item.type === "GateList") {
       expandAndPushGate(item, path, path, portMap, params);
+    } else if (item.type === "CellInst") {
+      elaborateCellInst(item, path, path, portMap, params, false);
     } else if (item.type === "Always" || item.type === "Initial") {
       const sens =
         item.type === "Always"
@@ -2117,6 +1863,7 @@ export function elaborate(design, opts = {}) {
     compilePackage(createStdPackageAst());
   }
   for (const pkg of userPkgs) compilePackage(pkg);
+  registerUdps(design.udps || []);
   elaborateModule(top, "", null, null, null);
 
   return {
@@ -2128,957 +1875,10 @@ export function elaborate(design, opts = {}) {
     tasks,
     functions,
     classes: classTable,
+    udps,
     timeCtx: normalizeTimeCtx(timeCtx),
     hierarchy: hierarchy.slice().sort(
       (a, b) => a.split(".").length - b.split(".").length || a.localeCompare(b)
     ),
   };
-}
-
-/**
- * @param {Map<string, object>|undefined} classes
- * @param {string} className
- * @param {string} methodName
- * @param {{ fromSuper?: boolean }} [opts]
- */
-function lookupMethod(classes, className, methodName, opts = {}) {
-  let cur = classes?.get(className);
-  if (opts.fromSuper) {
-    cur = cur?.base ? classes.get(cur.base) : null;
-  }
-  while (cur) {
-    if (methodName === "new" && cur.ctor) return cur.ctor;
-    if (cur.methods.has(methodName)) return cur.methods.get(methodName);
-    // virtual: keep searching up only if not found; non-virtual same
-    cur = cur.base ? classes.get(cur.base) : null;
-  }
-  return null;
-}
-
-function isClassOrDerived(classes, className, ancestorName) {
-  let cur = className;
-  while (cur) {
-    if (cur === ancestorName) return true;
-    cur = classes.get(cur)?.base || null;
-  }
-  return false;
-}
-
-function checkMemberAccess(member, memberName, ctx) {
-  const access = member.access || "public";
-  if (access === "public") return;
-  const caller = ctx.thisHandle && ctx.heap && ctx.thisHandle.oid != null
-    ? ctx.heap.get(ctx.thisHandle.oid)?.className
-    : null;
-  if (!caller) {
-    throw new Error(`Cannot access ${access} member '${memberName}' outside class`);
-  }
-  const def = member.definedIn;
-  if (!def) return;
-  if (access === "local" && caller !== def) {
-    throw new Error(`Cannot access local member '${memberName}' from '${caller}'`);
-  }
-  if (access === "protected" && !isClassOrDerived(ctx.classes, caller, def)) {
-    throw new Error(`Cannot access protected member '${memberName}' from '${caller}'`);
-  }
-}
-
-function slotGet(slot) {
-  if (!slot) return null;
-  if (slot.isHandle) return slot.handle;
-  if (slot.isString) return makeSvString(slot.str);
-  if (slot.isDynArray || slot.isQueue) return slot; // whole collection (for assignment copy)
-  return slot.value;
-}
-
-function requireValue(v, what) {
-  if (isHandle(v)) throw new Error(`${what}: expected bit value, got class handle`);
-  if (isSvString(v)) throw new Error(`${what}: expected bit value, got string`);
-  if (v && (v.isDynArray || v.isQueue)) {
-    throw new Error(`${what}: expected bit value, got array/queue`);
-  }
-  return v;
-}
-
-/**
- * Allocate object and run constructor.
- * @returns {{ $h: true, oid: number|null }}
- */
-function allocObject(className, args, signals, ctx) {
-  const classes = ctx.classes;
-  const heap = ctx.heap;
-  if (!classes || !heap) throw new Error("Class runtime not initialized");
-  const cls = classes.get(className);
-  if (!cls) throw new Error(`Unknown class '${className}'`);
-  const oid = ctx.nextOid();
-  const props = new Map();
-  for (const p of cls.props) {
-    if (p.isHandle) {
-      props.set(p.name, {
-        name: p.name,
-        isHandle: true,
-        classType: p.classType,
-        handle: NULL_HANDLE,
-        width: 0,
-        kind: "class",
-        access: p.access || "public",
-        definedIn: p.definedIn,
-      });
-    } else {
-      const slot = {
-        name: p.name,
-        isHandle: false,
-        width: p.width,
-        kind: p.kind || "logic",
-        value: p.isString ? Value.zeros(1) : Value.xxxx(p.width),
-        access: p.access || "public",
-        definedIn: p.definedIn,
-      };
-      if (p.isString) {
-        slot.isString = true;
-        slot.str = "";
-        slot.width = 0;
-      }
-      if (p.isDynArray) {
-        slot.isDynArray = true;
-        slot.elems = [];
-      }
-      if (p.isQueue) {
-        slot.isQueue = true;
-        slot.elems = [];
-      }
-      props.set(p.name, slot);
-    }
-  }
-  const obj = { className, props };
-  heap.set(oid, obj);
-  const handle = makeHandle(oid);
-  if (isStdNativeClass(className)) {
-    const argValues = (args || []).map((a) => evalExpr(a, signals, { ...ctx, thisHandle: handle }));
-    applyStdCtor(obj, className, argValues);
-    return handle;
-  }
-  const ctor = cls.ctor;
-  if (ctor) {
-    runClassFunction(ctor, handle, args, signals, ctx);
-  }
-  return handle;
-}
-
-function runSuperNew(args, signals, ctx) {
-  if (!ctx.thisHandle || ctx.thisHandle.oid == null) {
-    throw new Error("super.new used outside constructor");
-  }
-  const obj = ctx.heap.get(ctx.thisHandle.oid);
-  const cls = ctx.classes.get(obj.className);
-  if (!cls?.base) throw new Error(`Class '${obj.className}' has no base for super.new`);
-  const base = ctx.classes.get(cls.base);
-  if (!base?.ctor) return NULL_HANDLE;
-  return runClassFunction(base.ctor, ctx.thisHandle, args || [], signals, ctx);
-}
-
-function resolveArgSlot(arg, signals, ctx) {
-  if (!arg || arg.type !== "Ident") {
-    throw new Error("Method output/ref argument must be an identifier");
-  }
-  if (ctx.locals?.has(arg.name)) return ctx.locals.get(arg.name);
-  if (signals.has(arg.name)) return signals.get(arg.name);
-  throw new Error(`Unknown signal '${arg.name}'`);
-}
-
-function writeStdOut(slot, msg) {
-  if (!slot || msg == null) return;
-  if (slot.isHandle) {
-    slot.handle = msg;
-    return;
-  }
-  if (isHandle(msg)) throw new Error("Cannot assign class handle to bit slot");
-  slot.value = (msg.clone?.() ?? msg).resize(slot.width);
-}
-
-function runClassFunction(method, thisHandle, args, signals, ctx) {
-  if (method.isStatic && method.returnsHandle === "process" && method.name === "self") {
-    if (!ctx._processSelf) {
-      ctx._processSelf = allocObject("process", [], signals, ctx);
-    }
-    return ctx._processSelf;
-  }
-  if (method.isStatic && !thisHandle) {
-    // static method: no this
-  } else if (method.isStatic) {
-    thisHandle = null;
-  }
-
-  // Native std::mailbox / semaphore / process methods
-  if (thisHandle?.oid != null && ctx.heap) {
-    const obj = ctx.heap.get(thisHandle.oid);
-    if (obj && isStdNativeClass(obj.className)) {
-      const argValues = [];
-      const outputSlots = [];
-      let ai = 0;
-      for (const p of method.ports) {
-        if (ai >= (args || []).length) {
-          if (p.direction === "output" || p.direction === "inout") {
-            // missing output — leave unbound
-            continue;
-          }
-          argValues.push(undefined);
-          continue;
-        }
-        const arg = args[ai++];
-        if (p.direction === "output" || p.direction === "inout") {
-          const slot = resolveArgSlot(arg, signals, ctx);
-          outputSlots.push(slot);
-          argValues.push(null);
-        } else {
-          argValues.push(evalExpr(arg, signals, ctx));
-        }
-      }
-      const r = tryStdFunction(obj, method.name, argValues, thisHandle, ctx);
-      if (r.handled) {
-        if (r.out != null && outputSlots[0]) writeStdOut(outputSlots[0], r.out);
-        if (method.isVoid || method.width === 0) return NULL_HANDLE;
-        return r.value ?? NULL_HANDLE;
-      }
-    }
-  }
-
-  const flocal = new Map();
-  if (!method.isVoid && method.width > 0) {
-    flocal.set(method.name, {
-      width: method.width,
-      kind: "reg",
-      value: Value.xxxx(method.width),
-    });
-  }
-  for (const p of method.ports) {
-    if (p.isHandle) {
-      flocal.set(p.name, {
-        isHandle: true,
-        classType: p.classType,
-        handle: NULL_HANDLE,
-        width: 0,
-        kind: "class",
-      });
-    } else {
-      flocal.set(p.name, {
-        width: p.width,
-        kind: p.kind || "reg",
-        value: Value.xxxx(p.width),
-      });
-    }
-  }
-  for (const d of method.decls) {
-    if (d.isHandle) {
-      flocal.set(d.name, {
-        isHandle: true,
-        classType: d.classType,
-        handle: NULL_HANDLE,
-        width: 0,
-        kind: "class",
-      });
-    } else {
-      flocal.set(d.name, {
-        width: d.width,
-        kind: d.kind || "reg",
-        value: Value.xxxx(d.width),
-      });
-    }
-  }
-  let ai = 0;
-  for (const p of method.ports) {
-    if (p.direction === "input" || !p.direction) {
-      if (ai >= args.length) throw new Error(`Too few args to ${method.name}`);
-      const v = evalExpr(args[ai++], signals, ctx);
-      if (p.isHandle) {
-        if (!isHandle(v)) throw new Error(`Method '${method.name}' expects class handle for '${p.name}'`);
-        flocal.get(p.name).handle = v;
-      } else {
-        if (isHandle(v)) throw new Error(`Method '${method.name}' expects bit value for '${p.name}'`);
-        flocal.get(p.name).value = v.resize(p.width);
-      }
-    } else {
-      // output/inout: alias caller's slot into locals
-      if (ai >= args.length) throw new Error(`Too few args to ${method.name}`);
-      const slot = resolveArgSlot(args[ai++], signals, ctx);
-      flocal.set(p.name, slot);
-    }
-  }
-  const callCtx = {
-    ...ctx,
-    locals: flocal,
-    thisHandle: method.isStatic ? null : thisHandle,
-  };
-  execBlocking(method.body, signals, callCtx);
-  if (method.isVoid || method.width === 0) return NULL_HANDLE;
-  return flocal.get(method.name).value.clone();
-}
-
-function resolveRecvHandle(recv, signals, ctx) {
-  if (recv.type === "This") {
-    if (!ctx.thisHandle) throw new Error("'this' used outside method");
-    return ctx.thisHandle;
-  }
-  if (recv.type === "Super") {
-    if (!ctx.thisHandle) throw new Error("'super' used outside method");
-    return ctx.thisHandle;
-  }
-  const h = evalExpr(recv, signals, ctx);
-  if (!isHandle(h)) throw new Error("Method/property receiver must be a class handle");
-  if (h.oid == null) throw new Error("Null class handle dereference");
-  return h;
-}
-
-function resolveCollectionSlot(recv, signals, ctx) {
-  const locals = ctx.locals || null;
-  const lookup = (name) => {
-    if (locals && locals.has(name)) return locals.get(name);
-    const s = signals.get(name);
-    if (s) return s;
-    if (ctx.thisHandle && ctx.heap && ctx.thisHandle.oid != null) {
-      const obj = ctx.heap.get(ctx.thisHandle.oid);
-      if (obj && obj.props.has(name)) return obj.props.get(name);
-    }
-    return null;
-  };
-  if (recv.type === "Ident") {
-    const s = lookup(recv.name);
-    return isCollectionSlot(s) ? s : null;
-  }
-  if (recv.type === "PropAccess") {
-    try {
-      const h = resolveRecvHandle(recv.recv, signals, ctx);
-      const obj = ctx.heap.get(h.oid);
-      const slot = obj?.props.get(recv.field);
-      return isCollectionSlot(slot) ? slot : null;
-    } catch {
-      return null;
-    }
-  }
-  if (recv.type === "This" || recv.type === "Super") {
-    return null;
-  }
-  return null;
-}
-
-/**
- * Evaluate system functions (`$random`, `$urandom`).
- * @param {object} expr
- * @param {Map<string, any>} signals
- * @param {{ locals?: Map<string, any>, nextRandom?: () => number }} ctx
- */
-function evalSysFunc(expr, signals, ctx) {
-  const name = expr.name;
-  if (name === "$time" || name === "$stime") {
-    if (expr.args.length) throw new Error(`${name} takes no arguments`);
-    const t = ctx.getTime ? ctx.getTime() : 0;
-    return Value.fromUint(t >>> 0, 32);
-  }
-  if (name === "$signed" || name === "$unsigned") {
-    if (expr.args.length !== 1) throw new Error(`${name} takes one argument`);
-    const v = requireValue(evalExpr(expr.args[0], signals, ctx), name).clone();
-    v.signed = name === "$signed";
-    return v;
-  }
-  if (name !== "$random" && name !== "$urandom") {
-    throw new Error(`Unsupported system function ${name}`);
-  }
-  const next =
-    ctx.nextRandom ||
-    (() => {
-      // fallback deterministic LCG if sim did not inject RNG
-      if (ctx._rng == null) ctx._rng = 0x9e3779b9;
-      ctx._rng = (Math.imul(ctx._rng, 1103515245) + 12345) >>> 0;
-      return ctx._rng;
-    });
-
-  let seedObj = null;
-  if (expr.args.length > 1) throw new Error(`${name} takes at most one seed argument`);
-  if (expr.args.length === 1) {
-    const a = expr.args[0];
-    if (a.type !== "Ident") throw new Error(`${name} seed must be a variable`);
-    const locals = ctx.locals || null;
-    seedObj = (locals && locals.has(a.name) ? locals.get(a.name) : null) || signals.get(a.name);
-    if (!seedObj) throw new Error(`Unknown seed '${a.name}'`);
-    const seedBits = seedObj.value;
-    if (!seedBits.hasXZ) {
-      // reseed from variable
-      const s = Number(seedBits.resize(32).toUint()) >>> 0;
-      if (ctx.reseed) ctx.reseed(s);
-      else ctx._rng = s;
-    }
-  }
-
-  const r = next() >>> 0;
-  if (seedObj) {
-    seedObj.value = Value.fromUint(r, seedObj.width || 32);
-  }
-  return Value.fromUint(r, 32);
-}
-
-/**
- * Evaluate expression against a signal map (optional locals / functions).
- * @param {object} expr
- * @param {Map<string, { value: Value, width: number }>} signals
- * @param {{ locals?: Map<string, any>, functions?: Map<string, any>, nextRandom?: () => number }} [ctx]
- * @returns {Value|{$h:true,oid:number|null}}
- */
-export function evalExpr(expr, signals, ctx = {}) {
-  const locals = ctx.locals || null;
-  const lookup = (name) => {
-    if (locals && locals.has(name)) return locals.get(name);
-    const s = signals.get(name);
-    if (s) return s;
-    if (ctx.thisHandle && ctx.heap && ctx.thisHandle.oid != null) {
-      const obj = ctx.heap.get(ctx.thisHandle.oid);
-      if (obj && obj.props.has(name)) return obj.props.get(name);
-    }
-    return null;
-  };
-
-  switch (expr.type) {
-    case "Number":
-      return Value.fromUint(expr.value, Math.max(1, expr.value.toString(2).length));
-    case "Literal": {
-      const p = parseLiteral(expr.raw);
-      if (!p.ok) throw new Error(p.error);
-      const v = p.value;
-      if (p.signed) v.signed = true;
-      return v;
-    }
-    case "Null":
-      return NULL_HANDLE;
-    case "String":
-      return makeSvString(expr.value);
-    case "NewArray": {
-      const n = Number(
-        requireValue(evalExpr(expr.size, signals, ctx), "new[]").toUint() ?? 0n
-      );
-      return makeNewArray(n);
-    }
-    case "This":
-      if (!ctx.thisHandle) throw new Error("'this' used outside method");
-      return ctx.thisHandle;
-    case "New": {
-      const cn = expr.className;
-      if (!cn) throw new Error("new: cannot resolve class type (assign to a typed handle)");
-      return allocObject(cn, expr.args || [], signals, ctx);
-    }
-    case "SuperNew":
-      return runSuperNew(expr.args || [], signals, ctx);
-    case "Ident": {
-      const s = lookup(expr.name);
-      if (!s) throw new Error(`Unknown signal '${expr.name}'`);
-      if (s.access && s.access !== "public") checkMemberAccess(s, expr.name, ctx);
-      return slotGet(s);
-    }
-    case "PropAccess": {
-      const h = resolveRecvHandle(expr.recv, signals, ctx);
-      const obj = ctx.heap.get(h.oid);
-      if (!obj) throw new Error(`Bad object handle`);
-      const slot = obj.props.get(expr.field);
-      if (!slot) throw new Error(`Unknown property '${expr.field}'`);
-      checkMemberAccess(slot, expr.field, ctx);
-      return slotGet(slot);
-    }
-    case "MethodCall": {
-      const coll = resolveCollectionSlot(expr.recv, signals, ctx);
-      if (coll) {
-        const argValues = (expr.args || []).map((a) => evalExpr(a, signals, ctx));
-        const r = evalCollectionMethod(coll, expr.name, argValues);
-        if (r != null) return r;
-        // void methods used as expressions are illegal; try exec for size-like misses
-        if (execCollectionMethod(coll, expr.name, argValues)) return makeSvString("");
-        throw new Error(`Unknown method '${expr.name}' on ${coll.isString ? "string" : coll.isQueue ? "queue" : "dynamic array"}`);
-      }
-      const fromSuper = expr.recv.type === "Super";
-      const h = resolveRecvHandle(expr.recv, signals, ctx);
-      const obj = ctx.heap.get(h.oid);
-      const method = lookupMethod(ctx.classes, obj.className, expr.name, { fromSuper });
-      if (!method) throw new Error(`Unknown method '${expr.name}' on ${obj.className}`);
-      checkMemberAccess(method, expr.name, ctx);
-      if (method.methodKind === "task") {
-        throw new Error(`Task method '${expr.name}' cannot be used as an expression`);
-      }
-      return runClassFunction(method, h, expr.args || [], signals, ctx);
-    }
-    case "Call": {
-      const fn = ctx.functions?.get(expr.name);
-      if (!fn) throw new Error(`Unknown function '${expr.name}'`);
-      if (fn.isStatic || fn.methodKind === "function" && fn.returnsHandle) {
-        return runClassFunction(fn, null, expr.args || [], signals, ctx);
-      }
-      const flocal = new Map();
-      flocal.set(fn.name, {
-        width: fn.width,
-        kind: "reg",
-        value: Value.xxxx(fn.width),
-      });
-      for (const p of fn.ports) {
-        flocal.set(p.name, {
-          width: p.width,
-          kind: p.kind || "reg",
-          value: Value.xxxx(p.width),
-        });
-      }
-      for (const d of fn.decls) {
-        flocal.set(d.name, {
-          width: d.width,
-          kind: d.kind || "reg",
-          value: Value.xxxx(d.width),
-        });
-      }
-      let ai = 0;
-      for (const p of fn.ports) {
-        if (p.direction === "input" || !p.direction) {
-          if (ai >= expr.args.length) throw new Error(`Too few args to ${fn.name}`);
-          const v = requireValue(evalExpr(expr.args[ai++], signals, ctx), fn.name);
-          flocal.get(p.name).value = v.resize(p.width);
-        }
-      }
-      execBlocking(fn.body, signals, { ...ctx, locals: flocal });
-      return flocal.get(fn.name).value.clone();
-    }
-    case "SysFunc": {
-      return evalSysFunc(expr, signals, ctx);
-    }
-    case "Unary": {
-      const v = requireValue(evalExpr(expr.expr, signals, ctx), `unary ${expr.op}`);
-      if (expr.op === "~") return bitwiseNot(v);
-      if (expr.op === "!") return new Value(logicalToBit(v).bits === "1" ? "0" : v.hasXZ ? "x" : "1");
-      if (expr.op === "-") return arithBin(Value.zeros(v.width), v, "sub");
-      if (expr.op === "&") return reduceAnd(v);
-      if (expr.op === "|") return reduceOr(v);
-      if (expr.op === "^") return reduceXor(v);
-      if (expr.op === "~&") return bitwiseNot(reduceAnd(v));
-      if (expr.op === "~|") return bitwiseNot(reduceOr(v));
-      if (expr.op === "~^" || expr.op === "^~") return bitwiseNot(reduceXor(v));
-      throw new Error(`Unary ${expr.op}`);
-    }
-    case "TriBuf": {
-      const ctrl = logicalToBit(requireValue(evalExpr(expr.ctrl ?? expr.en, signals, ctx), "tribuf"));
-      let data = requireValue(evalExpr(expr.data, signals, ctx), "tribuf");
-      if (expr.invertData) data = bitwiseNot(data);
-      const on = expr.activeLow ? "0" : "1";
-      const off = expr.activeLow ? "1" : "0";
-      if (ctrl.bits === on) return data;
-      if (ctrl.bits === off) return Value.zzzz(data.width);
-      // Control X/Z → H/L (ambiguous 1-or-Z / 0-or-Z)
-      let out = "";
-      for (let i = 0; i < data.width; i++) {
-        const b = data.bits[i];
-        if (b === "1") out += "h";
-        else if (b === "0") out += "l";
-        else out += "x";
-      }
-      return new Value(out);
-    }
-    case "SwitchPass": {
-      // Value path only (Z when off); strength/rails filled in sim for switchPass assigns
-      const data = requireValue(evalExpr(expr.data, signals, ctx), "switch");
-      if (expr.sense === "always" || !expr.en) return data;
-      const en = logicalToBit(requireValue(evalExpr(expr.en, signals, ctx), "switch"));
-      const on = expr.sense === "n" ? "1" : "0";
-      const off = expr.sense === "n" ? "0" : "1";
-      if (en.bits === on) return data;
-      if (en.bits === off) return Value.zzzz(data.width);
-      let out = "";
-      for (let i = 0; i < data.width; i++) {
-        const b = data.bits[i];
-        if (b === "1") out += "h";
-        else if (b === "0") out += "l";
-        else out += "x";
-      }
-      return new Value(out);
-    }
-    case "Binary": {
-      const l = evalExpr(expr.left, signals, ctx);
-      const r = evalExpr(expr.right, signals, ctx);
-      const op = expr.op;
-      if ((op === "==" || op === "!=" || op === "===" || op === "!==") && (isHandle(l) || isHandle(r))) {
-        const eq = handleEq(l, r);
-        const bit = op === "!=" || op === "!==" ? !eq : eq;
-        return new Value(bit ? "1" : "0");
-      }
-      if ((op === "==" || op === "!=" || op === "===" || op === "!==") && (isSvString(l) || isSvString(r))) {
-        const ls = isSvString(l) ? l.str : String(l);
-        const rs = isSvString(r) ? r.str : String(r);
-        const eq = ls === rs;
-        const bit = op === "!=" || op === "!==" ? !eq : eq;
-        return new Value(bit ? "1" : "0");
-      }
-      const lv = requireValue(l, `binary ${op}`);
-      const rv = requireValue(r, `binary ${op}`);
-      if (op === "&") return bitwiseBin(lv, rv, (a, b) => a & b);
-      if (op === "|") return bitwiseBin(lv, rv, (a, b) => a | b);
-      if (op === "^") return bitwiseBin(lv, rv, (a, b) => a ^ b);
-      if (op === "~^" || op === "^~") return bitwiseBin(lv, rv, (a, b) => ~(a ^ b) & 1);
-      if (op === "+") return arithBin(lv, rv, "add");
-      if (op === "-") return arithBin(lv, rv, "sub");
-      if (op === "*") return arithBin(lv, rv, "mul");
-      if (op === "/") return arithBin(lv, rv, "div");
-      if (op === "%") return arithBin(lv, rv, "mod");
-      if (op === "<<") return shiftLeft(lv, rv);
-      if (op === ">>") return shiftRight(lv, rv);
-      if (op === ">>>") return lv.signed ? shiftRightArith(lv, rv) : shiftRight(lv, rv);
-      if (op === "<<<") return shiftLeft(lv, rv);
-      if (op === "==") return compare(lv, rv, "eq");
-      if (op === "!=") return compare(lv, rv, "ne");
-      if (op === "===") return compare(lv, rv, "caseeq");
-      if (op === "!==") return compare(lv, rv, "casene");
-      if (op === "<") return compare(lv, rv, "lt");
-      if (op === ">") return compare(lv, rv, "gt");
-      if (op === "<=") return compare(lv, rv, "le");
-      if (op === ">=") return compare(lv, rv, "ge");
-      if (op === "&&") {
-        const a = logicalToBit(lv);
-        const b = logicalToBit(rv);
-        if (a.hasXZ || b.hasXZ) return new Value("x");
-        return new Value(a.bits === "1" && b.bits === "1" ? "1" : "0");
-      }
-      if (op === "||") {
-        const a = logicalToBit(lv);
-        const b = logicalToBit(rv);
-        if (a.bits === "1" || b.bits === "1") return new Value("1");
-        if (a.hasXZ || b.hasXZ) return new Value("x");
-        return new Value("0");
-      }
-      throw new Error(`Binary ${op}`);
-    }
-    case "Cond": {
-      const c = logicalToBit(requireValue(evalExpr(expr.cond, signals, ctx), "?:"));
-      if (c.hasXZ) {
-        const a = evalExpr(expr.a, signals, ctx);
-        const b = evalExpr(expr.b, signals, ctx);
-        if (isHandle(a) || isHandle(b)) return NULL_HANDLE;
-        const w = Math.max(a.width, b.width);
-        return Value.xxxx(w);
-      }
-      return c.bits === "1" ? evalExpr(expr.a, signals, ctx) : evalExpr(expr.b, signals, ctx);
-    }
-    case "Concat": {
-      const parts = expr.parts.map((p) => evalExpr(p, signals, ctx));
-      if (parts.some(isSvString)) {
-        return makeSvString(
-          parts
-            .map((p) => {
-              if (isSvString(p)) return p.str;
-              throw new Error("string concat requires string operands");
-            })
-            .join("")
-        );
-      }
-      return concatValues(parts.map((p) => requireValue(p, "concat")));
-    }
-    case "Replicate": {
-      const n = Number(
-        requireValue(evalExpr(expr.count, signals, ctx), "replicate").toUint() ?? 0n
-      );
-      const v = evalExpr(expr.expr, signals, ctx);
-      if (isSvString(v)) return makeSvString(v.str.repeat(n));
-      return concatValues(Array.from({ length: n }, () => requireValue(v, "replicate")));
-    }
-    case "BitSelect": {
-      // Memory / dynamic array / queue / string index
-      if (expr.expr.type === "Ident") {
-        const ms = lookup(expr.expr.name);
-        if (ms && ms.memory) {
-          const idx = requireValue(evalExpr(expr.index, signals, ctx), "index");
-          if (idx.hasXZ) return Value.xxxx(ms.width);
-          const addr = Number(idx.toUint());
-          return (ms.words.get(addr) || Value.xxxx(ms.width)).clone();
-        }
-        if (ms && isCollectionSlot(ms)) {
-          const idx = requireValue(evalExpr(expr.index, signals, ctx), "index");
-          if (idx.hasXZ) return Value.xxxx(ms.width || 8);
-          return indexRead(ms, Number(idx.toUint()));
-        }
-      }
-      if (expr.expr.type === "PropAccess") {
-        const coll = resolveCollectionSlot(expr.expr, signals, ctx);
-        if (coll) {
-          const idx = requireValue(evalExpr(expr.index, signals, ctx), "index");
-          if (idx.hasXZ) return Value.xxxx(coll.width || 8);
-          return indexRead(coll, Number(idx.toUint()));
-        }
-      }
-      const v = requireValue(evalExpr(expr.expr, signals, ctx), "bit select");
-      const idx = requireValue(evalExpr(expr.index, signals, ctx), "index");
-      if (idx.hasXZ) return new Value("x");
-      const i = Number(idx.toUint());
-      return new Value(v.bit(i));
-    }
-    case "PartSelect": {
-      const v = requireValue(evalExpr(expr.expr, signals, ctx), "part select");
-      const hi = requireValue(evalExpr(expr.hi, signals, ctx), "part select");
-      const lo = requireValue(evalExpr(expr.lo, signals, ctx), "part select");
-      if (hi.hasXZ || lo.hasXZ) return Value.xxxx(1);
-      return v.slice(Number(hi.toUint()), Number(lo.toUint()));
-    }
-    default:
-      throw new Error(`Cannot eval ${expr.type}`);
-  }
-}
-
-/**
- * Run delay-free procedural statements (functions).
- */
-export function execBlocking(stmt, signals, ctx = {}) {
-  if (!stmt) return;
-  switch (stmt.type) {
-    case "Block":
-      for (const s of stmt.stmts) execBlocking(s, signals, ctx);
-      break;
-    case "Blocking": {
-      const v = evalExpr(stmt.rhs, signals, ctx);
-      applyLValue(stmt.lhs, v, signals, ctx);
-      break;
-    }
-    case "NBA": {
-      // Treat as blocking inside functions
-      const v = evalExpr(stmt.rhs, signals, ctx);
-      applyLValue(stmt.lhs, v, signals, ctx);
-      break;
-    }
-    case "MethodCallStmt": {
-      const coll = resolveCollectionSlot(stmt.recv, signals, ctx);
-      if (coll) {
-        const argValues = (stmt.args || []).map((a) => evalExpr(a, signals, ctx));
-        if (execCollectionMethod(coll, stmt.name, argValues)) break;
-        // expression methods used as statements (e.g. pop discarding result)
-        if (evalCollectionMethod(coll, stmt.name, argValues) != null) break;
-        throw new Error(`Unknown method '${stmt.name}' on collection`);
-      }
-      const fromSuper = stmt.recv.type === "Super";
-      const h = resolveRecvHandle(stmt.recv, signals, ctx);
-      const obj = ctx.heap.get(h.oid);
-      const method = lookupMethod(ctx.classes, obj.className, stmt.name, { fromSuper });
-      if (!method) throw new Error(`Unknown method '${stmt.name}' on ${obj.className}`);
-      checkMemberAccess(method, stmt.name, ctx);
-      if (method.methodKind === "task") {
-        throw new Error(`Task method '${stmt.name}' inside function not supported`);
-      }
-      runClassFunction(method, h, stmt.args || [], signals, ctx);
-      break;
-    }
-    case "SuperNewStmt":
-      runSuperNew(stmt.args || [], signals, ctx);
-      break;
-    case "If":
-      if (logicalToBit(requireValue(evalExpr(stmt.cond, signals, ctx), "if")).bits === "1") {
-        execBlocking(stmt.then, signals, ctx);
-      } else if (stmt.else) {
-        execBlocking(stmt.else, signals, ctx);
-      }
-      break;
-    case "For": {
-      execBlocking(stmt.init, signals, ctx);
-      let guard = 0;
-      while (
-        logicalToBit(requireValue(evalExpr(stmt.cond, signals, ctx), "for")).bits === "1"
-      ) {
-        if (++guard > 100000) throw new Error("for in function exceeded cap");
-        execBlocking(stmt.body, signals, ctx);
-        execBlocking(stmt.step, signals, ctx);
-      }
-      break;
-    }
-    case "While": {
-      let guard = 0;
-      while (
-        logicalToBit(requireValue(evalExpr(stmt.cond, signals, ctx), "while")).bits === "1"
-      ) {
-        if (++guard > 100000) throw new Error("while in function exceeded cap");
-        execBlocking(stmt.body, signals, ctx);
-      }
-      break;
-    }
-    case "Repeat": {
-      const n = Number(
-        requireValue(evalExpr(stmt.count, signals, ctx), "repeat").toUint() ?? 0n
-      );
-      for (let i = 0; i < n; i++) execBlocking(stmt.body, signals, ctx);
-      break;
-    }
-    case "Case": {
-      const sel = requireValue(evalExpr(stmt.expr, signals, ctx), "case");
-      let matched = false;
-      let defaultBody = null;
-      for (const it of stmt.items) {
-        if (it.items == null) {
-          defaultBody = it.body;
-          continue;
-        }
-        for (const lab of it.items) {
-          const lv = requireValue(evalExpr(lab, signals, ctx), "case");
-          if (sel.bits === lv.resize(sel.width).bits) {
-            execBlocking(it.body, signals, ctx);
-            matched = true;
-            break;
-          }
-        }
-        if (matched) break;
-      }
-      if (!matched && defaultBody) execBlocking(defaultBody, signals, ctx);
-      break;
-    }
-    default:
-      throw new Error(`Unsupported in function: ${stmt.type}`);
-  }
-}
-
-/**
- * Apply value to LValue (blocking).
- * @param {object} lv
- * @param {any} val
- * @param {Map} signals
- * @param {object|Map|null} [ctxOrLocals]
- */
-export function applyLValue(lv, val, signals, ctxOrLocals = null) {
-  const ctx =
-    ctxOrLocals && typeof ctxOrLocals === "object" && !(ctxOrLocals instanceof Map) && "locals" in ctxOrLocals
-      ? ctxOrLocals
-      : ctxOrLocals && typeof ctxOrLocals === "object" && ctxOrLocals.heap
-        ? ctxOrLocals
-        : { locals: ctxOrLocals instanceof Map || ctxOrLocals == null ? ctxOrLocals : null };
-  // Also accept full evCtx (has locals, heap, …) without requiring "locals" key presence
-  const fullCtx =
-    ctxOrLocals && typeof ctxOrLocals === "object" && !(ctxOrLocals instanceof Map)
-      ? ctxOrLocals
-      : ctx;
-  const locals = fullCtx.locals || null;
-
-  const lookupSlot = (name) => {
-    if (locals && locals.has(name)) return locals.get(name);
-    const s = signals.get(name);
-    if (s) return s;
-    if (fullCtx.thisHandle && fullCtx.heap && fullCtx.thisHandle.oid != null) {
-      const obj = fullCtx.heap.get(fullCtx.thisHandle.oid);
-      if (obj && obj.props.has(name)) return obj.props.get(name);
-    }
-    return null;
-  };
-
-  // Class property: this.prop or handle.prop
-  if (lv.prop) {
-    let h;
-    if (lv.isThis || lv.name === "this") {
-      if (!fullCtx.thisHandle) throw new Error("'this' used outside method");
-      h = fullCtx.thisHandle;
-    } else {
-      const recv = lookupSlot(lv.name);
-      if (!recv || !recv.isHandle) throw new Error(`'${lv.name}' is not a class handle`);
-      h = recv.handle;
-    }
-    if (!h || h.oid == null) throw new Error("Null class handle dereference");
-    const obj = fullCtx.heap.get(h.oid);
-    const slot = obj.props.get(lv.prop);
-    if (!slot) throw new Error(`Unknown property '${lv.prop}'`);
-    checkMemberAccess(slot, lv.prop, fullCtx);
-    if (slot.isHandle) {
-      if (!isHandle(val)) throw new Error(`Property '${lv.prop}' expects a class handle`);
-      slot.handle = val;
-      return;
-    }
-    if (isCollectionSlot(slot)) {
-      if (lv.select?.type === "Bit") {
-        const idxV = evalExpr(lv.select.index, signals, fullCtx);
-        if (idxV.hasXZ) return;
-        indexWrite(slot, Number(idxV.toUint()), val);
-        return;
-      }
-      if (isNewArray(val)) {
-        resizeDynArray(slot, val.size);
-        return;
-      }
-      if (isSvString(val) && slot.isString) {
-        slot.str = val.str;
-        return;
-      }
-      if (isCollectionSlot(val)) {
-        copyCollection(slot, val);
-        return;
-      }
-      throw new Error(`Incompatible assignment to property '${lv.prop}'`);
-    }
-    if (isHandle(val)) throw new Error(`Property '${lv.prop}' expects a bit value`);
-    if (lv.select) {
-      applyLValue({ type: "LValue", name: lv.prop, select: lv.select }, val, signals, {
-        locals: new Map([[lv.prop, slot]]),
-        heap: fullCtx.heap,
-        thisHandle: fullCtx.thisHandle,
-      });
-      return;
-    }
-    slot.value = val.resize(slot.width);
-    return;
-  }
-
-  const s = lookupSlot(lv.name);
-  if (!s) throw new Error(`Unknown signal '${lv.name}'`);
-  if (s.isHandle) {
-    if (lv.select) throw new Error(`Cannot bit-select class handle '${lv.name}'`);
-    if (!isHandle(val)) throw new Error(`'${lv.name}' expects a class handle`);
-    s.handle = val;
-    return;
-  }
-  if (isCollectionSlot(s)) {
-    if (!lv.select) {
-      if (isNewArray(val)) {
-        resizeDynArray(s, val.size);
-        return;
-      }
-      if (isSvString(val) && s.isString) {
-        s.str = val.str;
-        return;
-      }
-      if (isCollectionSlot(val)) {
-        copyCollection(s, val);
-        return;
-      }
-      throw new Error(`Cannot assign to collection '${lv.name}'`);
-    }
-    if (lv.select.type === "Bit") {
-      const idxV = evalExpr(lv.select.index, signals, fullCtx);
-      if (idxV.hasXZ) return;
-      indexWrite(s, Number(idxV.toUint()), val);
-      return;
-    }
-    throw new Error(`Part-select on collection '${lv.name}' not supported`);
-  }
-  if (!lv.select) {
-    if (s.memory) throw new Error(`Cannot assign entire memory '${lv.name}'`);
-    if (isHandle(val)) throw new Error(`Cannot assign class handle to '${lv.name}'`);
-    if (isSvString(val)) throw new Error(`Cannot assign string to '${lv.name}'`);
-    s.value = val.resize(s.width);
-    return;
-  }
-  if (isHandle(val)) throw new Error(`Cannot assign class handle with select`);
-  if (lv.select.type === "Bit") {
-    const idxV = evalExpr(lv.select.index, signals, fullCtx);
-    if (idxV.hasXZ) return;
-    const i = Number(idxV.toUint());
-    if (s.memory) {
-      s.words.set(i, val.resize(s.width));
-      return;
-    }
-    const bits = s.value.bits.split("");
-    const pos = s.width - 1 - i;
-    if (pos < 0 || pos >= s.width) return;
-    bits[pos] = val.resize(1).bits[0];
-    s.value = new Value(bits.join(""));
-    return;
-  }
-  if (s.memory) throw new Error(`Part-select on memory word not supported for '${lv.name}'`);
-  const hi = Number(evalExpr(lv.select.hi, signals, fullCtx).toUint());
-  const lo = Number(evalExpr(lv.select.lo, signals, fullCtx).toUint());
-  const w = hi - lo + 1;
-  const piece = val.resize(w).bits;
-  const bits = s.value.bits.split("");
-  for (let i = 0; i < w; i++) {
-    const bitIndex = hi - i;
-    const pos = s.width - 1 - bitIndex;
-    if (pos >= 0 && pos < s.width) bits[pos] = piece[i];
-  }
-  s.value = new Value(bits.join(""));
 }

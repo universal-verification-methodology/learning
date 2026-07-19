@@ -21,6 +21,6 @@ cp -r src ../learning/platform/vendor/systemverilog-simulator/
 
 Or point tools at the Pages URL via `platform/assets/hdl-engine.js` (`prefer: "public"`).
 
-Includes teaching API: `lintSynthesizability` / `SYNTH_LINT_RULES`.
+Includes teaching API: `lintSynthesizability` / `SYNTH_LINT_RULES`, `lintStyle` / `STYLE_LINT_RULES`.
 
 License: MIT (simulator). Platform tools remain under the learning monorepo license.

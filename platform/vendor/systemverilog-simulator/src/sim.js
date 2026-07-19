@@ -1,6 +1,6 @@
 import { Value } from "./value.js";
-import { evalExpr, applyLValue, execBlocking } from "./elaborate.js";
-import { logicalToBit, resolveValuesWithStrength, pickTransportDelay, DEFAULT_STRENGTH, formatStrengthRails, reduceRails, emptyRails, STRENGTH_LEVEL } from "./value.js";
+import { evalExpr, applyLValue, execBlocking } from "./eval-expr.js";
+import { logicalToBit, formatStrengthRails } from "./value.js";
 import { isHandle, formatHandle } from "./handle.js";
 import { delaySpecToTicks } from "./time.js";
 import {
@@ -15,6 +15,9 @@ import {
   evalCollectionMethod,
   execCollectionMethod,
 } from "./sv-array.js";
+import { createForceOverlay } from "./sim-force.js";
+import { createForkControl } from "./sim-fork.js";
+import { createAssignEngine } from "./sim-assigns.js";
 
 /**
  * Event-driven teaching simulator (subset v0).
@@ -26,6 +29,9 @@ export function createSim(netlist, opts = {}) {
   const functions = netlist.functions || new Map();
   const tasks = netlist.tasks || new Map();
   const classes = netlist.classes || new Map();
+  const udps = netlist.udps || new Map();
+  /** @type {Map<string, { prevInputs: string[], state: string }>} */
+  const udpInsts = new Map();
   const timeCtx = netlist.timeCtx || null;
   const delayNum = (spec) => delaySpecToTicks(spec, timeCtx);
   /** @type {Map<number, { className: string, props: Map<string, any> }>} */
@@ -51,6 +57,8 @@ export function createSim(netlist, opts = {}) {
     thisHandle: thisStack.length ? thisStack[thisStack.length - 1] : null,
     functions,
     classes,
+    udps,
+    udpInsts,
     heap,
     nextOid: () => nextOid++,
     nextRandom,
@@ -58,16 +66,27 @@ export function createSim(netlist, opts = {}) {
     getTime: () => time,
   });
   const ev = (expr) => evalExpr(expr, signals, evCtx());
-  /** @type {Map<string, Value>} force overrides */
-  const forces = new Map();
+  const {
+    forceBits,
+    isFullyForced,
+    mergeForce,
+    setForceOverlay,
+    clearForceOverlay,
+  } = createForceOverlay({ signals, ev });
   /** @type {Map<string, { lhs: object, rhs: object }>} procedural continuous assigns */
   const procAssigns = new Map();
   /** @type {Set<string>} named events triggered this settle */
   const triggeredEvents = new Set();
+  /** @type {object|null} process currently inside stmtRunner */
+  let activeProc = null;
 
   function ap(lv, v, flags = {}) {
-    if (!lv.select && !lv.prop && forces.has(lv.name) && !flags.force) return;
+    if (!flags.force && !lv.prop && !lv.select && isFullyForced(lv.name)) return;
     applyLValue(lv, v, signals, evCtx());
+    if (!flags.force && !lv.prop && forceBits.has(lv.name)) {
+      const s = signals.get(lv.name);
+      if (s && !s.isHandle) s.value = mergeForce(lv.name, s.value);
+    }
   }
   let time = 0;
   let finished = false;
@@ -112,6 +131,42 @@ export function createSim(netlist, opts = {}) {
   function schedule(delay, fn) {
     queue.push({ time: time + Math.max(0, delay), fn, id: nextId++ });
   }
+
+  const {
+    hasLiveForkChildren,
+    noteForkBranchDone,
+    disableForkSiblings,
+    requestDisable,
+    spawnForkJoin,
+  } = createForkControl({
+    procState,
+    schedule,
+    settle: () => settle(),
+    runProc: (p) => runProc(p),
+  });
+
+  const { updateAssigns, applyNBAs } = createAssignEngine({
+    netlist,
+    signals,
+    procAssigns,
+    ev,
+    delayNum,
+    schedule,
+    settle: () => settle(),
+    logSignal,
+    forceBits,
+    isFullyForced,
+    mergeForce,
+    markPendingEdges: () => {
+      pendingEdges = true;
+    },
+    drainNba: () => {
+      const bucket = nbaBucket;
+      nbaBucket = [];
+      return bucket;
+    },
+    prevBits,
+  });
 
   function setSignalBits(name, value) {
     const s = signals.get(name);
@@ -209,12 +264,38 @@ export function createSim(netlist, opts = {}) {
     return false;
   }
 
+  function disabled() {
+    return !!(activeProc && activeProc.disableTarget);
+  }
+
   function* stmtRunner(stmt) {
-    if (!stmt || finished) return;
+    if (!stmt || finished || disabled()) return;
     switch (stmt.type) {
-      case "Block":
-        for (const s of stmt.stmts) yield* stmtRunner(s);
+      case "Block": {
+        const bname = stmt.name || null;
+        if (bname && activeProc) {
+          if (!activeProc.blockStack) activeProc.blockStack = [];
+          activeProc.blockStack.push(bname);
+        }
+        try {
+          for (const s of stmt.stmts) {
+            if (disabled()) break;
+            yield* stmtRunner(s);
+          }
+        } finally {
+          if (bname && activeProc?.blockStack?.length) {
+            const top = activeProc.blockStack.pop();
+            if (top !== bname) {
+              // stack mismatch — leave as-is
+              activeProc.blockStack.push(top);
+            }
+          }
+        }
+        if (activeProc && activeProc.disableTarget === bname) {
+          activeProc.disableTarget = null;
+        }
         break;
+      }
       case "Delay":
         yield { type: "delay", delay: delayNum(stmt.delay) };
         break;
@@ -254,16 +335,17 @@ export function createSim(netlist, opts = {}) {
       case "For": {
         yield* stmtRunner(stmt.init);
         let guard = 0;
-        while (isTruthy(ev(stmt.cond))) {
+        while (!disabled() && isTruthy(ev(stmt.cond))) {
           if (++guard > 100000) throw new Error("for loop exceeded 100000 iterations");
           yield* stmtRunner(stmt.body);
+          if (disabled()) break;
           yield* stmtRunner(stmt.step);
         }
         break;
       }
       case "While": {
         let guard = 0;
-        while (isTruthy(ev(stmt.cond))) {
+        while (!disabled() && isTruthy(ev(stmt.cond))) {
           if (++guard > 100000) throw new Error("while loop exceeded 100000 iterations");
           yield* stmtRunner(stmt.body);
         }
@@ -274,7 +356,10 @@ export function createSim(netlist, opts = {}) {
         if (nVal.hasXZ) break;
         const n = Number(nVal.toUint() ?? 0n);
         if (n > 100000) throw new Error("repeat count too large");
-        for (let i = 0; i < n; i++) yield* stmtRunner(stmt.body);
+        for (let i = 0; i < n; i++) {
+          if (disabled()) break;
+          yield* stmtRunner(stmt.body);
+        }
         break;
       }
       case "Case": {
@@ -301,6 +386,7 @@ export function createSim(netlist, opts = {}) {
       }
       case "Forever":
         for (let guard = 0; ; guard++) {
+          if (disabled()) return;
           if (guard > 1000000) throw new Error("forever exceeded iteration cap");
           yield* stmtRunner(stmt.body);
         }
@@ -318,6 +404,9 @@ export function createSim(netlist, opts = {}) {
         break;
       case "DisableFork":
         yield { type: "disable_fork" };
+        break;
+      case "Disable":
+        yield { type: "disable", name: stmt.name };
         break;
       case "Wait":
         while (!isTruthy(ev(stmt.expr))) {
@@ -339,14 +428,15 @@ export function createSim(netlist, opts = {}) {
       }
       case "Force": {
         const v = ev(stmt.rhs);
-        forces.set(stmt.lhs.name, v.clone());
+        setForceOverlay(stmt.lhs, v);
         ap(stmt.lhs, v, { force: true });
         logSignal(stmt.lhs.name);
         pendingEdges = true;
         break;
       }
       case "Release": {
-        forces.delete(stmt.lhs.name);
+        clearForceOverlay(stmt.lhs);
+        pendingEdges = true;
         break;
       }
       case "ProcAssign":
@@ -751,6 +841,8 @@ export function createSim(netlist, opts = {}) {
   function runProc(proc) {
     if (finished || proc.dead || proc.running) return;
     proc.running = true;
+    const prevActive = activeProc;
+    activeProc = proc;
     try {
       if (!proc.stack) proc.stack = [stmtRunner(proc.body)];
 
@@ -774,41 +866,10 @@ export function createSim(netlist, opts = {}) {
         if (r.value?.type === "fork_join") {
           const branches = r.value.branches || [];
           const join = r.value.join || "join";
-          const token = {
-            remaining: branches.length,
-            mode: join,
-            anyDone: false,
-            parent: proc,
-          };
-          for (const body of branches) {
-            const child = {
-              kind: "ForkBranch",
-              body,
-              stack: null,
-              suspended: false,
-              dead: false,
-              running: false,
-              forkToken: token,
-              forkParent: proc,
-              forkCounted: false,
-              sens: { type: "Initial" },
-            };
-            procState.push(child);
-            runProc(child);
-          }
-          if (join === "join_none") {
-            continue;
-          }
-          if (join === "join_any") {
-            if (token.anyDone || token.remaining <= 0) continue;
+          const fr = spawnForkJoin(proc, branches, join);
+          if (fr.suspend) {
             proc.suspended = true;
-            proc.forkWait = token;
-            return;
-          }
-          // join (all)
-          if (token.remaining > 0) {
-            proc.suspended = true;
-            proc.forkWait = token;
+            proc.forkWait = fr.forkWait;
             return;
           }
           continue;
@@ -822,7 +883,11 @@ export function createSim(netlist, opts = {}) {
           continue;
         }
         if (r.value?.type === "disable_fork") {
-          disableForkChildren(proc);
+          disableForkSiblings(proc);
+          continue;
+        }
+        if (r.value?.type === "disable") {
+          requestDisable(r.value.name);
           continue;
         }
         if (r.value?.type === "wait_pred") {
@@ -853,70 +918,13 @@ export function createSim(netlist, opts = {}) {
       } else if (proc.kind === "Always" && proc.sens.type === "Timed" && !finished) {
         // Restart timed always
         proc.running = false;
+        activeProc = prevActive;
         runProc(proc);
         return;
       }
     } finally {
       proc.running = false;
-    }
-  }
-
-  function isForkDescendant(child, ancestor) {
-    let cur = child.forkParent;
-    while (cur) {
-      if (cur === ancestor) return true;
-      cur = cur.forkParent;
-    }
-    return false;
-  }
-
-  function hasLiveForkChildren(parent) {
-    return procState.some((p) => !p.dead && isForkDescendant(p, parent));
-  }
-
-  function wakeForkWaiters(token) {
-    schedule(0, () => {
-      for (const p of procState) {
-        if (p.forkWait === token) {
-          p.forkWait = null;
-          p.suspended = false;
-          runProc(p);
-        }
-      }
-      settle();
-    });
-  }
-
-  function noteForkBranchDone(proc) {
-    if (proc.forkCounted) return;
-    proc.forkCounted = true;
-    const tok = proc.forkToken;
-    if (tok) {
-      tok.remaining--;
-      if (tok.mode === "join_any" && !tok.anyDone) {
-        tok.anyDone = true;
-        wakeForkWaiters(tok);
-      } else if (tok.mode === "join" && tok.remaining <= 0) {
-        wakeForkWaiters(tok);
-      }
-    }
-    // wait fork parents wake via wakeWaiters in settle
-    schedule(0, () => settle());
-  }
-
-  function disableForkChildren(parent) {
-    for (const p of procState) {
-      if (p.dead || !isForkDescendant(p, parent)) continue;
-      p.dead = true;
-      p.suspended = true;
-      p.stack = null;
-      p.waitExpr = null;
-      p.waitSens = null;
-      p.waitSensSnap = null;
-      p.waitPred = null;
-      p.waitFork = false;
-      p.forkWait = null;
-      noteForkBranchDone(p);
+      activeProc = prevActive;
     }
   }
 
@@ -988,261 +996,6 @@ export function createSim(netlist, opts = {}) {
     triggeredEvents.clear();
   }
 
-  function updateAssigns() {
-    let changed = true;
-    let guard = 0;
-    while (changed) {
-      if (++guard > 1000) throw new Error("Continuous assign oscillation");
-      changed = false;
-
-      /** @type {Map<string, object[]>} */
-      const netDrivers = new Map();
-      /** @type {object[]} */
-      const selectAssigns = [];
-
-      for (const a of netlist.assigns) {
-        if (a.lhs.select) {
-          selectAssigns.push(a);
-          continue;
-        }
-        if (!netDrivers.has(a.lhs.name)) netDrivers.set(a.lhs.name, []);
-        netDrivers.get(a.lhs.name).push(a);
-      }
-      for (const [, pa] of procAssigns) {
-        if (pa.lhs.select) {
-          selectAssigns.push(pa);
-          continue;
-        }
-        if (!netDrivers.has(pa.lhs.name)) netDrivers.set(pa.lhs.name, []);
-        netDrivers.get(pa.lhs.name).push(pa);
-      }
-
-      // Update driver contributions (with optional transport delay)
-      for (const [, drivers] of netDrivers) {
-        for (const a of drivers) {
-          if (!a.lhs.select && forces.has(a.lhs.name)) continue;
-          let val;
-          let railsPerBit = null;
-          if (a.switchPass && a.rhs && a.rhs.type === "SwitchPass") {
-            const sw = evalSwitchContrib(a.rhs);
-            val = sw.value;
-            railsPerBit = sw.railsPerBit;
-          } else {
-            val = ev(a.rhs);
-          }
-          const bits = val.bits;
-          const delaySpec = a.delay || 0;
-          const hasDelay =
-            (typeof delaySpec === "number" && delaySpec > 0) ||
-            (delaySpec && typeof delaySpec === "object");
-
-          if (hasDelay && delayNum(delaySpec) > 0) {
-            if (a._lastRhs === bits) continue;
-            a._lastRhs = bits;
-            const captured = val.clone();
-            const capturedRails = railsPerBit;
-            const prevContrib = a._contrib ? a._contrib.bits : Value.zzzz(captured.width).bits;
-            const dly = pickTransportDelay(delaySpec, prevContrib, bits);
-            // Inertial delay: cancel any previously scheduled update for this driver
-            const gen = (a._delayGen = (a._delayGen || 0) + 1);
-            const capturedGen = gen;
-            schedule(dly, () => {
-              if (a._delayGen !== capturedGen) return;
-              if (!a.lhs.select && forces.has(a.lhs.name)) return;
-              a._contrib = captured;
-              a._railsPerBit = capturedRails;
-              if (applyResolvedNet(a.lhs.name)) pendingEdges = true;
-              settle();
-            });
-            continue;
-          }
-          a._contrib = val.clone();
-          a._railsPerBit = railsPerBit;
-        }
-      }
-
-      // Resolve all multi-driver nets
-      for (const name of netDrivers.keys()) {
-        if (forces.has(name)) continue;
-        if (applyResolvedNet(name)) {
-          changed = true;
-          pendingEdges = true;
-        }
-      }
-
-      // Bit/part-select continuous assigns (single-driver path)
-      for (const a of selectAssigns) {
-        if (!a.rhs) continue;
-        if (!a.lhs.select && forces.has(a.lhs.name)) continue;
-        const v = ev(a.rhs);
-        const delaySpec = a.delay || 0;
-        if (delayNum(delaySpec) > 0) {
-          const bits = v.bits;
-          if (a._lastRhs === bits) continue;
-          a._lastRhs = bits;
-          const captured = v.clone();
-          const lhs = a.lhs;
-          const prev = signals.get(lhs.name)?.value.bits || "";
-          const dly = pickTransportDelay(delaySpec, prev, bits);
-          const gen = (a._delayGen = (a._delayGen || 0) + 1);
-          const capturedGen = gen;
-          schedule(dly, () => {
-            if (a._delayGen !== capturedGen) return;
-            if (!lhs.select && forces.has(lhs.name)) return;
-            const before = signals.get(lhs.name)?.value.bits;
-            applyLValue(lhs, captured, signals);
-            logSignal(lhs.name);
-            if (signals.get(lhs.name)?.value.bits !== before) pendingEdges = true;
-            settle();
-          });
-          continue;
-        }
-        const before = signals.get(a.lhs.name)?.value.bits;
-        applyLValue(a.lhs, v, signals);
-        logSignal(a.lhs.name);
-        if (signals.get(a.lhs.name)?.value.bits !== before) {
-          changed = true;
-          pendingEdges = true;
-        }
-      }
-    }
-  }
-
-  function evalSwitchContrib(expr) {
-    const dataVal = ev(expr.data);
-    const width = dataVal.width;
-    const zval = Value.zzzz(width);
-
-    function dataRails() {
-      // Prefer live net rails when the data net is actually driven
-      if (expr.data.type === "Ident" && !expr.data.select) {
-        const s = signals.get(expr.data.name);
-        if (
-          s &&
-          s.rails &&
-          s.rails.some((r) => (r.s0 | 0) > 0 || (r.s1 | 0) > 0)
-        ) {
-          return s.rails.map((r) => reduceRails(r, !!expr.resistive));
-        }
-      }
-      // Fallback: strong drive from evaluated bit values (regs / literals)
-      return [...dataVal.bits].map((b) => {
-        let r;
-        if (b === "0") r = { s0: STRENGTH_LEVEL.strong, s1: 0 };
-        else if (b === "1") r = { s0: 0, s1: STRENGTH_LEVEL.strong };
-        else if (b === "l") r = { s0: STRENGTH_LEVEL.strong, s1: 0, forceX: true };
-        else if (b === "h") r = { s0: 0, s1: STRENGTH_LEVEL.strong, forceX: true };
-        else if (b === "x")
-          r = { s0: STRENGTH_LEVEL.strong, s1: STRENGTH_LEVEL.strong, forceX: true };
-        else r = emptyRails();
-        return reduceRails(r, !!expr.resistive);
-      });
-    }
-
-    if (expr.sense === "always" || !expr.en) {
-      return { value: dataVal.clone(), railsPerBit: dataRails() };
-    }
-    const en = logicalToBit(ev(expr.en));
-    const on = expr.sense === "n" ? "1" : "0";
-    const off = expr.sense === "n" ? "0" : "1";
-    if (en.bits === off) {
-      return {
-        value: zval,
-        railsPerBit: Array.from({ length: width }, () => emptyRails()),
-      };
-    }
-    if (en.bits === on) {
-      return { value: dataVal.clone(), railsPerBit: dataRails() };
-    }
-    // Control X → H/L passthrough
-    let out = "";
-    for (let i = 0; i < width; i++) {
-      const b = dataVal.bits[i];
-      if (b === "1") out += "h";
-      else if (b === "0") out += "l";
-      else out += "x";
-    }
-    const rails = dataRails().map((r) => ({ ...r, forceX: true }));
-    return { value: new Value(out), railsPerBit: rails };
-  }
-
-  function applyResolvedNet(name) {
-    const s = signals.get(name);
-    if (!s) return false;
-    /** @type {object[]} */
-    const contribs = [];
-    let anyActive = false;
-    for (const a of netlist.assigns) {
-      if (a.lhs.select || a.lhs.name !== name) continue;
-      const val = a._contrib || Value.zzzz(s.width);
-      if (a._railsPerBit) {
-        contribs.push({ value: val, railsPerBit: a._railsPerBit });
-      } else {
-        contribs.push({
-          value: val,
-          strength: a.strength || DEFAULT_STRENGTH,
-        });
-      }
-      if (val.bits && /[01xhl]/i.test(val.bits)) anyActive = true;
-    }
-    for (const [, pa] of procAssigns) {
-      if (pa.lhs.select || pa.lhs.name !== name) continue;
-      const val = pa._contrib || Value.zzzz(s.width);
-      contribs.push({
-        value: val,
-        strength: pa.strength || DEFAULT_STRENGTH,
-      });
-      if (val.bits && /[01xhl]/i.test(val.bits)) anyActive = true;
-    }
-    if (!contribs.length && s.kind !== "trireg") return false;
-
-    const { value: resolved, rails } = resolveValuesWithStrength(
-      contribs,
-      s.width,
-      s.kind,
-      s.kind === "trireg"
-        ? {
-            chargeLevel: s.chargeLevel,
-            prevBits: s.value.bits,
-            prevRails: s.rails,
-          }
-        : {}
-    );
-
-    if (s.kind === "trireg") {
-      const capacitive = !anyActive;
-      if (capacitive && !s._capacitive && (s.decay | 0) > 0) {
-        const gen = (s._decayGen = (s._decayGen || 0) + 1);
-        const capturedGen = gen;
-        schedule(s.decay | 0, () => {
-          if (s._decayGen !== capturedGen) return;
-          if (!s._capacitive) return;
-          s.value = Value.xxxx(s.width);
-          const ch = s.chargeLevel || 2;
-          s.rails = Array.from({ length: s.width }, () => ({
-            s0: ch,
-            s1: ch,
-            forceX: true,
-          }));
-          logSignal(name);
-          pendingEdges = true;
-          settle();
-        });
-      }
-      if (!capacitive) s._decayGen = (s._decayGen || 0) + 1;
-      s._capacitive = capacitive;
-    }
-
-    if (s.value.bits === resolved.bits) {
-      s.rails = rails;
-      return false;
-    }
-    s.value = resolved;
-    s.rails = rails;
-    logSignal(name);
-    return true;
-  }
-
   function runComboAlways() {
     for (const proc of procState) {
       if (proc.kind !== "Always" || proc.dead || proc.suspended) continue;
@@ -1271,24 +1024,6 @@ export function createSim(netlist, opts = {}) {
       }
     }
     // Note: do not capturePrev here — wakeWaiters must see the edge first
-  }
-
-  function applyNBAs() {
-    if (!nbaBucket.length) return false;
-    const bucket = nbaBucket;
-    nbaBucket = [];
-    for (const n of bucket) {
-      if (!n.lhs.select && forces.has(n.lhs.name)) continue;
-      const before = signals.get(n.lhs.name)?.value.bit(0);
-      applyLValue(n.lhs, n.value, signals);
-      logSignal(n.lhs.name);
-      const after = signals.get(n.lhs.name)?.value.bit(0);
-      if (before !== after) {
-        prevBits.set(n.lhs.name, before ?? "x");
-        pendingEdges = true;
-      }
-    }
-    return true;
   }
 
   function freeze() {

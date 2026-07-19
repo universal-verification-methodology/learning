@@ -50,6 +50,7 @@ Set `HDL_ENGINE_SPEC.prefer = "public"` in `assets/hdl-engine.js` once Pages ser
 | `blocking-vs-nonblocking` | twin `createSession` (`=` vs `<=`) | **Done** |
 | `waveform-mini` / `fsm-lab` | session + waves | Planned |
 | `synth-lint` | `lintSynthesizability` / `SYNTH_LINT_RULES` | **Done** |
+| `hdl-style` | `lintStyle` / `STYLE_LINT_RULES` | **Done** |
 
 ---
 

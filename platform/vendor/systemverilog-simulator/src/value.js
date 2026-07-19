@@ -218,8 +218,9 @@ export function bitwiseNot(a) {
 }
 
 export function reduceAnd(a) {
-  if (a.hasXZ) return new Value("x");
-  return new Value(a.bits.includes("0") ? "0" : "1");
+  if (a.bits.includes("0")) return new Value("0");
+  if (/x|z/i.test(a.bits)) return new Value("x");
+  return new Value("1");
 }
 
 export function reduceOr(a) {

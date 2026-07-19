@@ -9,7 +9,8 @@ export { Value } from "./value.js";
 export { parseLiteral, MAX_W } from "./literal.js";
 export { lex } from "./lexer.js";
 export { parse } from "./parser.js";
-export { elaborate, evalExpr, applyLValue } from "./elaborate.js";
+export { elaborate } from "./elaborate.js";
+export { evalExpr, applyLValue, execBlocking } from "./eval-expr.js";
 export { createSim } from "./sim.js";
 export { preprocess, materializeSources } from "./preprocess.js";
 export {
@@ -20,6 +21,7 @@ export {
 } from "./comb-eval.js";
 export { createSession } from "./session.js";
 export { lintSynthesizability, SYNTH_LINT_RULES } from "./synth-lint.js";
+export { lintStyle, STYLE_LINT_RULES } from "./style-lint.js";
 
 import { parse } from "./parser.js";
 import { elaborate } from "./elaborate.js";

@@ -128,6 +128,10 @@ const KEYWORDS = new Set([
   "timeunit",
   "timeprecision",
   "string",
+  "primitive",
+  "endprimitive",
+  "table",
+  "endtable",
 ]);
 
 /**

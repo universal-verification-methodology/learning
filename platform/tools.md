@@ -51,9 +51,12 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `ripple-carry-adder-animator` | 4-bit `5 + 3` — step carry through full adders → 8 |
 | `carry-look-ahead-adder-propagate-and-generate` | 4-bit `5 + 3` — G/P table + expanded C₁…C₄ |
 | `synth-lint` | Clean `assign y = a & b`; engine `lintSynthesizability` |
+| `hdl-style` | Clean FF with `clk`/`rst_n`; engine `lintStyle` |
 | `cache-walk` | Cold cache, addr `0x14` → miss + install; second access → hit |
 | `fifo-lab` | Depth-4 empty FIFO — push `0xA5` → count=1, empty clears |
 | `seq-detector` | Mealy overlap detect `1011` — step stream → Z=`0001` |
+| `fsm-lab` | Moore toggle — step `1011`, Z follows S0/S1 |
+| `handshake` | valid∧ready on cycle 0 with data `0xA5` → one beat |
 
 ### Status legend
 
@@ -196,7 +199,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| FSM designer + stepper | `fsm-lab` | **Planned** | Draw states/transitions; Moore/Mealy; step input stream; state table |
+| FSM designer + stepper | `fsm-lab` | **Shipped** | Presets + editable table; Moore/Mealy; step stream; 22 challenges |
 | State encoding lab | `state-encoding` | **Shipped** | Binary / one-hot / Gray; FF count + transition Hamming; 22 challenges |
 | Sequence detector playground | `seq-detector` | **Shipped** | Step bit stream; Mealy/Moore; overlap; pattern `1011`; 22 challenges |
 
@@ -222,14 +225,14 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Block-diagram integrator | `block-diagram` | **Planned** | Connect CPU / datapath / memory-style blocks |
-| Bus handshake animator | `handshake` | **Planned** | Valid/ready timing (conceptual) |
+| Bus handshake animator | `handshake` | **Shipped** | valid/ready fire; source/sink stall presets; 22 challenges |
 
 ## Coding standards & synthesizability
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Synthesizability linter (static) | `synth-lint` | **Shipped** | HDL engine `lintSynthesizability`; `#delay` / latch / FF style; 22 challenges |
-| Naming / style checker | `hdl-style` | **Planned** | Prefixes (`clk_`, `rst_n_`), section order heuristics |
+| Naming / style checker | `hdl-style` | **Shipped** | HDL engine `lintStyle`; live hints + Tab assist; `clk`/`rst_n`, `always_ff`/`always_comb`, `logic`; Fix buttons; same API as IDE Problems; 22 challenges |
 
 ## Protocols (conceptual)
 
@@ -271,9 +274,9 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `state-encoding` (**shipped**), `seq-detector` (**shipped**), `fsm-lab`, `waveform-mini` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `state-encoding` (**shipped**), `seq-detector` (**shipped**), `fsm-lab` (**shipped**), `waveform-mini` |
 | **C** | Datapath & memory | `alu-explorer` (**shipped**), `mem-map` (**shipped**), `array-mult` (**shipped**), `ripple-carry-adder-animator` (**shipped**), `carry-look-ahead-adder-propagate-and-generate` (**shipped**), `cache-walk` (**shipped**), `fifo-lab` (**shipped**) |
-| **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint` (**shipped**), `handshake`, `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
+| **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint` (**shipped**), `hdl-style` (**shipped**), `handshake` (**shipped**), `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
 | **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
 
 Phases are planning aids only; the public catalog stays domain-based.
@@ -301,8 +304,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 33 |
-| Planned | 13 |
+| Shipped | 36 |
+| Planned | 10 |
 | **Total catalogued** | **46** |
 
 Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).

@@ -1,75 +1,69 @@
 import { loadHdlEngine } from "../../assets/hdl-engine.js";
 import { attachAssist, fixForRule } from "../../assets/hdl-assist.js";
 
-const STORAGE_KEY = "ddv-synth-lint-v1";
-const CLEARED_KEY = "ddv-synth-lint-cleared-v1";
+const STORAGE_KEY = "ddv-hdl-style-v1";
+const CLEARED_KEY = "ddv-hdl-style-cleared-v1";
 
 /** @type {null | Awaited<ReturnType<typeof loadHdlEngine>>} */
 let hdl = null;
 
-const STARTER = `module and2(
-  input  logic a,
-  input  logic b,
-  output logic y
+const STARTER = `module ff_ok(
+  input  logic clk,
+  input  logic rst_n,
+  input  logic d,
+  output logic q
 );
-  assign y = a & b;
-endmodule
-`;
-
-const SNIPPETS = {
-  starter: { label: "Clean assign", code: STARTER },
-  delay: {
-    label: "assign #delay",
-    code: `module bad_delay(input a, output y);
-  assign #5 y = a;
-endmodule
-`,
-  },
-  initial: {
-    label: "initial",
-    code: `module bad_init(output reg y);
-  initial y = 0;
-endmodule
-`,
-  },
-  latch: {
-    label: "Incomplete if",
-    code: `module latch_en(input en, d, output reg y);
-  always @(*) begin
-    if (en) y = d;
-  end
-endmodule
-`,
-  },
-  ff_blocking: {
-    label: "FF with =",
-    code: `module ff_bad(input clk, d, output reg q);
-  always_ff @(posedge clk) q = d;
-endmodule
-`,
-  },
-  comb_nba: {
-    label: "Comb with <=",
-    code: `module comb_nba(input a, b, output logic y);
-  always_comb y <= a & b;
-endmodule
-`,
-  },
-  timed: {
-    label: "always #5",
-    code: `module clkgen(output reg clk);
-  initial clk = 0;
-  always #5 clk = ~clk;
-endmodule
-`,
-  },
-  good_ff: {
-    label: "Good FF",
-    code: `module ff_ok(input clk, rst_n, d, output logic q);
   always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) q <= 1'b0;
     else        q <= d;
   end
+endmodule
+`;
+
+const SNIPPETS = {
+  starter: { label: "Clean FF", code: STARTER },
+  clock: {
+    label: "clock not clk",
+    code: `module m(input clock, input d, output reg q);
+  always @(posedge clock) q <= d;
+endmodule
+`,
+  },
+  reset: {
+    label: "reset not rst_n",
+    code: `module m(input clk, input reset, input d, output logic q);
+  always_ff @(posedge clk or negedge reset) begin
+    if (!reset) q <= 1'b0;
+    else        q <= d;
+  end
+endmodule
+`,
+  },
+  always_edge: {
+    label: "always @(posedge)",
+    code: `module m(input clk, input d, output logic q);
+  always @(posedge clk) q <= d;
+endmodule
+`,
+  },
+  always_star: {
+    label: "always @(*)",
+    code: `module m(input a, b, output logic y);
+  always @(*) y = a & b;
+endmodule
+`,
+  },
+  prefer_reg: {
+    label: "output reg",
+    code: `module m(input a, output reg y);
+  assign y = a;
+endmodule
+`,
+  },
+  good_comb: {
+    label: "Good always_comb",
+    code: `module m(input logic a, b, output logic y);
+  always_comb y = a & b;
 endmodule
 `,
   },
@@ -80,234 +74,234 @@ const CHALLENGES = [
     id: "quiz-what",
     title: "Quiz: what is this",
     type: "quiz",
-    prompt: "This lab’s lintSynthesizability API is…",
-    hint: "Teaching heuristics.",
+    prompt: "This lab’s lintStyle API is…",
+    hint: "Teaching heuristics shared with the IDE.",
     choices: [
-      "a teaching rule pack on the HDL AST — not full industrial synthesis",
-      "identical to Vivado synth",
+      "a teaching / assist style pack — not Verible or a company style guide",
+      "identical to Vivado lint",
       "only a formatter",
-      "a SPICE netlist checker",
+      "a synthesis tool",
     ],
-    answer: "a teaching rule pack on the HDL AST — not full industrial synthesis",
+    answer: "a teaching / assist style pack — not Verible or a company style guide",
   },
   {
-    id: "quiz-delay",
-    title: "Quiz: #delay",
+    id: "quiz-clk",
+    title: "Quiz: clock name",
     type: "quiz",
-    prompt: "`assign #5 y = a;` is flagged mainly because…",
-    hint: "Synth ignores / rejects delays.",
+    prompt: "Teaching style prefers clock nets named…",
+    hint: "clk / *_clk.",
+    choices: ["`clk` / `*_clk`", "always `clock`", "only `c`", "`sys`"],
+    answer: "`clk` / `*_clk`",
+  },
+  {
+    id: "quiz-rst",
+    title: "Quiz: reset name",
+    type: "quiz",
+    prompt: "Active-low reset naming often uses…",
+    hint: "_n suffix.",
+    choices: ["`rst_n` / `reset_n`", "only `reset`", "`r`", "`nrst` without convention"],
+    answer: "`rst_n` / `reset_n`",
+  },
+  {
+    id: "quiz-ff",
+    title: "Quiz: always_ff",
+    type: "quiz",
+    prompt: "For edge-triggered flops, prefer…",
+    hint: "SV keyword.",
+    choices: ["`always_ff @(posedge …)`", "`always @(*)`", "`initial`", "`forever`"],
+    answer: "`always_ff @(posedge …)`",
+  },
+  {
+    id: "quiz-comb",
+    title: "Quiz: always_comb",
+    type: "quiz",
+    prompt: "For combo procedural blocks, prefer…",
+    hint: "SV keyword.",
+    choices: ["`always_comb`", "`always @(posedge clk)`", "`#delay`", "`fork`"],
+    answer: "`always_comb`",
+  },
+  {
+    id: "quiz-logic",
+    title: "Quiz: logic vs reg",
+    type: "quiz",
+    prompt: "For new SystemVerilog RTL, prefer…",
+    hint: "SV type.",
+    choices: ["`logic` over legacy `reg`", "only `wire`", "only `integer`", "`real`"],
+    answer: "`logic` over legacy `reg`",
+  },
+  {
+    id: "quiz-ide",
+    title: "Quiz: IDE assist",
+    type: "quiz",
+    prompt: "Live style hints in the simulator IDE use…",
+    hint: "Same engine API.",
     choices: [
-      "procedural/continuous delays are not synthesizable RTL",
-      "5 is an illegal number",
-      "assign is illegal",
-      "it creates a PLL",
-    ],
-    answer: "procedural/continuous delays are not synthesizable RTL",
-  },
-  {
-    id: "quiz-initial",
-    title: "Quiz: initial",
-    type: "quiz",
-    prompt: "`initial` in RTL modules is typically…",
-    hint: "Sim-only.",
-    choices: [
-      "simulation-only (prefer reset in always_ff)",
-      "required for every flop",
-      "the only way to write combo logic",
-      "ignored by all simulators",
-    ],
-    answer: "simulation-only (prefer reset in always_ff)",
-  },
-  {
-    id: "quiz-latch",
-    title: "Quiz: latch",
-    type: "quiz",
-    prompt: "`always @(*) if (en) y = d;` with no else often…",
-    hint: "Incomplete assignment.",
-    choices: [
-      "infers a latch (incomplete combo assignment)",
-      "infers a posedge flop",
-      "is always illegal syntax",
-      "forces y = X forever",
-    ],
-    answer: "infers a latch (incomplete combo assignment)",
-  },
-  {
-    id: "quiz-blocking-ff",
-    title: "Quiz: = in FF",
-    type: "quiz",
-    prompt: "Inside `always_ff @(posedge clk)`, prefer…",
-    hint: "NBA.",
-    choices: ["non-blocking `<=` for flop outputs", "only blocking `=`", "`#delay` before each assign", "`fork`/`join`"],
-    answer: "non-blocking `<=` for flop outputs",
-  },
-  {
-    id: "quiz-nba-comb",
-    title: "Quiz: <= in comb",
-    type: "quiz",
-    prompt: "In `always_comb`, prefer…",
-    hint: "Blocking.",
-    choices: ["blocking `=`", "only `<=`", "`initial`", "gate delays"],
-    answer: "blocking `=`",
-  },
-  {
-    id: "quiz-systask",
-    title: "Quiz: $display",
-    type: "quiz",
-    prompt: "`$display` / `$finish` in synthesizable RTL…",
-    hint: "TB.",
-    choices: [
-      "are simulation/testbench constructs",
-      "synthesize to LEDs",
-      "are required by always_ff",
-      "clear latches",
-    ],
-    answer: "are simulation/testbench constructs",
-  },
-  {
-    id: "quiz-engine",
-    title: "Quiz: where lint lives",
-    type: "quiz",
-    prompt: "The lint engine for this tool is provided by…",
-    hint: "Same as other HDL labs.",
-    choices: [
-      "the vendored HDL simulator (`lintSynthesizability`)",
+      "the same `lintStyle` API as this teaching lab",
       "a separate Python server",
-      "the browser’s CSS parser",
+      "only CSS underlines",
       "GTKWave only",
     ],
-    answer: "the vendored HDL simulator (`lintSynthesizability`)",
+    answer: "the same `lintStyle` API as this teaching lab",
   },
   {
     id: "run-clean",
-    title: "Lint: clean assign",
+    title: "Lint: clean FF",
     type: "run",
-    prompt: "Load the clean assign starter (or snippet) and Lint — ok must be true with zero findings.",
+    prompt: "Load the clean FF starter and Lint — ok with zero findings.",
     hint: "Load starter example.",
     needOk: true,
     needEmpty: true,
   },
   {
-    id: "run-delay",
-    title: "Lint: catch #delay",
+    id: "run-clk",
+    title: "Lint: name-clk",
     type: "run",
-    prompt: "Load “assign #delay” snippet and Lint — must report rule no-delay.",
-    hint: "Snippet button.",
-    needRule: "no-delay",
-  },
-  {
-    id: "run-initial",
-    title: "Lint: catch initial",
-    type: "run",
-    prompt: "Load “initial” snippet and Lint — must report no-initial.",
+    prompt: "Load “clock not clk” and Lint — must report name-clk.",
     hint: "Snippet.",
-    needRule: "no-initial",
+    needRule: "name-clk",
   },
   {
-    id: "run-latch",
-    title: "Lint: latch-risk",
+    id: "run-rst",
+    title: "Lint: name-rst",
     type: "run",
-    prompt: "Load “Incomplete if” and Lint — must report latch-risk.",
+    prompt: "Load “reset not rst_n” — must report name-rst.",
     hint: "Snippet.",
-    needRule: "latch-risk",
+    needRule: "name-rst",
   },
   {
-    id: "run-ff-block",
-    title: "Lint: blocking-in-seq",
+    id: "run-ff",
+    title: "Lint: prefer-always-ff",
     type: "run",
-    prompt: "Load “FF with =” — must report blocking-in-seq.",
+    prompt: "Load “always @(posedge)” — must report prefer-always-ff.",
     hint: "Snippet.",
-    needRule: "blocking-in-seq",
+    needRule: "prefer-always-ff",
   },
   {
-    id: "run-comb-nba",
-    title: "Lint: nba-in-comb",
+    id: "run-comb",
+    title: "Lint: prefer-always-comb",
     type: "run",
-    prompt: "Load “Comb with <=” — must report nba-in-comb.",
+    prompt: "Load “always @(*)” — must report prefer-always-comb.",
     hint: "Snippet.",
-    needRule: "nba-in-comb",
+    needRule: "prefer-always-comb",
   },
   {
-    id: "run-timed",
-    title: "Lint: timed-always",
+    id: "run-logic",
+    title: "Lint: prefer-logic",
     type: "run",
-    prompt: "Load “always #5” — must report timed-always (and likely no-initial).",
+    prompt: "Load “output reg” — must report prefer-logic.",
     hint: "Snippet.",
-    needRule: "timed-always",
+    needRule: "prefer-logic",
   },
   {
-    id: "run-good-ff",
-    title: "Lint: good FF clean",
+    id: "run-good-comb",
+    title: "Lint: good always_comb",
     type: "run",
-    prompt: "Load “Good FF” and Lint — no error-severity findings (warnings about decl-init may appear; errors must be none).",
-    hint: "Good FF snippet.",
-    needNoErrors: true,
+    prompt: "Load “Good always_comb” — zero findings.",
+    hint: "Snippet.",
+    needOk: true,
+    needEmpty: true,
   },
   {
-    id: "run-fix-latch",
-    title: "Fix: complete else",
+    id: "run-fix-clk",
+    title: "Fix: rename clock→clk",
     type: "run",
-    prompt: "Start from Incomplete if; add `else y = 1'b0;` so latch-risk disappears, then Lint.",
-    hint: "Complete both paths.",
-    checkSource: (src, res) =>
-      /else/.test(src) && res && res.ok && !res.findings.some((f) => f.rule === "latch-risk"),
+    prompt: "Start from “clock not clk”; rename to `clk` and use `always_ff` so name-clk and prefer-always-ff are gone.",
+    hint: "Rename port + always_ff.",
+    checkSource: (src, res) => {
+      if (!res || !res.ok) return false;
+      if (/\bclock\b/i.test(src) && !/\bclk\b/i.test(src)) return false;
+      return (
+        !res.findings.some((f) => f.rule === "name-clk" || f.rule === "prefer-always-ff") &&
+        /always_ff/.test(src) &&
+        /\bclk\b/.test(src)
+      );
+    },
   },
   {
-    id: "run-fix-delay",
-    title: "Fix: remove delay",
+    id: "run-fix-rst",
+    title: "Fix: reset→rst_n",
     type: "run",
-    prompt: "Start from assign #delay; remove `#5` so no-delay is gone.",
-    hint: "`assign y = a;`",
-    checkSource: (src, res) =>
-      !/#\s*\d/.test(src) && res && !res.findings.some((f) => f.rule === "no-delay"),
-  },
-  {
-    id: "quiz-not-yosys",
-    title: "Quiz: honesty",
-    type: "quiz",
-    prompt: "Passing this linter means…",
-    hint: "Lab tool.",
-    choices: [
-      "the code avoided common teaching red flags — still verify with real synth in courses",
-      "the design is tape-out ready",
-      "timing is closed at 1 GHz",
-      "UVM is complete",
-    ],
-    answer: "the code avoided common teaching red flags — still verify with real synth in courses",
+    prompt: "Start from “reset not rst_n”; rename to `rst_n` so name-rst disappears.",
+    hint: "Rename reset → rst_n everywhere.",
+    checkSource: (src, res) => {
+      if (!res) return false;
+      return (
+        /\brst_n\b/.test(src) &&
+        !/\breset\b/i.test(src) &&
+        !res.findings.some((f) => f.rule === "name-rst")
+      );
+    },
   },
   {
     id: "run-parse-err",
     title: "Lint: parse-error",
     type: "run",
-    prompt: "Paste broken RTL (e.g. `module oops`) and Lint — must report parse-error.",
+    prompt: "Paste broken syntax (`module oops`) and Lint — must report parse-error.",
     hint: "Incomplete module.",
     needRule: "parse-error",
   },
   {
-    id: "quiz-rules",
-    title: "Quiz: rule filter",
+    id: "quiz-severity",
+    title: "Quiz: severity",
     type: "quiz",
-    prompt: "Disabling rules in the chip row…",
-    hint: "opts.rules.",
+    prompt: "Style findings in this pack are usually…",
+    hint: "Don’t block Run.",
     choices: [
-      "narrows which findings are reported",
-      "changes the SystemVerilog grammar",
-      "turns on UVM",
-      "deletes the editor",
+      "info/warning hints — they should not block simulation alone",
+      "always fatal errors",
+      "only for synthesis tools",
+      "ignored by the IDE",
     ],
-    answer: "narrows which findings are reported",
+    answer: "info/warning hints — they should not block simulation alone",
   },
   {
     id: "run-filter",
-    title: "Filter: only latch-risk",
+    title: "Filter: only name-clk",
     type: "run",
-    prompt: "Load Incomplete if; enable only the latch-risk rule chip; Lint — findings must be only latch-risk (no other rules).",
+    prompt: "Load “clock not clk”; enable only the name-clk rule chip; Lint — findings must be only name-clk.",
     hint: "Toggle chips.",
-    checkSource: (_src, res, state) => {
-      if (!res || !state.enabledRules.includes("latch-risk")) return false;
-      if (state.enabledRules.length !== 1) return false;
-      return res.findings.length > 0 && res.findings.every((f) => f.rule === "latch-risk");
+    checkSource: (_src, res, st) => {
+      if (!res || !st.enabledRules.includes("name-clk")) return false;
+      if (st.enabledRules.length !== 1) return false;
+      return res.findings.length > 0 && res.findings.every((f) => f.rule === "name-clk");
     },
+  },
+  {
+    id: "quiz-vs-synth",
+    title: "Quiz: vs synth-lint",
+    type: "quiz",
+    prompt: "`lintStyle` vs `lintSynthesizability`…",
+    hint: "Different rule packs.",
+    choices: [
+      "style = naming/SV form; synth = delays/latches/blocking — both share the engine",
+      "they are the same function",
+      "style replaces synthesis",
+      "only style can find #delay",
+    ],
+    answer: "style = naming/SV form; synth = delays/latches/blocking — both share the engine",
+  },
+  {
+    id: "run-empty-rules",
+    title: "Lint: all rules default",
+    type: "run",
+    prompt: "With all rule chips on (default), load Clean FF — still zero findings.",
+    hint: "Starter + all rules.",
+    needOk: true,
+    needEmpty: true,
+  },
+  {
+    id: "quiz-assist",
+    title: "Quiz: beyond teaching",
+    type: "quiz",
+    prompt: "Beyond this teaching lab, style lint is meant to…",
+    hint: "IDE Problems tab.",
+    choices: [
+      "auto-assist coders with live hints while editing",
+      "replace all verification",
+      "upload RTL to a cloud linter",
+      "only grade homework offline",
+    ],
+    answer: "auto-assist coders with live hints while editing",
   },
 ];
 
@@ -358,7 +352,7 @@ function restoreSession() {
   }
 }
 
-const root = document.getElementById("sl-root");
+const root = document.getElementById("hs-root");
 root.innerHTML = `
   <p class="starter-note" id="starter-note"></p>
   <div class="challenge">
@@ -377,7 +371,7 @@ root.innerHTML = `
   </div>
   <div class="panel">
     <div class="panel-head">
-      <h2>RTL lint</h2>
+      <h2>Style lint</h2>
       <div class="tool-actions">
         <button type="button" class="btn btn-ghost" id="btn-starter">Load starter example</button>
         <button type="button" class="btn btn-secondary" id="btn-lint">Lint</button>
@@ -385,13 +379,13 @@ root.innerHTML = `
     </div>
     <div class="panel-body">
       <p class="engine-status" id="engine-status">Loading HDL engine…</p>
-      <p class="sl-meta">Snippets</p>
+      <p class="hs-meta">Snippets</p>
       <div class="snippet-row" id="snippets"></div>
-      <label class="sl-meta" for="src">Source <span class="assist-status" id="assist-status" hidden></span></label>
-      <div class="sl-editor-wrap">
-        <textarea class="sl-editor" id="src" spellcheck="false"></textarea>
+      <label class="hs-meta" for="src">Source <span class="assist-status" id="assist-status" hidden></span></label>
+      <div class="hs-editor-wrap">
+        <textarea class="hs-editor" id="src" spellcheck="false"></textarea>
       </div>
-      <p class="sl-meta" style="margin-top:0.75rem">Rules (uncheck to disable) · live lint · Tab complete</p>
+      <p class="hs-meta" style="margin-top:0.75rem">Rules (uncheck to disable) · live hints while typing · Tab to complete</p>
       <div class="rule-chips" id="rule-chips"></div>
       <div id="verdict"></div>
       <ul class="findings" id="findings" aria-live="polite"></ul>
@@ -412,13 +406,13 @@ function setEngineStatus(kind, msg) {
 }
 
 function runLint() {
-  if (!hdl || typeof hdl.lintSynthesizability !== "function") {
-    setEngineStatus("err", "HDL engine missing lintSynthesizability — refresh vendor pin");
+  if (!hdl || typeof hdl.lintStyle !== "function") {
+    setEngineStatus("err", "HDL engine missing lintStyle — refresh vendor pin");
     return null;
   }
   const opts = {};
   if (state.enabledRules.length) opts.rules = state.enabledRules.slice();
-  const res = hdl.lintSynthesizability(state.source, opts);
+  const res = hdl.lintStyle(state.source, opts);
   state.lastResult = res;
   saveSession();
   renderFindings();
@@ -429,7 +423,7 @@ let liveLintTimer = 0;
 function scheduleLiveLint() {
   clearTimeout(liveLintTimer);
   liveLintTimer = setTimeout(() => {
-    if (hdl?.lintSynthesizability) runLint();
+    if (hdl?.lintStyle) runLint();
   }, 400);
 }
 
@@ -439,12 +433,18 @@ function renderFindings() {
   const list = document.getElementById("findings");
   if (!res) {
     verd.innerHTML = "";
-    list.innerHTML = `<li class="sl-meta" style="border:none">Click Lint to analyze.</li>`;
+    list.innerHTML = `<li class="hs-meta" style="border:none">Click Lint to analyze.</li>`;
     return;
   }
-  verd.innerHTML = res.ok
-    ? `<div class="verdict ok">OK — no errors</div>`
-    : `<div class="verdict bad">Issues — ${res.findings.filter((f) => f.severity === "error").length} error(s)</div>`;
+  const errs = res.findings.filter((f) => f.severity === "error").length;
+  const hints = res.findings.length;
+  if (!res.ok) {
+    verd.innerHTML = `<div class="verdict bad">Issues — ${errs} error(s)</div>`;
+  } else if (hints) {
+    verd.innerHTML = `<div class="verdict hints">OK — ${hints} style hint(s)</div>`;
+  } else {
+    verd.innerHTML = `<div class="verdict ok">OK — no findings</div>`;
+  }
   if (!res.findings.length) {
     list.innerHTML = `<li>No findings.</li>`;
     return;
@@ -490,7 +490,7 @@ function escapeHtml(s) {
 
 function renderLab() {
   document.getElementById("starter-note").textContent =
-    "Starter example: clean continuous assign. Try snippets that fail lint, then fix them.";
+    "Starter example: clean always_ff with clk + rst_n. Try snippets that emit style hints, then fix them.";
   document.getElementById("src").value = state.source;
 
   const snip = document.getElementById("snippets");
@@ -509,17 +509,12 @@ function renderLab() {
   });
 
   const chips = document.getElementById("rule-chips");
-  const allRules = ((hdl && hdl.SYNTH_LINT_RULES) || [
-    "no-delay",
-    "no-initial",
-    "no-systask",
-    "no-fork",
-    "no-force",
-    "timed-always",
-    "blocking-in-seq",
-    "nba-in-comb",
-    "latch-risk",
-    "decl-init",
+  const allRules = ((hdl && hdl.STYLE_LINT_RULES) || [
+    "name-clk",
+    "name-rst",
+    "prefer-always-ff",
+    "prefer-always-comb",
+    "prefer-logic",
   ]).filter((r) => r !== "parse-error");
   const active =
     state.enabledRules.length === 0 ? new Set(allRules) : new Set(state.enabledRules);
@@ -568,7 +563,7 @@ function renderChallenge() {
     quiz.innerHTML = ch.choices
       .map(
         (c) =>
-          `<label><input type="radio" name="syn-quiz" value="${String(c).replace(/"/g, "&quot;")}" ${
+          `<label><input type="radio" name="hs-quiz" value="${String(c).replace(/"/g, "&quot;")}" ${
             state.quizChoice === c ? "checked" : ""
           }> ${c}</label>`
       )
@@ -608,18 +603,17 @@ function loadChallengeSetup() {
     return;
   }
   state.enabledRules = [];
-  if (ch.id === "run-clean") state.source = STARTER;
-  else if (ch.id === "run-delay" || ch.id === "run-fix-delay") state.source = SNIPPETS.delay.code;
-  else if (ch.id === "run-initial") state.source = SNIPPETS.initial.code;
-  else if (ch.id === "run-latch" || ch.id === "run-fix-latch") state.source = SNIPPETS.latch.code;
-  else if (ch.id === "run-ff-block") state.source = SNIPPETS.ff_blocking.code;
-  else if (ch.id === "run-comb-nba") state.source = SNIPPETS.comb_nba.code;
-  else if (ch.id === "run-timed") state.source = SNIPPETS.timed.code;
-  else if (ch.id === "run-good-ff") state.source = SNIPPETS.good_ff.code;
+  if (ch.id === "run-clean" || ch.id === "run-empty-rules") state.source = STARTER;
+  else if (ch.id === "run-clk" || ch.id === "run-fix-clk") state.source = SNIPPETS.clock.code;
+  else if (ch.id === "run-rst" || ch.id === "run-fix-rst") state.source = SNIPPETS.reset.code;
+  else if (ch.id === "run-ff") state.source = SNIPPETS.always_edge.code;
+  else if (ch.id === "run-comb") state.source = SNIPPETS.always_star.code;
+  else if (ch.id === "run-logic") state.source = SNIPPETS.prefer_reg.code;
+  else if (ch.id === "run-good-comb") state.source = SNIPPETS.good_comb.code;
   else if (ch.id === "run-parse-err") state.source = "module oops";
   else if (ch.id === "run-filter") {
-    state.source = SNIPPETS.latch.code;
-    state.enabledRules = ["latch-risk"];
+    state.source = SNIPPETS.clock.code;
+    state.enabledRules = ["name-clk"];
   }
   state.lastResult = null;
   saveSession();
@@ -640,7 +634,6 @@ function checkChallenge() {
     if (ch.needOk) ok = !!res.ok;
     if (ch.needEmpty) ok = ok && res.findings.length === 0;
     if (ch.needRule) ok = res.findings.some((f) => f.rule === ch.needRule);
-    if (ch.needNoErrors) ok = !res.findings.some((f) => f.severity === "error");
     if (ch.checkSource) ok = !!ch.checkSource(state.source, res, state);
   }
   if (ok) {
@@ -705,10 +698,10 @@ async function boot() {
   renderAll();
   try {
     hdl = await loadHdlEngine();
-    if (!hdl.lintSynthesizability) {
-      setEngineStatus("err", "Engine loaded but lintSynthesizability missing — update vendor");
+    if (!hdl.lintStyle) {
+      setEngineStatus("err", "Engine loaded but lintStyle missing — update vendor");
     } else {
-      setEngineStatus("ready", `HDL engine ready · ${hdl.SYNTH_LINT_RULES?.length || "?"} lint rules · live assist on`);
+      setEngineStatus("ready", `HDL engine ready · ${hdl.STYLE_LINT_RULES?.length || "?"} style rules · live assist on`);
       renderLab();
       scheduleLiveLint();
     }

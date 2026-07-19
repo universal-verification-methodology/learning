@@ -1,4 +1,4 @@
-.sl-editor {
+.hs-editor {
   width: 100%;
   min-height: 14rem;
   font-family: var(--mono);
@@ -69,6 +69,10 @@
   background: var(--ok-bg, #e7f6ec);
   color: var(--ok, #1b7a3d);
 }
+.verdict.hints {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  color: var(--ink);
+}
 .verdict.bad {
   background: var(--err-bg, #fdecea);
   color: var(--err, #b33);
@@ -95,7 +99,7 @@
   background: color-mix(in srgb, var(--accent) 16%, var(--surface));
 }
 
-.sl-meta {
+.hs-meta {
   margin: 0.35rem 0;
   font-size: 0.88rem;
   color: var(--muted);
@@ -134,7 +138,7 @@
   color: var(--err, #b33);
 }
 
-.sl-editor-wrap {
+.hs-editor-wrap {
   position: relative;
 }
 
@@ -196,4 +200,7 @@
   background: color-mix(in srgb, var(--accent) 12%, var(--surface));
   color: var(--ink);
   cursor: pointer;
+}
+.fix-btn:hover {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
 }
