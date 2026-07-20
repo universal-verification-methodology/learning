@@ -957,8 +957,169 @@
       "title": "Verilog RTL",
       "focus": "IEEE 1364 RTL coding",
       "prereq": "learn_digital recommended",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to Verilog RTL",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "module-diagram",
+          "kind": "lab",
+          "title": "Module / port diagram",
+          "toolId": "module-diagram",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "verilog-literals",
+          "kind": "lab",
+          "title": "Verilog literals",
+          "toolId": "verilog-literals",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "wire-vs-reg",
+          "kind": "lab",
+          "title": "wire vs reg",
+          "toolId": "wire-vs-reg",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "ansi-ports",
+          "kind": "lab",
+          "title": "ANSI vs non-ANSI ports",
+          "toolId": "ansi-ports",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "sv-operators",
+          "kind": "lab",
+          "title": "Operators",
+          "toolId": "sv-operators",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "sensitivity-list",
+          "kind": "lab",
+          "title": "Sensitivity lists",
+          "toolId": "sensitivity-list",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "latch-risk",
+          "kind": "lab",
+          "title": "Latch risk",
+          "toolId": "latch-risk",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "blocking-vs-nonblocking",
+          "kind": "lab",
+          "title": "Blocking vs non-blocking",
+          "toolId": "blocking-vs-nonblocking",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "param-width",
+          "kind": "lab",
+          "title": "Parameter / width",
+          "toolId": "param-width",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "named-vs-positional",
+          "kind": "lab",
+          "title": "Named vs positional",
+          "toolId": "named-vs-positional",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "localparam-lab",
+          "kind": "lab",
+          "title": "localparam",
+          "toolId": "localparam-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "sv-generate",
+          "kind": "lab",
+          "title": "Generate / replication",
+          "toolId": "sv-generate",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "one-driver",
+          "kind": "lab",
+          "title": "One-driver nets",
+          "toolId": "one-driver",
+          "status": "shipped"
+        },
+        {
+          "n": "14",
+          "slug": "counter-lab",
+          "kind": "lab",
+          "title": "Counter patterns",
+          "toolId": "counter-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "15",
+          "slug": "shift-register-lab",
+          "kind": "lab",
+          "title": "Shift-register patterns",
+          "toolId": "shift-register-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "16",
+          "slug": "synth-lint",
+          "kind": "lab",
+          "title": "Synthesizability lint",
+          "toolId": "synth-lint",
+          "status": "shipped"
+        },
+        {
+          "n": "17",
+          "slug": "hdl-style",
+          "kind": "lab",
+          "title": "HDL style",
+          "toolId": "hdl-style",
+          "status": "shipped"
+        },
+        {
+          "n": "18",
+          "slug": "fsm-datapath-bridge",
+          "kind": "bridge",
+          "title": "FSM & datapath in RTL",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "19",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Verilog complete → SV or simulators",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_verilog"
     },
     {

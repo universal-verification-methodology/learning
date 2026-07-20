@@ -594,7 +594,7 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 | `learn_unix` | vfs → scripting, archives, workflow, make/env labs **shipped** | — |
 | `learn_git` | Full Version control + template/submission labs (**all shipped**) | none for browser labs — module 21 stays offline (`unix-git-practice`) |
 | `learn_digital` | Numbers→Boolean→gates→clocks→FSM→datapath→mem (**48 shipped**) | — |
-| `learn_verilog` | Full IEEE 1364 RTL browser path (**all 17 labs shipped**) | none for browser labs — module 18 is bridge (reuse digital labs) |
+| `learn_verilog` | Full IEEE 1364 RTL browser path (**all 17 labs shipped**; **20 modules with clips/decks on platform**) | none for browser labs — module 18 is bridge (reuse digital labs) |
 | `learn_systemverilog` | (labs mostly planned) | `sv-always-procs` â†’ `sv-migration` set |
 | `learn_uvm2017` / `learn_pyuvm` | `tb-anatomy` / `tb-vs-uvm-map` / `tb-layers` / `uvm-phases` / `uvm-factory` / `uvm-configdb` / `uvm-objections` / `uvm-seq-flow` / `uvm-agent` / `uvm-tlm` / `uvm-scoreboard` / `ral-map` / `uvm-reporting` / `uvm-callbacks` / `uvm-vseq` / `uvm-multi-agent` / `protocol-checker` / `vip-anatomy` / `uvm-plusargs` (+ SV TB sketches) **shipped**; offline via legacy | remaining pyuvm/cocotb labs |
 | `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**) | — |

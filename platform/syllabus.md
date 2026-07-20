@@ -587,8 +587,8 @@ Take modules in order inside a course; skip `bridge` when self-studying; never s
 | Existing folder | Maps to |
 |-----------------|---------|
 | `learn_unix_git` | `learn_unix` (**scaffolded** under `courses/learn_unix/`) + `learn_git` (**scaffolded** under `courses/learn_git/`; M6–7 labs, M8 → offline/wrap) |
-| `learn_digital_verilog` | `learn_digital` (**scaffolded** under `courses/learn_digital/`) + parts of `learn_verilog` (**scaffolded** under `courses/learn_verilog/`) |
-| `learn_verilog_systemverilog` | `learn_verilog` (**scaffolded**) + `learn_systemverilog` (**scaffolded** under `courses/learn_systemverilog/`) |
+| `learn_digital_verilog` | `learn_digital` (**ready** on platform) + `learn_verilog` (**ready** under `courses/learn_verilog/`; 20 modules with media) |
+| `learn_verilog_systemverilog` | `learn_verilog` (**ready**) + `learn_systemverilog` (**scaffolded** under `courses/learn_systemverilog/`) |
 | `learn_verilator_iverilog` | `learn_verilator` + `learn_iverilog` (**both scaffolded** under `courses/`) |
 | `learn_uvm2017_sv_verilator` | `learn_uvm2017` (**scaffolded** under `courses/learn_uvm2017/`) |
 | `learn_uvm_pyuvm` | `learn_pyuvm` (**scaffolded** under `courses/learn_pyuvm/`) |

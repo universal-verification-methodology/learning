@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync learn_git / learn_digital labs in catalog.json from course MODULES.md."""
+"""Sync course labs in catalog.json from course MODULES.md (learn_git, learn_digital, learn_verilog)."""
 from __future__ import annotations
 
 import json
@@ -21,19 +21,34 @@ COURSES = {
         "focus": "Model → commit → branch → remotes → deliver",
         "prereq": "learn_unix recommended",
         "modules": ROOT / "courses" / "learn_git" / "docs" / "MODULES.md",
-        "module_prefix": "module",
+        "course_root": ROOT / "courses" / "learn_git",
     },
     "learn_digital": {
         "title": "Digital foundations",
         "focus": "Number systems → logic → FSM → datapath → memory",
         "prereq": None,
         "modules": ROOT / "courses" / "learn_digital" / "docs" / "MODULES.md",
-        "module_prefix": "module",
+        "course_root": ROOT / "courses" / "learn_digital",
+    },
+    "learn_verilog": {
+        "title": "Verilog RTL",
+        "focus": "IEEE 1364 RTL coding",
+        "prereq": "learn_digital recommended",
+        "modules": ROOT / "courses" / "learn_verilog" / "docs" / "MODULES.md",
+        "course_root": ROOT / "courses" / "learn_verilog",
     },
 }
 
 
-def slug_from_row(n: str, title: str, tool_id: str | None, kind: str) -> str:
+def module_slug(course_root: Path, n: str) -> str | None:
+    prefix = f"module{n.zfill(2)}-"
+    for child in sorted(course_root.iterdir()):
+        if child.is_dir() and child.name.startswith(prefix):
+            return child.name[len(prefix) :]
+    return None
+
+
+def slug_from_row(n: str, kind: str, tool_id: str | None, dir_slug: str | None) -> str:
     if kind == "intro":
         return "intro"
     if kind == "wrap":
@@ -42,10 +57,12 @@ def slug_from_row(n: str, title: str, tool_id: str | None, kind: str) -> str:
         return "sandbox"
     if tool_id:
         return tool_id
+    if dir_slug:
+        return dir_slug
     return f"lab-{n}"
 
 
-def parse_modules(path: Path) -> list[dict]:
+def parse_modules(path: Path, course_root: Path) -> list[dict]:
     text = path.read_text(encoding="utf-8")
     labs = []
     for m in ROW.finditer(text):
@@ -53,7 +70,7 @@ def parse_modules(path: Path) -> list[dict]:
         tool_id = tool_id.strip() if tool_id else None
         if tool_id == "unix-git-practice":
             tool_id = None
-        slug = slug_from_row(n, title, tool_id, kind)
+        slug = slug_from_row(n, kind, tool_id, module_slug(course_root, n))
         labs.append(
             {
                 "n": n.zfill(2),
@@ -72,7 +89,7 @@ def main() -> None:
     by_id = {c["id"]: c for c in cat["courses"]}
 
     for course_id, meta in COURSES.items():
-        labs = parse_modules(meta["modules"])
+        labs = parse_modules(meta["modules"], meta["course_root"])
         course = by_id[course_id]
         course["status"] = "ready"
         course["title"] = meta["title"]

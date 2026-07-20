@@ -157,6 +157,19 @@ COURSE_META = {
         "first_lab": "radix-converter",
         "first_n": "01",
     },
+    "learn_verilog": {
+        "lead": (
+            "IEEE 1364 RTL coding — modules, always blocks, and synthesizability. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_verilog">learn_verilog</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#hdl-structure",
+        "tools_label": "Verilog labs",
+        "syllabus_anchor": "4-learn_verilog",
+        "first_lab": "module-diagram",
+        "first_n": "01",
+    },
 }
 
 

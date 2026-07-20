@@ -62,7 +62,7 @@ Configure org / branch / CDN in [`assets/site-config.js`](assets/site-config.js)
 | Path | Role |
 |------|------|
 | [`index.html`](index.html) | Home pillars |
-| [`courses/`](courses/index.html) | Course list; **learn_unix**, **learn_git**, **learn_digital** have guided lab pages |
+| [`courses/`](courses/index.html) | Course list; **learn_unix**, **learn_git**, **learn_digital**, **learn_verilog** have guided lab pages |
 | [`tools/`](tools/index.html) | Concept lab shelf |
 | [`path/`](path/index.html) | Learning ladder + progress tint |
 | [`simulator/`](simulator/index.html) | HDL Simulator link + `core` datasets placeholder |
