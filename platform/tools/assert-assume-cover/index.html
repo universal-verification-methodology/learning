@@ -30,12 +30,16 @@
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
       <h1>Assert / assume / cover</h1>
-      <p class="lead">Classify property roles. Starter: three statements correctly tagged.</p>
+      <p class="lead">
+        Classify verification statements as <strong>assert</strong> (must hold),
+        <strong>assume</strong> (environment constraint), or <strong>cover</strong>
+        (observability). Score tags — wrong roles show <strong>PARTIAL</strong>.
+        Starter: <code>out==f(in)</code> assert, reset assume, opcode cover → PASS 3/3.
+      </p>
     </section>
     <div id="aac-root"></div>
   </main>
   <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
-  <script src="../../assets/ddv-concept-lab.js"></script>
   <script src="assert-assume-cover.js"></script>
   <script src="../../assets/site.js"></script>
 </body>

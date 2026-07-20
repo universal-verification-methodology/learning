@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Formal vacuity — Digital Design and Verification Platform</title>
+  <title>Formal vacuity sketch — Digital Design and Verification Platform</title>
   <link rel="stylesheet" href="../../assets/site.css">
   <link rel="stylesheet" href="../../assets/tools-shared.css">
   <link rel="stylesheet" href="formal-vacuity.css">
@@ -22,20 +22,24 @@
       <nav aria-label="Breadcrumb">
         <a href="../../index.html">Home</a>
         <a href="../index.html">Tools</a>
-        <span class="here">Formal vacuity</span>
+        <span class="here">Formal vacuity sketch</span>
       </nav>
     </div>
   </header>
   <main id="main">
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
-      <h1>Formal vacuity</h1>
-      <p class="lead">Antecedent never true → vacuous pass. Starter: <code>a |-> b</code> with a always 0.</p>
+      <h1>Formal vacuity sketch</h1>
+      <p class="lead">
+        Explore <code>a |-> b</code> vacuity: when antecedent <code>a</code> never rises,
+        the property passes <strong>vacuously</strong>. Contrast with a meaningful pass
+        when <code>a</code> fires and <code>b</code> holds. Starter: a always 0 →
+        VACUOUS_PASS.
+      </p>
     </section>
     <div id="fvac-root"></div>
   </main>
   <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
-  <script src="../../assets/ddv-concept-lab.js"></script>
   <script src="formal-vacuity.js"></script>
   <script src="../../assets/site.js"></script>
 </body>

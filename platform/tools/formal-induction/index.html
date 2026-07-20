@@ -30,12 +30,16 @@
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
       <h1>Formal induction sketch</h1>
-      <p class="lead">Base + step picture (literacy). Starter: base holds, step holds → proved (sketch).</p>
+      <p class="lead">
+        Toggle <strong>base</strong> and <strong>inductive step</strong> — verdict
+        <strong>PROVED</strong> only when both hold. Otherwise
+        <strong>BASE_FAIL</strong> or <strong>STEP_FAIL</strong>. Visual cards show
+        P(0) and P(k)&rarr;P(k+1). Starter: both true → PROVED.
+      </p>
     </section>
     <div id="finduct-root"></div>
   </main>
   <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
-  <script src="../../assets/ddv-concept-lab.js"></script>
   <script src="formal-induction.js"></script>
   <script src="../../assets/site.js"></script>
 </body>

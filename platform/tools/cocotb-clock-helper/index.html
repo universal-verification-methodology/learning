@@ -30,12 +30,19 @@
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
       <h1>cocotb Clock helper</h1>
-      <p class="lead">Sketch <code>Clock(dut.clk, 10, units='ns').start()</code>. Starter: period 10, edges at 10/20/30.</p>
+      <p class="lead">
+        Sketch
+        <strong>Clock(dut.clk, period, units='ns').start()</strong>
+        — show period, generate posedge times at
+        <code>period</code>,
+        <code>2×period</code>,
+        <code>3×period</code>.
+        Starter: period <code>10</code>, edges at <code>10, 20, 30</code>.
+      </p>
     </section>
-    <div id="cocotb-clock-root"></div>
+    <div id="cclk-root"></div>
   </main>
   <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
-  <script src="../../assets/ddv-concept-lab.js"></script>
   <script src="cocotb-clock-helper.js"></script>
   <script src="../../assets/site.js"></script>
 </body>

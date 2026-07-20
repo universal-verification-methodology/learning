@@ -30,12 +30,16 @@
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
       <h1>Formal BMC bound</h1>
-      <p class="lead">Bounded model check depth <code>k</code>. Starter: bug at step 3, k=5 → CEX.</p>
+      <p class="lead">
+        Sketch bounded model checking: set <code>bugAt</code> step and bound
+        <code>k</code>, then Run BMC. If <code>k &ge; bugAt</code> → <strong>CEX</strong>;
+        else <strong>PASS_BOUND</strong>. Depth bars visualize the search horizon.
+        Starter: bug at step 3, k=5 → CEX.
+      </p>
     </section>
     <div id="bmc-root"></div>
   </main>
   <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
-  <script src="../../assets/ddv-concept-lab.js"></script>
   <script src="formal-bmc-bound.js"></script>
   <script src="../../assets/site.js"></script>
 </body>

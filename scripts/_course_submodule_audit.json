@@ -1,0 +1,13 @@
+{
+  "missing_public_github": [],
+  "targets_not_in_gitmodules": [
+    "learn_verilog",
+    "learn_iverilog",
+    "learn_pyuvm",
+    "learn_python_hw",
+    "learn_sv_tb",
+    "learn_cocotb",
+    "learn_formal"
+  ],
+  "org_repo_count": 114
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Formal counterexample — Digital Design and Verification Platform</title>
+  <title>Formal counterexample wave — Digital Design and Verification Platform</title>
   <link rel="stylesheet" href="../../assets/site.css">
   <link rel="stylesheet" href="../../assets/tools-shared.css">
   <link rel="stylesheet" href="formal-counterexample.css">
@@ -22,20 +22,23 @@
       <nav aria-label="Breadcrumb">
         <a href="../../index.html">Home</a>
         <a href="../index.html">Tools</a>
-        <span class="here">Formal counterexample</span>
+        <span class="here">Formal counterexample wave</span>
       </nav>
     </div>
   </header>
   <main id="main">
     <div class="eyebrow">Interactive tool</div>
     <section class="hero">
-      <h1>Formal counterexample</h1>
-      <p class="lead">Step a short CEX wave. Starter: cursor on the failing cycle.</p>
+      <h1>Formal counterexample wave</h1>
+      <p class="lead">
+        Step through a formal counterexample trace <code>{t, a, b, ok}</code>.
+        Highlight the failing cycle; use Prev/Next to walk time.
+        Starter: failure at <strong>t=3</strong> where <code>ok=false</code>.
+      </p>
     </section>
     <div id="fcex-root"></div>
   </main>
   <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
-  <script src="../../assets/ddv-concept-lab.js"></script>
   <script src="formal-counterexample.js"></script>
   <script src="../../assets/site.js"></script>
 </body>

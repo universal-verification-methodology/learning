@@ -93,10 +93,10 @@ Canonical **target** syllabi for the learning monorepo (pass 3 · **lab-driven**
 | 12 | `learn_spi` | SPI same arc | Verilog | ~10 |
 | 13 | `learn_i2c` | I²C same arc | Verilog | ~10 |
 | 14 | `learn_verification_planning_management` | Plan → coverage → CI → sign-off | Protocol or UVM helpful | ~12 |
-| 15 | `learn_python_hw` | Python on-ramp for HW verification | Unix helpful | ~8 |
-| 16 | `learn_sv_tb` | Directed TB → CRV → SVA → cover | `learn_systemverilog` | ~12 |
-| 17 | `learn_cocotb` | cocotb triggers → DUT → self-check | `learn_python_hw` recommended; Verilog + sim | ~10 |
-| 18 | `learn_formal` | Assert / assume / cover → BMC literacy | `learn_sv_tb` or SVA lite; Verilog | ~10 |
+| 15 | `learn_python_hw` | Python on-ramp for HW verification | Unix helpful | ~9 |
+| 16 | `learn_sv_tb` | Directed TB → CRV → SVA → cover | `learn_systemverilog` | ~14 |
+| 17 | `learn_cocotb` | cocotb Clock/DUT/scoreboard path | `learn_python_hw` recommended; Verilog + sim | ~12 |
+| 18 | `learn_formal` | Assert / assume / cover → BMC literacy | `learn_sv_tb` or SVA lite; Verilog | ~12 |
 
 Counts are **planning targets** (intro/wrap + one row per lab). Add/drop `bridge` modules when recording media without changing the lab shelf.
 
@@ -571,26 +571,28 @@ Do **not** re-teach full verification planning inside each protocol — point to
 
 ## 15. `learn_python_hw`
 
-**Goal:** Python on-ramp for hardware verification (env, async, vectors) before cocotb.  
+**Goal:** Python on-ramp for hardware verification (env, async, vectors, pytest) before cocotb.  
 **Course tree:** [`courses/learn_python_hw/`](courses/learn_python_hw/) (dual track: local Python + browser labs).  
-**Next:** `learn_cocotb` → `learn_pyuvm`.
+**Next:** `learn_cocotb` → `learn_pyuvm`.  
+**Browser tools:** `python-async-tb`, `stim-as-data`, `pytest-assert-lab`, `file-vector-io` **(S)**.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to Python for hardware | Why Python for TB |
 | 01 | lab | Python async TB | `python-async-tb` |
 | 02 | offline | venv + pip for HW tools | Local venv |
-| 03 | lab | Stimulus as data / vectors | `file-vector-io` |
-| 04 | offline | pytest + golden asserts | Local pytest |
-| 05 | bridge | Why async fits simulation | Glue before cocotb |
-| 06 | offline | Install preview (cocotb deps) | pip list / dry-run |
-| 07 | wrap | Python-for-HW complete | → `learn_cocotb` |
+| 03 | lab | Stimulus as data | `stim-as-data` |
+| 04 | lab | pytest assert / golden | `pytest-assert-lab` |
+| 05 | lab | HDL file / vector I/O | `file-vector-io` |
+| 06 | bridge | Why async fits simulation | Glue before cocotb |
+| 07 | offline | Install preview (cocotb deps) | pip dry-run |
+| 08 | wrap | Python-for-HW complete | → `learn_cocotb` |
 
 ---
 
 ## 16. `learn_sv_tb`
 
-**Goal:** Directed SystemVerilog testbench literacy — self-check, classes, CRV, cover, SVA — before UVM.  
+**Goal:** Directed SystemVerilog testbench literacy — self-check, tasks/fork, classes, CRV, cover, SVA — before UVM.  
 **Course tree:** [`courses/learn_sv_tb/`](courses/learn_sv_tb/) (dual track: local SV TB + browser sketches).  
 **Prereq:** `learn_systemverilog`.  
 **Next:** `learn_uvm2017` · `learn_formal`.
@@ -601,20 +603,22 @@ Do **not** re-teach full verification planning inside each protocol — point to
 | 01 | lab | TB anatomy | `tb-anatomy` |
 | 02 | lab | Self-checking TB | `self-check-tb` |
 | 03 | lab | Clock + reset patterns | `tb-clock-reset` |
-| 04 | lab | File / vector I/O | `file-vector-io` |
-| 05 | lab | Virtual interface wiring | `vif-wiring` |
-| 06 | lab | Class / inheritance sketch | `sv-class-sketch` |
-| 07 | lab | Constraint / random lite | `crv-lite` |
-| 08 | lab | Coverpoint / bins | `cover-bins` |
-| 09 | lab | SVA implication timeline | `sva-timeline` |
-| 10 | lab | TB vs UVM map | `tb-vs-uvm-map` |
-| 11 | wrap | SV TB complete | → UVM or formal |
+| 04 | lab | Task vs function | `task-vs-function` |
+| 05 | lab | Fork / join | `fork-join` |
+| 06 | lab | File / vector I/O | `file-vector-io` |
+| 07 | lab | Virtual interface wiring | `vif-wiring` |
+| 08 | lab | Class / inheritance sketch | `sv-class-sketch` |
+| 09 | lab | Constraint / random lite | `crv-lite` |
+| 10 | lab | Coverpoint / bins | `cover-bins` |
+| 11 | lab | SVA implication timeline | `sva-timeline` |
+| 12 | lab | TB vs UVM map | `tb-vs-uvm-map` |
+| 13 | wrap | SV TB complete | → UVM or formal |
 
 ---
 
 ## 17. `learn_cocotb`
 
-**Goal:** cocotb as a Python testbench — triggers, DUT handles, self-check — before pyuvm methodology.  
+**Goal:** cocotb as a Python testbench — triggers, Clock, DUT/BinaryValue, scoreboard — before pyuvm methodology.  
 **Course tree:** [`courses/learn_cocotb/`](courses/learn_cocotb/) (dual track: real cocotb + browser sketches).  
 **Prereq:** `learn_python_hw` recommended; Verilog + sim.  
 **Next:** `learn_pyuvm`.  
@@ -625,35 +629,39 @@ Do **not** re-teach full verification planning inside each protocol — point to
 | 00 | intro | Welcome to cocotb | Python TB vs SV TB |
 | 01 | lab | Python async TB | `python-async-tb` |
 | 02 | lab | cocotb triggers | `cocotb-triggers` |
-| 03 | lab | cocotb DUT handle | `cocotb-dut-handle` |
-| 04 | lab | cocotb ↔ UVM roles | `cocotb-uvm-map` |
-| 05 | lab | Self-check pattern | `self-check-tb` |
-| 06 | lab | Clock + reset in TB | `tb-clock-reset` |
-| 07 | lab | Waves literacy | `waveform-lab` |
-| 08 | offline | Run a cocotb example | Local cocotb + sim |
-| 09 | wrap | cocotb complete | → `learn_pyuvm` |
+| 03 | lab | cocotb Clock helper | `cocotb-clock-helper` |
+| 04 | lab | cocotb DUT handle | `cocotb-dut-handle` |
+| 05 | lab | cocotb BinaryValue | `cocotb-binary-value` |
+| 06 | lab | cocotb scoreboard | `cocotb-scoreboard` |
+| 07 | lab | cocotb ↔ UVM roles | `cocotb-uvm-map` |
+| 08 | lab | Self-check pattern | `self-check-tb` |
+| 09 | lab | Waves literacy | `waveform-lab` |
+| 10 | offline | Run a cocotb example | Local cocotb + sim |
+| 11 | wrap | cocotb complete | → `learn_pyuvm` |
 
 ---
 
 ## 18. `learn_formal`
 
-**Goal:** Formal verification literacy — assert / assume / cover, BMC, counterexamples — not a full commercial formal flow.  
-**Course tree:** [`courses/learn_formal/`](courses/learn_formal/) (dual track: SymbiYosys/offline + browser SVA/cover/synth sketches).  
+**Goal:** Formal verification literacy — assert / assume / cover, vacuity, BMC, CEX, induction — not a full commercial formal flow.  
+**Course tree:** [`courses/learn_formal/`](courses/learn_formal/) (dual track: SymbiYosys/offline + browser formal sketches).  
 **Prereq:** `learn_sv_tb` or SVA lite; Verilog.  
-**Browser tools:** `sva-timeline`, `cover-bins`, `synth-lint`, `hdl-style` **(S)**; BMC / induction stay **offline**.
+**Browser tools:** `sva-timeline`, `assert-assume-cover`, `cover-bins`, `formal-vacuity`, `formal-bmc-bound`, `formal-counterexample`, `formal-induction`, `synth-lint`, `hdl-style` **(S)**; real BMC stays **offline**.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to formal | Prove vs simulate |
 | 01 | lab | Properties on a timeline | `sva-timeline` |
-| 02 | lab | Cover vs prove intuition | `cover-bins` |
-| 03 | bridge | Assert / assume / cover | Property roles |
-| 04 | lab | Prove-friendly RTL hygiene | `synth-lint` |
-| 05 | lab | Style cues for formal | `hdl-style` |
-| 06 | offline | BMC hello (SymbiYosys) | Local formal |
-| 07 | offline | Read a counterexample | Wave / trace |
-| 08 | offline | Induction sketch | Local formal |
-| 09 | wrap | Formal path complete | → planning / UVM |
+| 02 | lab | Assert / assume / cover | `assert-assume-cover` |
+| 03 | lab | Cover vs prove intuition | `cover-bins` |
+| 04 | lab | Vacuity | `formal-vacuity` |
+| 05 | lab | BMC bound | `formal-bmc-bound` |
+| 06 | lab | Read a counterexample | `formal-counterexample` |
+| 07 | lab | Induction sketch | `formal-induction` |
+| 08 | lab | Prove-friendly RTL hygiene | `synth-lint` |
+| 09 | lab | Style cues for formal | `hdl-style` |
+| 10 | offline | BMC hello (SymbiYosys) | Local formal |
+| 11 | wrap | Formal path complete | → planning / UVM |
 
 ---
 
