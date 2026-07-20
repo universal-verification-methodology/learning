@@ -231,3 +231,51 @@
   color: var(--ink);
   border-color: color-mix(in srgb, #c44 55%, var(--line));
 }
+
+.value-summary-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+@media (max-width: 720px) {
+  .value-summary-row { grid-template-columns: 1fr; }
+}
+
+.summary-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface);
+  text-align: center;
+}
+
+.summary-card h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.summary-card .val {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.summary-card .val.mono {
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+}
+
+.summary-card.is-active {
+  border-color: color-mix(in srgb, var(--accent, #2a6) 55%, var(--line));
+  background: color-mix(in srgb, var(--accent, #2a6) 10%, var(--surface));
+}
+
+.bit-cell.nibble-break {
+  margin-right: 0.35rem;
+}

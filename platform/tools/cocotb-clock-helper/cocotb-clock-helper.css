@@ -114,6 +114,19 @@
   color: var(--ink);
 }
 
+.edge-tick.is-half {
+  border-style: dashed;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.half-timeline {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
 .wave-strip {
   display: flex;
   align-items: center;
