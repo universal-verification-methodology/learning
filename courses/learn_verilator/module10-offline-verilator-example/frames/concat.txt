@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module10-offline-verilator-example/frames/slide-1.png'
+duration 15.24
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module10-offline-verilator-example/frames/slide-2.png'
+duration 21.264
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module10-offline-verilator-example/frames/slide-3.png'
+duration 20.592
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module10-offline-verilator-example/frames/slide-4.png'
+duration 21.888
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module10-offline-verilator-example/frames/slide-5.png'
+duration 19.32
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module10-offline-verilator-example/frames/slide-6.png'
+duration 15.984
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module10-offline-verilator-example/frames/slide-6.png'

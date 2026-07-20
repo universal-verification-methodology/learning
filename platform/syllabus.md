@@ -1,5 +1,3 @@
-> **Site copy** of repo-root [../syllabus.md](../syllabus.md). Re-copy after editing the canonical file.
-
 # Target course syllabus
 
 Canonical **target** syllabi for the learning monorepo (pass 3 · **lab-driven** · 2026-07).
@@ -68,8 +66,12 @@ Canonical **target** syllabi for the learning monorepo (pass 3 · **lab-driven**
 14. [learn_spi](#12-learn_spi)
 15. [learn_i2c](#13-learn_i2c)
 16. [learn_verification_planning_management](#14-learn_verification_planning_management)
-17. [Suggested learning ladder](#suggested-learning-ladder)
-18. [Migration from existing courses](#migration-from-existing-courses)
+17. [learn_python_hw](#15-learn_python_hw)
+18. [learn_sv_tb](#16-learn_sv_tb)
+19. [learn_cocotb](#17-learn_cocotb)
+20. [learn_formal](#18-learn_formal)
+21. [Suggested learning ladder](#suggested-learning-ladder)
+22. [Migration from existing courses](#migration-from-existing-courses)
 
 ---
 
@@ -86,11 +88,15 @@ Canonical **target** syllabi for the learning monorepo (pass 3 · **lab-driven**
 | 7 | `learn_verilator` | Verilator as a tool | Verilog; C++ helpful | ~10 |
 | 8 | `learn_iverilog` | Icarus as a tool | Verilog | ~10 |
 | 9 | `learn_hdl_simulator` | Browser HDL Simulator *(rename later)* | Verilog helpful | ~10 |
-| 10 | `learn_pyuvm` | cocotb → pyuvm | Python + Verilog + sim | ~12 |
+| 10 | `learn_pyuvm` | cocotb → pyuvm | Python + Verilog + sim; `learn_cocotb` helpful | ~12 |
 | 11 | `learn_uart` | UART spec → RTL → TB → VIP map | Verilog | ~10 |
 | 12 | `learn_spi` | SPI same arc | Verilog | ~10 |
 | 13 | `learn_i2c` | I²C same arc | Verilog | ~10 |
 | 14 | `learn_verification_planning_management` | Plan → coverage → CI → sign-off | Protocol or UVM helpful | ~12 |
+| 15 | `learn_python_hw` | Python on-ramp for HW verification | Unix helpful | ~8 |
+| 16 | `learn_sv_tb` | Directed TB → CRV → SVA → cover | `learn_systemverilog` | ~12 |
+| 17 | `learn_cocotb` | cocotb triggers → DUT → self-check | `learn_python_hw` recommended; Verilog + sim | ~10 |
+| 18 | `learn_formal` | Assert / assume / cover → BMC literacy | `learn_sv_tb` or SVA lite; Verilog | ~10 |
 
 Counts are **planning targets** (intro/wrap + one row per lab). Add/drop `bridge` modules when recording media without changing the lab shelf.
 
@@ -303,7 +309,7 @@ courses/<course_id>/
 
 **Goal:** SystemVerilog **design** constructs (IEEE 1800) — not UVM.  
 **Course tree:** [`courses/learn_systemverilog/`](courses/learn_systemverilog/) (dual track: real SV + browser labs).  
-**Platform:** [`courses/learn_systemverilog/`](courses/learn_systemverilog/) — **14 modules with clips/decks** (intro + 12 labs + wrap).  
+**Platform:** [`platform/courses/learn_systemverilog/`](platform/courses/learn_systemverilog/) — **14 modules with clips/decks**.  
 **Source legacy:** `learn_verilog_systemverilog` M4–8.
 
 | # | Kind | Module | Primary lab / activity |
@@ -327,7 +333,7 @@ courses/<course_id>/
 
 ## 6. `learn_uvm2017`
 
-**Goal:** UVM 2017 (IEEE 1800.2) methodology literacy + offline practice.  
+**Goal:** UVM methodology literacy + offline practice.  
 **Course tree:** [`courses/learn_uvm2017/`](courses/learn_uvm2017/) (dual track: real UVM + browser sketches).  
 **Source legacy:** `learn_uvm2017_sv_verilator`.  
 **Offline:** UVM library + Verilator (or commercial).
@@ -414,7 +420,7 @@ courses/<course_id>/
 
 **Working title** — rename later.  
 **Goal:** Guided path for the [HDL Simulator](https://universal-verification-methodology.github.io/systemverilog-simulator/).  
-**Course tree:** [`courses/learn_hdl_simulator/`](../courses/learn_hdl_simulator/) (dual track: public IDE + browser `hdl-sim-*` literacy).  
+**Course tree:** [`courses/learn_hdl_simulator/`](courses/learn_hdl_simulator/) (dual track: public IDE + browser `hdl-sim-*` literacy).  
 **Practice surface:** full simulator IDE; `hdl-sim-*` labs teach workflow.  
 **Browser tools:** all `hdl-sim-*` labs **(S)**; module 09 is free practice in the public IDE.
 
@@ -540,7 +546,7 @@ Do **not** re-teach full verification planning inside each protocol — point to
 ## 14. `learn_verification_planning_management`
 
 **Goal:** Plan → coverage → regression → sign-off.  
-**Course tree:** [`courses/learn_verification_planning_management/`](../courses/learn_verification_planning_management/) (dual track: written plans + browser boards).  
+**Course tree:** [`courses/learn_verification_planning_management/`](courses/learn_verification_planning_management/) (dual track: written plans + browser boards).  
 **Source legacy:** `verification_planning_management`.  
 **Browser tools:** planning shelf labs 01–12 all **(S)**.
 
@@ -563,6 +569,94 @@ Do **not** re-teach full verification planning inside each protocol — point to
 
 ---
 
+## 15. `learn_python_hw`
+
+**Goal:** Python on-ramp for hardware verification (env, async, vectors) before cocotb.  
+**Course tree:** [`courses/learn_python_hw/`](courses/learn_python_hw/) (dual track: local Python + browser labs).  
+**Next:** `learn_cocotb` → `learn_pyuvm`.
+
+| # | Kind | Module | Primary lab / activity |
+|---|------|--------|-------------------------|
+| 00 | intro | Welcome to Python for hardware | Why Python for TB |
+| 01 | lab | Python async TB | `python-async-tb` |
+| 02 | offline | venv + pip for HW tools | Local venv |
+| 03 | lab | Stimulus as data / vectors | `file-vector-io` |
+| 04 | offline | pytest + golden asserts | Local pytest |
+| 05 | bridge | Why async fits simulation | Glue before cocotb |
+| 06 | offline | Install preview (cocotb deps) | pip list / dry-run |
+| 07 | wrap | Python-for-HW complete | → `learn_cocotb` |
+
+---
+
+## 16. `learn_sv_tb`
+
+**Goal:** Directed SystemVerilog testbench literacy — self-check, classes, CRV, cover, SVA — before UVM.  
+**Course tree:** [`courses/learn_sv_tb/`](courses/learn_sv_tb/) (dual track: local SV TB + browser sketches).  
+**Prereq:** `learn_systemverilog`.  
+**Next:** `learn_uvm2017` · `learn_formal`.
+
+| # | Kind | Module | Primary lab / activity |
+|---|------|--------|-------------------------|
+| 00 | intro | Welcome to SV testbench | Directed TB map |
+| 01 | lab | TB anatomy | `tb-anatomy` |
+| 02 | lab | Self-checking TB | `self-check-tb` |
+| 03 | lab | Clock + reset patterns | `tb-clock-reset` |
+| 04 | lab | File / vector I/O | `file-vector-io` |
+| 05 | lab | Virtual interface wiring | `vif-wiring` |
+| 06 | lab | Class / inheritance sketch | `sv-class-sketch` |
+| 07 | lab | Constraint / random lite | `crv-lite` |
+| 08 | lab | Coverpoint / bins | `cover-bins` |
+| 09 | lab | SVA implication timeline | `sva-timeline` |
+| 10 | lab | TB vs UVM map | `tb-vs-uvm-map` |
+| 11 | wrap | SV TB complete | → UVM or formal |
+
+---
+
+## 17. `learn_cocotb`
+
+**Goal:** cocotb as a Python testbench — triggers, DUT handles, self-check — before pyuvm methodology.  
+**Course tree:** [`courses/learn_cocotb/`](courses/learn_cocotb/) (dual track: real cocotb + browser sketches).  
+**Prereq:** `learn_python_hw` recommended; Verilog + sim.  
+**Next:** `learn_pyuvm`.  
+**Note:** `learn_pyuvm` still teaches cocotb → pyuvm; this course is the **cocotb-first** lane.
+
+| # | Kind | Module | Primary lab / activity |
+|---|------|--------|-------------------------|
+| 00 | intro | Welcome to cocotb | Python TB vs SV TB |
+| 01 | lab | Python async TB | `python-async-tb` |
+| 02 | lab | cocotb triggers | `cocotb-triggers` |
+| 03 | lab | cocotb DUT handle | `cocotb-dut-handle` |
+| 04 | lab | cocotb ↔ UVM roles | `cocotb-uvm-map` |
+| 05 | lab | Self-check pattern | `self-check-tb` |
+| 06 | lab | Clock + reset in TB | `tb-clock-reset` |
+| 07 | lab | Waves literacy | `waveform-lab` |
+| 08 | offline | Run a cocotb example | Local cocotb + sim |
+| 09 | wrap | cocotb complete | → `learn_pyuvm` |
+
+---
+
+## 18. `learn_formal`
+
+**Goal:** Formal verification literacy — assert / assume / cover, BMC, counterexamples — not a full commercial formal flow.  
+**Course tree:** [`courses/learn_formal/`](courses/learn_formal/) (dual track: SymbiYosys/offline + browser SVA/cover/synth sketches).  
+**Prereq:** `learn_sv_tb` or SVA lite; Verilog.  
+**Browser tools:** `sva-timeline`, `cover-bins`, `synth-lint`, `hdl-style` **(S)**; BMC / induction stay **offline**.
+
+| # | Kind | Module | Primary lab / activity |
+|---|------|--------|-------------------------|
+| 00 | intro | Welcome to formal | Prove vs simulate |
+| 01 | lab | Properties on a timeline | `sva-timeline` |
+| 02 | lab | Cover vs prove intuition | `cover-bins` |
+| 03 | bridge | Assert / assume / cover | Property roles |
+| 04 | lab | Prove-friendly RTL hygiene | `synth-lint` |
+| 05 | lab | Style cues for formal | `hdl-style` |
+| 06 | offline | BMC hello (SymbiYosys) | Local formal |
+| 07 | offline | Read a counterexample | Wave / trace |
+| 08 | offline | Induction sketch | Local formal |
+| 09 | wrap | Formal path complete | → planning / UVM |
+
+---
+
 ## Suggested learning ladder
 
 ```text
@@ -570,16 +664,17 @@ learn_unix ──► learn_git
       │
       ▼
 learn_digital ──► learn_verilog ──► learn_systemverilog
-                       │
-          ┌────────────┼────────────────┐
-          ▼            ▼                ▼
+                       │                    │
+          ┌────────────┼────────────────┐   ├──────────► learn_sv_tb ──► learn_formal
+          ▼            ▼                ▼   │
  learn_hdl_simulator  learn_iverilog  learn_verilator
-          │
-          ▼
+          │                    │
+          ▼                    ▼
    learn_uart / learn_spi / learn_i2c
           │
           ├──────────────► learn_uvm2017
-          └──────────────► learn_pyuvm
+          │
+learn_python_hw ──► learn_cocotb ──► learn_pyuvm
           │
           ▼
  learn_verification_planning_management
@@ -598,9 +693,10 @@ Take modules in order inside a course; skip `bridge` when self-studying; never s
 | `learn_verilog_systemverilog` | `learn_verilog` (**ready**) + `learn_systemverilog` (**ready** under `courses/learn_systemverilog/`; 14 modules with media) |
 | `learn_verilator_iverilog` | `learn_verilator` + `learn_iverilog` (**both scaffolded** under `courses/`) |
 | `learn_uvm2017_sv_verilator` | `learn_uvm2017` (**ready** under `courses/learn_uvm2017/` — guided pages + module-slides) |
-| `learn_uvm_pyuvm` | `learn_pyuvm` (**scaffolded** under `courses/learn_pyuvm/`) |
+| `learn_uvm_pyuvm` | `learn_pyuvm` (**scaffolded** under `courses/learn_pyuvm/`) + cocotb lane also in **`learn_cocotb`** / on-ramp **`learn_python_hw`** |
 | `learn_uart_spi_i2c` | `learn_uart` + `learn_spi` + `learn_i2c` (**all scaffolded** under `courses/`) |
 | `verification_planning_management` | `learn_verification_planning_management` (**scaffolded** under `courses/learn_verification_planning_management/`) |
+| *(new)* | `learn_python_hw`, `learn_sv_tb`, `learn_cocotb`, `learn_formal` (**scaffolded** under `courses/`) |
 
 **Repo layout later:** prefer `moduleNN-<lab-id>/` aligned to this table so media (`outline`, `slides`, `transcript`, `video`) stays 1:1 with labs.
 

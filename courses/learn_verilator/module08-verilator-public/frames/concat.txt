@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module08-verilator-public/frames/slide-1.png'
+duration 19.368
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module08-verilator-public/frames/slide-2.png'
+duration 24.984
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module08-verilator-public/frames/slide-3.png'
+duration 18.144
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module08-verilator-public/frames/slide-4.png'
+duration 19.104
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module08-verilator-public/frames/slide-5.png'
+duration 20.256
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module08-verilator-public/frames/slide-6.png'
+duration 18.672
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module08-verilator-public/frames/slide-6.png'

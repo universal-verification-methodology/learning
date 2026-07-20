@@ -301,6 +301,58 @@ COURSE_META = {
         "first_lab": "verif-plan-check",
         "first_n": "01",
     },
+    "learn_python_hw": {
+        "lead": (
+            "Python on-ramp for hardware verification — async TB, vectors, venv/pytest — before cocotb. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_python_hw">learn_python_hw</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching lab, then practice offline."
+        ),
+        "tools_href": "../../tools/index.html",
+        "tools_label": "Tools shelf",
+        "syllabus_anchor": "15-learn_python_hw",
+        "first_lab": "python-async-tb",
+        "first_n": "01",
+    },
+    "learn_sv_tb": {
+        "lead": (
+            "Directed SystemVerilog testbench literacy — self-check, CRV, cover, SVA — before UVM. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_sv_tb">learn_sv_tb</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html",
+        "tools_label": "SV TB labs",
+        "syllabus_anchor": "16-learn_sv_tb",
+        "first_lab": "tb-anatomy",
+        "first_n": "01",
+    },
+    "learn_cocotb": {
+        "lead": (
+            "cocotb as a Python testbench — triggers, DUT handles, self-check — before pyuvm. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_cocotb">learn_cocotb</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching lab, then run a real cocotb example offline."
+        ),
+        "tools_href": "../../tools/index.html",
+        "tools_label": "cocotb labs",
+        "syllabus_anchor": "17-learn_cocotb",
+        "first_lab": "python-async-tb",
+        "first_n": "01",
+    },
+    "learn_formal": {
+        "lead": (
+            "Formal verification literacy — assert / assume / cover, BMC, counterexamples — not a full commercial flow. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_formal">learn_formal</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Use browser SVA/cover sketches, then SymbiYosys offline."
+        ),
+        "tools_href": "../../tools/index.html",
+        "tools_label": "SVA / cover labs",
+        "syllabus_anchor": "18-learn_formal",
+        "first_lab": "sva-timeline",
+        "first_n": "01",
+    },
 }
 
 

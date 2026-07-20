@@ -1,12 +1,64 @@
-# Module 04 outline
-title: "C++ TB / DPI sketch"
-kind: lab
-lab: dpi-cpp-tb
+title: C++ host testbench
+footer: learn_verilator — dpi cpp tb
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: C++ host testbench
+  subtitle: Verilator’s native cosim shape is a C++ host driving a generated model
+    pointer, traditionally Vtop, inside an eval loop
+  notes: Verilator’s native cosim shape is a C++ host driving a generated model pointer—traditionally
+    Vtop—inside an eval loop. That is a different paradigm from a classic SystemVerilog
+    testbench with initial blocks and forever clocks. This module keeps the paradigms
+    separate so you do not mix them by accident.
+- type: bullets
+  title: Eval loop vs SV TB
+  bullets:
+  - The host allocates the model, toggles inputs, calls eval for each time step
+  - DPI can bridge to C functions when you need it
+  - A classic SV testbench compiled elsewhere follows different rules
+  notes: The host allocates the model, toggles inputs, calls eval for each time step,
+    and checks outputs in C++. DPI can bridge to C functions when you need it, but
+    DPI is optional glue—not a replacement for knowing where the eval loop lives.
+    A classic SV testbench compiled elsewhere follows different rules; do not paste
+    UVM-style TB into a Verilator C++ main and hope.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Lab starter
+  notes: In the browser lab, load the starter and identify host, model, and eval loop
+    regions on the diagram. Challenges ask which code belongs in C++ main versus RTL
+    versus optional DPI imports. Finish with status ready when you can sketch the
+    loop in plain language.
+- type: bullets
+  title: Real Verilator practice
+  bullets:
+  - In Track A, open a minimal C++ host example from EXAMPLES or the legacy tree
+  - Point to where the model is constructed, where eval is called in a loop
+  - If DPI appears
+  notes: In Track A, open a minimal C++ host example from EXAMPLES or the legacy tree.
+    Point to where the model is constructed, where eval is called in a loop, and where
+    the run ends. If DPI appears, name one function it exports or imports—optional
+    detail, not the whole story.
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not mix a full SV event testbench paradigm with a Verilator C++ main in the
+    same flow
+  - Do not call eval once and assume time advanced forever
+  - Do not treat DPI as mandatory, many flows are pure C++
+  - And do not debug RTL in waves before confirming the host actually stepped cycles
+  notes: Do not mix a full SV event testbench paradigm with a Verilator C++ main in
+    the same flow without knowing exactly what you are doing. Do not call eval once
+    and assume time advanced forever. Do not treat DPI as mandatory—many flows are
+    pure C++. And do not debug RTL in waves before confirming the host actually stepped
+    cycles.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser, label host, model, and eval loop correctly
+  - In Track A, run one tiny C++ host binary once
+  - When you are ready, take the short quiz, then continue to clock and reset patterns
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    label host, model, and eval loop correctly. In Track A, run one tiny C++ host
+    binary once. When you are ready, take the short quiz, then continue to clock and
+    reset patterns.

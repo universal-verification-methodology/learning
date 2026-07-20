@@ -1,12 +1,68 @@
-# Module 10 outline
-title: "Build & run a Verilator example"
-kind: offline
-lab: course-makefile
+title: Offline capstone
+footer: learn_verilator — offline verilator example
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: Offline capstone
+  subtitle: This module has no graded browser lab
+  notes: This module has no graded browser lab. Your job is to build and run a real
+    Verilator example offline using the legacy Verilator course tree bundled beside
+    this path. You will prove the toolchain end to end—not merely click through a
+    diagram.
+- type: bullets
+  title: Where to work
+  bullets:
+  - Open the sibling learn Verilator Icarus legacy repository from the monorepo courses
+    folder
+  - Follow its README and module scripts for a small Verilator plus C++ or Verilog
+    testbench
+  - The exact target names vary by legacy module, that is normal
+  - Capture the commands you used and whether the run passed
+  notes: Open the sibling learn Verilator Icarus legacy repository from the monorepo
+    courses folder. Follow its README and module scripts for a small Verilator plus
+    C++ or Verilog testbench example. The exact target names vary by legacy module—that
+    is normal. Capture the commands you used and whether the run passed.
+- type: bullets
+  title: A typical command shape
+  bullets:
+  - Change into the legacy course root
+  - You should see compile, build, and run stages complete with a pass or an explainable
+    fail
+  - Write the command sequence in your notes as if a teammate must replay it tomorrow
+  notes: Change into the legacy course root, pick a minimal example target, run make
+    or the documented script, then execute the produced binary or test runner. You
+    should see compile, build, and run stages complete with a pass or an explainable
+    fail. Write the command sequence in your notes as if a teammate must replay it
+    tomorrow.
+- type: bullets
+  title: What to record
+  bullets:
+  - Note Verilator version, the example name, pass or fail
+  - If something failed, record the stage, compile, link, or run, and the first error
+    line
+  - Fixes belong in your notes too; this is practice, not a hidden autograder
+  notes: Note Verilator version, the example name, pass or fail, and one artifact—log
+    snippet, wave file, or stdout line—that proves the run happened. If something
+    failed, record the stage—compile, link, or run—and the first error line. Fixes
+    belong in your notes too; this is practice, not a hidden autograder.
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not substitute a browser lab for this offline requirement
+  - Do not assume one Makefile from a blog matches the legacy tree, read the local
+    README
+  - Do not skip capturing results; module eleven assumes you attempted a real run
+  - And if install is broken, fix install before blaming RTL
+  notes: Do not substitute a browser lab for this offline requirement. Do not assume
+    one Makefile from a blog matches the legacy tree—read the local README. Do not
+    skip capturing results; module eleven assumes you attempted a real run. And if
+    install is broken, fix install before blaming RTL.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the offline checklist
+  - 'Optional stretch: produce a short trace from the same example'
+  - When you are ready, take the short quiz, then continue to the wrap module
+  notes: 'Complete the offline checklist: one real build and run from the legacy tree,
+    commands and outcome recorded. Optional stretch: produce a short trace from the
+    same example. When you are ready, take the short quiz, then continue to the wrap
+    module.'

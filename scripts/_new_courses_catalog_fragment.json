@@ -1,0 +1,362 @@
+[
+  {
+    "id": "learn_python_hw",
+    "title": "Python for hardware",
+    "focus": "Python on-ramp for HW verification (before cocotb)",
+    "prereq": "Unix helpful",
+    "status": "ready",
+    "repo": "learn_python_hw",
+    "labs": [
+      {
+        "n": "00",
+        "slug": "intro",
+        "kind": "intro",
+        "title": "Welcome to Python for hardware",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "01",
+        "slug": "python-async-tb",
+        "kind": "lab",
+        "title": "Python async TB",
+        "toolId": "python-async-tb",
+        "status": "shipped"
+      },
+      {
+        "n": "02",
+        "slug": "offline-venv-pip",
+        "kind": "offline",
+        "title": "venv + pip for HW tools",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "03",
+        "slug": "file-vector-io",
+        "kind": "lab",
+        "title": "Stimulus as data / vectors",
+        "toolId": "file-vector-io",
+        "status": "shipped"
+      },
+      {
+        "n": "04",
+        "slug": "offline-pytest-golden",
+        "kind": "offline",
+        "title": "pytest + golden asserts",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "05",
+        "slug": "why-async-sim",
+        "kind": "bridge",
+        "title": "Why async fits simulation",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "06",
+        "slug": "offline-hello-deps",
+        "kind": "offline",
+        "title": "Install preview (cocotb deps)",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "07",
+        "slug": "wrap",
+        "kind": "wrap",
+        "title": "Python-for-HW complete",
+        "toolId": null,
+        "status": "shipped"
+      }
+    ]
+  },
+  {
+    "id": "learn_sv_tb",
+    "title": "SystemVerilog testbench",
+    "focus": "Directed TB \u2192 CRV \u2192 SVA \u2192 cover (before UVM)",
+    "prereq": "learn_systemverilog",
+    "status": "ready",
+    "repo": "learn_sv_tb",
+    "labs": [
+      {
+        "n": "00",
+        "slug": "intro",
+        "kind": "intro",
+        "title": "Welcome to SV testbench",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "01",
+        "slug": "tb-anatomy",
+        "kind": "lab",
+        "title": "TB anatomy",
+        "toolId": "tb-anatomy",
+        "status": "shipped"
+      },
+      {
+        "n": "02",
+        "slug": "self-check-tb",
+        "kind": "lab",
+        "title": "Self-checking TB",
+        "toolId": "self-check-tb",
+        "status": "shipped"
+      },
+      {
+        "n": "03",
+        "slug": "tb-clock-reset",
+        "kind": "lab",
+        "title": "Clock + reset patterns",
+        "toolId": "tb-clock-reset",
+        "status": "shipped"
+      },
+      {
+        "n": "04",
+        "slug": "file-vector-io",
+        "kind": "lab",
+        "title": "File / vector I/O",
+        "toolId": "file-vector-io",
+        "status": "shipped"
+      },
+      {
+        "n": "05",
+        "slug": "vif-wiring",
+        "kind": "lab",
+        "title": "Virtual interface wiring",
+        "toolId": "vif-wiring",
+        "status": "shipped"
+      },
+      {
+        "n": "06",
+        "slug": "sv-class-sketch",
+        "kind": "lab",
+        "title": "Class / inheritance sketch",
+        "toolId": "sv-class-sketch",
+        "status": "shipped"
+      },
+      {
+        "n": "07",
+        "slug": "crv-lite",
+        "kind": "lab",
+        "title": "Constraint / random lite",
+        "toolId": "crv-lite",
+        "status": "shipped"
+      },
+      {
+        "n": "08",
+        "slug": "cover-bins",
+        "kind": "lab",
+        "title": "Coverpoint / bins",
+        "toolId": "cover-bins",
+        "status": "shipped"
+      },
+      {
+        "n": "09",
+        "slug": "sva-timeline",
+        "kind": "lab",
+        "title": "SVA implication timeline",
+        "toolId": "sva-timeline",
+        "status": "shipped"
+      },
+      {
+        "n": "10",
+        "slug": "tb-vs-uvm-map",
+        "kind": "lab",
+        "title": "TB vs UVM map",
+        "toolId": "tb-vs-uvm-map",
+        "status": "shipped"
+      },
+      {
+        "n": "11",
+        "slug": "wrap",
+        "kind": "wrap",
+        "title": "SV TB complete",
+        "toolId": null,
+        "status": "shipped"
+      }
+    ]
+  },
+  {
+    "id": "learn_cocotb",
+    "title": "cocotb",
+    "focus": "cocotb triggers \u2192 DUT handle \u2192 self-check (before pyuvm)",
+    "prereq": "learn_python_hw recommended; Verilog + sim",
+    "status": "ready",
+    "repo": "learn_cocotb",
+    "labs": [
+      {
+        "n": "00",
+        "slug": "intro",
+        "kind": "intro",
+        "title": "Welcome to cocotb",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "01",
+        "slug": "python-async-tb",
+        "kind": "lab",
+        "title": "Python async TB",
+        "toolId": "python-async-tb",
+        "status": "shipped"
+      },
+      {
+        "n": "02",
+        "slug": "cocotb-triggers",
+        "kind": "lab",
+        "title": "cocotb triggers",
+        "toolId": "cocotb-triggers",
+        "status": "shipped"
+      },
+      {
+        "n": "03",
+        "slug": "cocotb-dut-handle",
+        "kind": "lab",
+        "title": "cocotb DUT handle",
+        "toolId": "cocotb-dut-handle",
+        "status": "shipped"
+      },
+      {
+        "n": "04",
+        "slug": "cocotb-uvm-map",
+        "kind": "lab",
+        "title": "cocotb \u2194 UVM roles",
+        "toolId": "cocotb-uvm-map",
+        "status": "shipped"
+      },
+      {
+        "n": "05",
+        "slug": "self-check-tb",
+        "kind": "lab",
+        "title": "Self-check pattern",
+        "toolId": "self-check-tb",
+        "status": "shipped"
+      },
+      {
+        "n": "06",
+        "slug": "tb-clock-reset",
+        "kind": "lab",
+        "title": "Clock + reset in TB",
+        "toolId": "tb-clock-reset",
+        "status": "shipped"
+      },
+      {
+        "n": "07",
+        "slug": "waveform-lab",
+        "kind": "lab",
+        "title": "Waves literacy",
+        "toolId": "waveform-lab",
+        "status": "shipped"
+      },
+      {
+        "n": "08",
+        "slug": "offline-cocotb-example",
+        "kind": "offline",
+        "title": "Run a cocotb example",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "09",
+        "slug": "wrap",
+        "kind": "wrap",
+        "title": "cocotb complete",
+        "toolId": null,
+        "status": "shipped"
+      }
+    ]
+  },
+  {
+    "id": "learn_formal",
+    "title": "Formal verification intro",
+    "focus": "Assert / assume / cover \u2192 BMC \u2192 counterexample (literacy)",
+    "prereq": "learn_sv_tb or SVA lite; Verilog",
+    "status": "ready",
+    "repo": "learn_formal",
+    "labs": [
+      {
+        "n": "00",
+        "slug": "intro",
+        "kind": "intro",
+        "title": "Welcome to formal",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "01",
+        "slug": "sva-timeline",
+        "kind": "lab",
+        "title": "Properties on a timeline",
+        "toolId": "sva-timeline",
+        "status": "shipped"
+      },
+      {
+        "n": "02",
+        "slug": "cover-bins",
+        "kind": "lab",
+        "title": "Cover vs prove intuition",
+        "toolId": "cover-bins",
+        "status": "shipped"
+      },
+      {
+        "n": "03",
+        "slug": "assert-assume-cover",
+        "kind": "bridge",
+        "title": "Assert / assume / cover",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "04",
+        "slug": "synth-lint",
+        "kind": "lab",
+        "title": "Prove-friendly RTL hygiene",
+        "toolId": "synth-lint",
+        "status": "shipped"
+      },
+      {
+        "n": "05",
+        "slug": "hdl-style",
+        "kind": "lab",
+        "title": "Style cues for formal",
+        "toolId": "hdl-style",
+        "status": "shipped"
+      },
+      {
+        "n": "06",
+        "slug": "offline-bmc-hello",
+        "kind": "offline",
+        "title": "BMC hello (SymbiYosys)",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "07",
+        "slug": "offline-counterexample",
+        "kind": "offline",
+        "title": "Read a counterexample",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "08",
+        "slug": "offline-induction-sketch",
+        "kind": "offline",
+        "title": "Induction sketch",
+        "toolId": null,
+        "status": "shipped"
+      },
+      {
+        "n": "09",
+        "slug": "wrap",
+        "kind": "wrap",
+        "title": "Formal path complete",
+        "toolId": null,
+        "status": "shipped"
+      }
+    ]
+  }
+]

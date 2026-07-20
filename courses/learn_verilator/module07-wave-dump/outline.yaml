@@ -1,12 +1,63 @@
-# Module 07 outline
-title: "Wave dump literacy"
-kind: lab
-lab: wave-dump
+title: Pick the wave format
+footer: learn_verilator — wave dump
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: Pick the wave format
+  subtitle: VCD is familiar and portable for quick debug
+  notes: VCD is familiar and portable for quick debug. FST compresses better for long
+    farm runs and large designs. The literacy lab names scenarios—quick debug, long
+    regression farm, portable share—and asks which format fits. In every case, dumping
+    must actually be on—not a pretend filename.
+- type: bullets
+  title: Scenario-first choice
+  bullets:
+  - For quick debug on a tiny block, VCD is often fine
+  - For overnight farms with millions of cycles, prefer FST to keep disks sane
+  - When you share a snippet with a colleague on another tool
+  - Regardless of format
+  notes: For quick debug on a tiny block, VCD is often fine. For overnight farms with
+    millions of cycles, prefer FST to keep disks sane. When you share a snippet with
+    a colleague on another tool, think portable VCD—or confirm their viewer reads
+    FST. Regardless of format, trace compile flags and dump calls must be active or
+    you get empty pride.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Lab starter
+  notes: In the wave dump lab, load the starter and map scenarios to VCD or FST choices
+    until status reads ready. Challenges include dump switched off—fix the flow so
+    recording is truly on. Treat wrong format picks as teaching moments about disk
+    size and viewer support.
+- type: bullets
+  title: Real Verilator practice
+  bullets:
+  - In Track A, produce one small VCD and, if your flow supports it, one small FST
+    from the
+  - Compare file sizes and open both in your viewer
+  - Note which Makefile variables or flags differ
+  - Keep runs short, this is format literacy, not volume testing
+  notes: In Track A, produce one small VCD and, if your flow supports it, one small
+    FST from the same tiny design. Compare file sizes and open both in your viewer.
+    Note which Makefile variables or flags differ. Keep runs short—this is format
+    literacy, not volume testing.
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not pick FST then forget trace-fst at compile
+  - Do not share a zero-byte file because dump never ran
+  - Do not use farm-scale dumps for a five-signal typo debug
+  - And do not assume every viewer supports every format, check before you send
+  notes: Do not pick FST then forget trace-fst at compile. Do not share a zero-byte
+    file because dump never ran. Do not use farm-scale dumps for a five-signal typo
+    debug. And do not assume every viewer supports every format—check before you send.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser, pass scenario chooser challenges with dump truly enabled
+  - In Track A, open one real trace you created
+  - When you are ready, take the short quiz, then continue to Verilator public visibility
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    pass scenario chooser challenges with dump truly enabled. In Track A, open one
+    real trace you created. When you are ready, take the short quiz, then continue
+    to Verilator public visibility.

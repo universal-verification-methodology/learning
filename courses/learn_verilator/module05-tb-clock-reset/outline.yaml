@@ -1,12 +1,62 @@
-# Module 05 outline
-title: "TB clock + reset patterns"
-kind: lab
-lab: tb-clock-reset
+title: Clock and reset in the host
+footer: learn_verilator — tb clock reset
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: Clock and reset in the host
+  subtitle: Every Verilator run needs a disciplined clock and reset story
+  notes: Every Verilator run needs a disciplined clock and reset story. A common pattern
+    is a forever loop with half-period delays for the clock. Reset should assert for
+    a known number of posedges, then release synchronously—not held forever, not dropped
+    at random time zero without thought.
+- type: bullets
+  title: Assert, wait, release
+  bullets:
+  - Assert reset low or high consistently with your active level
+  - Count posedges while reset is held, often two or three is enough for literacy
+  - Release reset synchronously relative to the clock edge you care about
+  - After release, let the DUT run
+  notes: Assert reset low or high consistently with your active level. Count posedges
+    while reset is held—often two or three is enough for literacy. Release reset synchronously
+    relative to the clock edge you care about. After release, let the DUT run; do
+    not leave reset glued active while wondering why nothing moves.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Lab starter
+  notes: In the browser clock-and-reset lab, load the starter testbench sketch and
+    adjust assert duration and release point until status reads ready. Challenges
+    flag reset held forever, release combinatorially, or clock with no half-period
+    discipline. Fix the pattern, not only the displayed waveform paint.
+- type: bullets
+  title: Real Verilator practice
+  bullets:
+  - In Track A, open EXAMPLES and implement or inspect a host loop that toggles clock
+    with
+  - Run once and confirm outputs change only after reset deasserts
+  - Say how many posedges you waited, make the number intentional
+  notes: In Track A, open EXAMPLES and implement or inspect a host loop that toggles
+    clock with half-period sleeps or timed steps, asserts reset for N cycles, then
+    releases. Run once and confirm outputs change only after reset deasserts. Say
+    how many posedges you waited—make the number intentional.
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not hold reset forever and call it a passing test
+  - Do not release reset asynchronously if your DUT expects synchronous deassert
+  - Do not forget the clock entirely in a C++ host, eval needs input changes
+  - And do not copy a browser sketch verbatim without matching your DUT’s reset polarity
+  notes: Do not hold reset forever and call it a passing test. Do not release reset
+    asynchronously if your DUT expects synchronous deassert. Do not forget the clock
+    entirely in a C++ host—eval needs input changes. And do not copy a browser sketch
+    verbatim without matching your DUT’s reset polarity.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser, reach ready with a synchronous release pattern
+  - In Track A, run one reset sequence you can explain out loud
+  - When you are ready, take the short quiz, then continue to Verilator trace
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    reach ready with a synchronous release pattern. In Track A, run one reset sequence
+    you can explain out loud. When you are ready, take the short quiz, then continue
+    to Verilator trace.

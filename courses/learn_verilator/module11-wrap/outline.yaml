@@ -1,12 +1,72 @@
-# Module 11 outline
-title: "Verilator track complete"
-kind: wrap
-lab: null
+title: Verilator track complete
+footer: learn_verilator — wrap
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: Verilator track complete
+  subtitle: You now have a working map of Verilator as a tool
+  notes: You now have a working map of Verilator as a tool. You can choose versus
+    Icarus for the job, walk compile-elaborate-run, lint with intent, host a C++ testbench
+    with an eval loop, discipline clock and reset, pair trace flags with dump calls,
+    pick VCD or FST wisely, expose only needed internals, read metrics seriously,
+    and run an offline example for real.
+- type: bullets
+  title: Skills you can reuse
+  bullets:
+  - Job-first simulator choice transfers to every new block
+  - Lint-before-waves saves hours
+  - The eval-loop mental model survives across designs
+  - Trace flag plus dump is the wave mantra
+  - Minimal public markers keep hosts clean
+  - Metrics vocabulary
+  notes: Job-first simulator choice transfers to every new block. Lint-before-waves
+    saves hours. The eval-loop mental model survives across designs. Trace flag plus
+    dump is the wave mantra. Minimal public markers keep hosts clean. Metrics vocabulary—pass
+    rate, coverage, escapes—bridges to planning courses without becoming UVM.
+- type: two_column
+  title: Dual-track recap
+  left:
+  - If you mainly used browser labs, pick one Track A example and reproduce compile,
+    run
+  - If you mainly used Track A, revisit any browser lab you skipped for graded challenges
+  - Confirm you can open the tools index and name where Simulation literacy lives
+  right: assets/tools-index.png
+  notes: If you mainly used browser labs, pick one Track A example and reproduce compile,
+    run, and a short trace. If you mainly used Track A, revisit any browser lab you
+    skipped for graded challenges. Confirm you can open the tools index and name where
+    Simulation literacy lives.
+- type: bullets
+  title: Where to go next
+  bullets:
+  - For event-delay teaching depth, spend time in learn Icarus, the sibling path
+  - For protocol bring-up, UART, SPI
+  - For SystemVerilog language depth, continue learn Verilog modules
+  - For UVM, climb that ladder when you need constrained-random environments, not
+    before you
+  notes: For event-delay teaching depth, spend time in learn Icarus—the sibling path.
+    For protocol bring-up, UART, SPI, and I²C courses reuse the same trace and testbench
+    habits. For SystemVerilog language depth, continue learn Verilog modules. For
+    UVM, climb that ladder when you need constrained-random environments—not before
+    you can run a clean Verilator regression.
+- type: bullets
+  title: Mindset to keep
+  bullets:
+  - Fix RTL before blanket-disabling warnings
+  - Keep C++ host and SV testbench paradigms straight
+  - Turn dump on when you need waves
+  - Mark public only what you must read
+  - Treat escapes as BLOCKED until addressed
+  - And remember
+  notes: 'Fix RTL before blanket-disabling warnings. Keep C++ host and SV testbench
+    paradigms straight. Turn dump on when you need waves. Mark public only what you
+    must read. Treat escapes as BLOCKED until addressed. And remember: browser labs
+    teach moves; confidence comes from offline runs that pass twice in a row.'
+- type: bullets
+  title: Closing
+  bullets:
+  - Check off the wrap checklist
+  - You finished the learn Verilator path
+  - Run one small regression or lint-clean example if you want a victory lap
+  notes: Check off the wrap checklist. You finished the learn Verilator path. Run
+    one small regression or lint-clean example if you want a victory lap, then pick
+    the next course that matches your goal—language depth, Icarus literacy, protocols,
+    or planning metrics.

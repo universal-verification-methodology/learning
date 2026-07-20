@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module07-wave-dump/frames/slide-1.png'
+duration 21.432
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module07-wave-dump/frames/slide-2.png'
+duration 23.784
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module07-wave-dump/frames/slide-3.png'
+duration 17.664
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module07-wave-dump/frames/slide-4.png'
+duration 19.68
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module07-wave-dump/frames/slide-5.png'
+duration 17.064
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module07-wave-dump/frames/slide-6.png'
+duration 18.576
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module07-wave-dump/frames/slide-6.png'

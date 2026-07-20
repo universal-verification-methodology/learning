@@ -119,6 +119,34 @@ COURSES = {
         / "MODULES.md",
         "course_root": ROOT / "courses" / "learn_verification_planning_management",
     },
+    "learn_python_hw": {
+        "title": "Python for hardware",
+        "focus": "Python on-ramp for HW verification (before cocotb)",
+        "prereq": "Unix helpful",
+        "modules": ROOT / "courses" / "learn_python_hw" / "docs" / "MODULES.md",
+        "course_root": ROOT / "courses" / "learn_python_hw",
+    },
+    "learn_sv_tb": {
+        "title": "SystemVerilog testbench",
+        "focus": "Directed TB → CRV → SVA → cover (before UVM)",
+        "prereq": "learn_systemverilog",
+        "modules": ROOT / "courses" / "learn_sv_tb" / "docs" / "MODULES.md",
+        "course_root": ROOT / "courses" / "learn_sv_tb",
+    },
+    "learn_cocotb": {
+        "title": "cocotb",
+        "focus": "cocotb triggers → DUT handle → self-check (before pyuvm)",
+        "prereq": "learn_python_hw recommended; Verilog + sim",
+        "modules": ROOT / "courses" / "learn_cocotb" / "docs" / "MODULES.md",
+        "course_root": ROOT / "courses" / "learn_cocotb",
+    },
+    "learn_formal": {
+        "title": "Formal verification intro",
+        "focus": "Assert / assume / cover → BMC → counterexample (literacy)",
+        "prereq": "learn_sv_tb or SVA lite; Verilog",
+        "modules": ROOT / "courses" / "learn_formal" / "docs" / "MODULES.md",
+        "course_root": ROOT / "courses" / "learn_formal",
+    },
 }
 
 

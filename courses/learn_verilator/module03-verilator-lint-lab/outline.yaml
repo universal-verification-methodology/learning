@@ -1,12 +1,63 @@
-# Module 03 outline
-title: "Verilator lint"
-kind: lab
-lab: verilator-lint-lab
+title: Verilator lint
+footer: learn_verilator — verilator lint lab
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: Verilator lint
+  subtitle: Lint is cheap insurance
+  notes: Lint is cheap insurance. Verilator’s linter catches width mismatches, unused
+    signals, inferred latches, and incomplete case statements before you spend an
+    hour in waves. Turn warnings on with wall-class strictness and treat CLEAN, BLIND,
+    and warnings-as-errors as deliberate policy choices—not accidents.
+- type: bullets
+  title: Common warning families
+  bullets:
+  - Watch for UNUSED, something you declared but never read
+  - WIDTH, expressions that do not line up
+  - LATCH, inferred storage you did not mean
+  - CASEINCOMPLETE, case statements without a default or full coverage
+  - The literacy lab tags these families so you learn the fix, not only the flag name
+  notes: Watch for UNUSED—something you declared but never read. WIDTH—expressions
+    that do not line up. LATCH—inferred storage you did not mean. CASEINCOMPLETE—case
+    statements without a default or full coverage. The literacy lab tags these families
+    so you learn the fix, not only the flag name.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Lab starter
+  notes: In the lint lab, load the starter design and practice CLEAN versus BLIND
+    versus warnings-as-error modes. A BLIND run hides problems; CLEAN surfaces them;
+    treating warnings as errors forces zero tolerance. Challenges ask you to fix RTL—not
+    merely silence with blanket no-warning flags.
+- type: bullets
+  title: Real Verilator practice
+  bullets:
+  - In Track A, lint a tiny module with wall-level warnings enabled
+  - Introduce one intentional WIDTH or UNUSED issue
+  - Avoid the reflex to blanket-disable warnings unless you have documented why
+  - Self-check scripts can confirm you reached a clean lint pass
+  notes: In Track A, lint a tiny module with wall-level warnings enabled. Introduce
+    one intentional WIDTH or UNUSED issue, see the message, then fix the RTL properly.
+    Avoid the reflex to blanket-disable warnings unless you have documented why. Self-check
+    scripts can confirm you reached a clean lint pass.
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not blanket-disable warnings to greenwash a broken design
+  - Do not confuse BLIND with CLEAN, no output is not the same as no problems
+  - Do not ship with warnings-as-errors until your tree is actually clean
+  - 'And remember: lint passes do not replace simulation, they narrow the search space'
+  notes: 'Do not blanket-disable warnings to greenwash a broken design. Do not confuse
+    BLIND with CLEAN—no output is not the same as no problems. Do not ship with warnings-as-errors
+    until your tree is actually clean. And remember: lint passes do not replace simulation—they
+    narrow the search space.'
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser, reach CLEAN on at least one challenge without only silencing flags
+  - In Track A, run lint with strict warnings once
+  - When you are ready, take the short quiz, then continue to C++ testbench and DPI
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    reach CLEAN on at least one challenge without only silencing flags. In Track A,
+    run lint with strict warnings once. When you are ready, take the short quiz, then
+    continue to C++ testbench and DPI.

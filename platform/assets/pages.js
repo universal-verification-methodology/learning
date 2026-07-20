@@ -365,8 +365,9 @@
         ["learn_digital"],
         ["learn_verilog"],
         ["learn_systemverilog", "learn_hdl_simulator", "learn_iverilog", "learn_verilator"],
+        ["learn_sv_tb", "learn_formal"],
         ["learn_uart", "learn_spi", "learn_i2c"],
-        ["learn_uvm2017", "learn_pyuvm"],
+        ["learn_python_hw", "learn_cocotb", "learn_pyuvm", "learn_uvm2017"],
         ["learn_verification_planning_management"],
       ];
       const html = rows

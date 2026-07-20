@@ -22,3 +22,75 @@
 [submodule "courses/learn_uvm2017_sv_verilator"]
 	path = courses/learn_uvm2017_sv_verilator
 	url = git@github.com:universal-verification-methodology/learn_uvm2017_sv_verilator.git
+[submodule "courses/learn_unix"]
+	path = courses/learn_unix
+	url = git@github.com:universal-verification-methodology/learn_unix.git
+	branch = main
+[submodule "courses/learn_git"]
+	path = courses/learn_git
+	url = git@github.com:universal-verification-methodology/learn_git.git
+	branch = main
+[submodule "courses/learn_digital"]
+	path = courses/learn_digital
+	url = git@github.com:universal-verification-methodology/learn_digital.git
+	branch = main
+[submodule "courses/learn_systemverilog"]
+	path = courses/learn_systemverilog
+	url = git@github.com:universal-verification-methodology/learn_systemverilog.git
+	branch = main
+[submodule "courses/learn_uvm2017"]
+	path = courses/learn_uvm2017
+	url = git@github.com:universal-verification-methodology/learn_uvm2017.git
+	branch = main
+[submodule "courses/learn_verilator"]
+	path = courses/learn_verilator
+	url = git@github.com:universal-verification-methodology/learn_verilator.git
+	branch = main
+[submodule "courses/learn_hdl_simulator"]
+	path = courses/learn_hdl_simulator
+	url = git@github.com:universal-verification-methodology/learn_hdl_simulator.git
+	branch = main
+[submodule "courses/learn_uart"]
+	path = courses/learn_uart
+	url = git@github.com:universal-verification-methodology/learn_uart.git
+	branch = main
+[submodule "courses/learn_spi"]
+	path = courses/learn_spi
+	url = git@github.com:universal-verification-methodology/learn_spi.git
+	branch = main
+[submodule "courses/learn_i2c"]
+	path = courses/learn_i2c
+	url = git@github.com:universal-verification-methodology/learn_i2c.git
+	branch = main
+[submodule "courses/learn_verification_planning_management"]
+	path = courses/learn_verification_planning_management
+	url = git@github.com:universal-verification-methodology/learn_verification_planning_management.git
+	branch = main
+[submodule "courses/learn_verilog"]
+	path = courses/learn_verilog
+	url = git@github.com:universal-verification-methodology/learn_verilog.git
+	branch = main
+[submodule "courses/learn_iverilog"]
+	path = courses/learn_iverilog
+	url = git@github.com:universal-verification-methodology/learn_iverilog.git
+	branch = main
+[submodule "courses/learn_pyuvm"]
+	path = courses/learn_pyuvm
+	url = git@github.com:universal-verification-methodology/learn_pyuvm.git
+	branch = main
+[submodule "courses/learn_python_hw"]
+	path = courses/learn_python_hw
+	url = git@github.com:universal-verification-methodology/learn_python_hw.git
+	branch = main
+[submodule "courses/learn_sv_tb"]
+	path = courses/learn_sv_tb
+	url = git@github.com:universal-verification-methodology/learn_sv_tb.git
+	branch = main
+[submodule "courses/learn_cocotb"]
+	path = courses/learn_cocotb
+	url = git@github.com:universal-verification-methodology/learn_cocotb.git
+	branch = main
+[submodule "courses/learn_formal"]
+	path = courses/learn_formal
+	url = git@github.com:universal-verification-methodology/learn_formal.git
+	branch = main

@@ -1,12 +1,65 @@
-# Module 02 outline
-title: "Compile → elaborate → run"
-kind: lab
-lab: sim-pipeline
+title: The simulation pipeline
+footer: learn_verilator — sim pipeline
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: The simulation pipeline
+  subtitle: 'Every simulator run is a pipeline: compile sources, elaborate the design
+    hierarchy, then execute time'
+  notes: 'Every simulator run is a pipeline: compile sources, elaborate the design
+    hierarchy, then execute time. Icarus and Verilator share that story even when
+    the commands differ. If you cannot name the stage that failed, you will debug
+    the wrong log file.'
+- type: bullets
+  title: Verilator’s compile-to-binary path
+  bullets:
+  - Verilator’s common flow is compile with the C++ emit flag
+  - Elaboration happens inside Verilator’s front end
+  - Status READY in the literacy lab means every stage completed
+  notes: Verilator’s common flow is compile with the C++ emit flag, build the generated
+    model plus your host, then run the binary. Elaboration happens inside Verilator’s
+    front end; the artifact you run is often an executable, not a standalone vvp-style
+    interpreter. Status READY in the literacy lab means every stage completed—not
+    merely “no red text somewhere.”
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Lab starter
+  notes: In the pipeline lab, load the starter and walk compile, elaborate, and run
+    stages for both tool shapes. Drag or click until the pipeline reads ready. Challenges
+    call out missing stages—compile without run, run without elaborate—and ask you
+    to repair the order.
+- type: bullets
+  title: Real Verilator practice
+  bullets:
+  - In Track A, open EXAMPLES and run one minimal Verilator compile that emits C++,
+    then make
+  - Say out loud which log lines belong to compile versus link versus run
+  - If the binary exits immediately, check whether the testbench host actually stepped
+    time
+  notes: In Track A, open EXAMPLES and run one minimal Verilator compile that emits
+    C++, then make and execute the binary. Say out loud which log lines belong to
+    compile versus link versus run. If the binary exits immediately, check whether
+    the testbench host actually stepped time.
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not treat “verilator ran” as “simulation succeeded”, did you build and run
+    the host?
+  - Do not debug waves when compile never finished
+  - Do not compare Icarus and Verilator commands flag-for-flag; compare stages
+  - And remember READY is a whole pipeline, not one green checkbox
+  notes: Do not treat “verilator ran” as “simulation succeeded”—did you build and
+    run the host? Do not debug waves when compile never finished. Do not compare Icarus
+    and Verilator commands flag-for-flag; compare stages. And remember READY is a
+    whole pipeline, not one green checkbox.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser, reach ready on the pipeline diagram
+  - In Track A, run compile, build, and execute once on a tiny design
+  - When you are ready, take the short quiz, then continue to Verilator lint
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    reach ready on the pipeline diagram. In Track A, run compile, build, and execute
+    once on a tiny design. When you are ready, take the short quiz, then continue
+    to Verilator lint.

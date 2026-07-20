@@ -74,7 +74,7 @@ Until you push `video.mp4` / `quiz.json` to the public course repo, jsDelivr/CDN
 | Path | Role |
 |------|------|
 | [`index.html`](index.html) | Home pillars |
-| [`courses/`](courses/index.html) | Course list; **all 14 target courses ready** (guided lab pages from `MODULES.md`) |
+| [`courses/`](courses/index.html) | Course list; **18 target courses ready** (guided lab pages from `MODULES.md`) |
 | [`tools/`](tools/index.html) | Concept lab shelf |
 | [`path/`](path/index.html) | Learning ladder + progress tint |
 | [`simulator/`](simulator/index.html) | HDL Simulator link + `core` datasets placeholder |

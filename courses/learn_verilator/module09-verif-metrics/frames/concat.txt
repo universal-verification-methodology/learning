@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module09-verif-metrics/frames/slide-1.png'
+duration 19.032
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module09-verif-metrics/frames/slide-2.png'
+duration 21.312
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module09-verif-metrics/frames/slide-3.png'
+duration 20.184
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module09-verif-metrics/frames/slide-4.png'
+duration 20.976
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module09-verif-metrics/frames/slide-5.png'
+duration 18.816
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module09-verif-metrics/frames/slide-6.png'
+duration 21.624
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module09-verif-metrics/frames/slide-6.png'

@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module04-dpi-cpp-tb/frames/slide-1.png'
+duration 19.92
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module04-dpi-cpp-tb/frames/slide-2.png'
+duration 25.368
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module04-dpi-cpp-tb/frames/slide-3.png'
+duration 17.904
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module04-dpi-cpp-tb/frames/slide-4.png'
+duration 18.744
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module04-dpi-cpp-tb/frames/slide-5.png'
+duration 23.04
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module04-dpi-cpp-tb/frames/slide-6.png'
+duration 19.56
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module04-dpi-cpp-tb/frames/slide-6.png'

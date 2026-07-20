@@ -1,12 +1,66 @@
-# Module 08 outline
-title: "Verilator public"
-kind: lab
-lab: verilator-public
+title: Exposing signals to C++
+footer: learn_verilator — verilator public
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: Exposing signals to C++
+  subtitle: Not every internal net is visible to your C++ testbench by default
+  notes: Not every internal net is visible to your C++ testbench by default. Module
+    ports are already visible at the boundary. Internal signals stay hidden unless
+    you mark them with the Verilator public comment pragma. The design goal is minimal
+    exposure—only what the host truly needs to check or drive.
+- type: bullets
+  title: Public, hidden, and ports
+  bullets:
+  - Ports are your contract, no pragma required for normal top-level access patterns
+  - Unmarked internals are HIDDEN from the host’s perspective unless you peek via
+    hierarchy
+  - Mark selectively with the public comment when a scoreboard or checker in C++ must
+    read an
+  - More exposure slows compile and couples TB to implementation details
+  notes: Ports are your contract—no pragma required for normal top-level access patterns.
+    Unmarked internals are HIDDEN from the host’s perspective unless you peek via
+    hierarchy tricks you should not rely on in production. Mark selectively with the
+    public comment when a scoreboard or checker in C++ must read an internal register.
+    More exposure slows compile and couples TB to implementation details.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Lab starter
+  notes: In the public visibility lab, load the starter RTL and decide which signals
+    need the public marker for a C++ check. Challenges show over-marked designs—everything
+    public—and under-marked designs where the host cannot see the net under test.
+    Reach ready with minimal marking.
+- type: bullets
+  title: Real Verilator practice
+  bullets:
+  - In Track A, take a tiny module with one internal counter
+  - Run once without public markers and note what the host cannot see
+  - Add a public marker on the one net you must observe, recompile, and confirm access
+  - Remove gratuitous markers before you commit, minimal is the rule
+  notes: In Track A, take a tiny module with one internal counter. Run once without
+    public markers and note what the host cannot see. Add a public marker on the one
+    net you must observe, recompile, and confirm access. Remove gratuitous markers
+    before you commit—minimal is the rule.
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not mark every signal public to avoid thinking about interfaces
+  - Do not assume ports need the pragma, they already belong to the boundary
+  - Do not hide required check signals and then debug blind in C++
+  - And remember recompile is required after marker changes, this is not a runtime
+    poke
+  notes: Do not mark every signal public to avoid thinking about interfaces. Do not
+    assume ports need the pragma—they already belong to the boundary. Do not hide
+    required check signals and then debug blind in C++. And remember recompile is
+    required after marker changes—this is not a runtime poke.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser, pass minimal-marking challenges
+  - In Track A, expose one internal net intentionally and read it from the host
+  - When you are ready, take the short quiz, then continue to verification metrics
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    pass minimal-marking challenges. In Track A, expose one internal net intentionally
+    and read it from the host. When you are ready, take the short quiz, then continue
+    to verification metrics.

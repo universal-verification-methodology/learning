@@ -92,6 +92,16 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `uvm-plusargs` | starter: `+UVM_TESTNAME=base_test +SEED=1` — test selected |
 | `cocotb-triggers` | starter: `await RisingEdge(clk)` fires at t=10 |
 | `cocotb-dut-handle` | starter: `dut.uart.txd` resolves — value `1` |
+| `pytest-assert-lab` | expect `0xA5` == actual → PASS |
+| `stim-as-data` | 4 AND vectors — Apply all PASS |
+| `cocotb-clock-helper` | period 10 → edges 10/20/30 |
+| `cocotb-binary-value` | 8-bit `0xA5` → `10100101` |
+| `cocotb-scoreboard` | expect `0xA5`, observe match → PASS |
+| `assert-assume-cover` | 3 statements correctly tagged |
+| `formal-bmc-bound` | bug@3, k=5 → CEX |
+| `formal-counterexample` | cursor on failing cycle |
+| `formal-induction` | base+step hold → proved sketch |
+| `formal-vacuity` | `a|->b` with a always 0 → vacuous |
 | `python-async-tb` | starter: `@cocotb.test` + `async def` + `await Timer(10)` — DONE |
 | `verif-plan-check` | starter: UART TX → send one byte → `tx_byte_done` — COMPLETE |
 | `feature-matrix` | starter: UART TX/RX × byte/idle/err — no gaps |
@@ -476,7 +486,30 @@ Concept diagrams for `learn_uvm2017` / `learn_uvm2017_sv_verilator` / `learn_uvm
 | Plusargs / CLP | `uvm-plusargs` | **Shipped** | `+UVM_TESTNAME` and test knobs; 22 challenges |
 | cocotb triggers | `cocotb-triggers` | **Shipped** | RisingEdge / Timer / First / Combine; 22 challenges |
 | cocotb DUT handle | `cocotb-dut-handle` | **Shipped** | hierarchical dut.path · .value peek/poke; 22 challenges |
-| Python async TB sketch | `python-async-tb` | **Shipped** | `async def` test + await timeline; 22 challenges |
+| Python async TB sketch | `pytest-assert-lab` | expect `0xA5` == actual → PASS |
+| `stim-as-data` | 4 AND vectors — Apply all PASS |
+| `cocotb-clock-helper` | period 10 → edges 10/20/30 |
+| `cocotb-binary-value` | 8-bit `0xA5` → `10100101` |
+| `cocotb-scoreboard` | expect `0xA5`, observe match → PASS |
+| `assert-assume-cover` | 3 statements correctly tagged |
+| `formal-bmc-bound` | bug@3, k=5 → CEX |
+| `formal-counterexample` | cursor on failing cycle |
+| `formal-induction` | base+step hold → proved sketch |
+| `formal-vacuity` | `a|->b` with a always 0 → vacuous |
+| `python-async-tb` | **Shipped** | `async def` test + await timeline; 22 challenges |
+
+
+## Formal verification (conceptual)
+
+Literacy for `learn_formal`. **Not** a commercial formal engine or SymbiYosys replacement.
+
+| Tool | Path id | Status | What it teaches |
+|------|---------|--------|-----------------|
+| Assert / assume / cover | `assert-assume-cover` | **Shipped** | Property roles; 22 challenges |
+| Formal BMC bound | `formal-bmc-bound` | **Shipped** | Bound k vs bug depth; 22 challenges |
+| Formal counterexample | `formal-counterexample` | **Shipped** | Step a short CEX; 22 challenges |
+| Formal induction sketch | `formal-induction` | **Shipped** | Base + step literacy; 22 challenges |
+| Formal vacuity | `formal-vacuity` | **Shipped** | Vacuous pass intuition; 22 challenges |
 
 ## Verification planning (lightweight)
 
@@ -538,6 +571,7 @@ Do **not** implement these as full browser replacements:
 - Synthesis (Yosys, Vivado, DC) and P&R  
 - Cycle-accurate protocol VIPs and scoreboards  
 - Toolchain installers and CI Make flows  
+- Full formal engines (SymbiYosys / Jasper / VC Formal) and proof databases  
 
 Those stay in course repos and local / WSL environments. Browser tools may ship **concept sketches** (phases, TLM wiring, cover bins as checklists) and **link** to sandboxes or docs.
 
@@ -576,10 +610,14 @@ Courses **link** to domains; they do not own tools. Target syllabi (lab-driven m
 | `learn_iverilog` | **Simulation literacy** (Icarus), waves, self-check TB |
 | `learn_hdl_simulator` | **Browser HDL simulator**, waveforms, TB anatomy, synth/style hints |
 | `learn_pyuvm` | **UVM sketches**, cocotb triggers / DUT handle, Python async TB |
-| `learn_uart` | Protocols (UART+), Specâ†’RTL, TB vs UVM map |
-| `learn_spi` | Protocols (SPI+), Specâ†’RTL, TB vs UVM map |
-| `learn_i2c` | Protocols (IÂ²C+), Specâ†’RTL, TB vs UVM map |
+| `learn_uart` | Protocols (UART+), Spec→RTL, TB vs UVM map |
+| `learn_spi` | Protocols (SPI+), Spec→RTL, TB vs UVM map |
+| `learn_i2c` | Protocols (I²C+), Spec→RTL, TB vs UVM map |
 | `learn_verification_planning_management` | Verification planning, metrics, CI/farm, VIP handoff |
+| `learn_python_hw` | Python async TB, stim-as-data, pytest-assert, file/vector I/O |
+| `learn_sv_tb` | **SV TB sketches**, CRV / cover / SVA timeline, TB vs UVM map |
+| `learn_cocotb` | cocotb triggers / Clock / BinaryValue / scoreboard / DUT, Python async |
+| `learn_formal` | **Formal sketches**, SVA timeline, cover, synth/style; SymbiYosys offline |
 
 Legacy folders (`learn_unix_git`, `learn_digital_verilog`, â€¦) map to the target ids above â€” see syllabus migration table.
 
@@ -605,6 +643,10 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 | `learn_spi` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `protocol-checker` (**shipped**); course scaffolded | — |
 | `learn_i2c` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `vip-anatomy` (**shipped**); course scaffolded | — |
 | `learn_verification_planning_management` | planning shelf + `vip-handoff` / `verif-metrics` (**shipped**); course scaffolded under `courses/learn_verification_planning_management/` | — |
+| `learn_python_hw` | `python-async-tb` / `stim-as-data` / `pytest-assert-lab` / `file-vector-io` (**shipped**); course scaffolded | offline venv / deps |
+| `learn_sv_tb` | SV TB path + `task-vs-function` / `fork-join` (**all shipped**); course scaffolded | — |
+| `learn_cocotb` | cocotb triggers/clock/DUT/BinaryValue/scoreboard + async (**shipped**); course scaffolded | offline cocotb example |
+| `learn_formal` | assert/assume/cover + BMC/CEX/induction/vacuity + SVA/cover/synth (**shipped**); course scaffolded | SymbiYosys offline hello |
 
 Still **offline-only** (see Out of scope): installing toolchains, running course Makefiles, full UVM/CRV/SVA engines, commercial VIP, synthesis/P&R.
 
@@ -614,8 +656,8 @@ Still **offline-only** (see Out of scope): installing toolchains, running course
 
 | Status | Count |
 |--------|------:|
-| Shipped | 202 |
+| Shipped | 212 |
 | Planned | 0 |
-| **Total catalogued** | **202** |
+| **Total catalogued** | **212** |
 
 Update this file when a planned tool ships (status â†’ **Shipped**, path verified under `platform/tools/`).

@@ -1,12 +1,66 @@
-# Module 00 outline
-title: "Welcome to Verilator"
-kind: intro
-lab: null
+title: Welcome to Verilator
+footer: learn_verilator — intro
 slides:
-  - Course context / when Verilator wins
-  - Core idea (1 concept)
-  - Track B: show lab starter if shipped (else diagram)
-  - Track A: real command-line cue
-  - Common pitfalls
-  - Your turn + quiz prompt
-duration_minutes: 8
+- type: title
+  title: Welcome to Verilator
+  subtitle: Welcome to learn Verilator
+  notes: 'Welcome to learn Verilator. This path treats Verilator as a tool you can
+    rely on every day: lint your RTL, wrap it in a C++ or DPI testbench, capture traces,
+    and read verification metrics. You are not here for a full UVM course—that lives
+    elsewhere. You are here to get fast, cycle-accurate simulation working in a real
+    flow.'
+- type: bullets
+  title: What you will build toward
+  bullets:
+  - Glance at pass rate and coverage before sign-off
+  - Module ten is an offline build-and-run capstone; module eleven closes the loop
+  notes: Across the modules you will choose when Verilator beats Icarus, walk the
+    compile-to-run pipeline, clean up lint with intent, host a C++ testbench with
+    an eval loop, generate clock and reset patterns that release cleanly, turn tracing
+    on and dump waves you can actually open, expose only what the host needs, and
+    glance at pass rate and coverage before sign-off. Module ten is an offline build-and-run
+    capstone; module eleven closes the loop.
+- type: bullets
+  title: Two tracks, one idea
+  bullets:
+  - Track A is real Verilator on your machine
+  - Metrics ideas
+  - You may do either track, or both
+  - A good rhythm is browser lab first for the vocabulary, then Track A for fidelity
+  notes: 'Track A is real Verilator on your machine: a C++ toolchain, Makefiles, and
+    examples in the legacy Verilator course tree. Track B is the platform’s simulation
+    literacy labs—browser challenges for chooser, pipeline, lint, trace, and metrics
+    ideas. You may do either track, or both. A good rhythm is browser lab first for
+    the vocabulary, then Track A for fidelity.'
+- type: bullets
+  title: Set up Track A
+  bullets:
+  - Install Verilator and confirm the version command works in your shell
+  - Open this course folder and skim module READMEs and EXAMPLES prompts as you go
+  - When a module offers a self-check script, use it to grade checklist items
+  - Keep the sibling Icarus course in mind, you will compare the two tools early on
+  notes: Install Verilator and confirm the version command works in your shell. Open
+    this course folder and skim module READMEs and EXAMPLES prompts as you go. When
+    a module offers a self-check script, use it to grade checklist items. Keep the
+    sibling Icarus course in mind—you will compare the two tools early on.
+- type: two_column
+  title: Set up Track B
+  left:
+  - From the monorepo root
+  - All nine Verilator browser labs ship on the live site too
+  - Confirm you can reach the index
+  right: assets/tools-index.png
+  notes: From the monorepo root, serve the platform folder with a simple local web
+    server, then open the tools index and jump to the Simulation literacy section.
+    All nine Verilator browser labs ship on the live site too. Confirm you can reach
+    the index—the next module sends you into the Icarus versus Verilator chooser lab.
+- type: bullets
+  title: How to move through modules
+  bullets:
+  - For each module
+  - Prefer Track B when you want graded challenges
+  - When you finish this intro checklist, continue to Icarus versus Verilator
+  notes: For each module, read the README for the outcome, pick a track—or both—then
+    work the checklist. Prefer Track B when you want graded challenges; prefer Track
+    A when you want install fidelity and real VCD or FST files. When you finish this
+    intro checklist, continue to Icarus versus Verilator.

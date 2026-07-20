@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module02-sim-pipeline/frames/slide-1.png'
+duration 16.392
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module02-sim-pipeline/frames/slide-2.png'
+duration 24.12
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module02-sim-pipeline/frames/slide-3.png'
+duration 17.52
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module02-sim-pipeline/frames/slide-4.png'
+duration 19.056
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module02-sim-pipeline/frames/slide-5.png'
+duration 18.864
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module02-sim-pipeline/frames/slide-6.png'
+duration 18.624
+file '/mnt/d/proj/designs/learning/courses/learn_verilator/module02-sim-pipeline/frames/slide-6.png'
