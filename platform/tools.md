@@ -111,6 +111,8 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `iverilog-flags` | starter: `-g2012 -Wall -o sim.vvp +incdir+include tb.v dut.v` — READY |
 | `iverilog-timescale` | starter: `` `timescale 1ns/1ps `` · `#10` → 10 ns — ALIGNED |
 | `vvp-plusargs` | starter: `vvp sim.vvp +SEED=1 +VERBOSE` — READY |
+| `verilator-lint-lab` | starter: `-Wall` on · findings fixed — CLEAN |
+| `verilator-trace` | starter: `--trace` · VCD · open+dump — READY |
 | `i2c-open-drain` | ACK — slave pulls SDA low, master releases |
 | `i2c-clock-stretch` | ACK then SCL held low ×3 — master waits |
 | `i2c-repeated-start` | Sr write-pointer then read @ 0x50 |
@@ -497,8 +499,8 @@ Flow literacy for `learn_iverilog` / `learn_verilator` â€” **not** a browse
 | iverilog flags lab | `iverilog-flags` | **Shipped** | `-g2005`/`-g2012`, `-Wall`, `-o`, `+incdir`; 22 challenges |
 | iverilog timescale | `iverilog-timescale` | **Shipped** | `` `timescale `` vs timeunit pitfalls; 22 challenges |
 | vvp plusargs | `vvp-plusargs` | **Shipped** | `$test$plusargs` / runtime plusargs; 22 challenges |
-| Verilator lint lab | `verilator-lint-lab` | **Planned** | `-Wall` warning teaching (concept) |
-| Verilator trace | `verilator-trace` | **Planned** | `--trace` â†’ VCD/FST roles |
+| Verilator lint lab | `verilator-lint-lab` | **Shipped** | `-Wall` warning teaching (concept); 22 challenges |
+| Verilator trace | `verilator-trace` | **Shipped** | `--trace` → VCD/FST roles; 22 challenges |
 | Verilator public | `verilator-public` | **Planned** | `/*verilator public*/` / hierarchy visibility |
 
 ## Browser HDL simulator (guided)
@@ -588,7 +590,7 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 | `learn_systemverilog` | (labs mostly planned) | `sv-always-procs` â†’ `sv-migration` set |
 | `learn_uvm2017` / `learn_pyuvm` | `tb-anatomy` / `tb-vs-uvm-map` / `tb-layers` / `uvm-phases` / `uvm-factory` / `uvm-configdb` / `uvm-objections` / `uvm-seq-flow` / `uvm-agent` / `uvm-tlm` / `uvm-scoreboard` / `ral-map` / `uvm-reporting` / `uvm-callbacks` / `uvm-vseq` / `uvm-multi-agent` / `protocol-checker` / `vip-anatomy` / `uvm-plusargs` (+ SV TB sketches) **shipped**; offline via legacy | remaining pyuvm/cocotb labs |
 | `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**) | — |
-| `learn_verilator` | offline fidelity via legacy; course scaffolded; `tb-clock-reset` / `sim-pipeline` / `wave-dump` / `dpi-cpp-tb` / `iverilog-vs-verilator` / `verif-metrics` (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | `verilator-lint-lab`, `verilator-trace`, `verilator-public` |
+| `learn_verilator` | offline fidelity via legacy; course scaffolded; sim literacy + lint/trace/metrics labs (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | `verilator-public` |
 | `learn_iverilog` | shipped TB/wave labs + toolchain (`iverilog-flags` / `iverilog-timescale` / `vvp-plusargs`) + `sim-pipeline` / `wave-dump` / `self-check-tb` (**shipped**); course scaffolded; offline module 11 | — |
 | `learn_hdl_simulator` | waveform-lab, tb-anatomy, synth/style | **`hdl-sim-*` guided set** + public simulator now |
 | `learn_uart` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `tb-clock-reset` / `vip-anatomy` (**shipped**); course scaffolded | — |
@@ -604,8 +606,8 @@ Still **offline-only** (see Out of scope): installing toolchains, running course
 
 | Status | Count |
 |--------|------:|
-| Shipped | 192 |
-| Planned | 10 |
+| Shipped | 194 |
+| Planned | 8 |
 | **Total catalogued** | **202** |
 
 Update this file when a planned tool ships (status â†’ **Shipped**, path verified under `platform/tools/`).

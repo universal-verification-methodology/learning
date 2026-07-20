@@ -370,10 +370,10 @@ courses/<course_id>/
 | 00 | intro | Welcome to Verilator | When to use it |
 | 01 | lab | iverilog vs Verilator | `iverilog-vs-verilator` |
 | 02 | lab | Compile → elaborate → run | `sim-pipeline` |
-| 03 | lab | Verilator lint | `verilator-lint-lab` **(P)** |
+| 03 | lab | Verilator lint | `verilator-lint-lab` |
 | 04 | lab | C++ TB / DPI sketch | `dpi-cpp-tb` |
 | 05 | lab | TB clock + reset patterns | `tb-clock-reset` |
-| 06 | lab | Verilator trace | `verilator-trace` **(P)** |
+| 06 | lab | Verilator trace | `verilator-trace` |
 | 07 | lab | Wave dump literacy | `wave-dump` |
 | 08 | lab | Verilator public | `verilator-public` **(P)** |
 | 09 | lab | Verification metrics | `verif-metrics` |
