@@ -25,9 +25,24 @@
     const mode = String(cfg.mediaSource || "cdn").toLowerCase();
     if (mode === "local") return true;
     if (mode === "cdn") return false;
-    // "auto" (default for local authoring): localhost only
+    // "auto": localhost only — falls back to CDN if course-media is missing
     const h = (location && location.hostname) || "";
     return h === "localhost" || h === "127.0.0.1" || h === "[::1]";
+  }
+
+  function cdnFileUrl(cfg, org, repo, branch, dir, file) {
+    const cdn = (cfg.mediaCdn || "jsdelivr").toLowerCase();
+    if (cdn === "raw") {
+      return `https://raw.githubusercontent.com/${org}/${repo}/${branch}/${dir}/${file}`;
+    }
+    return `https://cdn.jsdelivr.net/gh/${org}/${repo}@${branch}/${dir}/${file}`;
+  }
+
+  function localFileUrl(repo, dir, file) {
+    const depth = document.querySelector("[data-asset-base]");
+    const assetBase = (depth && depth.getAttribute("data-asset-base")) || "../../assets/";
+    const prefix = String(assetBase).replace(/assets\/?$/, "course-media/");
+    return `${prefix}${repo}/${dir}/${file}`;
   }
 
   /** Media URLs from org course repos (video.mp4, slides.pptx, …). */
@@ -38,22 +53,19 @@
     const repo = (course && course.repo) || (course && course.id) || "";
     const dir = moduleDir(lab);
     const local = useLocalMedia(cfg);
-    const cdn = (cfg.mediaCdn || "jsdelivr").toLowerCase();
-    const fileUrl = (file) => {
-      if (local && repo) {
-        // Served from platform/course-media/<repo> → ../../courses/<repo>
-        // (create with: python platform/scripts/link_course_media.py)
-        const depth = document.querySelector("[data-asset-base]");
-        const assetBase = (depth && depth.getAttribute("data-asset-base")) || "../../assets/";
-        // asset-base is N×../assets/ ; course-media sits beside assets under platform/
-        const prefix = String(assetBase).replace(/assets\/?$/, "course-media/");
-        return `${prefix}${repo}/${dir}/${file}`;
-      }
-      if (cdn === "raw") {
-        return `https://raw.githubusercontent.com/${org}/${repo}/${branch}/${dir}/${file}`;
-      }
-      return `https://cdn.jsdelivr.net/gh/${org}/${repo}@${branch}/${dir}/${file}`;
+    const fileUrls = (file) => {
+      const cdn = cdnFileUrl(cfg, org, repo, branch, dir, file);
+      const loc = repo ? localFileUrl(repo, dir, file) : cdn;
+      return {
+        primary: local && repo ? loc : cdn,
+        fallbacks: local && repo ? [cdn] : [],
+      };
     };
+    const video = fileUrls("video.mp4");
+    const slidesPptx = fileUrls("slides.pptx");
+    const slidesPdf = fileUrls("slides.pdf");
+    const quiz = fileUrls("quiz.json");
+    const transcript = fileUrls("transcript.md");
     return {
       org,
       repo,
@@ -62,11 +74,13 @@
       local,
       moduleGithub: `https://github.com/${org}/${repo}/tree/${branch}/${dir}`,
       repoGithub: `https://github.com/${org}/${repo}`,
-      video: fileUrl("video.mp4"),
-      slidesPptx: fileUrl("slides.pptx"),
-      slidesPdf: fileUrl("slides.pdf"),
-      quiz: fileUrl("quiz.json"),
-      transcript: fileUrl("transcript.md"),
+      video: video.primary,
+      videoFallbacks: video.fallbacks,
+      slidesPptx: slidesPptx.primary,
+      slidesPdf: slidesPdf.primary,
+      quiz: quiz.primary,
+      quizFallbacks: quiz.fallbacks,
+      transcript: transcript.primary,
     };
   }
 
@@ -98,7 +112,7 @@
              </div>
              <p class="progress-meta">${stats.done} of ${stats.total} labs marked done (${stats.pct}%)
                · <button type="button" class="btn-link" data-reset-course="${courseId}">Reset progress</button></p>`
-          : `<p class="progress-meta">Lab list placeholder — progress unlocks when labs ship.</p>`;
+          : `<p class="progress-meta">No labs listed yet.</p>`;
         const reset = progressEl.querySelector("[data-reset-course]");
         if (reset) {
           reset.addEventListener("click", () => {
@@ -216,14 +230,9 @@
 
         <section class="video-panel" aria-label="Lab video">
           <div class="video-wrap">
-            <video controls preload="metadata" playsinline>
+            <video controls preload="metadata" playsinline data-video-primary="${escape(media.video)}" data-video-fallbacks="${escape((media.videoFallbacks || []).join("|"))}">
               <source src="${escape(media.video)}" type="video/mp4">
             </video>
-            <div class="video-placeholder" hidden>
-              Video not available yet in
-              <a href="${escape(media.moduleGithub)}" rel="noopener"><code>${escape(media.dir)}/video.mp4</code></a>.
-              Download the PPTX/PDF or open the tool to continue.
-            </div>
           </div>
         </section>
 
@@ -240,9 +249,9 @@
           <li>Mark the lab done when you are satisfied (saved in this browser only).</li>
         </ol>
 
-        <div id="quiz" class="placeholder-panel">
+        <div id="quiz" class="quiz-section" hidden>
           <h2>Quiz</h2>
-          <p>Loading quiz from <code>quiz.json</code>…</p>
+          <p class="lead">Loading…</p>
         </div>
 
         <p class="lead" style="margin-top:1.5rem">
@@ -260,26 +269,42 @@
         });
       }
 
-      const video = root.querySelector("video");
-      const ph = root.querySelector(".video-placeholder");
-      if (video && ph) {
-        video.addEventListener("error", () => {
-          video.style.display = "none";
-          ph.hidden = false;
-        });
-        video.style.display = "";
-        ph.hidden = true;
-      }
+      wireLabVideo(root.querySelector("video"));
 
       const nextHref = next ? `../${next.slug}/index.html` : "../../index.html";
       const nextLabel = next ? "Next lab →" : "Course map →";
-      loadAndMountQuiz(media.quiz, root.querySelector("#quiz"), {
-        nextHref,
-        nextLabel,
-        onPass: () => {
-          D.setLabDone(courseId, slug, true);
-        },
-      });
+      loadAndMountQuiz(
+        [media.quiz].concat(media.quizFallbacks || []),
+        root.querySelector("#quiz"),
+        {
+          nextHref,
+          nextLabel,
+          onPass: () => {
+            D.setLabDone(courseId, slug, true);
+          },
+        }
+      );
+    });
+  }
+
+  function wireLabVideo(video) {
+    if (!video) return;
+    const panel = video.closest(".video-panel");
+    const fallbacks = String(video.getAttribute("data-video-fallbacks") || "")
+      .split("|")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    let fi = 0;
+    video.addEventListener("error", () => {
+      if (fi < fallbacks.length) {
+        const next = fallbacks[fi++];
+        const source = video.querySelector("source");
+        if (source) source.src = next;
+        video.src = next;
+        video.load();
+        return;
+      }
+      if (panel) panel.hidden = true;
     });
   }
 
@@ -317,24 +342,30 @@
     return quiz;
   }
 
-  function loadAndMountQuiz(quizUrl, quizRoot, opts) {
-    if (!quizRoot) return;
-    ensureQuizScript()
-      .then(() => fetch(quizUrl, { cache: "no-cache" }))
-      .then((r) => {
+  function fetchJsonFirst(urls) {
+    const list = (urls || []).filter(Boolean);
+    const tryAt = (i) => {
+      if (i >= list.length) return Promise.reject(new Error("all urls failed"));
+      return fetch(list[i], { cache: "no-cache" }).then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
-      })
+      }).catch(() => tryAt(i + 1));
+    };
+    return tryAt(0);
+  }
+
+  function loadAndMountQuiz(quizUrls, quizRoot, opts) {
+    if (!quizRoot) return;
+    ensureQuizScript()
+      .then(() => fetchJsonFirst(Array.isArray(quizUrls) ? quizUrls : [quizUrls]))
       .then((quiz) => {
+        quizRoot.hidden = false;
         window.DDVQuiz.mount(quizRoot, normalizeQuiz(quiz), opts);
       })
       .catch(() => {
-        quizRoot.className = "placeholder-panel";
-        quizRoot.innerHTML = `
-          <h2>Quiz</h2>
-          <p>Quiz not available yet. When <code>quiz.json</code> is published in the module folder,
-          it will load here automatically.</p>
-          <p><a href="${String(quizUrl).replace(/"/g, "&quot;")}" rel="noopener">Open quiz.json URL</a></p>`;
+        // Courses ship quiz.json with modules — hide quietly if missing.
+        quizRoot.hidden = true;
+        quizRoot.innerHTML = "";
       });
   }
 

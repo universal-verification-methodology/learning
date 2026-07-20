@@ -63,8 +63,8 @@ Configure org / branch / CDN in [`assets/site-config.js`](assets/site-config.js)
 
 ```bash
 python platform/scripts/link_course_media.py          # or: … learn_spi
-# mediaSource: "auto" in site-config.js → on localhost, lab pages load
-# /course-media/<repo>/moduleNN-slug/video.mp4 (junction into courses/)
+# Creates relative symlinks: platform/course-media/<repo> -> ../../courses/<repo>
+# mediaSource: "local" or "auto" → lab pages load /course-media/… on localhost
 ```
 
 Until you push `video.mp4` / `quiz.json` to the public course repo, jsDelivr/CDN links 404 — that is expected.

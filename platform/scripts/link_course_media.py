@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Link courses/<repo> into platform/course-media/<repo> for local lab-page media.
 
-Lab pages on localhost load video/slides/quiz from /course-media/<repo>/…
-(see assets/site-config.js mediaSource: \"auto\"). Production Pages still uses CDN.
+Uses **relative** symlink targets (../../courses/<repo>) so links work on any
+machine after clone. Lab pages can load video/slides/quiz from /course-media/
+when mediaSource is \"local\" or \"auto\". Production Pages uses CDN.
 
 Usage (from monorepo root):
   python platform/scripts/link_course_media.py
@@ -20,32 +21,55 @@ COURSES = ROOT / "courses"
 MEDIA = ROOT / "platform" / "course-media"
 
 
-def link_one(repo: str) -> bool:
+def relative_target(repo: str) -> str:
+    """Target string stored in the symlink (relative to platform/course-media/)."""
+    return os.path.join("..", "..", "courses", repo)
+
+
+def link_one(repo: str, *, force: bool = False) -> bool:
     src = COURSES / repo
     dst = MEDIA / repo
+    rel = relative_target(repo)
     if not src.is_dir():
         print(f"SKIP {repo}: missing {src}", file=sys.stderr)
         return False
     MEDIA.mkdir(parents=True, exist_ok=True)
+
     if dst.is_symlink() or dst.exists():
-        if dst.resolve() == src.resolve():
-            print(f"OK   {repo}: already linked")
+        same_resolved = False
+        try:
+            same_resolved = dst.resolve() == src.resolve()
+        except OSError:
+            same_resolved = False
+        current = os.readlink(dst) if dst.is_symlink() else None
+        # Normalize separators for comparison
+        current_norm = current.replace("\\", "/") if current else None
+        rel_norm = rel.replace("\\", "/")
+        if (
+            not force
+            and same_resolved
+            and current_norm == rel_norm
+        ):
+            print(f"OK   {repo}: already linked ({rel_norm})")
             return True
-        if dst.is_symlink() or dst.is_dir():
-            # Replace stale link / empty dir
-            if dst.is_symlink():
-                dst.unlink()
-            elif not any(dst.iterdir()):
-                dst.rmdir()
-            else:
+        if dst.is_symlink():
+            dst.unlink()
+        elif dst.is_dir():
+            if any(dst.iterdir()):
                 print(f"FAIL {repo}: {dst} exists and is not empty", file=sys.stderr)
                 return False
+            dst.rmdir()
+        else:
+            print(f"FAIL {repo}: {dst} exists and is not a link/dir", file=sys.stderr)
+            return False
+
     try:
-        os.symlink(src, dst, target_is_directory=True)
-        print(f"OK   {repo}: symlink -> {src}")
+        # Relative target so the link is portable across machines/checkouts.
+        os.symlink(rel, dst, target_is_directory=True)
+        print(f"OK   {repo}: symlink -> {rel}")
         return True
     except OSError:
-        # Windows without symlink privilege: directory junction
+        # Windows without symlink privilege: directory junction (absolute only).
         if os.name == "nt":
             import subprocess
 
@@ -55,7 +79,11 @@ def link_one(repo: str) -> bool:
                 text=True,
             )
             if r.returncode == 0:
-                print(f"OK   {repo}: junction -> {src}")
+                print(
+                    f"OK   {repo}: junction -> {src} "
+                    f"(absolute; prefer Developer Mode for relative symlinks)",
+                    file=sys.stderr,
+                )
                 return True
             print(f"FAIL {repo}: {r.stderr or r.stdout}", file=sys.stderr)
             return False
@@ -70,13 +98,18 @@ def main() -> int:
         nargs="*",
         help="Course folder names under courses/ (default: all learn_*)",
     )
+    ap.add_argument(
+        "--force",
+        action="store_true",
+        help="Recreate links even if they already resolve correctly",
+    )
     args = ap.parse_args()
     repos = args.repos
     if not repos:
         repos = sorted(p.name for p in COURSES.glob("learn_*") if p.is_dir())
     ok = 0
     for repo in repos:
-        if link_one(repo):
+        if link_one(repo, force=args.force):
             ok += 1
     print(f"Linked {ok}/{len(repos)} -> {MEDIA}")
     return 0 if ok == len(repos) else 1

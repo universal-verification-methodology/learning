@@ -26,13 +26,14 @@
   function mount(root, quiz, opts) {
     if (!root || !quiz || !Array.isArray(quiz.items) || !quiz.items.length) {
       if (root) {
-        root.innerHTML =
-          '<div class="placeholder-panel"><h2>Quiz</h2><p>No quiz items in this module yet.</p></div>';
+        root.hidden = true;
+        root.innerHTML = "";
       }
       return;
     }
 
     opts = opts || {};
+    root.hidden = false;
     const passing = quiz.passing_score != null ? quiz.passing_score : 0.67;
     const results = {};
     const nextHref = opts.nextHref || "";
