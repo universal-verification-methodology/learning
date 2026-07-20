@@ -1,5 +1,5 @@
 /**
- * Platform shell: GA4 bootstrap, progress, search, path/course helpers, Web3Forms.
+ * Platform shell: GA4 bootstrap, progress, search, path/course helpers, feedback forms.
  */
 (() => {
   const cfg = window.SITE_CONFIG || {};
@@ -239,59 +239,43 @@
       .replace(/"/g, "&quot;");
   }
 
-  /* ---------- Web3Forms ---------- */
-  function wireWeb3Forms() {
-    const key = (cfg.web3formsAccessKey || "").trim();
-    const setup = document.querySelectorAll("[data-web3forms-setup]");
-    const forms = document.querySelectorAll("form[data-web3forms]");
+  function wireFeedbackForms() {
+    const base = (cfg.feedbackIssuesUrl || "").trim();
+    if (!base) return;
 
-    if (!key) {
-      setup.forEach((el) => {
-        el.hidden = false;
-      });
-      forms.forEach((form) => {
-        form.querySelectorAll("button[type=submit], input[type=submit]").forEach((btn) => {
-          btn.disabled = true;
-          btn.title = "Add web3formsAccessKey in assets/site-config.js";
-        });
-      });
-      return;
-    }
-
-    setup.forEach((el) => {
-      el.hidden = true;
-    });
-
-    forms.forEach((form) => {
-      form.addEventListener("submit", async (e) => {
+    document.querySelectorAll("form[data-feedback-form]").forEach((form) => {
+      form.addEventListener("submit", (e) => {
         e.preventDefault();
-        const status = form.querySelector(".comm-status");
         const fd = new FormData(form);
-        fd.set("access_key", key);
+        const formType = fd.get("form_type") || "feedback";
+        const title =
+          formType === "testimonial"
+            ? `[Testimonial] ${fd.get("name") || "Reader"}`
+            : `[Feedback] ${fd.get("tool") || "general"}`;
+        const lines = [];
+        if (formType === "feedback") {
+          lines.push(`Area: ${fd.get("tool") || ""}`);
+          lines.push(`Type: ${fd.get("feedback_type") || ""}`);
+        } else if (fd.get("role")) {
+          lines.push(`Role: ${fd.get("role")}`);
+        }
+        if (fd.get("name")) lines.push(`Name: ${fd.get("name")}`);
+        if (fd.get("email")) lines.push(`Email: ${fd.get("email")}`);
+        lines.push("");
+        lines.push(fd.get("message") || "");
+
+        const url = new URL(base);
+        url.searchParams.set("title", title);
+        url.searchParams.set("body", lines.join("\n"));
+        window.open(url.toString(), "_blank", "noopener");
+
+        const status = form.querySelector(".comm-status");
         if (status) {
           status.hidden = false;
-          status.textContent = "Sending…";
-          status.className = "comm-status is-pending";
+          status.textContent = "Opening GitHub to submit your message.";
+          status.className = "comm-status is-ok";
         }
-        try {
-          const res = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: fd,
-          });
-          const data = await res.json();
-          if (!res.ok || data.success === false) throw new Error(data.message || "Send failed");
-          if (status) {
-            status.textContent = "Thanks — message sent.";
-            status.className = "comm-status is-ok";
-          }
-          form.reset();
-          gtagEvent("community_feedback", { form_type: fd.get("form_type") || "feedback" });
-        } catch (err) {
-          if (status) {
-            status.textContent = err.message || "Could not send. Try again later.";
-            status.className = "comm-status is-err";
-          }
-        }
+        gtagEvent("community_feedback", { form_type: formType });
       });
     });
   }
@@ -314,9 +298,19 @@
     });
   }
 
+  /* ---------- Simulator ---------- */
+  function wireSimulatorLinks() {
+    const url = (cfg.simulatorUrl || "").trim();
+    if (!url) return;
+    document.querySelectorAll('a[href$="simulator/index.html"]').forEach((a) => {
+      a.href = url;
+    });
+  }
+
   /* ---------- Boot ---------- */
   initGa4();
   mountSearch();
-  wireWeb3Forms();
+  wireFeedbackForms();
   wireVideos();
+  wireSimulatorLinks();
 })();

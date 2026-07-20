@@ -9,7 +9,7 @@
 
 Static companion site for the learning monorepo: **courses (lab paths)**, **tools shelf**, **path map**, **simulator**, **projects** (placeholder), and **community**. Progress and search are client-side. Real simulators and remotes stay in course repos / sandboxes.
 
-**Author setup (GA4 + Web3Forms):** [`SETUP.md`](SETUP.md)
+**Author setup (GA4):** [`SETUP.md`](SETUP.md)
 
 ## Table of contents
 
@@ -62,16 +62,21 @@ Configure org / branch / CDN in [`assets/site-config.js`](assets/site-config.js)
 | Path | Role |
 |------|------|
 | [`index.html`](index.html) | Home pillars |
-| [`courses/`](courses/index.html) | Course list; [`learn_unix`](courses/learn_unix/index.html) has full **lab** pages |
+| [`courses/`](courses/index.html) | Course list; **learn_unix**, **learn_git**, **learn_digital** have guided lab pages |
 | [`tools/`](tools/index.html) | Concept lab shelf |
 | [`path/`](path/index.html) | Learning ladder + progress tint |
 | [`simulator/`](simulator/index.html) | HDL Simulator link + `core` datasets placeholder |
 | [`projects/`](projects/index.html) | Placeholder |
-| [`community/`](community/index.html) | Stories + Web3Forms feedback |
+| [`community/`](community/index.html) | Stories + GitHub feedback |
 | [`assets/catalog.json`](assets/catalog.json) | Courses / labs / search index |
-| [`assets/site-config.js`](assets/site-config.js) | GA4 + Web3Forms keys |
+| [`assets/site-config.js`](assets/site-config.js) | GA4 + feedback issue URL |
 
-Regenerate Unix lab HTML stubs: `python platform/scripts/generate_lab_pages.py`
+Regenerate course catalog from `MODULES.md` and lab HTML:
+
+```bash
+python platform/scripts/sync_course_catalog.py
+python platform/scripts/generate_lab_pages.py
+```
 
 ## Tool map (shipped)
 

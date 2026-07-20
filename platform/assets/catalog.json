@@ -101,7 +101,7 @@
     {
       "id": "learn_unix",
       "title": "Unix for design",
-      "focus": "Shell \u2192 scripts \u2192 project hygiene",
+      "focus": "Shell → scripts → project hygiene",
       "prereq": null,
       "status": "ready",
       "repo": "learn_unix",
@@ -334,7 +334,7 @@
           "n": "28",
           "slug": "wrap",
           "kind": "wrap",
-          "title": "Unix path complete \u2192 Git",
+          "title": "Unix path complete → Git",
           "toolId": null,
           "status": "shipped"
         }
@@ -343,19 +343,613 @@
     {
       "id": "learn_git",
       "title": "Git for coursework",
-      "focus": "Model \u2192 commit \u2192 branch \u2192 remotes \u2192 deliver",
+      "focus": "Model → commit → branch → remotes → deliver",
       "prereq": "learn_unix recommended",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to Git for coursework",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "git-mental-model",
+          "kind": "lab",
+          "title": "Git mental model",
+          "toolId": "git-mental-model",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "git-graph",
+          "kind": "lab",
+          "title": "Graph, stage, commit (playground)",
+          "toolId": "git-graph",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "gitignore-lab",
+          "kind": "lab",
+          "title": ".gitignore patterns",
+          "toolId": "gitignore-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "commit-message-lab",
+          "kind": "lab",
+          "title": "Commit messages",
+          "toolId": "commit-message-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "git-log-lab",
+          "kind": "lab",
+          "title": "git log options",
+          "toolId": "git-log-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "git-undo-safe",
+          "kind": "lab",
+          "title": "Safe undo",
+          "toolId": "git-undo-safe",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "git-stash-lab",
+          "kind": "lab",
+          "title": "Stash scenarios",
+          "toolId": "git-stash-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "git-tags-lab",
+          "kind": "lab",
+          "title": "Tags",
+          "toolId": "git-tags-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "branch-strategy",
+          "kind": "lab",
+          "title": "Branch naming",
+          "toolId": "branch-strategy",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "git-conflicts",
+          "kind": "lab",
+          "title": "Merge conflicts",
+          "toolId": "git-conflicts",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "git-rebase-merge",
+          "kind": "lab",
+          "title": "Rebase vs merge",
+          "toolId": "git-rebase-merge",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "git-cherry-pick-lab",
+          "kind": "lab",
+          "title": "Cherry-pick",
+          "toolId": "git-cherry-pick-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "git-reflog",
+          "kind": "lab",
+          "title": "Reflog recovery",
+          "toolId": "git-reflog",
+          "status": "shipped"
+        },
+        {
+          "n": "14",
+          "slug": "blame-bisect",
+          "kind": "lab",
+          "title": "Blame & bisect",
+          "toolId": "blame-bisect",
+          "status": "shipped"
+        },
+        {
+          "n": "15",
+          "slug": "remotes",
+          "kind": "lab",
+          "title": "Remotes, PRs & submodules (concepts)",
+          "toolId": "remotes",
+          "status": "shipped"
+        },
+        {
+          "n": "16",
+          "slug": "remote-tracking",
+          "kind": "lab",
+          "title": "Remote-tracking branches",
+          "toolId": "remote-tracking",
+          "status": "shipped"
+        },
+        {
+          "n": "17",
+          "slug": "pr-review-lab",
+          "kind": "lab",
+          "title": "PR review checklist",
+          "toolId": "pr-review-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "18",
+          "slug": "submodule-pitfalls",
+          "kind": "lab",
+          "title": "Submodule pitfalls",
+          "toolId": "submodule-pitfalls",
+          "status": "shipped"
+        },
+        {
+          "n": "19",
+          "slug": "template-clone",
+          "kind": "lab",
+          "title": "Template-repo bootstrap",
+          "toolId": "template-clone",
+          "status": "shipped"
+        },
+        {
+          "n": "20",
+          "slug": "submission-repro",
+          "kind": "lab",
+          "title": "Submission reproducibility",
+          "toolId": "submission-repro",
+          "status": "shipped"
+        },
+        {
+          "n": "21",
+          "slug": "sandbox",
+          "kind": "offline",
+          "title": "Live sandbox: clone → Make → PR",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "22",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Git path complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_git"
     },
     {
       "id": "learn_digital",
       "title": "Digital foundations",
-      "focus": "Logic & datapath concepts",
+      "focus": "Number systems → logic → FSM → datapath → memory",
       "prereq": null,
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to digital foundations",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "radix-converter",
+          "kind": "lab",
+          "title": "Radix & bit width",
+          "toolId": "radix-converter",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "twos-complement",
+          "kind": "lab",
+          "title": "Two’s complement",
+          "toolId": "twos-complement",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "overflow-wrap",
+          "kind": "lab",
+          "title": "Overflow / wrap",
+          "toolId": "overflow-wrap",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "ascii-hex",
+          "kind": "lab",
+          "title": "ASCII / hex dump",
+          "toolId": "ascii-hex",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "gray-code",
+          "kind": "lab",
+          "title": "Gray code",
+          "toolId": "gray-code",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "bcd-lab",
+          "kind": "lab",
+          "title": "BCD",
+          "toolId": "bcd-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "parity-checksum",
+          "kind": "lab",
+          "title": "Parity / checksum",
+          "toolId": "parity-checksum",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "fixed-point",
+          "kind": "lab",
+          "title": "Fixed-point Qm.n",
+          "toolId": "fixed-point",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "bit-fields",
+          "kind": "lab",
+          "title": "Bit-fields",
+          "toolId": "bit-fields",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "endian-lab",
+          "kind": "lab",
+          "title": "Endian packing",
+          "toolId": "endian-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "truth-table",
+          "kind": "lab",
+          "title": "Truth tables",
+          "toolId": "truth-table",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "boolean-laws",
+          "kind": "lab",
+          "title": "Boolean laws",
+          "toolId": "boolean-laws",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "kmap",
+          "kind": "lab",
+          "title": "K-maps",
+          "toolId": "kmap",
+          "status": "shipped"
+        },
+        {
+          "n": "14",
+          "slug": "sop-pos",
+          "kind": "lab",
+          "title": "SOP ↔ POS",
+          "toolId": "sop-pos",
+          "status": "shipped"
+        },
+        {
+          "n": "15",
+          "slug": "dont-care-lab",
+          "kind": "lab",
+          "title": "Don’t-care minimization",
+          "toolId": "dont-care-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "16",
+          "slug": "logic-hazards",
+          "kind": "lab",
+          "title": "Logic hazards",
+          "toolId": "logic-hazards",
+          "status": "shipped"
+        },
+        {
+          "n": "17",
+          "slug": "gate-composer",
+          "kind": "lab",
+          "title": "Gate composer",
+          "toolId": "gate-composer",
+          "status": "shipped"
+        },
+        {
+          "n": "18",
+          "slug": "mux-decoder",
+          "kind": "lab",
+          "title": "Mux / decoder / encoder",
+          "toolId": "mux-decoder",
+          "status": "shipped"
+        },
+        {
+          "n": "19",
+          "slug": "priority-compare",
+          "kind": "lab",
+          "title": "Priority & compare",
+          "toolId": "priority-compare",
+          "status": "shipped"
+        },
+        {
+          "n": "20",
+          "slug": "half-full-adder",
+          "kind": "lab",
+          "title": "Half / full adder",
+          "toolId": "half-full-adder",
+          "status": "shipped"
+        },
+        {
+          "n": "21",
+          "slug": "xor-parity-tree",
+          "kind": "lab",
+          "title": "XOR parity tree",
+          "toolId": "xor-parity-tree",
+          "status": "shipped"
+        },
+        {
+          "n": "22",
+          "slug": "tri-state-bus",
+          "kind": "lab",
+          "title": "Tri-state / bus",
+          "toolId": "tri-state-bus",
+          "status": "shipped"
+        },
+        {
+          "n": "23",
+          "slug": "barrel-shifter",
+          "kind": "lab",
+          "title": "Barrel shifter",
+          "toolId": "barrel-shifter",
+          "status": "shipped"
+        },
+        {
+          "n": "24",
+          "slug": "seven-segment",
+          "kind": "lab",
+          "title": "Seven-segment",
+          "toolId": "seven-segment",
+          "status": "shipped"
+        },
+        {
+          "n": "25",
+          "slug": "clock-stepper",
+          "kind": "lab",
+          "title": "Clock-edge stepper",
+          "toolId": "clock-stepper",
+          "status": "shipped"
+        },
+        {
+          "n": "26",
+          "slug": "setup-hold",
+          "kind": "lab",
+          "title": "Setup / hold",
+          "toolId": "setup-hold",
+          "status": "shipped"
+        },
+        {
+          "n": "27",
+          "slug": "reset-timelines",
+          "kind": "lab",
+          "title": "Reset timelines",
+          "toolId": "reset-timelines",
+          "status": "shipped"
+        },
+        {
+          "n": "28",
+          "slug": "clock-enable",
+          "kind": "lab",
+          "title": "Clock enable vs gated clock",
+          "toolId": "clock-enable",
+          "status": "shipped"
+        },
+        {
+          "n": "29",
+          "slug": "cdc-sync",
+          "kind": "lab",
+          "title": "CDC / 2-FF sync",
+          "toolId": "cdc-sync",
+          "status": "shipped"
+        },
+        {
+          "n": "30",
+          "slug": "fsm-lab",
+          "kind": "lab",
+          "title": "FSM designer",
+          "toolId": "fsm-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "31",
+          "slug": "state-encoding",
+          "kind": "lab",
+          "title": "State encoding",
+          "toolId": "state-encoding",
+          "status": "shipped"
+        },
+        {
+          "n": "32",
+          "slug": "seq-detector",
+          "kind": "lab",
+          "title": "Sequence detector",
+          "toolId": "seq-detector",
+          "status": "shipped"
+        },
+        {
+          "n": "33",
+          "slug": "ring-johnson",
+          "kind": "lab",
+          "title": "Ring / Johnson",
+          "toolId": "ring-johnson",
+          "status": "shipped"
+        },
+        {
+          "n": "34",
+          "slug": "lfsr-lab",
+          "kind": "lab",
+          "title": "LFSR / PRBS",
+          "toolId": "lfsr-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "35",
+          "slug": "ripple-carry-adder-animator",
+          "kind": "lab",
+          "title": "Ripple-carry adder",
+          "toolId": "ripple-carry-adder-animator",
+          "status": "shipped"
+        },
+        {
+          "n": "36",
+          "slug": "carry-look-ahead-adder-propagate-and-generate",
+          "kind": "lab",
+          "title": "Carry-lookahead G/P",
+          "toolId": "carry-look-ahead-adder-propagate-and-generate",
+          "status": "shipped"
+        },
+        {
+          "n": "37",
+          "slug": "array-mult",
+          "kind": "lab",
+          "title": "Array multiplier",
+          "toolId": "array-mult",
+          "status": "shipped"
+        },
+        {
+          "n": "38",
+          "slug": "alu-explorer",
+          "kind": "lab",
+          "title": "ALU explorer",
+          "toolId": "alu-explorer",
+          "status": "shipped"
+        },
+        {
+          "n": "39",
+          "slug": "carry-select-adder",
+          "kind": "lab",
+          "title": "Carry-select sketch",
+          "toolId": "carry-select-adder",
+          "status": "shipped"
+        },
+        {
+          "n": "40",
+          "slug": "booth-encode",
+          "kind": "lab",
+          "title": "Booth encode",
+          "toolId": "booth-encode",
+          "status": "shipped"
+        },
+        {
+          "n": "41",
+          "slug": "signed-arith",
+          "kind": "lab",
+          "title": "Signed arithmetic",
+          "toolId": "signed-arith",
+          "status": "shipped"
+        },
+        {
+          "n": "42",
+          "slug": "mem-map",
+          "kind": "lab",
+          "title": "RAM / ROM map",
+          "toolId": "mem-map",
+          "status": "shipped"
+        },
+        {
+          "n": "43",
+          "slug": "fifo-lab",
+          "kind": "lab",
+          "title": "FIFO pointers",
+          "toolId": "fifo-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "44",
+          "slug": "cache-walk",
+          "kind": "lab",
+          "title": "Cache walk",
+          "toolId": "cache-walk",
+          "status": "shipped"
+        },
+        {
+          "n": "45",
+          "slug": "dual-port-ram",
+          "kind": "lab",
+          "title": "Dual-port RAM",
+          "toolId": "dual-port-ram",
+          "status": "shipped"
+        },
+        {
+          "n": "46",
+          "slug": "byte-enable-mem",
+          "kind": "lab",
+          "title": "Byte-enable memory",
+          "toolId": "byte-enable-mem",
+          "status": "shipped"
+        },
+        {
+          "n": "47",
+          "slug": "async-fifo",
+          "kind": "lab",
+          "title": "Async FIFO (Gray)",
+          "toolId": "async-fifo",
+          "status": "shipped"
+        },
+        {
+          "n": "48",
+          "slug": "handshake",
+          "kind": "lab",
+          "title": "Handshake (valid/ready)",
+          "toolId": "handshake",
+          "status": "shipped"
+        },
+        {
+          "n": "49",
+          "slug": "block-diagram",
+          "kind": "lab",
+          "title": "Block-diagram integrator",
+          "toolId": "block-diagram",
+          "status": "shipped"
+        },
+        {
+          "n": "50",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Digital complete → Verilog",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_digital"
     },
     {
@@ -415,7 +1009,7 @@
     {
       "id": "learn_pyuvm",
       "title": "pyuvm",
-      "focus": "cocotb \u2192 pyuvm",
+      "focus": "cocotb → pyuvm",
       "prereq": "Python + Verilog + sim",
       "status": "placeholder",
       "labs": [],
@@ -424,7 +1018,7 @@
     {
       "id": "learn_uart",
       "title": "UART",
-      "focus": "UART spec \u2192 RTL \u2192 TB \u2192 VIP map",
+      "focus": "UART spec → RTL → TB → VIP map",
       "prereq": "Verilog",
       "status": "placeholder",
       "labs": [],
@@ -441,8 +1035,8 @@
     },
     {
       "id": "learn_i2c",
-      "title": "I\u00b2C",
-      "focus": "I\u00b2C same arc",
+      "title": "I²C",
+      "focus": "I²C same arc",
       "prereq": "Verilog",
       "status": "placeholder",
       "labs": [],
@@ -451,7 +1045,7 @@
     {
       "id": "learn_verification_planning_management",
       "title": "Verification planning",
-      "focus": "Plan \u2192 coverage \u2192 CI \u2192 sign-off",
+      "focus": "Plan → coverage → CI → sign-off",
       "prereq": "Protocol or UVM helpful",
       "status": "placeholder",
       "labs": [],

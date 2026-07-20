@@ -36,45 +36,288 @@
     <div class="eyebrow">Community</div>
     <section class="hero">
       <h1>Share feedback</h1>
-      <p class="lead">
-        Suggest tool improvements or send a testimonial. Submissions go to the authors by email (Web3Forms)
-        when an access key is configured.
-      </p>
+      <p class="lead">Suggest improvements or send a testimonial.</p>
       <nav class="comm-nav" aria-label="On this page">
-        <a href="#tool-feedback">Tool feedback</a>
+        <a href="#feedback">Feedback</a>
         <a href="#share-testimonial">Testimonial</a>
       </nav>
     </section>
 
-    <div class="comm-setup" data-web3forms-setup hidden>
-      <strong>Setup required:</strong> create a free key at
-      <a href="https://web3forms.com" target="_blank" rel="noopener">web3forms.com</a>,
-      then set <code>web3formsAccessKey</code> in
-      <code>platform/assets/site-config.js</code>. Full steps: <a href="../../SETUP.md">SETUP.md</a>.
-      Until then, submit buttons stay disabled.
-    </div>
-
-    <section class="placeholder-panel" id="tool-feedback">
-      <h2>Suggest a tool improvement</h2>
-      <p>Missing feature? Confusing workflow? Tell us which tool and what would help.</p>
-      <form class="comm-form" data-web3forms novalidate>
-        <input type="hidden" name="subject" value="[DDV Platform] Tool feedback">
-        <input type="hidden" name="form_type" value="tool_feedback">
-        <label class="comm-hp" aria-hidden="true">Leave blank<input type="text" name="botcheck" tabindex="-1" autocomplete="off"></label>
+    <section class="placeholder-panel" id="feedback">
+      <h2>Suggest an improvement</h2>
+      <p>Missing feature? Confusing step? Tell us which area and what would help.</p>
+      <form class="comm-form" data-feedback-form novalidate>
+        <input type="hidden" name="form_type" value="feedback">
         <div class="comm-field">
-          <label for="tool-name">Tool / area</label>
-          <select id="tool-name" name="tool" required>
+          <label for="area">Area</label>
+          <select id="area" name="tool" required>
             <option value="">Select…</option>
-            <option value="general">General / new tool idea</option>
+            <optgroup label="Platform">
+            <option value="general">General / new idea</option>
             <option value="courses">Courses / lab pages</option>
             <option value="path">Path map / progress / search</option>
             <option value="simulator">HDL Simulator</option>
-            <option value="vfs-terminal">vfs-terminal</option>
-            <option value="git-graph">git-graph</option>
-            <option value="truth-table">truth-table</option>
-            <option value="waveform-lab">waveform-lab</option>
-            <option value="uart-frame">uart-frame</option>
+            <option value="projects">Projects</option>
+            <option value="community">Community / stories</option>
+            </optgroup>
+            <optgroup label="Shell &amp; filesystem">
+            <option value="vfs-terminal">Virtual filesystem terminal</option>
+            <option value="permissions">Permissions, umask, PATH &amp; ownership</option>
+            <option value="shell-history">Shell history &amp; reverse-search</option>
+            <option value="path-abs-rel">Absolute vs relative paths</option>
+            <option value="wildcards-globs">Glob / wildcard lab</option>
+            <option value="man-help-lab">man / --help discoverability</option>
+            <option value="file-types-lab">File types &amp; links</option>
+            <option value="realpath-resolve">realpath / readlink</option>
+            <option value="dotfiles-lab">Dotfiles &amp; config homes</option>
+            </optgroup>
+            <optgroup label="Processes &amp; text">
+            <option value="pipes">Pipes, redirection, xargs &amp; jobs</option>
+            <option value="ps-kill-lab">Process list &amp; signals</option>
+            <option value="job-control-lab">Job control deep-dive</option>
+            <option value="sort-uniq-cut">sort / uniq / cut</option>
+            <option value="here-doc-lab">Here-doc / here-string</option>
+            </optgroup>
+            <optgroup label="Scripting">
+            <option value="scripting">Script exit codes &amp; control flow</option>
+            <option value="exit-status-lab">Exit status &amp; &amp;&amp; / ||</option>
+            <option value="alias-lab">Alias &amp; function lab</option>
+            <option value="safe-scripting">Safe scripting checklist</option>
+            </optgroup>
+            <optgroup label="Projects &amp; archives">
+            <option value="project-archives">Project layout, archives, sed &amp; diff</option>
+            <option value="zip-vs-tar">tar vs zip</option>
+            <option value="backup-clean">Backup &amp; clean-build</option>
+            <option value="link-relative">Relative symlink pitfalls</option>
+            </optgroup>
+            <optgroup label="Version control">
+            <option value="git-mental-model">Git mental model</option>
+            <option value="git-graph">Git graph, staging, stash &amp; rebase</option>
+            <option value="gitignore-lab">.gitignore pattern lab</option>
+            <option value="commit-message-lab">Commit message lab</option>
+            <option value="git-log-lab">git log options</option>
+            <option value="git-undo-safe">Safe Git undo</option>
+            <option value="git-stash-lab">Stash scenarios</option>
+            <option value="git-tags-lab">Tags (light vs annotated)</option>
+            <option value="branch-strategy">Branch naming strategy</option>
+            <option value="git-conflicts">Merge conflict resolver</option>
+            <option value="git-rebase-merge">Rebase vs merge chooser</option>
+            <option value="git-cherry-pick-lab">Cherry-pick lab</option>
+            <option value="git-reflog">Reflog recovery</option>
+            <option value="blame-bisect">Blame &amp; bisect</option>
+            <option value="remotes">Remotes, PRs &amp; submodules</option>
+            <option value="remote-tracking">Remote-tracking branches</option>
+            <option value="pr-review-lab">PR review checklist</option>
+            <option value="submodule-pitfalls">Submodule pitfalls</option>
+            </optgroup>
+            <optgroup label="Workflow &amp; submission">
+            <option value="workflow">Pre-push checklist, Make &amp; env</option>
+            <option value="log-triage">Log / failure triage</option>
+            <option value="make-basics">Makefile basics</option>
+            <option value="env-file-lab">.env file literacy</option>
+            <option value="template-clone">Template-repo bootstrap</option>
+            <option value="dry-run-lab">Dry-run mindset</option>
+            <option value="submission-repro">Submission reproducibility</option>
+            </optgroup>
+            <optgroup label="Number systems &amp; representation">
+            <option value="radix-converter">Radix / bit-width converter</option>
+            <option value="twos-complement">Two’s complement lab</option>
+            <option value="overflow-wrap">Overflow / wrap-around</option>
+            <option value="ascii-hex">ASCII / hex dump literacy</option>
+            <option value="gray-code">Gray code converter</option>
+            <option value="bcd-lab">BCD encode / decode</option>
+            <option value="parity-checksum">Parity / XOR checksum</option>
+            <option value="fixed-point">Fixed-point Qm.n</option>
+            <option value="bit-fields">Bit-field extract / insert</option>
+            <option value="endian-lab">Endian packing</option>
+            <option value="verilog-literals">Verilog literal decoder</option>
+            </optgroup>
+            <optgroup label="Boolean algebra &amp; minimization">
+            <option value="truth-table">Truth-table builder</option>
+            <option value="kmap">K-map minimizer (2–6 vars)</option>
+            <option value="boolean-laws">Boolean law playground</option>
+            <option value="sop-pos">SOP ↔ POS converter</option>
+            <option value="dont-care-lab">Don’t-care minimization</option>
+            <option value="logic-hazards">Static / dynamic hazards</option>
+            </optgroup>
+            <optgroup label="Gates &amp; combinational blocks">
+            <option value="gate-composer">Gate composer</option>
+            <option value="mux-decoder">Mux / decoder / encoder explorer</option>
+            <option value="priority-compare">Priority encoder &amp; comparator</option>
+            <option value="half-full-adder">Half / full adder builder</option>
+            <option value="xor-parity-tree">XOR parity tree</option>
+            <option value="tri-state-bus">Tri-state / bus contention</option>
+            <option value="barrel-shifter">Barrel shifter</option>
+            <option value="seven-segment">Seven-segment decoder</option>
+            </optgroup>
+            <optgroup label="HDL structure &amp; operators">
+            <option value="module-diagram">Module / port diagram</option>
+            <option value="verilog-literals">Verilog literal decoder</option>
+            <option value="wire-vs-reg">Classic wire vs reg</option>
+            <option value="ansi-ports">ANSI vs non-ANSI ports</option>
+            <option value="sv-operators">Operator playground</option>
+            <option value="param-width">Parameter / width explorer</option>
+            <option value="named-vs-positional">Named vs positional connections</option>
+            <option value="localparam-lab">localparam vs parameter</option>
+            <option value="sv-generate">Generate / replication explorer</option>
+            <option value="one-driver">One-driver / multi-driver</option>
+            <option value="sv-typedefs">Typedef / enum / packed struct</option>
+            <option value="multi-dim-arrays">Multi-dimensional arrays</option>
+            <option value="bit-vs-logic">bit vs logic (2-state / 4-state)</option>
+            <option value="signed-width">Signed / unsigned width</option>
+            </optgroup>
+            <optgroup label="SystemVerilog design constructs">
+            <option value="sv-always-procs">always_comb / always_ff / always_latch</option>
+            <option value="sv-interfaces">Interface + modport sketch</option>
+            <option value="sv-packages">Package / import explorer</option>
+            <option value="sv-case-unique">unique / priority case</option>
+            <option value="sv-inside">inside / wildcard equality</option>
+            <option value="sv-checker">Checker / bind sketch</option>
+            <option value="ieee-version-map">IEEE construct → version map</option>
+            <option value="sv-migration">1364 → 1800 migration quiz</option>
+            </optgroup>
+            <optgroup label="Combinational design hygiene">
+            <option value="latch-risk">Combo style / latch-risk checker</option>
+            <option value="sensitivity-list">Sensitivity-list explorer</option>
+            </optgroup>
+            <optgroup label="Clocks, registers &amp; timing">
+            <option value="clock-stepper">Clock-edge stepper</option>
+            <option value="blocking-vs-nonblocking">Blocking vs non-blocking</option>
+            <option value="reset-timelines">Reset strategy timelines</option>
+            <option value="setup-hold">Setup / hold explainer</option>
+            <option value="cdc-sync">CDC / 2-FF synchronizer</option>
+            <option value="clock-enable">Clock enable vs gated clock</option>
+            <option value="shift-register-lab">Shift-register lab</option>
+            <option value="counter-lab">Counter lab</option>
+            </optgroup>
+            <optgroup label="Waveforms &amp; debug literacy">
+            <option value="waveform-lab">Waveform lab</option>
+            <option value="tb-anatomy">Testbench anatomy explorer</option>
+            <option value="delay-event-wait">Delay / event / wait</option>
+            <option value="task-vs-function">Task vs function vs always</option>
+            <option value="fork-join">Fork / join sketch</option>
+            <option value="gtkwave-cursors">GTKWave cursor literacy</option>
+            </optgroup>
+            <optgroup label="FSM &amp; control">
+            <option value="fsm-lab">FSM designer + stepper</option>
+            <option value="state-encoding">State encoding lab</option>
+            <option value="seq-detector">Sequence detector playground</option>
+            <option value="ring-johnson">Ring / Johnson counter</option>
+            <option value="lfsr-lab">LFSR / PRBS stepper</option>
+            </optgroup>
+            <optgroup label="Arithmetic &amp; datapath">
+            <option value="ripple-carry-adder-animator">Ripple-carry adder animator</option>
+            <option value="carry-look-ahead-adder-propagate-and-generate">Carry-lookahead generate &amp; propagate</option>
+            <option value="array-mult">Array multiplier grid</option>
+            <option value="alu-explorer">ALU operation explorer</option>
+            <option value="carry-select-adder">Carry-select adder sketch</option>
+            <option value="booth-encode">Booth encode grid</option>
+            <option value="signed-arith">Signed arithmetic / overflow</option>
+            </optgroup>
+            <optgroup label="Memory, FIFO &amp; cache">
+            <option value="mem-map">RAM / ROM address map</option>
+            <option value="fifo-lab">FIFO pointer &amp; flags</option>
+            <option value="cache-walk">Cache hit/miss walkthrough</option>
+            <option value="dual-port-ram">Dual-port RAM</option>
+            <option value="byte-enable-mem">Byte-enable memory</option>
+            <option value="async-fifo">Async FIFO (Gray pointers)</option>
+            </optgroup>
+            <optgroup label="Hierarchy, buses &amp; integration">
+            <option value="block-diagram">Block-diagram integrator</option>
+            <option value="handshake">Bus handshake animator</option>
+            <option value="pipeline-hazards">Pipeline stall / forward</option>
+            </optgroup>
+            <optgroup label="Coding standards &amp; synthesizability">
+            <option value="synth-lint">Synthesizability linter</option>
+            <option value="hdl-style">Naming / style checker</option>
+            </optgroup>
+            <optgroup label="Protocols (conceptual)">
+            <option value="uart-frame">UART frame animator</option>
+            <option value="spec-to-rtl">Spec → RTL checklist</option>
+            <option value="baud-divider">Baud / clock divider</option>
+            <option value="uart-oversample">UART oversampling</option>
+            <option value="uart-errors">UART error cases</option>
+            <option value="spi-step">SPI transaction stepper</option>
+            <option value="spi-cpol-cpha">SPI CPOL/CPHA modes</option>
+            <option value="spi-multi-cs">SPI multi-CS / daisy</option>
+            <option value="i2c-lab">I²C start/addr/ack explorer</option>
+            <option value="i2c-open-drain">I²C open-drain model</option>
+            <option value="i2c-clock-stretch">I²C clock stretch</option>
+            <option value="i2c-repeated-start">I²C repeated start</option>
+            <option value="tb-vs-uvm-map">Basic TB vs UVM map</option>
+            </optgroup>
+            <optgroup label="SV testbench &amp; assertions (conceptual)">
+            <option value="sv-class-sketch">Class / inheritance sketch</option>
+            <option value="crv-lite">Constraint / random lite</option>
+            <option value="cover-bins">Coverpoint / bins sketch</option>
+            <option value="sva-timeline">SVA implication timeline</option>
+            <option value="vif-wiring">Virtual interface wiring</option>
+            <option value="self-check-tb">Self-checking TB pattern</option>
+            <option value="tb-clock-reset">TB clock + reset patterns</option>
+            <option value="file-vector-io">File / vector I/O</option>
+            </optgroup>
+            <optgroup label="UVM methodology (sketches)">
+            <option value="tb-layers">Testbench layer diagram</option>
+            <option value="uvm-phases">UVM phase timeline</option>
+            <option value="uvm-factory">Factory override sketch</option>
+            <option value="uvm-configdb">ConfigDB key path</option>
+            <option value="uvm-agent">Agent anatomy</option>
+            <option value="uvm-tlm">TLM port wiring</option>
+            <option value="uvm-seq-flow">Sequence → driver flow</option>
+            <option value="uvm-objections">Objection raise/drop</option>
+            <option value="uvm-plusargs">Plusargs / CLP</option>
+            <option value="uvm-scoreboard">Scoreboard expect/actual</option>
+            <option value="ral-map">Register model map</option>
+            <option value="uvm-multi-agent">Multi-agent env</option>
+            <option value="uvm-vseq">Virtual sequence</option>
+            <option value="uvm-callbacks">Callbacks sketch</option>
+            <option value="uvm-reporting">UVM reporting ladder</option>
+            <option value="protocol-checker">Protocol checker sketch</option>
+            <option value="vip-anatomy">VIP anatomy</option>
+            </optgroup>
+            <optgroup label="Python / cocotb / pyuvm (sketches)">
+            <option value="python-async-tb">Python async TB sketch</option>
+            <option value="cocotb-triggers">cocotb triggers</option>
+            <option value="cocotb-dut-handle">cocotb DUT handle</option>
+            <option value="cocotb-uvm-map">cocotb vs UVM map</option>
+            </optgroup>
+            <optgroup label="Verification planning (lightweight)">
+            <option value="verif-plan-check">Coverage / plan checklist</option>
+            <option value="feature-matrix">Feature × scenario matrix</option>
+            <option value="coverage-closure">Coverage closure planner</option>
+            <option value="regression-triage">Regression triage board</option>
+            <option value="test-taxonomy">Test taxonomy planner</option>
+            <option value="risk-plan">Risk-based plan matrix</option>
+            <option value="signoff-checklist">Sign-off criteria</option>
+            <option value="seed-tags">Seed / config / tags</option>
+            <option value="ci-farm-flow">CI / farm regression flow</option>
+            <option value="vip-handoff">VIP handoff checklist</option>
+            </optgroup>
+            <optgroup label="Simulation literacy (conceptual)">
+            <option value="iverilog-vs-verilator">iverilog vs Verilator chooser</option>
+            <option value="sim-pipeline">Compile → elaborate → run</option>
+            <option value="verilator-lint-lab">Verilator lint lab</option>
+            <option value="dpi-cpp-tb">C++ TB / DPI sketch</option>
+            <option value="verilator-trace">Verilator trace</option>
+            <option value="wave-dump">Wave dump literacy</option>
+            <option value="verilator-public">Verilator public</option>
+            <option value="verif-metrics">Verification metrics board</option>
+            <option value="iverilog-flags">iverilog flags lab</option>
+            <option value="iverilog-timescale">iverilog timescale</option>
+            <option value="vvp-plusargs">vvp plusargs</option>
+            </optgroup>
+            <optgroup label="Browser HDL simulator (guided)">
+            <option value="hdl-sim-tour">Simulator UI tour</option>
+            <option value="hdl-sim-hello-dut">Hello DUT in browser</option>
+            <option value="hdl-sim-step-continue">Step &amp; continue</option>
+            <option value="hdl-sim-poke-force">Poke / force / release</option>
+            <option value="hdl-sim-waves">Full-sim waves</option>
+            <option value="hdl-sim-multi-file">Multi-file project</option>
+            <option value="hdl-sim-compare-golden">Golden compare</option>
+            </optgroup>
+            <optgroup label="Other">
             <option value="other">Other (describe in message)</option>
+            </optgroup>
           </select>
         </div>
         <div class="comm-field">
@@ -90,7 +333,7 @@
           <select id="tool-kind" name="feedback_type" required>
             <option value="enhancement">Enhancement idea</option>
             <option value="bug">Bug or confusing step</option>
-            <option value="new-tool">Proposal for a new tool</option>
+            <option value="new-lab">Proposal for a new lab</option>
           </select>
         </div>
         <div class="comm-field">
@@ -98,20 +341,18 @@
           <textarea id="tool-message" name="message" required placeholder="What would help learners?"></textarea>
         </div>
         <div class="comm-actions">
-          <button type="submit" class="btn btn-primary">Send tool feedback</button>
+          <button type="submit" class="btn btn-primary">Send feedback</button>
         </div>
+        <p class="comm-field-note">Opens a pre-filled GitHub issue in a new tab. Add screenshots there if needed.</p>
         <div class="comm-status" hidden role="status"></div>
-        <p class="comm-privacy">Sent by email via Web3Forms. Not stored on this static site.</p>
       </form>
     </section>
 
     <section class="placeholder-panel" id="share-testimonial">
       <h2>Share a testimonial</h2>
       <p>Reviewed before appearing on <a href="../stories/index.html">Reader stories</a>.</p>
-      <form class="comm-form" data-web3forms novalidate>
-        <input type="hidden" name="subject" value="[DDV Platform] Testimonial">
+      <form class="comm-form" data-feedback-form novalidate>
         <input type="hidden" name="form_type" value="testimonial">
-        <label class="comm-hp" aria-hidden="true">Leave blank<input type="text" name="botcheck" tabindex="-1" autocomplete="off"></label>
         <div class="comm-field">
           <label for="t-name">Name <span class="hint">(as you want it shown)</span></label>
           <input id="t-name" name="name" type="text" required autocomplete="name">
@@ -131,14 +372,11 @@
         <div class="comm-actions">
           <button type="submit" class="btn btn-primary">Send testimonial</button>
         </div>
+        <p class="comm-field-note">Opens a pre-filled GitHub issue in a new tab.</p>
         <div class="comm-status" hidden role="status"></div>
-        <p class="comm-privacy">Sent by email via Web3Forms for author review.</p>
       </form>
     </section>
   </main>
-  <footer class="site-footer">
-    <p class="site-footer-privacy">See <a href="../../SETUP.md">SETUP.md</a> for Web3Forms + GA4.</p>
-  </footer>
   <script src="../../assets/site-config.js"></script>
   <script src="../../assets/site.js"></script>
 </body>

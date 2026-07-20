@@ -1,6 +1,6 @@
-# Platform site setup (GA4 + Web3Forms)
+# Platform site setup (GA4)
 
-Keys live in [`assets/site-config.js`](assets/site-config.js). Leave them empty to keep analytics off and feedback forms disabled (setup banner shown).
+Keys live in [`assets/site-config.js`](assets/site-config.js). Leave them empty to keep analytics off.
 
 ## 1. Google Analytics 4 (GA4)
 
@@ -20,20 +20,9 @@ ga4MeasurementId: "G-XXXXXXXXXX",
 
 Video play / lab-complete events fire when GA4 is configured (`lab_complete`, `community_feedback`).
 
-## 2. Web3Forms (community feedback)
+## 2. Community feedback
 
-1. Go to [https://web3forms.com](https://web3forms.com) and create a free access key (tied to your email).
-2. Confirm the email from Web3Forms.
-3. In `platform/assets/site-config.js`, set:
-
-```js
-web3formsAccessKey: "your-uuid-access-key",
-```
-
-4. Redeploy. Forms on [`community/feedback/`](community/feedback/index.html) enable and POST to Web3Forms.
-5. Send a test message; you should receive email. Approved testimonials can be pasted into [`community/stories/`](community/stories/index.html).
-
-**Privacy:** submissions are emailed only; this static site does not store them.
+Feedback forms on [`community/feedback/`](community/feedback/index.html) open a pre-filled GitHub issue. Set `feedbackIssuesUrl` in `platform/assets/site-config.js` if you use a different repo.
 
 ## 3. GitHub Pages deploy (org site)
 

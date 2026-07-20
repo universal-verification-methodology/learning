@@ -595,6 +595,18 @@ span.btn.is-disabled {
   background: var(--surface);
 }
 .comm-field textarea { min-height: 7rem; resize: vertical; }
+.comm-field input[type="file"] {
+  max-width: 32rem;
+  padding: 0.35rem 0;
+  border: none;
+  background: transparent;
+}
+.comm-field-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  max-width: 32rem;
+}
 .comm-hp {
   position: absolute;
   left: -9999px;

@@ -113,6 +113,14 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `vvp-plusargs` | starter: `vvp sim.vvp +SEED=1 +VERBOSE` — READY |
 | `verilator-lint-lab` | starter: `-Wall` on · findings fixed — CLEAN |
 | `verilator-trace` | starter: `--trace` · VCD · open+dump — READY |
+| `verilator-public` | starter: `u_core.state` public — VISIBLE |
+| `hdl-sim-tour` | starter: all five panes visited — ORIENTED |
+| `hdl-sim-hello-dut` | starter: counter · Run→Stop→Reset — READY |
+| `hdl-sim-step-continue` | starter: Step + Continue→bp@5 — READY |
+| `hdl-sim-poke-force` | starter: poke + force→release on data — READY |
+| `hdl-sim-waves` | starter: clk+q · C1@5 C2@10 · q hex — WATCHING |
+| `hdl-sim-multi-file` | starter: tb top · WIDTH=8 · incdir include — LINKED |
+| `hdl-sim-compare-golden` | starter: compare @ C1=5 · JSON + VCD — MATCHED |
 | `i2c-open-drain` | ACK — slave pulls SDA low, master releases |
 | `i2c-clock-stretch` | ACK then SCL held low ×3 — master waits |
 | `i2c-repeated-start` | Sr write-pointer then read @ 0x50 |
@@ -501,7 +509,7 @@ Flow literacy for `learn_iverilog` / `learn_verilator` â€” **not** a browse
 | vvp plusargs | `vvp-plusargs` | **Shipped** | `$test$plusargs` / runtime plusargs; 22 challenges |
 | Verilator lint lab | `verilator-lint-lab` | **Shipped** | `-Wall` warning teaching (concept); 22 challenges |
 | Verilator trace | `verilator-trace` | **Shipped** | `--trace` → VCD/FST roles; 22 challenges |
-| Verilator public | `verilator-public` | **Planned** | `/*verilator public*/` / hierarchy visibility |
+| Verilator public | `verilator-public` | **Shipped** | `/*verilator public*/` / hierarchy visibility; 22 challenges |
 
 ## Browser HDL simulator (guided)
 
@@ -509,13 +517,13 @@ Guided literacy for [`learn_hdl_simulator`](../syllabus.md#9-learn_hdl_simulator
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Simulator UI tour | `hdl-sim-tour` | **Planned** | Files / Hierarchy / Signals / Wave / Console map |
-| Hello DUT in browser | `hdl-sim-hello-dut` | **Planned** | Tiny module â†’ Run / Stop / Reset |
-| Step & continue | `hdl-sim-step-continue` | **Planned** | Step · Continue · `$stop` / breakpoints |
-| Poke / force / release | `hdl-sim-poke-force` | **Planned** | Live drive vs force hazards |
-| Full-sim waves | `hdl-sim-waves` | **Planned** | Add signals · C1/C2 · radix (simulator UI) |
-| Multi-file project | `hdl-sim-multi-file` | **Planned** | Top · defines · `+incdir` · profiles |
-| Golden compare | `hdl-sim-compare-golden` | **Planned** | Diff @ C1 · JSON/VCD export literacy |
+| Simulator UI tour | `hdl-sim-tour` | **Shipped** | Files / Hierarchy / Signals / Wave / Console map; 22 challenges |
+| Hello DUT in browser | `hdl-sim-hello-dut` | **Shipped** | Tiny module → Run / Stop / Reset; 22 challenges |
+| Step & continue | `hdl-sim-step-continue` | **Shipped** | Step · Continue · `$stop` / breakpoints; 22 challenges |
+| Poke / force / release | `hdl-sim-poke-force` | **Shipped** | Live drive vs force hazards; 22 challenges |
+| Full-sim waves | `hdl-sim-waves` | **Shipped** | Add signals · C1/C2 · radix (simulator UI); 22 challenges |
+| Multi-file project | `hdl-sim-multi-file` | **Shipped** | Top · defines · `+incdir` · profiles; 22 challenges |
+| Golden compare | `hdl-sim-compare-golden` | **Shipped** | Diff @ C1 · JSON/VCD export literacy; 22 challenges |
 
 ---
 
@@ -590,9 +598,9 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 | `learn_systemverilog` | (labs mostly planned) | `sv-always-procs` â†’ `sv-migration` set |
 | `learn_uvm2017` / `learn_pyuvm` | `tb-anatomy` / `tb-vs-uvm-map` / `tb-layers` / `uvm-phases` / `uvm-factory` / `uvm-configdb` / `uvm-objections` / `uvm-seq-flow` / `uvm-agent` / `uvm-tlm` / `uvm-scoreboard` / `ral-map` / `uvm-reporting` / `uvm-callbacks` / `uvm-vseq` / `uvm-multi-agent` / `protocol-checker` / `vip-anatomy` / `uvm-plusargs` (+ SV TB sketches) **shipped**; offline via legacy | remaining pyuvm/cocotb labs |
 | `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**) | — |
-| `learn_verilator` | offline fidelity via legacy; course scaffolded; sim literacy + lint/trace/metrics labs (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | `verilator-public` |
+| `learn_verilator` | offline fidelity via legacy; course scaffolded; all syllabus browser labs (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | — |
 | `learn_iverilog` | shipped TB/wave labs + toolchain (`iverilog-flags` / `iverilog-timescale` / `vvp-plusargs`) + `sim-pipeline` / `wave-dump` / `self-check-tb` (**shipped**); course scaffolded; offline module 11 | — |
-| `learn_hdl_simulator` | waveform-lab, tb-anatomy, synth/style | **`hdl-sim-*` guided set** + public simulator now |
+| `learn_hdl_simulator` | waveform-lab, tb-anatomy, synth/style; all **`hdl-sim-*`** browser labs (**shipped**) | public simulator practice surface only |
 | `learn_uart` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `tb-clock-reset` / `vip-anatomy` (**shipped**); course scaffolded | — |
 | `learn_spi` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `protocol-checker` (**shipped**); course scaffolded | — |
 | `learn_i2c` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `vip-anatomy` (**shipped**); course scaffolded | — |
@@ -606,8 +614,8 @@ Still **offline-only** (see Out of scope): installing toolchains, running course
 
 | Status | Count |
 |--------|------:|
-| Shipped | 194 |
-| Planned | 8 |
+| Shipped | 202 |
+| Planned | 0 |
 | **Total catalogued** | **202** |
 
 Update this file when a planned tool ships (status â†’ **Shipped**, path verified under `platform/tools/`).

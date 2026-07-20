@@ -375,7 +375,7 @@ courses/<course_id>/
 | 05 | lab | TB clock + reset patterns | `tb-clock-reset` |
 | 06 | lab | Verilator trace | `verilator-trace` |
 | 07 | lab | Wave dump literacy | `wave-dump` |
-| 08 | lab | Verilator public | `verilator-public` **(P)** |
+| 08 | lab | Verilator public | `verilator-public` |
 | 09 | lab | Verification metrics | `verif-metrics` |
 | 10 | offline | Build & run a Verilator example | Course Makefile |
 | 11 | wrap | Verilator track complete | Recap |
@@ -416,13 +416,13 @@ courses/<course_id>/
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to the browser simulator | Link live IDE; what you’ll practice |
-| 01 | lab | UI tour | `hdl-sim-tour` **(P)** |
-| 02 | lab | Hello DUT | `hdl-sim-hello-dut` **(P)** |
-| 03 | lab | Step & continue | `hdl-sim-step-continue` **(P)** |
-| 04 | lab | Poke / force / release | `hdl-sim-poke-force` **(P)** |
-| 05 | lab | Full-sim waves | `hdl-sim-waves` **(P)** |
-| 06 | lab | Multi-file project | `hdl-sim-multi-file` **(P)** |
-| 07 | lab | Golden compare | `hdl-sim-compare-golden` **(P)** |
+| 01 | lab | UI tour | `hdl-sim-tour` |
+| 02 | lab | Hello DUT | `hdl-sim-hello-dut` |
+| 03 | lab | Step & continue | `hdl-sim-step-continue` |
+| 04 | lab | Poke / force / release | `hdl-sim-poke-force` |
+| 05 | lab | Full-sim waves | `hdl-sim-waves` |
+| 06 | lab | Multi-file project | `hdl-sim-multi-file` |
+| 07 | lab | Golden compare | `hdl-sim-compare-golden` |
 | 08 | bridge | Style & synth hints in the IDE | `hdl-style` **(S)**, `synth-lint` **(S)** (short clip) |
 | 09 | offline | Open public simulator — free practice | [HDL Simulator](https://universal-verification-methodology.github.io/systemverilog-simulator/) |
 | 10 | wrap | Simulator path complete | Recap; back to Verilog/TB |
@@ -435,7 +435,7 @@ courses/<course_id>/
 **Course tree:** [`courses/learn_pyuvm/`](courses/learn_pyuvm/) (dual track: real cocotb/pyuvm + browser sketches).  
 **Source legacy:** `learn_uvm_pyuvm`.  
 **Offline:** cocotb + pyuvm + Verilator (or other) — module 10.  
-**Browser tools:** `cocotb-uvm-map` **(S)**; other pyuvm-specific labs **(P)**; optional shipped literacy `tb-anatomy` / `tb-vs-uvm-map`.
+**Browser tools:** pyuvm/cocotb labs 01–04 and shared UVM sketches 05–09 all **(S)**; fidelity offline via module 10. Optional literacy: `tb-anatomy` / `tb-vs-uvm-map`.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
