@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protocol checker sketch — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="protocol-checker.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Tools</a>
+        <span class="here">Protocol checker sketch</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Interactive tool</div>
+    <section class="hero">
+      <h1>Protocol checker sketch</h1>
+      <p class="lead">
+        Contrast <strong>bus-rule checks</strong> with a
+        <strong>scoreboard</strong>: the checker is passive and flags
+        handshake / stability violations — not payload expect/actual.
+        Starter: clean <code>valid∧ready</code> beat with stable data — PASS.
+      </p>
+    </section>
+    <div id="pchk-root"></div>
+  </main>
+  <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
+  <script src="protocol-checker.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

@@ -35,16 +35,32 @@ web3formsAccessKey: "your-uuid-access-key",
 
 **Privacy:** submissions are emailed only; this static site does not store them.
 
-## 3. Dual GitHub Pages (optional)
+## 3. GitHub Pages deploy (org site)
+
+The live site is **`platform/`** published by Actions — **not** a `gh-pages` branch.
+
+| | |
+|--|--|
+| Workflow | [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) |
+| URL | https://universal-verification-methodology.github.io/learning/ |
+| Trigger | Push to `main` that touches `platform/**`, or **Actions → Deploy platform → Run workflow** |
+
+**One-time (repo Settings → Pages):**
+
+1. **Build and deployment → Source:** **GitHub Actions** (not “Deploy from a branch”).
+2. Push this workflow (or run it manually once).
+3. Optional: delete the old **`gh-pages`** branch so it cannot confuse anyone.
+
+### Dual / personal mirror (optional)
 
 Publish the same `platform/` tree to:
 
 | Site | Example URL |
 |------|-------------|
-| Org | `https://universal-verification-methodology.github.io/learning/` |
+| Org (this workflow) | `https://universal-verification-methodology.github.io/learning/` |
 | Personal | `https://yongfu-li.github.io/digital-design-verification/` |
 
-Use relative links (already the default). If a host uses a different base path, add a `<base href="…">` or a small `SITE_BASE` later — not required for same-folder deploy.
+Personal mirror: same Actions pattern in that repo, or copy `platform/` there. Relative links already work on both hosts.
 
 ## 4. Local preview
 

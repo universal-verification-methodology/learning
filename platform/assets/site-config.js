@@ -16,6 +16,16 @@ window.SITE_CONFIG = {
   /** Public HDL Simulator Pages URL */
   simulatorUrl:
     "https://universal-verification-methodology.github.io/systemverilog-simulator/",
+  /** Course media lives in org course repos (moduleNN-slug/video.mp4, slides.*) */
+  githubOrg: "universal-verification-methodology",
+  /** Branch used for media CDN links */
+  mediaBranch: "main",
+  /**
+   * How to resolve media files from course repos.
+   * "jsdelivr" → https://cdn.jsdelivr.net/gh/{org}/{repo}@{branch}/…
+   * "raw" → https://raw.githubusercontent.com/{org}/{repo}/{branch}/…
+   */
+  mediaCdn: "jsdelivr",
   /** localStorage namespace for lab progress */
   progressKey: "ddv.progress.v1",
 };

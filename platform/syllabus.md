@@ -156,10 +156,10 @@ courses/<course_id>/
 | 21 | lab | Backup & clean-build | `backup-clean` **(S)** |
 | 22 | lab | Relative symlink pitfalls | `link-relative` **(S)** |
 | 23 | lab | Pre-push / Make / env checklist | `workflow` **(S)** |
-| 24 | lab | Makefile basics | `make-basics` **(P)** |
-| 25 | lab | Dry-run mindset | `dry-run-lab` **(P)** |
-| 26 | lab | Log / failure triage | `log-triage` **(P)** |
-| 27 | lab | `.env` literacy | `env-file-lab` **(P)** |
+| 24 | lab | Makefile basics | `make-basics` **(S)** |
+| 25 | lab | Dry-run mindset | `dry-run-lab` **(S)** |
+| 26 | lab | Log / failure triage | `log-triage` **(S)** |
+| 27 | lab | `.env` literacy | `env-file-lab` **(S)** |
 | 28 | wrap | Unix path complete → Git | Recap; link `learn_git` |
 
 *Optional bridges:* after 08 (env cluster), after 18 (scripting cluster), after 22 (archives cluster).
@@ -332,27 +332,27 @@ courses/<course_id>/
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to UVM | Why layered TB; course map |
-| 01 | lab | TB layers | `tb-layers` **(P)** |
+| 01 | lab | TB layers | `tb-layers` |
 | 02 | lab | Basic TB vs UVM map | `tb-vs-uvm-map` |
 | 03 | lab | TB anatomy refresh | `tb-anatomy` **(S)** |
-| 04 | lab | UVM phases | `uvm-phases` **(P)** |
-| 05 | lab | Factory | `uvm-factory` **(P)** |
-| 06 | lab | ConfigDB | `uvm-configdb` **(P)** |
-| 07 | lab | Agent anatomy | `uvm-agent` **(P)** |
-| 08 | lab | TLM ports | `uvm-tlm` **(P)** |
-| 09 | lab | Sequence → driver | `uvm-seq-flow` **(P)** |
-| 10 | lab | Objections | `uvm-objections` **(P)** |
-| 11 | lab | Plusargs / testname | `uvm-plusargs` **(P)** |
+| 04 | lab | UVM phases | `uvm-phases` |
+| 05 | lab | Factory | `uvm-factory` |
+| 06 | lab | ConfigDB | `uvm-configdb` |
+| 07 | lab | Agent anatomy | `uvm-agent` |
+| 08 | lab | TLM ports | `uvm-tlm` |
+| 09 | lab | Sequence → driver | `uvm-seq-flow` |
+| 10 | lab | Objections | `uvm-objections` |
+| 11 | lab | Plusargs / testname | `uvm-plusargs` |
 | 12 | lab | CRV lite | `crv-lite` |
-| 13 | lab | Scoreboard | `uvm-scoreboard` **(P)** |
-| 14 | lab | RAL map | `ral-map` **(P)** |
+| 13 | lab | Scoreboard | `uvm-scoreboard` |
+| 14 | lab | RAL map | `ral-map` |
 | 15 | lab | SVA timeline (lite) | `sva-timeline` |
-| 16 | lab | Multi-agent env | `uvm-multi-agent` **(P)** |
-| 17 | lab | Virtual sequence | `uvm-vseq` **(P)** |
-| 18 | lab | Callbacks | `uvm-callbacks` **(P)** |
-| 19 | lab | Reporting | `uvm-reporting` **(P)** |
-| 20 | lab | Protocol checker | `protocol-checker` **(P)** |
-| 21 | lab | VIP anatomy | `vip-anatomy` **(P)** |
+| 16 | lab | Multi-agent env | `uvm-multi-agent` |
+| 17 | lab | Virtual sequence | `uvm-vseq` |
+| 18 | lab | Callbacks | `uvm-callbacks` |
+| 19 | lab | Reporting | `uvm-reporting` |
+| 20 | lab | Protocol checker | `protocol-checker` |
+| 21 | lab | VIP anatomy | `vip-anatomy` |
 | 22 | offline | Run a course UVM example | Course Makefile / Verilator |
 | 23 | wrap | UVM complete → planning or VIP work | Recap |
 
@@ -368,15 +368,15 @@ courses/<course_id>/
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to Verilator | When to use it |
-| 01 | lab | iverilog vs Verilator | `iverilog-vs-verilator` **(P)** |
-| 02 | lab | Compile → elaborate → run | `sim-pipeline` **(P)** |
+| 01 | lab | iverilog vs Verilator | `iverilog-vs-verilator` |
+| 02 | lab | Compile → elaborate → run | `sim-pipeline` |
 | 03 | lab | Verilator lint | `verilator-lint-lab` **(P)** |
-| 04 | lab | C++ TB / DPI sketch | `dpi-cpp-tb` **(P)** |
+| 04 | lab | C++ TB / DPI sketch | `dpi-cpp-tb` |
 | 05 | lab | TB clock + reset patterns | `tb-clock-reset` |
 | 06 | lab | Verilator trace | `verilator-trace` **(P)** |
-| 07 | lab | Wave dump literacy | `wave-dump` **(P)** |
+| 07 | lab | Wave dump literacy | `wave-dump` |
 | 08 | lab | Verilator public | `verilator-public` **(P)** |
-| 09 | lab | Verification metrics | `verif-metrics` **(P)** |
+| 09 | lab | Verification metrics | `verif-metrics` |
 | 10 | offline | Build & run a Verilator example | Course Makefile |
 | 11 | wrap | Verilator track complete | Recap |
 
@@ -392,15 +392,15 @@ courses/<course_id>/
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to Icarus | `iverilog` → `vvp` story |
-| 01 | lab | Compile → elaborate → run | `sim-pipeline` **(P)** |
-| 02 | lab | iverilog flags | `iverilog-flags` **(P)** |
-| 03 | lab | Timescale | `iverilog-timescale` **(P)** |
+| 01 | lab | Compile → elaborate → run | `sim-pipeline` |
+| 02 | lab | iverilog flags | `iverilog-flags` |
+| 03 | lab | Timescale | `iverilog-timescale` |
 | 04 | lab | Delay / event / wait | `delay-event-wait` **(S)** |
 | 05 | lab | Task vs function | `task-vs-function` **(S)** |
 | 06 | lab | Fork / join | `fork-join` **(S)** |
-| 07 | lab | vvp plusargs | `vvp-plusargs` **(P)** |
+| 07 | lab | vvp plusargs | `vvp-plusargs` |
 | 08 | lab | Self-checking TB | `self-check-tb` |
-| 09 | lab | Wave dump + waveform lab | `wave-dump` **(P)** / `waveform-lab` **(S)** |
+| 09 | lab | Wave dump + waveform lab | `wave-dump` / `waveform-lab` |
 | 10 | lab | GTKWave cursors | `gtkwave-cursors` **(S)** |
 | 11 | offline | Compile & dump a course example | Local iverilog |
 | 12 | wrap | Icarus track complete | Recap |
@@ -435,20 +435,20 @@ courses/<course_id>/
 **Course tree:** [`courses/learn_pyuvm/`](courses/learn_pyuvm/) (dual track: real cocotb/pyuvm + browser sketches).  
 **Source legacy:** `learn_uvm_pyuvm`.  
 **Offline:** cocotb + pyuvm + Verilator (or other) — module 10.  
-**Browser tools:** pyuvm-specific labs all **(P)**; optional shipped literacy `tb-anatomy` / `tb-vs-uvm-map`.
+**Browser tools:** `cocotb-uvm-map` **(S)**; other pyuvm-specific labs **(P)**; optional shipped literacy `tb-anatomy` / `tb-vs-uvm-map`.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to pyuvm | Python vs SV UVM map |
-| 01 | lab | Python async TB | `python-async-tb` **(P)** |
-| 02 | lab | cocotb triggers | `cocotb-triggers` **(P)** |
-| 03 | lab | cocotb DUT handle | `cocotb-dut-handle` **(P)** |
-| 04 | lab | cocotb ↔ UVM roles | `cocotb-uvm-map` **(P)** |
-| 05 | lab | UVM phases (shared sketch) | `uvm-phases` **(P)** |
-| 06 | lab | Factory (shared sketch) | `uvm-factory` **(P)** |
-| 07 | lab | Agent / seq flow | `uvm-agent` **(P)** / `uvm-seq-flow` **(P)** |
-| 08 | lab | ConfigDB & objections | `uvm-configdb` **(P)** / `uvm-objections` **(P)** |
-| 09 | lab | Scoreboard & multi-agent | `uvm-scoreboard` **(P)** / `uvm-multi-agent` **(P)** |
+| 01 | lab | Python async TB | `python-async-tb` |
+| 02 | lab | cocotb triggers | `cocotb-triggers` |
+| 03 | lab | cocotb DUT handle | `cocotb-dut-handle` |
+| 04 | lab | cocotb ↔ UVM roles | `cocotb-uvm-map` |
+| 05 | lab | UVM phases (shared sketch) | `uvm-phases` |
+| 06 | lab | Factory (shared sketch) | `uvm-factory` |
+| 07 | lab | Agent / seq flow | `uvm-agent` / `uvm-seq-flow` |
+| 08 | lab | ConfigDB & objections | `uvm-configdb` / `uvm-objections` |
+| 09 | lab | Scoreboard & multi-agent | `uvm-scoreboard` / `uvm-multi-agent` |
 | 10 | offline | Run a pyuvm example | Course repo |
 | 11 | wrap | pyuvm complete | Recap; compare to `learn_uvm2017` |
 
@@ -483,7 +483,7 @@ Do **not** re-teach full verification planning inside each protocol — point to
 | 09 | lab | TB clock / reset | `tb-clock-reset` |
 | 10 | lab | Waves | `waveform-lab` **(S)** |
 | 11 | lab | TB vs UVM map | `tb-vs-uvm-map` |
-| 12 | lab | VIP anatomy | `vip-anatomy` **(P)** |
+| 12 | lab | VIP anatomy | `vip-anatomy` |
 | 13 | wrap | UART complete | Recap; SPI / I²C / UVM |
 
 ---
@@ -505,7 +505,7 @@ Do **not** re-teach full verification planning inside each protocol — point to
 | 06 | lab | FSM for CS | `fsm-lab` **(S)** |
 | 07 | lab | Self-check TB | `self-check-tb` |
 | 08 | lab | Waves | `waveform-lab` **(S)** |
-| 09 | lab | TB vs UVM / VIP | `tb-vs-uvm-map` / `protocol-checker` **(P)** |
+| 09 | lab | TB vs UVM / VIP | `tb-vs-uvm-map` / `protocol-checker` |
 | 10 | wrap | SPI complete | Recap |
 
 ---
@@ -527,7 +527,7 @@ Do **not** re-teach full verification planning inside each protocol — point to
 | 06 | lab | FSM bit/byte | `fsm-lab` **(S)** |
 | 07 | lab | Self-check TB | `self-check-tb` |
 | 08 | lab | Waves | `waveform-lab` **(S)** |
-| 09 | lab | TB vs UVM / VIP | `tb-vs-uvm-map` / `vip-anatomy` **(P)** |
+| 09 | lab | TB vs UVM / VIP | `tb-vs-uvm-map` / `vip-anatomy` |
 | 10 | wrap | I²C complete | Recap |
 
 ---
@@ -540,18 +540,18 @@ Do **not** re-teach full verification planning inside each protocol — point to
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
 | 00 | intro | Welcome to verification planning | Stakeholders & scope |
-| 01 | lab | Coverage / plan checklist | `verif-plan-check` **(P)** |
-| 02 | lab | Test taxonomy | `test-taxonomy` **(P)** |
-| 03 | lab | Feature × scenario matrix | `feature-matrix` **(P)** |
+| 01 | lab | Coverage / plan checklist | `verif-plan-check` |
+| 02 | lab | Test taxonomy | `test-taxonomy` |
+| 03 | lab | Feature × scenario matrix | `feature-matrix` |
 | 04 | lab | Cover bins sketch | `cover-bins` |
-| 05 | lab | Coverage closure | `coverage-closure` **(P)** |
-| 06 | lab | Risk-based plan | `risk-plan` **(P)** |
-| 07 | lab | Seed / config / tags | `seed-tags` **(P)** |
-| 08 | lab | Regression triage | `regression-triage` **(P)** |
-| 09 | lab | Verification metrics | `verif-metrics` **(P)** |
-| 10 | lab | CI / farm flow | `ci-farm-flow` **(P)** |
-| 11 | lab | Sign-off checklist | `signoff-checklist` **(P)** |
-| 12 | lab | VIP handoff | `vip-handoff` **(P)** |
+| 05 | lab | Coverage closure | `coverage-closure` |
+| 06 | lab | Risk-based plan | `risk-plan` |
+| 07 | lab | Seed / config / tags | `seed-tags` |
+| 08 | lab | Regression triage | `regression-triage` |
+| 09 | lab | Verification metrics | `verif-metrics` |
+| 10 | lab | CI / farm flow | `ci-farm-flow` |
+| 11 | lab | Sign-off checklist | `signoff-checklist` |
+| 12 | lab | VIP handoff | `vip-handoff` |
 | 13 | wrap | Planning path complete | Recap |
 
 ---

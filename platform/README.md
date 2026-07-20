@@ -27,6 +27,8 @@ Static companion site for the learning monorepo: **courses (lab paths)**, **tool
 
 Open **[https://universal-verification-methodology.github.io/learning/](https://universal-verification-methodology.github.io/learning/)** (GitHub Pages). Tools: [https://universal-verification-methodology.github.io/learning/tools/](https://universal-verification-methodology.github.io/learning/tools/).
 
+**Deploy:** Actions publishes `platform/` from `main` (see [`.github/workflows/pages.yml`](../.github/workflows/pages.yml)). Set Pages source to **GitHub Actions**; you do not need a `gh-pages` branch. Details: [`SETUP.md`](SETUP.md).
+
 ## Quick start
 
 ```bash
@@ -37,6 +39,23 @@ python -m http.server 8080 --directory platform
 Open http://localhost:8080/ → **Home** (Courses, Tools, Path, Simulator, Projects, Community).
 
 Opening `file://` HTML also works after a hard refresh when scripts change (search/catalog need a local server because of `fetch`).
+
+## Course media (videos / slides)
+
+Lab pages load media from the matching **course repo** under
+[`universal-verification-methodology`](https://github.com/universal-verification-methodology/), not from this Pages tree.
+
+| Artifact | Path in course repo |
+|----------|---------------------|
+| Video | `moduleNN-<slug>/video.mp4` |
+| Slides | `moduleNN-<slug>/slides.pptx` · `slides.pdf` |
+| Quiz | `moduleNN-<slug>/quiz.json` (loaded live on the lab page) |
+
+Example ([learn_unix](https://github.com/universal-verification-methodology/learn_unix)):
+
+`https://cdn.jsdelivr.net/gh/universal-verification-methodology/learn_unix@main/module01-vfs-terminal/video.mp4`
+
+Configure org / branch / CDN in [`assets/site-config.js`](assets/site-config.js) (`githubOrg`, `mediaBranch`, `mediaCdn`). Each course’s `repo` field is in [`assets/catalog.json`](assets/catalog.json).
 
 ## Site map
 

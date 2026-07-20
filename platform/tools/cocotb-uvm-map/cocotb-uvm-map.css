@@ -1,0 +1,220 @@
+.idea-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .idea-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+  .idea-grid { grid-template-columns: 1fr; }
+}
+
+.idea-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  font-size: 0.88rem;
+}
+
+.idea-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.cum-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.cum-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cum-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cum-field select {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 10rem;
+}
+
+.cum-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+  .cum-layout { grid-template-columns: 1fr; }
+}
+
+.col-panel {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: var(--surface2);
+}
+
+.col-panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.pair-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+  margin-bottom: 0.4rem;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+}
+
+.pair-btn.is-sel {
+  outline: 2px solid var(--accent, #2a6);
+  outline-offset: 1px;
+}
+
+.pair-btn.is-mapped {
+  border-color: #2a6;
+  background: color-mix(in srgb, #2a6 10%, var(--surface));
+}
+
+.pair-btn .k {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.pair-btn .v {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  margin-top: 0.15rem;
+}
+
+.pair-btn .b {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.bridge-box {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface);
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.flow-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  margin-top: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+.flow-chip {
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface2);
+}
+
+.verdict {
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.65rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.verdict.idle { background: var(--surface2); color: var(--muted); }
+.verdict.yes { background: color-mix(in srgb, #2a6 18%, var(--surface)); color: #1a5; }
+.verdict.warn { background: color-mix(in srgb, #c90 18%, var(--surface)); color: #a70; }
+
+.flag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.flag {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.flag.is-on { color: var(--ink); }
+.flag.is-ok {
+  border-color: #2a6;
+  color: #1a5;
+  background: color-mix(in srgb, #2a6 12%, transparent);
+}
+
+.meta-note {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0.35rem 0 0;
+}
+
+.role-blurb {
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.code-box,
+.trace-box,
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  overflow: auto;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.trace-box,
+.log-box {
+  max-height: 10rem;
+}

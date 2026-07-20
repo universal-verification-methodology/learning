@@ -1,0 +1,243 @@
+.idea-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .idea-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+  .idea-grid { grid-template-columns: 1fr; }
+}
+
+.idea-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  font-size: 0.88rem;
+}
+
+.idea-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.ivf-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.ivf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ivf-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ivf-field select,
+.ivf-field input {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 8rem;
+}
+
+.ivf-field input.cli {
+  min-width: min(100%, 32rem);
+}
+
+.ivf-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+  .ivf-layout { grid-template-columns: 1fr; }
+}
+
+.panel-box {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: var(--surface2);
+}
+
+.panel-box h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}
+
+.chip {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.chip.is-on {
+  outline: 2px solid var(--accent, #2a6);
+  outline-offset: 1px;
+}
+
+.chip .k {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-family: inherit;
+}
+
+.flag-list {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+}
+
+.flag-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+.flag-list .id {
+  font-family: var(--mono);
+}
+
+.flag-list .tag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.12rem 0.3rem;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+
+.flag-list .tag.is-ok {
+  color: var(--accent, #2a6);
+  border-color: color-mix(in srgb, var(--accent, #2a6) 45%, var(--line));
+}
+
+.flag-list .tag.is-bad {
+  color: #c44;
+  border-color: color-mix(in srgb, #c44 50%, var(--line));
+}
+
+.flag-list .tag.is-opt {
+  color: var(--muted);
+}
+
+.meta-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.role-blurb {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.code-box,
+.trace-box,
+.log-box,
+.cmd-box {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: auto;
+  max-height: 14rem;
+}
+
+.verdict {
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.verdict.idle {
+  background: var(--surface2);
+  color: var(--muted);
+}
+
+.verdict.yes {
+  background: color-mix(in srgb, var(--accent, #2a6) 18%, var(--surface));
+  color: var(--ink);
+}
+
+.verdict.no {
+  background: color-mix(in srgb, #c44 16%, var(--surface));
+  color: var(--ink);
+}
+
+.flag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.flag {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface2);
+  color: var(--muted);
+}
+
+.flag.is-ok {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--accent, #2a6) 50%, var(--line));
+}
+
+.flag.is-bad {
+  color: var(--ink);
+  border-color: color-mix(in srgb, #c44 55%, var(--line));
+}

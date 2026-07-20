@@ -71,6 +71,46 @@ When shipping or extending a tool, follow this pattern so learners see how it wo
 | `vif-wiring` | UART uart_if — declare + instance + DUT wired |
 | `self-check-tb` | and2 a=1,b=1 expect y=1 — PASS |
 | `tb-clock-reset` | classic: rst_n low ×2 posedges, then sync release |
+| `file-vector-io` | starter and2 — 4 stim/exp vectors, Apply all PASS |
+| `tb-layers` | starter: 1 agent + scoreboard under env |
+| `uvm-phases` | starter: cursor on run, objection raised |
+| `uvm-factory` | starter: base_driver → error_driver type override |
+| `uvm-configdb` | starter: set vif @ env.agent, get from drv |
+| `uvm-objections` | starter: test raised — run held open |
+| `uvm-seq-flow` | starter: UART 0xA5 item at sequencer |
+| `uvm-agent` | starter: active agent, driver selected |
+| `uvm-tlm` | starter: seq_item + analysis both up |
+| `uvm-scoreboard` | starter: match 0xA5 expect/actual |
+| `ral-map` | starter: CTRL @ 0x00 front-door write 1 |
+| `cocotb-uvm-map` | starter: DUT handle ↔ vif mapped |
+| `uvm-reporting` | starter: INFO DRV @ LOW → shown |
+| `uvm-callbacks` | starter: err_inj on pre_drive armed |
+| `uvm-vseq` | starter: UART then SPI sequential |
+| `uvm-multi-agent` | starter: UART+SPI → shared sb |
+| `protocol-checker` | starter: clean valid∧ready, data `0xA5` — all rules PASS |
+| `vip-anatomy` | starter: UART VIP — agent+checker+coverage+docs COMPLETE |
+| `uvm-plusargs` | starter: `+UVM_TESTNAME=base_test +SEED=1` — test selected |
+| `cocotb-triggers` | starter: `await RisingEdge(clk)` fires at t=10 |
+| `cocotb-dut-handle` | starter: `dut.uart.txd` resolves — value `1` |
+| `python-async-tb` | starter: `@cocotb.test` + `async def` + `await Timer(10)` — DONE |
+| `verif-plan-check` | starter: UART TX → send one byte → `tx_byte_done` — COMPLETE |
+| `feature-matrix` | starter: UART TX/RX × byte/idle/err — no gaps |
+| `coverage-closure` | starter: hole `mid` → idea `directed mid samples` — READY |
+| `regression-triage` | starter: uart→fail, spi→flake, i2c→new — CLEAN |
+| `test-taxonomy` | starter: uart_byte→directed … parity_bad→corner — BALANCED |
+| `risk-plan` | starter: H×H→P0, M×H→P0, L×M→P2, L×L→defer — ALIGNED |
+| `signoff-checklist` | starter: coverage + bug bar + stability met — READY |
+| `seed-tags` | starter: seed 42 + uart_byte config + smoke,nightly — REPLAYABLE |
+| `ci-farm-flow` | starter: local → CI → farm all pass — READY |
+| `vip-handoff` | starter: docs + API + self-test met — READY |
+| `sim-pipeline` | starter: compile → elaborate → run all pass — READY |
+| `wave-dump` | starter: long_farm → FST dump on — MATCHED |
+| `dpi-cpp-tb` | starter: verilator_cpp model + eval loop — READY |
+| `iverilog-vs-verilator` | starter: long_regression → Verilator — MATCHED |
+| `verif-metrics` | starter: pass 98% · cov 95% · escape 0 — HEALTHY |
+| `iverilog-flags` | starter: `-g2012 -Wall -o sim.vvp +incdir+include tb.v dut.v` — READY |
+| `iverilog-timescale` | starter: `` `timescale 1ns/1ps `` · `#10` → 10 ns — ALIGNED |
+| `vvp-plusargs` | starter: `vvp sim.vvp +SEED=1 +VERBOSE` — READY |
 | `i2c-open-drain` | ACK — slave pulls SDA low, master releases |
 | `i2c-clock-stretch` | ACK then SCL held low ×3 — master waits |
 | `i2c-repeated-start` | Sr write-pointer then read @ 0x50 |
@@ -398,7 +438,7 @@ Literacy for `learn_verilator_iverilog` Modules 3â€“7 and SV TB intros. **N
 | Virtual interface wiring | `vif-wiring` | **Shipped** | Class TB to DUT via interface + virtual handle; 22 challenges |
 | Self-checking TB pattern | `self-check-tb` | **Shipped** | Stimulus → expect → pass/fail; 22 challenges |
 | TB clock + reset patterns | `tb-clock-reset` | **Shipped** | Clock gen + reset assert/deassert; 22 challenges |
-| File / vector I/O | `file-vector-io` | **Planned** | `$readmemh` / vector files as TB stimulus |
+| File / vector I/O | `file-vector-io` | **Shipped** | `$readmemh` stim/exp → apply loop; 22 challenges |
 
 ## UVM methodology (sketches)
 
@@ -406,42 +446,42 @@ Concept diagrams for `learn_uvm2017_sv_verilator` / `learn_uvm_pyuvm`. **Not** a
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Testbench layer diagram | `tb-layers` | **Planned** | Agent / env / scoreboard roles as a block sketch |
-| UVM phase timeline | `uvm-phases` | **Planned** | build â†’ connect â†’ run â†’ check â†’ report |
-| Factory override sketch | `uvm-factory` | **Planned** | Type override concept (who gets constructed) |
-| ConfigDB key path | `uvm-configdb` | **Planned** | set/get by hierarchical path + field |
-| Objection raise/drop | `uvm-objections` | **Planned** | Who holds the run phase open |
-| Sequence â†’ driver flow | `uvm-seq-flow` | **Planned** | item â†’ sequencer â†’ driver â†’ DUT |
-| Agent anatomy | `uvm-agent` | **Planned** | driver / monitor / sequencer layout |
-| TLM port wiring | `uvm-tlm` | **Planned** | analysis / put / get port sketch |
-| Scoreboard expect/actual | `uvm-scoreboard` | **Planned** | Predict vs observe compare pipeline |
-| Register model map | `ral-map` | **Planned** | Front-door vs back-door access concept |
-| cocotb vs UVM map | `cocotb-uvm-map` | **Planned** | Role mapping pyuvm / cocotb â†” SV UVM |
-| UVM reporting ladder | `uvm-reporting` | **Planned** | Verbosity / severity / ID filtering |
-| Callbacks sketch | `uvm-callbacks` | **Planned** | Pre/post hooks without subclassing |
-| Virtual sequence | `uvm-vseq` | **Planned** | Coordinate multiple sequencers |
-| Multi-agent env | `uvm-multi-agent` | **Planned** | Two+ agents sharing a scoreboard/env |
-| Protocol checker sketch | `protocol-checker` | **Planned** | Bus rule checks vs scoreboard roles |
-| VIP anatomy | `vip-anatomy` | **Planned** | Agent + checker + coverage + docs package |
-| Plusargs / CLP | `uvm-plusargs` | **Planned** | `+UVM_TESTNAME` and test knobs |
-| cocotb triggers | `cocotb-triggers` | **Planned** | RisingEdge / Timer / Combine (pyuvm path) |
-| cocotb DUT handle | `cocotb-dut-handle` | **Planned** | Hierarchical signal access from Python |
-| Python async TB sketch | `python-async-tb` | **Planned** | `async def` test + await timeline (concept) |
+| Testbench layer diagram | `tb-layers` | **Shipped** | Agent / env / scoreboard stack; 22 challenges |
+| UVM phase timeline | `uvm-phases` | **Shipped** | build → connect → run → check → report; 22 challenges |
+| Factory override sketch | `uvm-factory` | **Shipped** | Type/inst override — who gets constructed; 22 challenges |
+| ConfigDB key path | `uvm-configdb` | **Shipped** | set/get by path + field; 22 challenges |
+| Objection raise/drop | `uvm-objections` | **Shipped** | Who holds run open; raise/drop; 22 challenges |
+| Sequence → driver flow | `uvm-seq-flow` | **Shipped** | item → sequencer → driver → DUT; 22 challenges |
+| Agent anatomy | `uvm-agent` | **Shipped** | sequencer / driver / monitor; active vs passive; 22 challenges |
+| TLM port wiring | `uvm-tlm` | **Shipped** | seq_item / put / get / analysis; 22 challenges |
+| Scoreboard expect/actual | `uvm-scoreboard` | **Shipped** | predict vs observe compare; orphans; 22 challenges |
+| Register model map | `ral-map` | **Shipped** | block→reg→field; front-door vs back-door; 22 challenges |
+| cocotb vs UVM map | `cocotb-uvm-map` | **Shipped** | pyuvm / cocotb ↔ SV UVM roles; 22 challenges |
+| UVM reporting ladder | `uvm-reporting` | **Shipped** | severity / verbosity / ID filter; 22 challenges |
+| Callbacks sketch | `uvm-callbacks` | **Shipped** | pre/post hooks without subclassing; 22 challenges |
+| Virtual sequence | `uvm-vseq` | **Shipped** | vsequencer refs · seq vs parallel; 22 challenges |
+| Multi-agent env | `uvm-multi-agent` | **Shipped** | two+ agents · shared scoreboard fan-in; 22 challenges |
+| Protocol checker sketch | `protocol-checker` | **Shipped** | bus rules vs scoreboard roles; 22 challenges |
+| VIP anatomy | `vip-anatomy` | **Shipped** | agent + checker + coverage + docs package; 22 challenges |
+| Plusargs / CLP | `uvm-plusargs` | **Shipped** | `+UVM_TESTNAME` and test knobs; 22 challenges |
+| cocotb triggers | `cocotb-triggers` | **Shipped** | RisingEdge / Timer / First / Combine; 22 challenges |
+| cocotb DUT handle | `cocotb-dut-handle` | **Shipped** | hierarchical dut.path · .value peek/poke; 22 challenges |
+| Python async TB sketch | `python-async-tb` | **Shipped** | `async def` test + await timeline; 22 challenges |
 
 ## Verification planning (lightweight)
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Coverage / plan checklist | `verif-plan-check` | **Planned** | Feature â†’ scenario â†’ coverage item mapping (document aid) |
-| Feature Ã— scenario matrix | `feature-matrix` | **Planned** | Traceability grid (plan doc aid) |
-| Coverage closure planner | `coverage-closure` | **Planned** | Hole â†’ next test idea |
-| Regression triage board | `regression-triage` | **Planned** | Fail / flake / new buckets (concept) |
-| Test taxonomy planner | `test-taxonomy` | **Planned** | Directed / random / stress / corner tiers |
-| Risk-based plan matrix | `risk-plan` | **Planned** | Risk Ã— impact â†’ test priority |
-| Sign-off criteria | `signoff-checklist` | **Planned** | Exit criteria: coverage, bug bar, stability |
-| Seed / config / tags | `seed-tags` | **Planned** | Test metadata for replay & triage |
-| CI / farm regression flow | `ci-farm-flow` | **Planned** | Local â†’ CI â†’ farm stages (sketch) |
-| VIP handoff checklist | `vip-handoff` | **Planned** | Docs + API + self-test deliverables |
+| Coverage / plan checklist | `verif-plan-check` | **Shipped** | feature → scenario → coverage mapping; 22 challenges |
+| Feature × scenario matrix | `feature-matrix` | **Shipped** | traceability grid P/C/gap; 22 challenges |
+| Coverage closure planner | `coverage-closure` | **Shipped** | hole → next test idea; 22 challenges |
+| Regression triage board | `regression-triage` | **Shipped** | Fail / flake / new / env buckets; 22 challenges |
+| Test taxonomy planner | `test-taxonomy` | **Shipped** | Directed / random / stress / corner tiers; 22 challenges |
+| Risk-based plan matrix | `risk-plan` | **Shipped** | Risk × impact → P0/P1/P2/defer; 22 challenges |
+| Sign-off criteria | `signoff-checklist` | **Shipped** | Exit criteria: coverage, bug bar, stability; 22 challenges |
+| Seed / config / tags | `seed-tags` | **Shipped** | Test metadata for replay & triage; 22 challenges |
+| CI / farm regression flow | `ci-farm-flow` | **Shipped** | Local → CI → farm stages; 22 challenges |
+| VIP handoff checklist | `vip-handoff` | **Shipped** | Docs + API + self-test deliverables; 22 challenges |
 
 ## Simulation literacy (conceptual)
 
@@ -449,14 +489,14 @@ Flow literacy for `learn_iverilog` / `learn_verilator` â€” **not** a browse
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Compile â†’ elaborate â†’ run | `sim-pipeline` | **Planned** | Toolchain stage diagram (iverilog / Verilator) |
-| Wave dump literacy | `wave-dump` | **Planned** | VCD vs FST roles (not GTKWave) |
-| C++ TB / DPI sketch | `dpi-cpp-tb` | **Planned** | Verilator C++ TB vs SV TB paradigms |
-| iverilog vs Verilator chooser | `iverilog-vs-verilator` | **Planned** | When to pick each tool (matrix quiz) |
-| Verification metrics board | `verif-metrics` | **Planned** | Pass rate, coverage %, bug escape concepts |
-| iverilog flags lab | `iverilog-flags` | **Planned** | `-g2005`/`-g2012`, `-Wall`, `-o`, `+incdir` |
-| iverilog timescale | `iverilog-timescale` | **Planned** | `` `timescale `` vs timeunit pitfalls |
-| vvp plusargs | `vvp-plusargs` | **Planned** | `$test$plusargs` / runtime plusargs |
+| Compile → elaborate → run | `sim-pipeline` | **Shipped** | Toolchain stage diagram (iverilog / Verilator); 22 challenges |
+| Wave dump literacy | `wave-dump` | **Shipped** | VCD vs FST roles (not GTKWave); 22 challenges |
+| C++ TB / DPI sketch | `dpi-cpp-tb` | **Shipped** | Verilator C++ TB vs SV TB paradigms; 22 challenges |
+| iverilog vs Verilator chooser | `iverilog-vs-verilator` | **Shipped** | When to pick each tool (matrix quiz); 22 challenges |
+| Verification metrics board | `verif-metrics` | **Shipped** | Pass rate, coverage %, bug escape concepts; 22 challenges |
+| iverilog flags lab | `iverilog-flags` | **Shipped** | `-g2005`/`-g2012`, `-Wall`, `-o`, `+incdir`; 22 challenges |
+| iverilog timescale | `iverilog-timescale` | **Shipped** | `` `timescale `` vs timeunit pitfalls; 22 challenges |
+| vvp plusargs | `vvp-plusargs` | **Shipped** | `$test$plusargs` / runtime plusargs; 22 challenges |
 | Verilator lint lab | `verilator-lint-lab` | **Planned** | `-Wall` warning teaching (concept) |
 | Verilator trace | `verilator-trace` | **Planned** | `--trace` â†’ VCD/FST roles |
 | Verilator public | `verilator-public` | **Planned** | `/*verilator public*/` / hierarchy visibility |
@@ -504,7 +544,7 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | **C** | Datapath & memory | `alu-explorer` (**shipped**), `mem-map` (**shipped**), `array-mult` (**shipped**), `ripple-carry-adder-animator` (**shipped**), `carry-look-ahead-adder-propagate-and-generate` (**shipped**), `cache-walk` (**shipped**), `fifo-lab` (**shipped**), `dual-port-ram` (**shipped**), `byte-enable-mem` (**shipped**), `async-fifo` (**shipped**) |
 | **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint` (**shipped**), `hdl-style` (**shipped**), `handshake` (**shipped**), `pipeline-hazards` (**shipped**), `uart-frame` (**shipped**), `uart-oversample` (**shipped**), `uart-errors` (**shipped**), `baud-divider` (**shipped**), `spec-to-rtl` (**shipped**), `spi-step` (**shipped**), `spi-multi-cs` (**shipped**), `spi-cpol-cpha` (**shipped**), `i2c-lab` (**shipped**), `i2c-clock-stretch` (**shipped**), `i2c-repeated-start` (**shipped**), `i2c-open-drain` (**shipped**) |
 | **E** | SV design constructs | `sv-always-procs`, `sv-case-unique`, `sv-interfaces`, `sv-packages`, `sv-generate`, `sv-typedefs`, `ieee-version-map`, `sv-migration` |
-| **F** | Verification literacy | `tb-anatomy` (**shipped**), `tb-vs-uvm-map` (**shipped**), `sv-class-sketch` (**shipped**), `crv-lite` (**shipped**), `cover-bins` (**shipped**), `sva-timeline` (**shipped**), `vif-wiring` (**shipped**), `self-check-tb` (**shipped**), `tb-clock-reset` (**shipped**), `tb-layers`, SV TB sketches, UVM sketches, `verif-plan-check`, sim literacy |
+| **F** | Verification literacy | `tb-anatomy` (**shipped**), `tb-vs-uvm-map` (**shipped**), `sv-class-sketch` (**shipped**), `crv-lite` (**shipped**), `cover-bins` (**shipped**), `sva-timeline` (**shipped**), `vif-wiring` (**shipped**), `self-check-tb` (**shipped**), `tb-clock-reset` (**shipped**), `file-vector-io` (**shipped**), `tb-layers` (**shipped**), `uvm-phases` (**shipped**), `uvm-factory` (**shipped**), `uvm-configdb` (**shipped**), `uvm-objections` (**shipped**), `uvm-seq-flow` (**shipped**), `uvm-agent` (**shipped**), `uvm-tlm` (**shipped**), `uvm-scoreboard` (**shipped**), `ral-map` (**shipped**), `cocotb-uvm-map` (**shipped**), `cocotb-triggers` (**shipped**), `cocotb-dut-handle` (**shipped**), `python-async-tb` (**shipped**), `uvm-reporting` (**shipped**), `uvm-callbacks` (**shipped**), `uvm-vseq` (**shipped**), `uvm-multi-agent` (**shipped**), `protocol-checker` (**shipped**), `vip-anatomy` (**shipped**), `uvm-plusargs` (**shipped**), SV TB sketches, UVM sketches, `verif-plan-check` (**shipped**), sim literacy |
 
 Phases are planning aids only; the public catalog stays domain-based.
 
@@ -541,20 +581,20 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 
 | Target course | Already strong | Gaps (Planned ids) |
 |---------------|----------------|--------------------|
-| `learn_unix` | vfs â†’ scripting, archives, `backup-clean` **shipped**, workflow | `link-relative`, `make-basics`, `dry-run-lab`, `log-triage`, `env-file-lab` |
+| `learn_unix` | vfs → scripting, archives, workflow, make/env labs **shipped** | — |
 | `learn_git` | Full Version control + template/submission labs (**all shipped**) | none for browser labs — module 21 stays offline (`unix-git-practice`) |
 | `learn_digital` | Numbers→Boolean→gates→clocks→FSM→datapath→mem (**48 shipped**) | — |
 | `learn_verilog` | Full IEEE 1364 RTL browser path (**all 17 labs shipped**) | none for browser labs — module 18 is bridge (reuse digital labs) |
 | `learn_systemverilog` | (labs mostly planned) | `sv-always-procs` â†’ `sv-migration` set |
-| `learn_uvm2017` / `learn_pyuvm` | `tb-anatomy` / `tb-vs-uvm-map` (+ SV TB sketches) **shipped**; offline via legacy | UVM sketches + **all** pyuvm/cocotb labs (`python-async-tb`, triggers, DUT handle, map) |
-| `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; **0** pyuvm-specific browser labs shipped | `python-async-tb`, `cocotb-triggers`, `cocotb-dut-handle`, `cocotb-uvm-map`, shared `uvm-*` sketches |
-| `learn_verilator` | offline fidelity via legacy; course scaffolded; `tb-clock-reset` (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | `iverilog-vs-verilator`, `sim-pipeline`, `verilator-lint-lab`, `dpi-cpp-tb`, `verilator-trace`, `wave-dump`, `verilator-public`, `verif-metrics` |
-| `learn_iverilog` | shipped TB/wave labs + `self-check-tb` (**shipped**); course scaffolded; offline module 11 | `sim-pipeline`, `iverilog-flags`, `iverilog-timescale`, `vvp-plusargs`, `wave-dump` |
+| `learn_uvm2017` / `learn_pyuvm` | `tb-anatomy` / `tb-vs-uvm-map` / `tb-layers` / `uvm-phases` / `uvm-factory` / `uvm-configdb` / `uvm-objections` / `uvm-seq-flow` / `uvm-agent` / `uvm-tlm` / `uvm-scoreboard` / `ral-map` / `uvm-reporting` / `uvm-callbacks` / `uvm-vseq` / `uvm-multi-agent` / `protocol-checker` / `vip-anatomy` / `uvm-plusargs` (+ SV TB sketches) **shipped**; offline via legacy | remaining pyuvm/cocotb labs |
+| `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**) | — |
+| `learn_verilator` | offline fidelity via legacy; course scaffolded; `tb-clock-reset` / `sim-pipeline` / `wave-dump` / `dpi-cpp-tb` / `iverilog-vs-verilator` / `verif-metrics` (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | `verilator-lint-lab`, `verilator-trace`, `verilator-public` |
+| `learn_iverilog` | shipped TB/wave labs + toolchain (`iverilog-flags` / `iverilog-timescale` / `vvp-plusargs`) + `sim-pipeline` / `wave-dump` / `self-check-tb` (**shipped**); course scaffolded; offline module 11 | — |
 | `learn_hdl_simulator` | waveform-lab, tb-anatomy, synth/style | **`hdl-sim-*` guided set** + public simulator now |
-| `learn_uart` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `tb-clock-reset` (**shipped**); course scaffolded | `vip-anatomy` |
-| `learn_spi` | shared labs + `self-check-tb` / `tb-vs-uvm-map` (**shipped**); course scaffolded | `protocol-checker` |
-| `learn_i2c` | shared labs + `self-check-tb` / `tb-vs-uvm-map` (**shipped**); course scaffolded | `vip-anatomy` |
-| `learn_verification_planning_management` | `cover-bins` (**shipped**); plan/matrix/closure/triage planned | `verif-plan-check`, taxonomy, risk, signoff, seeds, CI, VIP handoff |
+| `learn_uart` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `tb-clock-reset` / `vip-anatomy` (**shipped**); course scaffolded | — |
+| `learn_spi` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `protocol-checker` (**shipped**); course scaffolded | — |
+| `learn_i2c` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `vip-anatomy` (**shipped**); course scaffolded | — |
+| `learn_verification_planning_management` | planning shelf browser labs + `vip-handoff` / `verif-metrics` (**shipped**); course not fully scaffolded | — |
 
 Still **offline-only** (see Out of scope): installing toolchains, running course Makefiles, full UVM/CRV/SVA engines, commercial VIP, synthesis/P&R.
 
@@ -564,8 +604,8 @@ Still **offline-only** (see Out of scope): installing toolchains, running course
 
 | Status | Count |
 |--------|------:|
-| Shipped | 152 |
-| Planned | 50 |
+| Shipped | 192 |
+| Planned | 10 |
 | **Total catalogued** | **202** |
 
 Update this file when a planned tool ships (status â†’ **Shipped**, path verified under `platform/tools/`).

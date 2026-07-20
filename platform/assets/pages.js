@@ -16,10 +16,44 @@
     return `${prefix}tools/${toolId}/index.html`;
   }
 
+  function moduleDir(lab) {
+    return `module${lab.n}-${lab.slug}`;
+  }
+
+  /** Media URLs from org course repos (video.mp4, slides.pptx, …). */
+  function mediaUrls(course, lab) {
+    const cfg = D.cfg || {};
+    const org = cfg.githubOrg || "universal-verification-methodology";
+    const branch = cfg.mediaBranch || "main";
+    const repo = (course && course.repo) || (course && course.id) || "";
+    const dir = moduleDir(lab);
+    const cdn = (cfg.mediaCdn || "jsdelivr").toLowerCase();
+    const fileUrl = (file) => {
+      if (cdn === "raw") {
+        return `https://raw.githubusercontent.com/${org}/${repo}/${branch}/${dir}/${file}`;
+      }
+      return `https://cdn.jsdelivr.net/gh/${org}/${repo}@${branch}/${dir}/${file}`;
+    };
+    return {
+      org,
+      repo,
+      branch,
+      dir,
+      moduleGithub: `https://github.com/${org}/${repo}/tree/${branch}/${dir}`,
+      repoGithub: `https://github.com/${org}/${repo}`,
+      video: fileUrl("video.mp4"),
+      slidesPptx: fileUrl("slides.pptx"),
+      slidesPdf: fileUrl("slides.pdf"),
+      quiz: fileUrl("quiz.json"),
+      transcript: fileUrl("transcript.md"),
+    };
+  }
+
   function renderCourseList(root) {
     D.loadCatalog().then((cat) => {
       const ul = document.createElement("ul");
       ul.className = "chapter-list";
+      const org = (D.cfg && D.cfg.githubOrg) || "universal-verification-methodology";
       (cat.courses || []).forEach((c) => {
         const stats = D.courseStats(c);
         const li = document.createElement("li");
@@ -36,7 +70,8 @@
           li.innerHTML = `<span class="tool-title">${escape(c.title)}
             <span class="pill-soon">Coming soon</span></span>
             <div class="chapter-meta">${escape(c.focus || "")} · guided lab pages not published yet
-              · see <a href="../syllabus.md">syllabus</a> · <a href="../tools/index.html">tools</a></div>`;
+              · see <a href="../syllabus.md">syllabus</a> · <a href="../tools/index.html">tools</a>
+              ${c.repo ? ` · <a href="https://github.com/${escape(org)}/${escape(c.repo)}">repo</a>` : ""}</div>`;
         }
         ul.appendChild(li);
       });
@@ -74,19 +109,21 @@
       }
 
       if (!course.labs || !course.labs.length) {
+        const media = mediaUrls(course, { n: "00", slug: "intro" });
         root.innerHTML = `
           <div class="placeholder-panel">
             <h2>Labs coming soon</h2>
             <p>Guided lab pages for <code>${escape(courseId)}</code> are not on the site yet.
-            Meanwhile use the <a href="../../tools/index.html">tools shelf</a> and the
-            <a href="../../syllabus.md">syllabus</a>.</p>
+            Meanwhile use the <a href="../../tools/index.html">tools shelf</a>, the
+            <a href="../../syllabus.md">syllabus</a>, and the course repo
+            <a href="${escape(media.repoGithub)}">${escape(media.repoGithub)}</a>.</p>
           </div>`;
         return;
       }
 
       const ul = document.createElement("ul");
       ul.className = "chapter-list lab-list";
-      course.labs.forEach((lab, i) => {
+      course.labs.forEach((lab) => {
         const done = D.labDone(courseId, lab.slug);
         const planned = lab.status === "planned";
         const href = `labs/${lab.slug}/index.html`;
@@ -131,6 +168,7 @@
       const next = idx < labs.length - 1 ? labs[idx + 1] : null;
       const done = D.labDone(courseId, slug);
       const tool = toolHref(lab.toolId, 4);
+      const media = mediaUrls(course, lab);
       const titleEl = document.querySelector("[data-lab-title]");
       if (titleEl) titleEl.textContent = lab.title;
       document.title = `${lab.title} — ${course.title}`;
@@ -159,7 +197,10 @@
                 ? `<a class="btn btn-primary" href="${tool}">Open tool</a>`
                 : `<span class="btn btn-ghost is-disabled">No browser tool</span>`
             }
-            <a class="btn btn-secondary" href="../../../../tools/index.html">Tools shelf</a>
+            <a class="btn btn-secondary" href="${escape(media.slidesPptx)}">Download PPTX</a>
+            <a class="btn btn-secondary" href="${escape(media.slidesPdf)}">Download PDF</a>
+            <a class="btn btn-ghost" href="#quiz">Jump to quiz</a>
+            <a class="btn btn-ghost" href="${escape(media.moduleGithub)}" rel="noopener">Module on GitHub</a>
             <button type="button" class="btn ${done ? "btn-ghost" : "btn-secondary"}" data-toggle-done>
               ${done ? "Mark not done" : "Mark lab done"}
             </button>
@@ -174,33 +215,37 @@
         <section class="video-panel" aria-label="Lab video">
           <div class="video-wrap">
             <video controls preload="metadata" playsinline>
-              <source src="" type="video/mp4">
+              <source src="${escape(media.video)}" type="video/mp4">
             </video>
-            <div class="video-placeholder">
-              Video clip not published yet. Use the course module transcript / slides in the repo, then open the tool.
+            <div class="video-placeholder" hidden>
+              Video not available yet in
+              <a href="${escape(media.moduleGithub)}" rel="noopener"><code>${escape(media.dir)}/video.mp4</code></a>.
+              Download the PPTX/PDF or open the tool to continue.
             </div>
           </div>
         </section>
 
         <h2>What to do</h2>
         <ol class="lab-steps">
-          <li>Skim the idea (clip or module README when available).</li>
+          <li>Watch the clip (from the course repo) or skim the slides.</li>
           ${
             tool
               ? `<li><a href="${tool}">Open the browser tool</a>${lab.toolId ? ` (<code>${escape(lab.toolId)}</code>)` : ""} — load the starter example, then try challenges.</li>`
-              : `<li>This step is ${escape(kindLabel(lab.kind)).toLowerCase()} — no primary tool; follow the course README.</li>`
+              : `<li>This step is ${escape(kindLabel(lab.kind)).toLowerCase()} — no primary tool; follow the module README on GitHub.</li>`
           }
-          <li>Optional: practice Track A (real shell / toolchain) from the course repo.</li>
+          <li>Optional: practice Track A from
+            <a href="${escape(media.repoGithub)}" rel="noopener">${escape(media.repo)}</a>.</li>
           <li>Mark the lab done when you are satisfied (saved in this browser only).</li>
         </ol>
 
-        <div class="placeholder-panel" id="quiz">
+        <div id="quiz" class="placeholder-panel">
           <h2>Quiz</h2>
-          <p>Inline quiz placeholder — will load from module <code>quiz.json</code> when media ships.</p>
+          <p>Loading quiz from <code>quiz.json</code>…</p>
         </div>
 
         <p class="lead" style="margin-top:1.5rem">
-          Author sources: <code>courses/${escape(courseId)}/module${escape(lab.n)}-*/</code>
+          Media source:
+          <a href="${escape(media.moduleGithub)}" rel="noopener"><code>${escape(media.org)}/${escape(media.repo)}/${escape(media.dir)}/</code></a>
           · <a href="../../../../syllabus.md">Syllabus</a>
         </p>
       `;
@@ -213,14 +258,61 @@
         });
       }
 
-      // show placeholder immediately (empty source)
       const video = root.querySelector("video");
       const ph = root.querySelector(".video-placeholder");
       if (video && ph) {
-        video.style.display = "none";
-        ph.hidden = false;
+        video.addEventListener("error", () => {
+          video.style.display = "none";
+          ph.hidden = false;
+        });
+        video.style.display = "";
+        ph.hidden = true;
       }
+
+      const nextHref = next ? `../${next.slug}/index.html` : "../../index.html";
+      const nextLabel = next ? "Next lab →" : "Course map →";
+      loadAndMountQuiz(media.quiz, root.querySelector("#quiz"), {
+        nextHref,
+        nextLabel,
+        onPass: () => {
+          D.setLabDone(courseId, slug, true);
+        },
+      });
     });
+  }
+
+  function ensureQuizScript() {
+    if (window.DDVQuiz) return Promise.resolve();
+    const base = (document.querySelector("[data-asset-base]") || {}).getAttribute?.("data-asset-base")
+      || "assets/";
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = `${base}quiz.js`;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error("quiz.js failed to load"));
+      document.head.appendChild(s);
+    });
+  }
+
+  function loadAndMountQuiz(quizUrl, quizRoot, opts) {
+    if (!quizRoot) return;
+    ensureQuizScript()
+      .then(() => fetch(quizUrl, { cache: "no-cache" }))
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((quiz) => {
+        window.DDVQuiz.mount(quizRoot, quiz, opts);
+      })
+      .catch(() => {
+        quizRoot.className = "placeholder-panel";
+        quizRoot.innerHTML = `
+          <h2>Quiz</h2>
+          <p>Quiz not available yet. When <code>quiz.json</code> is published in the module folder,
+          it will load here automatically.</p>
+          <p><a href="${String(quizUrl).replace(/"/g, "&quot;")}" rel="noopener">Open quiz.json URL</a></p>`;
+      });
   }
 
   function renderPathMap(root) {

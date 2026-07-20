@@ -1,0 +1,234 @@
+.idea-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .idea-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+  .idea-grid { grid-template-columns: 1fr; }
+}
+
+.idea-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  font-size: 0.88rem;
+}
+
+.idea-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.utlm-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.utlm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.utlm-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.utlm-field select {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 10rem;
+}
+
+.utlm-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+  .utlm-layout { grid-template-columns: 1fr; }
+}
+
+.panel-box {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: var(--surface2);
+}
+
+.panel-box h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+}
+
+.wire-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.45rem;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+@media (max-width: 600px) {
+  .wire-row {
+    grid-template-columns: 1fr;
+  }
+  .wire-arrow { text-align: center; }
+}
+
+.endp {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+  background: var(--surface);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.endp.is-sel {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.endp.is-live {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+}
+
+.endp .k {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.endp .v {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 0.15rem;
+}
+
+.wire-arrow {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.wire-arrow.is-on {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.txn-box {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  min-height: 2.8rem;
+}
+
+.verdict {
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.55rem;
+}
+
+.verdict.idle {
+  background: var(--surface2);
+  border: 1px solid var(--line);
+}
+
+.verdict.yes {
+  background: color-mix(in srgb, #2a7 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, #2a7 45%, var(--line));
+}
+
+.verdict.warn {
+  background: color-mix(in srgb, #c90 14%, var(--surface));
+  border: 1px solid color-mix(in srgb, #c90 40%, var(--line));
+}
+
+.flag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.flag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  background: var(--surface2);
+}
+
+.flag.is-ok {
+  border-color: color-mix(in srgb, #2a7 50%, var(--line));
+  background: color-mix(in srgb, #2a7 12%, var(--surface));
+}
+
+.flag.is-on {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+
+.flag.is-bad {
+  border-color: color-mix(in srgb, #c44 50%, var(--line));
+  background: color-mix(in srgb, #c44 10%, var(--surface));
+}
+
+.code-box,
+.trace-box,
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface2);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin: 0;
+  max-height: 14rem;
+}
+
+.meta-note {
+  font-size: 0.88rem;
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+}
+
+.role-blurb {
+  font-size: 0.92rem;
+  margin: 0;
+  line-height: 1.45;
+}

@@ -1,67 +1,353 @@
 {
   "version": 1,
   "ladder": [
-    { "id": "learn_unix", "next": ["learn_git", "learn_digital"] },
-    { "id": "learn_git", "next": ["learn_digital", "learn_verilog"] },
-    { "id": "learn_digital", "next": ["learn_verilog"] },
-    { "id": "learn_verilog", "next": ["learn_systemverilog", "learn_hdl_simulator", "learn_iverilog", "learn_verilator"] },
-    { "id": "learn_systemverilog", "next": ["learn_uvm2017", "learn_uart"] },
-    { "id": "learn_hdl_simulator", "next": ["learn_uart"] },
-    { "id": "learn_iverilog", "next": ["learn_uart"] },
-    { "id": "learn_verilator", "next": ["learn_uart", "learn_pyuvm"] },
-    { "id": "learn_uart", "next": ["learn_spi", "learn_uvm2017", "learn_pyuvm", "learn_verification_planning_management"] },
-    { "id": "learn_spi", "next": ["learn_i2c", "learn_uvm2017", "learn_verification_planning_management"] },
-    { "id": "learn_i2c", "next": ["learn_uvm2017", "learn_verification_planning_management"] },
-    { "id": "learn_uvm2017", "next": ["learn_verification_planning_management"] },
-    { "id": "learn_pyuvm", "next": ["learn_verification_planning_management"] },
-    { "id": "learn_verification_planning_management", "next": [] }
+    {
+      "id": "learn_unix",
+      "next": [
+        "learn_git",
+        "learn_digital"
+      ]
+    },
+    {
+      "id": "learn_git",
+      "next": [
+        "learn_digital",
+        "learn_verilog"
+      ]
+    },
+    {
+      "id": "learn_digital",
+      "next": [
+        "learn_verilog"
+      ]
+    },
+    {
+      "id": "learn_verilog",
+      "next": [
+        "learn_systemverilog",
+        "learn_hdl_simulator",
+        "learn_iverilog",
+        "learn_verilator"
+      ]
+    },
+    {
+      "id": "learn_systemverilog",
+      "next": [
+        "learn_uvm2017",
+        "learn_uart"
+      ]
+    },
+    {
+      "id": "learn_hdl_simulator",
+      "next": [
+        "learn_uart"
+      ]
+    },
+    {
+      "id": "learn_iverilog",
+      "next": [
+        "learn_uart"
+      ]
+    },
+    {
+      "id": "learn_verilator",
+      "next": [
+        "learn_uart",
+        "learn_pyuvm"
+      ]
+    },
+    {
+      "id": "learn_uart",
+      "next": [
+        "learn_spi",
+        "learn_uvm2017",
+        "learn_pyuvm",
+        "learn_verification_planning_management"
+      ]
+    },
+    {
+      "id": "learn_spi",
+      "next": [
+        "learn_i2c",
+        "learn_uvm2017",
+        "learn_verification_planning_management"
+      ]
+    },
+    {
+      "id": "learn_i2c",
+      "next": [
+        "learn_uvm2017",
+        "learn_verification_planning_management"
+      ]
+    },
+    {
+      "id": "learn_uvm2017",
+      "next": [
+        "learn_verification_planning_management"
+      ]
+    },
+    {
+      "id": "learn_pyuvm",
+      "next": [
+        "learn_verification_planning_management"
+      ]
+    },
+    {
+      "id": "learn_verification_planning_management",
+      "next": []
+    }
   ],
   "courses": [
     {
       "id": "learn_unix",
       "title": "Unix for design",
-      "focus": "Shell → scripts → project hygiene",
+      "focus": "Shell \u2192 scripts \u2192 project hygiene",
       "prereq": null,
       "status": "ready",
+      "repo": "learn_unix",
       "labs": [
-        { "n": "00", "slug": "intro", "kind": "intro", "title": "Welcome to Unix for design", "toolId": null, "status": "shipped" },
-        { "n": "01", "slug": "vfs-terminal", "kind": "lab", "title": "Virtual filesystem terminal", "toolId": "vfs-terminal", "status": "shipped" },
-        { "n": "02", "slug": "man-help-lab", "kind": "lab", "title": "man / --help discoverability", "toolId": "man-help-lab", "status": "shipped" },
-        { "n": "03", "slug": "path-abs-rel", "kind": "lab", "title": "Absolute vs relative paths", "toolId": "path-abs-rel", "status": "shipped" },
-        { "n": "04", "slug": "wildcards-globs", "kind": "lab", "title": "Globs & wildcards", "toolId": "wildcards-globs", "status": "shipped" },
-        { "n": "05", "slug": "file-types-lab", "kind": "lab", "title": "File types & links", "toolId": "file-types-lab", "status": "shipped" },
-        { "n": "06", "slug": "realpath-resolve", "kind": "lab", "title": "realpath / readlink", "toolId": "realpath-resolve", "status": "shipped" },
-        { "n": "07", "slug": "permissions", "kind": "lab", "title": "Permissions, umask, PATH", "toolId": "permissions", "status": "shipped" },
-        { "n": "08", "slug": "dotfiles-lab", "kind": "lab", "title": "Dotfiles & config homes", "toolId": "dotfiles-lab", "status": "shipped" },
-        { "n": "09", "slug": "ps-kill-lab", "kind": "lab", "title": "Process list & signals", "toolId": "ps-kill-lab", "status": "shipped" },
-        { "n": "10", "slug": "job-control-lab", "kind": "lab", "title": "Job control", "toolId": "job-control-lab", "status": "shipped" },
-        { "n": "11", "slug": "pipes", "kind": "lab", "title": "Pipes, redirection, xargs", "toolId": "pipes", "status": "shipped" },
-        { "n": "12", "slug": "sort-uniq-cut", "kind": "lab", "title": "sort / uniq / cut", "toolId": "sort-uniq-cut", "status": "shipped" },
-        { "n": "13", "slug": "here-doc-lab", "kind": "lab", "title": "Here-doc / here-string", "toolId": "here-doc-lab", "status": "shipped" },
-        { "n": "14", "slug": "shell-history", "kind": "lab", "title": "Shell history & reverse-search", "toolId": "shell-history", "status": "shipped" },
-        { "n": "15", "slug": "alias-lab", "kind": "lab", "title": "Alias & functions", "toolId": "alias-lab", "status": "shipped" },
-        { "n": "16", "slug": "scripting", "kind": "lab", "title": "Script control flow", "toolId": "scripting", "status": "shipped" },
-        { "n": "17", "slug": "exit-status-lab", "kind": "lab", "title": "Exit status & && / ||", "toolId": "exit-status-lab", "status": "shipped" },
-        { "n": "18", "slug": "safe-scripting", "kind": "lab", "title": "Safe scripting", "toolId": "safe-scripting", "status": "shipped" },
-        { "n": "19", "slug": "project-archives", "kind": "lab", "title": "Project layout, archives, sed & diff", "toolId": "project-archives", "status": "shipped" },
-        { "n": "20", "slug": "zip-vs-tar", "kind": "lab", "title": "tar vs zip", "toolId": "zip-vs-tar", "status": "shipped" },
-        { "n": "21", "slug": "backup-clean", "kind": "lab", "title": "Backup & clean-build", "toolId": "backup-clean", "status": "shipped" },
-        { "n": "22", "slug": "link-relative", "kind": "lab", "title": "Relative symlink pitfalls", "toolId": "link-relative", "status": "shipped" },
-        { "n": "23", "slug": "workflow", "kind": "lab", "title": "Pre-push / Make / env checklist", "toolId": "workflow", "status": "shipped" },
-        { "n": "24", "slug": "make-basics", "kind": "lab", "title": "Makefile basics", "toolId": "make-basics", "status": "planned" },
-        { "n": "25", "slug": "dry-run-lab", "kind": "lab", "title": "Dry-run mindset", "toolId": "dry-run-lab", "status": "planned" },
-        { "n": "26", "slug": "log-triage", "kind": "lab", "title": "Log / failure triage", "toolId": "log-triage", "status": "planned" },
-        { "n": "27", "slug": "env-file-lab", "kind": "lab", "title": ".env literacy", "toolId": "env-file-lab", "status": "planned" },
-        { "n": "28", "slug": "wrap", "kind": "wrap", "title": "Unix path complete → Git", "toolId": null, "status": "shipped" }
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to Unix for design",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "vfs-terminal",
+          "kind": "lab",
+          "title": "Virtual filesystem terminal",
+          "toolId": "vfs-terminal",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "man-help-lab",
+          "kind": "lab",
+          "title": "man / --help discoverability",
+          "toolId": "man-help-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "path-abs-rel",
+          "kind": "lab",
+          "title": "Absolute vs relative paths",
+          "toolId": "path-abs-rel",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "wildcards-globs",
+          "kind": "lab",
+          "title": "Globs & wildcards",
+          "toolId": "wildcards-globs",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "file-types-lab",
+          "kind": "lab",
+          "title": "File types & links",
+          "toolId": "file-types-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "realpath-resolve",
+          "kind": "lab",
+          "title": "realpath / readlink",
+          "toolId": "realpath-resolve",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "permissions",
+          "kind": "lab",
+          "title": "Permissions, umask, PATH",
+          "toolId": "permissions",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "dotfiles-lab",
+          "kind": "lab",
+          "title": "Dotfiles & config homes",
+          "toolId": "dotfiles-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "ps-kill-lab",
+          "kind": "lab",
+          "title": "Process list & signals",
+          "toolId": "ps-kill-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "job-control-lab",
+          "kind": "lab",
+          "title": "Job control",
+          "toolId": "job-control-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "pipes",
+          "kind": "lab",
+          "title": "Pipes, redirection, xargs",
+          "toolId": "pipes",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "sort-uniq-cut",
+          "kind": "lab",
+          "title": "sort / uniq / cut",
+          "toolId": "sort-uniq-cut",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "here-doc-lab",
+          "kind": "lab",
+          "title": "Here-doc / here-string",
+          "toolId": "here-doc-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "14",
+          "slug": "shell-history",
+          "kind": "lab",
+          "title": "Shell history & reverse-search",
+          "toolId": "shell-history",
+          "status": "shipped"
+        },
+        {
+          "n": "15",
+          "slug": "alias-lab",
+          "kind": "lab",
+          "title": "Alias & functions",
+          "toolId": "alias-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "16",
+          "slug": "scripting",
+          "kind": "lab",
+          "title": "Script control flow",
+          "toolId": "scripting",
+          "status": "shipped"
+        },
+        {
+          "n": "17",
+          "slug": "exit-status-lab",
+          "kind": "lab",
+          "title": "Exit status & && / ||",
+          "toolId": "exit-status-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "18",
+          "slug": "safe-scripting",
+          "kind": "lab",
+          "title": "Safe scripting",
+          "toolId": "safe-scripting",
+          "status": "shipped"
+        },
+        {
+          "n": "19",
+          "slug": "project-archives",
+          "kind": "lab",
+          "title": "Project layout, archives, sed & diff",
+          "toolId": "project-archives",
+          "status": "shipped"
+        },
+        {
+          "n": "20",
+          "slug": "zip-vs-tar",
+          "kind": "lab",
+          "title": "tar vs zip",
+          "toolId": "zip-vs-tar",
+          "status": "shipped"
+        },
+        {
+          "n": "21",
+          "slug": "backup-clean",
+          "kind": "lab",
+          "title": "Backup & clean-build",
+          "toolId": "backup-clean",
+          "status": "shipped"
+        },
+        {
+          "n": "22",
+          "slug": "link-relative",
+          "kind": "lab",
+          "title": "Relative symlink pitfalls",
+          "toolId": "link-relative",
+          "status": "shipped"
+        },
+        {
+          "n": "23",
+          "slug": "workflow",
+          "kind": "lab",
+          "title": "Pre-push / Make / env checklist",
+          "toolId": "workflow",
+          "status": "shipped"
+        },
+        {
+          "n": "24",
+          "slug": "make-basics",
+          "kind": "lab",
+          "title": "Makefile basics",
+          "toolId": "make-basics",
+          "status": "shipped"
+        },
+        {
+          "n": "25",
+          "slug": "dry-run-lab",
+          "kind": "lab",
+          "title": "Dry-run mindset",
+          "toolId": "dry-run-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "26",
+          "slug": "log-triage",
+          "kind": "lab",
+          "title": "Log / failure triage",
+          "toolId": "log-triage",
+          "status": "shipped"
+        },
+        {
+          "n": "27",
+          "slug": "env-file-lab",
+          "kind": "lab",
+          "title": ".env literacy",
+          "toolId": "env-file-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "28",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Unix path complete \u2192 Git",
+          "toolId": null,
+          "status": "shipped"
+        }
       ]
     },
     {
       "id": "learn_git",
       "title": "Git for coursework",
-      "focus": "Model → commit → branch → remotes → deliver",
+      "focus": "Model \u2192 commit \u2192 branch \u2192 remotes \u2192 deliver",
       "prereq": "learn_unix recommended",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_git"
     },
     {
       "id": "learn_digital",
@@ -69,7 +355,8 @@
       "focus": "Logic & datapath concepts",
       "prereq": null,
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_digital"
     },
     {
       "id": "learn_verilog",
@@ -77,7 +364,8 @@
       "focus": "IEEE 1364 RTL coding",
       "prereq": "learn_digital recommended",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_verilog"
     },
     {
       "id": "learn_systemverilog",
@@ -85,7 +373,8 @@
       "focus": "IEEE 1800 design (not UVM)",
       "prereq": "learn_verilog",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_systemverilog"
     },
     {
       "id": "learn_uvm2017",
@@ -93,7 +382,8 @@
       "focus": "UVM methodology (SV)",
       "prereq": "SystemVerilog + TB",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_uvm2017"
     },
     {
       "id": "learn_verilator",
@@ -101,7 +391,8 @@
       "focus": "Verilator as a tool",
       "prereq": "Verilog; C++ helpful",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_verilator"
     },
     {
       "id": "learn_iverilog",
@@ -109,7 +400,8 @@
       "focus": "Icarus as a tool",
       "prereq": "Verilog",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_iverilog"
     },
     {
       "id": "learn_hdl_simulator",
@@ -117,23 +409,26 @@
       "focus": "Browser HDL Simulator guided path",
       "prereq": "Verilog helpful",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_hdl_simulator"
     },
     {
       "id": "learn_pyuvm",
       "title": "pyuvm",
-      "focus": "cocotb → pyuvm",
+      "focus": "cocotb \u2192 pyuvm",
       "prereq": "Python + Verilog + sim",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_pyuvm"
     },
     {
       "id": "learn_uart",
       "title": "UART",
-      "focus": "UART spec → RTL → TB → VIP map",
+      "focus": "UART spec \u2192 RTL \u2192 TB \u2192 VIP map",
       "prereq": "Verilog",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_uart"
     },
     {
       "id": "learn_spi",
@@ -141,34 +436,73 @@
       "focus": "SPI same arc",
       "prereq": "Verilog",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_spi"
     },
     {
       "id": "learn_i2c",
-      "title": "I²C",
-      "focus": "I²C same arc",
+      "title": "I\u00b2C",
+      "focus": "I\u00b2C same arc",
       "prereq": "Verilog",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_i2c"
     },
     {
       "id": "learn_verification_planning_management",
       "title": "Verification planning",
-      "focus": "Plan → coverage → CI → sign-off",
+      "focus": "Plan \u2192 coverage \u2192 CI \u2192 sign-off",
       "prereq": "Protocol or UVM helpful",
       "status": "placeholder",
-      "labs": []
+      "labs": [],
+      "repo": "learn_verification_planning_management"
     }
   ],
   "toolsIndex": [
-    { "id": "vfs-terminal", "title": "Virtual filesystem terminal", "section": "Shell & filesystem" },
-    { "id": "permissions", "title": "Permissions, umask, PATH", "section": "Shell & filesystem" },
-    { "id": "pipes", "title": "Pipes, redirection, xargs", "section": "Shell & filesystem" },
-    { "id": "scripting", "title": "Script exit codes & control flow", "section": "Shell & filesystem" },
-    { "id": "project-archives", "title": "Project layout, archives, sed & diff", "section": "Shell & filesystem" },
-    { "id": "git-graph", "title": "Git graph, staging, stash & rebase", "section": "Git" },
-    { "id": "truth-table", "title": "Truth-table builder", "section": "Digital logic" },
-    { "id": "waveform-lab", "title": "Waveform lab", "section": "HDL & waveforms" },
-    { "id": "uart-frame", "title": "UART frame", "section": "Protocols" }
+    {
+      "id": "vfs-terminal",
+      "title": "Virtual filesystem terminal",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "permissions",
+      "title": "Permissions, umask, PATH",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "pipes",
+      "title": "Pipes, redirection, xargs",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "scripting",
+      "title": "Script exit codes & control flow",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "project-archives",
+      "title": "Project layout, archives, sed & diff",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "git-graph",
+      "title": "Git graph, staging, stash & rebase",
+      "section": "Git"
+    },
+    {
+      "id": "truth-table",
+      "title": "Truth-table builder",
+      "section": "Digital logic"
+    },
+    {
+      "id": "waveform-lab",
+      "title": "Waveform lab",
+      "section": "HDL & waveforms"
+    },
+    {
+      "id": "uart-frame",
+      "title": "UART frame",
+      "section": "Protocols"
+    }
   ]
 }
