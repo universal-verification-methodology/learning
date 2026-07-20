@@ -33,6 +33,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # Local authoring links (../../courses/…) — never ship to Pages.
+      - name: Drop local-only course-media
+        run: rm -rf platform/course-media
+
       - name: Upload platform artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -2374,7 +2374,7 @@
         },
         {
           "n": "03",
-          "slug": "file-vector-io",
+          "slug": "stim-as-data",
           "kind": "lab",
           "title": "Stimulus as data",
           "toolId": "stim-as-data",
@@ -2382,7 +2382,7 @@
         },
         {
           "n": "04",
-          "slug": "offline-pytest-golden",
+          "slug": "pytest-assert-lab",
           "kind": "lab",
           "title": "pytest assert / golden",
           "toolId": "pytest-assert-lab",
@@ -2398,7 +2398,7 @@
         },
         {
           "n": "06",
-          "slug": "offline-hello-deps",
+          "slug": "why-async-sim",
           "kind": "bridge",
           "title": "Why async fits simulation",
           "toolId": null,
@@ -2464,7 +2464,7 @@
         },
         {
           "n": "04",
-          "slug": "file-vector-io",
+          "slug": "task-vs-function",
           "kind": "lab",
           "title": "Task vs function",
           "toolId": "task-vs-function",
@@ -2488,7 +2488,7 @@
         },
         {
           "n": "07",
-          "slug": "crv-lite",
+          "slug": "vif-wiring",
           "kind": "lab",
           "title": "Virtual interface wiring",
           "toolId": "vif-wiring",
@@ -2496,7 +2496,7 @@
         },
         {
           "n": "08",
-          "slug": "cover-bins",
+          "slug": "sv-class-sketch",
           "kind": "lab",
           "title": "Class / inheritance sketch",
           "toolId": "sv-class-sketch",
@@ -2618,7 +2618,7 @@
         },
         {
           "n": "08",
-          "slug": "offline-cocotb-example",
+          "slug": "self-check-tb",
           "kind": "lab",
           "title": "Self-check pattern",
           "toolId": "self-check-tb",
@@ -2684,7 +2684,7 @@
         },
         {
           "n": "03",
-          "slug": "assert-assume-cover",
+          "slug": "cover-bins",
           "kind": "lab",
           "title": "Cover vs prove intuition",
           "toolId": "cover-bins",
@@ -2724,7 +2724,7 @@
         },
         {
           "n": "08",
-          "slug": "offline-induction-sketch",
+          "slug": "synth-lint",
           "kind": "lab",
           "title": "Prove-friendly RTL hygiene",
           "toolId": "synth-lint",

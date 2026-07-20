@@ -1,0 +1,4 @@
+# Local-only junctions/symlinks for lab media on localhost.
+# Created by: python platform/scripts/link_course_media.py
+# Must not ship to GitHub Pages (breaks artifact upload).
+/platform/course-media/
