@@ -2,7 +2,7 @@
 name: module-slides
 description: >-
   Builds per-module PPTX, PDF, natural TTS audio, and short narrated videos for
-  lab-driven courses under courses/ (e.g. learn_unix moduleNN-slug). Revises
+  lab-driven courses under courses/ (e.g. learn_unix or learn_git moduleNN-slug). Revises
   transcripts for spoken English, syncs outline/slides, dual Track A/B callouts,
   and captures browser-lab UI snapshots (Playwright) into assets/ for Track B.
   Use when the user mentions module-slides, module PPT/pptx, PDF, transcript,
@@ -171,6 +171,11 @@ python .cursor/skills/module-slides/scripts/capture_real_shell.py \
   courses/<course>/moduleNN-slug \
   --example-subdir <folder> \
   --commands "pwd,ls -la,…"
+
+# Or run a prepared demo script (learn_git pattern):
+python .cursor/skills/module-slides/scripts/capture_real_shell.py \
+  courses/learn_git/module02-git-graph \
+  --bash-script assets/_demo_m02.sh
 # → assets/real-shell.png (+ .txt)
 ```
 
@@ -387,5 +392,5 @@ Install: `pip install -r .cursor/skills/module-slides/scripts/requirements.txt`
 ## Related
 
 - Syllabus: [`syllabus.md`](../../../syllabus.md)  
-- Example course: `courses/learn_unix/`  
+- Example courses: `courses/learn_unix/` · `courses/learn_git/` (see [reference.md](reference.md) § learn_git)
 - Schemas/templates: [reference.md](reference.md)

@@ -198,3 +198,55 @@ bash $SKILL/narrate_clips.sh "$MOD"
 `build_pptx.py` accepts folders named `moduleNN-slug` and writes **`slides.pptx`** with footer `course — slug words` when it can detect `courses/<course>/` in the path.
 
 Also accepts legacy `part-*` / `clip-*` / `chapterN` folder names if those trees still exist in a repo.
+
+## Course: learn_git (pass 2 notes)
+
+**Path:** `courses/learn_git/module00-intro` … `module22-wrap` (23 clips).
+
+| Module kind | Track B lab snapshot | Track A real-shell | Notes |
+|-------------|---------------------|-------------------|-------|
+| `lab` (01–20) | `assets/lab-starter.png` | `assets/_demo_mNN.sh` → `real-shell.png` | Dual-track slide map |
+| `offline` (21) | — | `assets/_demo_mNN.sh` | Sandbox rehearsal; Track A only in clip |
+| `wrap` (22) | `assets/tools-index.png` (`--lab index`) | — | No real-shell frame |
+| `intro` (00) | tools index snapshot | — | Course welcome |
+
+### Track A demo scripts (`assets/_demo_mNN.sh`)
+
+- Run under WSL; strip CRLF first: `sed -i 's/\r$//' assets/_demo_mNN.sh`
+- Use a demo identity so commits work in temp dirs:
+
+```bash
+GIT=(git -c user.email=demo@local -c user.name=Demo)
+"${GIT[@]}" commit -m "message"
+```
+
+- Prefer `mktemp -d` practice repos over mutating `examples/` trees (many are command lists only).
+- After `git init`, use `git branch -M main` when later modules assume `main`.
+- **Capture:** `capture_real_shell.py … --bash-script assets/_demo_mNN.sh` (not `--session-script`).
+
+### Remotes / submodules demos (15–18)
+
+- Bare file remotes: after first push, set default branch on the bare repo:  
+  `git -C "$BARE" symbolic-ref HEAD refs/heads/main`
+- Local `file://` URLs and `git submodule add` need:  
+  `git -c protocol.file.allow=always …`
+
+### Windows / PowerShell authoring
+
+- Chain build steps in **WSL** (`wsl -e bash -lc 'cd /mnt/d/… && …'`) — PowerShell does not accept `&&` in older versions.
+- Avoid inline `$VAR` in `wsl bash -lc` one-liners from PowerShell; put logic in `assets/_demo_mNN.sh` instead.
+- Playwright snapshots: run `capture_lab_snapshot.py` from **Windows Python** if WSL lacks Playwright; narrate/PDF/video still via WSL (`narrate_clips.sh`).
+
+### Bulk verify (whole course)
+
+```bash
+SKILL=.cursor/skills/module-slides/scripts
+for d in courses/learn_git/module*/; do
+  python $SKILL/verify_clip.py "$d" || break
+  python $SKILL/verify_transcript_consistency.py "$d" || break
+done
+```
+
+### Spoken length (learn_git pass 2)
+
+Target **~2–3 min** for early concept labs (00–13), **~2.5–3 min** for remotes/submodules (14–20), **~2–2.5 min** for offline/wrap (21–22). All clips stayed under the 10-minute cap.
