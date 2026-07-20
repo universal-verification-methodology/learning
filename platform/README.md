@@ -74,12 +74,12 @@ Until you push `video.mp4` / `quiz.json` to the public course repo, jsDelivr/CDN
 | Path | Role |
 |------|------|
 | [`index.html`](index.html) | Home pillars |
-| [`courses/`](courses/index.html) | Course list; **18 target courses ready** (guided lab pages from `MODULES.md`) |
+| [`courses/`](courses/index.html) | Courses map; **18 target courses ready** (guided lab pages from `MODULES.md`) |
 | [`tools/`](tools/index.html) | Concept lab shelf |
-| [`path/`](path/index.html) | Learning ladder + progress tint |
+| [`path/`](path/index.html) | Redirect → courses map (bookmarks) |
 | [`simulator/`](simulator/index.html) | HDL Simulator link + `core` datasets placeholder |
 | [`projects/`](projects/index.html) | Placeholder |
-| [`community/`](community/index.html) | Stories + GitHub feedback |
+| [`community/`](community/index.html) | Stories (curated via `assets/stories.json`) + GitHub feedback |
 | [`assets/catalog.json`](assets/catalog.json) | Courses / labs / search index |
 | [`assets/site-config.js`](assets/site-config.js) | GA4 + feedback issue URL |
 

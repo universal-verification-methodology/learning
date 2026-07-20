@@ -17,7 +17,6 @@
           <a href="../../courses/index.html">Courses</a>
           <a href="../../tools/index.html">Tools</a>
           <a href="../../simulator/index.html">Simulator</a>
-          <a href="../../path/index.html">Path</a>
           <a href="../../projects/index.html">Projects</a>
           <a href="../index.html" class="is-active" aria-current="page">Community</a>
         </nav>
@@ -36,18 +35,58 @@
     <div class="eyebrow">Community</div>
     <section class="hero">
       <h1>Reader stories</h1>
-      <p class="lead">Curated testimonials from instructors, students, and practitioners.</p>
-    </section>
-    <div class="placeholder-panel">
-      <h2>No stories published yet</h2>
-      <p>
-        This page is a placeholder. After you receive testimonials via
-        <a href="../feedback/index.html">Share feedback</a>, paste approved quotes here as static HTML.
+      <p class="lead">
+        Short notes from people who used the courses and tools —
+        students, instructors, and engineers. Reviewed before they appear here.
       </p>
-    </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#share-story">Share your story</a>
+        <a class="btn btn-ghost" href="../feedback/index.html">Send product feedback</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="stories-heading">
+      <h2 id="stories-heading">Published</h2>
+      <div data-render="stories"></div>
+    </section>
+
+    <section class="story-share" id="share-story" aria-labelledby="share-heading">
+      <h2 id="share-heading">Share your story</h2>
+      <p>
+        Tell us what you worked through and what helped. We edit lightly for clarity
+        and only publish with your name (or handle) as you enter it below.
+      </p>
+      <form class="comm-form" data-feedback-form novalidate>
+        <input type="hidden" name="form_type" value="testimonial">
+        <div class="comm-field">
+          <label for="t-name">Name <span class="hint">(as you want it shown)</span></label>
+          <input id="t-name" name="name" type="text" required autocomplete="name">
+        </div>
+        <div class="comm-field">
+          <label for="t-role">Role <span class="hint">(optional)</span></label>
+          <input id="t-role" name="role" type="text" placeholder="Student, instructor, engineer…">
+        </div>
+        <div class="comm-field">
+          <label for="t-email">Email <span class="hint">(optional, not published)</span></label>
+          <input id="t-email" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="comm-field">
+          <label for="t-message">Your story</label>
+          <textarea id="t-message" name="message" required placeholder="What did you use, and what changed for you?"></textarea>
+        </div>
+        <div class="comm-actions">
+          <button type="submit" class="btn btn-primary">Send story</button>
+        </div>
+        <p class="comm-field-note">Opens a pre-filled GitHub issue in a new tab for review.</p>
+        <div class="comm-status" hidden role="status"></div>
+      </form>
+    </section>
   </main>
-  <footer class="site-footer">Digital Design and Verification Platform</footer>
+  <footer class="site-footer">
+    <a href="../index.html">Community</a> · <a href="../feedback/index.html">Feedback</a>
+  </footer>
   <script src="../../assets/site-config.js"></script>
   <script src="../../assets/site.js"></script>
+  <script src="../../assets/pages.js"></script>
 </body>
 </html>

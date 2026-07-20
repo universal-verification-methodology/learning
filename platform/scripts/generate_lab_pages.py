@@ -27,7 +27,6 @@ COURSE_INDEX = """<!DOCTYPE html>
           <a href="../index.html" class="is-active" aria-current="page">Courses</a>
           <a href="../../tools/index.html">Tools</a>
           <a href="../../simulator/index.html">Simulator</a>
-          <a href="../../path/index.html">Path</a>
           <a href="../../projects/index.html">Projects</a>
           <a href="../../community/index.html">Community</a>
         </nav>
@@ -53,7 +52,7 @@ COURSE_INDEX = """<!DOCTYPE html>
       <div class="cta-row">
         <a class="btn btn-primary" href="labs/{first_lab}/index.html">Start Lab {first_n}</a>
         <a class="btn btn-secondary" href="{tools_href}">{tools_label}</a>
-        <a class="btn btn-ghost" href="../../path/index.html">Path map</a>
+        <a class="btn btn-ghost" href="../index.html#courses-map">Courses map</a>
       </div>
     </section>
     <h2>Labs</h2>
@@ -88,7 +87,6 @@ LAB_TPL = """<!DOCTYPE html>
           <a href="../../../index.html" class="is-active" aria-current="page">Courses</a>
           <a href="../../../../tools/index.html">Tools</a>
           <a href="../../../../simulator/index.html">Simulator</a>
-          <a href="../../../../path/index.html">Path</a>
           <a href="../../../../projects/index.html">Projects</a>
           <a href="../../../../community/index.html">Community</a>
         </nav>

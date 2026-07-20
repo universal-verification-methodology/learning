@@ -17,7 +17,6 @@
           <a href="index.html" class="is-active" aria-current="page">Courses</a>
           <a href="../tools/index.html">Tools</a>
           <a href="../simulator/index.html">Simulator</a>
-          <a href="../path/index.html">Path</a>
           <a href="../projects/index.html">Projects</a>
           <a href="../community/index.html">Community</a>
         </nav>
@@ -33,11 +32,12 @@
     <section class="hero">
       <h1>Courses</h1>
       <p class="lead">
-        Each course is a sequence of <strong>labs</strong> (not parts or modules in the UI).
-        Progress is saved in this browser. See the <a href="../path/index.html">path map</a> for suggested order.
+        Each course is a sequence of <strong>labs</strong>. Progress is saved in this browser.
+        Nodes on the map tint when you mark labs done.
       </p>
     </section>
-    <div data-render="courses"></div>
+    <h2 id="courses-map">Courses map</h2>
+    <div data-render="path-map"></div>
   </main>
   <footer class="site-footer">
     Syllabus source: <a href="../syllabus.md">syllabus.md</a>.

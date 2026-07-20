@@ -110,6 +110,9 @@
     catalogUrl() {
       return `${assetBase()}catalog.json`;
     },
+    storiesUrl() {
+      return `${assetBase()}stories.json`;
+    },
   };
 
   /* ---------- Catalog ---------- */
@@ -157,7 +160,7 @@
       });
     });
     items.push(
-      { type: "page", title: "Learning path map", subtitle: "Ladder", href: "path/index.html", keys: "path ladder map learning" },
+      { type: "page", title: "Courses map", subtitle: "Courses", href: "courses/index.html#courses-map", keys: "path ladder map learning courses" },
       { type: "page", title: "HDL Simulator", subtitle: "Simulator", href: "simulator/index.html", keys: "simulator hdl waveform" },
       { type: "page", title: "Tools catalog", subtitle: "Tools", href: "tools/index.html", keys: "tools labs catalog" },
       { type: "page", title: "Community", subtitle: "Feedback", href: "community/index.html", keys: "community feedback stories" },

@@ -70,36 +70,17 @@
     };
   }
 
-  function renderCourseList(root) {
-    D.loadCatalog().then((cat) => {
-      const ul = document.createElement("ul");
-      ul.className = "chapter-list";
-      const org = (D.cfg && D.cfg.githubOrg) || "universal-verification-methodology";
-      (cat.courses || []).forEach((c) => {
-        const stats = D.courseStats(c);
-        const li = document.createElement("li");
-        const ready = c.status === "ready";
-        if (ready) {
-          li.innerHTML = `<a href="${c.id}/index.html">
-            <span class="tool-title">${escape(c.title)}</span>
-            <div class="chapter-meta">${escape(c.focus || "")}
-              ${stats.total ? ` · ${stats.done}/${stats.total} labs done (${stats.pct}%)` : ""}
-            </div>
-          </a>`;
-        } else {
-          li.className = "is-planned";
-          li.innerHTML = `<span class="tool-title">${escape(c.title)}
-            <span class="pill-soon">Coming soon</span></span>
-            <div class="chapter-meta">${escape(c.focus || "")} · guided lab pages not published yet
-              · see <a href="../syllabus.md">syllabus</a> · <a href="../tools/index.html">tools</a>
-              ${c.repo ? ` · <a href="https://github.com/${escape(org)}/${escape(c.repo)}">repo</a>` : ""}</div>`;
-        }
-        ul.appendChild(li);
-      });
-      root.innerHTML = "";
-      root.appendChild(ul);
-    });
-  }
+  /** Courses map rows (top → bottom, left → right). */
+  const PATH_LADDER_ROWS = [
+    ["learn_unix", "learn_git"],
+    ["learn_digital"],
+    ["learn_verilog"],
+    ["learn_systemverilog", "learn_hdl_simulator", "learn_iverilog", "learn_verilator"],
+    ["learn_sv_tb", "learn_formal"],
+    ["learn_uart", "learn_spi", "learn_i2c"],
+    ["learn_python_hw", "learn_cocotb", "learn_pyuvm", "learn_uvm2017"],
+    ["learn_verification_planning_management"],
+  ];
 
   function renderCourseLabs(root, courseId) {
     D.loadCatalog().then((cat) => {
@@ -360,17 +341,7 @@
   function renderPathMap(root) {
     D.loadCatalog().then((cat) => {
       const byId = Object.fromEntries((cat.courses || []).map((c) => [c.id, c]));
-      const rows = [
-        ["learn_unix", "learn_git"],
-        ["learn_digital"],
-        ["learn_verilog"],
-        ["learn_systemverilog", "learn_hdl_simulator", "learn_iverilog", "learn_verilator"],
-        ["learn_sv_tb", "learn_formal"],
-        ["learn_uart", "learn_spi", "learn_i2c"],
-        ["learn_python_hw", "learn_cocotb", "learn_pyuvm", "learn_uvm2017"],
-        ["learn_verification_planning_management"],
-      ];
-      const html = rows
+      const html = PATH_LADDER_ROWS
         .map((row) => {
           const cells = row
             .map((id) => {
@@ -378,7 +349,7 @@
               if (!c) return "";
               const stats = D.courseStats(c);
               const ready = c.status === "ready";
-              const href = ready ? `../courses/${id}/index.html` : "../courses/index.html";
+              const href = ready ? `${id}/index.html` : "#courses-map";
               const cls = [
                 "ladder-node",
                 ready ? "is-ready" : "is-placeholder",
@@ -398,11 +369,48 @@
         })
         .join('<div class="ladder-arrow" aria-hidden="true">↓</div>');
 
-      root.innerHTML = `
-        <div class="ladder-map">${html}</div>
-        <p class="lead">Suggested order from the syllabus. Skip bridges when self-studying; prefer shipped tools before planned labs.</p>
-      `;
+      root.innerHTML = `<div class="ladder-map">${html}</div>`;
     });
+  }
+
+  function renderStories(root) {
+    const empty = `
+      <div class="story-empty">
+        <p>No stories published yet — be the first.</p>
+        <p class="story-empty-meta">Submissions are reviewed before they appear on this page.</p>
+        <p><a class="btn btn-secondary" href="#share-story">Share your story</a></p>
+      </div>`;
+    const url = D.storiesUrl ? D.storiesUrl() : "../../assets/stories.json";
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error("stories fetch failed");
+        return r.json();
+      })
+      .then((data) => {
+        const list = (data && data.stories) || [];
+        if (!list.length) {
+          root.innerHTML = empty;
+          return;
+        }
+        root.innerHTML = `<ul class="story-list">${list
+          .map((s) => {
+            const role = s.role ? ` · ${escape(s.role)}` : "";
+            const course = s.course
+              ? ` <span class="story-course">${escape(s.course)}</span>`
+              : "";
+            const nameHtml = s.url
+              ? `<a class="story-name" href="${escape(s.url)}" rel="noopener noreferrer" target="_blank">${escape(s.name || "Reader")}</a>`
+              : `<span class="story-name">${escape(s.name || "Reader")}</span>`;
+            return `<li class="story">
+              <blockquote class="story-quote"><p>${escape(s.quote || s.message || "")}</p></blockquote>
+              <p class="story-by">${nameHtml}${role}${course}</p>
+            </li>`;
+          })
+          .join("")}</ul>`;
+      })
+      .catch(() => {
+        root.innerHTML = empty;
+      });
   }
 
   function escape(s) {
@@ -415,9 +423,9 @@
 
   document.querySelectorAll("[data-render]").forEach((el) => {
     const mode = el.getAttribute("data-render");
-    if (mode === "courses") renderCourseList(el);
     if (mode === "course-labs") renderCourseLabs(el, el.getAttribute("data-course"));
     if (mode === "path-map") renderPathMap(el);
+    if (mode === "stories") renderStories(el);
     if (mode === "lab") {
       renderLabPage(el.getAttribute("data-course"), el.getAttribute("data-lab"));
     }

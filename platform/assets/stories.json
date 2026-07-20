@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "stories": [
+    {
+      "id": "yongfu-welcome",
+      "name": "Yongfu Li",
+      "role": "Hobbyist",
+      "url": "https://www.linkedin.com/in/yongfu-li/",
+      "quote": "I built this platform as a hobby so anyone curious about digital design and verification can learn in the browser—guided labs, a shared tools shelf, and a clear courses map. Please give it a try. Your feedback matters: tell us what helped, what confused you, and what you want next so we can keep improving this for our members."
+    }
+  ]
+}

@@ -520,7 +520,7 @@ span.btn.is-disabled {
   font-size: 1.1rem;
 }
 
-/* Learning ladder */
+/* Courses map (ladder) */
 .ladder-map {
   margin: 1rem 0 1.5rem;
   display: flex;
@@ -633,6 +633,72 @@ span.btn.is-disabled {
   gap: 0.75rem;
   margin-top: 0.75rem;
 }
+
+/* Reader stories */
+.story-list {
+  list-style: none;
+  margin: 0.75rem 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.story {
+  margin: 0;
+  padding: 0 0 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.story:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.story-quote {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.story-quote p { margin: 0; }
+.story-by {
+  margin: 0.65rem 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+.story-name { font-weight: 650; color: var(--ink); }
+a.story-name {
+  color: var(--accent);
+  text-decoration: none;
+}
+a.story-name:hover { text-decoration: underline; }
+.story-course {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+}
+.story-empty {
+  margin: 0.5rem 0 1.25rem;
+  max-width: 36rem;
+}
+.story-empty-meta {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.story-share {
+  margin: 2rem 0 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.story-share > p {
+  max-width: 36rem;
+  color: var(--muted);
+}
+
 .site-footer-privacy {
   margin: 0.5rem 0 0;
   font-size: 0.82rem;
