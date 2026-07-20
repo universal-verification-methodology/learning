@@ -310,8 +310,62 @@
     });
   }
 
+  /* ---------- Mobile nav ---------- */
+  function wireMobileNav() {
+    const headerInner = document.querySelector(".site-header-inner");
+    const tools = document.querySelector(".site-header-tools");
+    const nav = document.querySelector(".site-nav");
+    if (!headerInner || !tools || !nav || headerInner.querySelector(".nav-toggle")) return;
+
+    if (!nav.id) nav.id = "site-nav";
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-toggle";
+    btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-controls", nav.id);
+    btn.setAttribute("aria-label", "Open menu");
+    btn.innerHTML =
+      '<span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>' +
+      "<span>Menu</span>";
+
+    const brand = headerInner.querySelector(".brand");
+    if (brand && brand.nextSibling) {
+      headerInner.insertBefore(btn, brand.nextSibling);
+    } else {
+      headerInner.appendChild(btn);
+    }
+
+    const setOpen = (open) => {
+      nav.classList.toggle("is-open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      const label = btn.querySelector("span:last-child");
+      if (label && !label.classList.contains("nav-toggle-bars")) {
+        label.textContent = open ? "Close" : "Menu";
+      }
+    };
+
+    btn.addEventListener("click", () => {
+      setOpen(!nav.classList.contains("is-open"));
+    });
+
+    nav.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => setOpen(false));
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") setOpen(false);
+    });
+
+    window.matchMedia("(max-width: 900px)").addEventListener("change", (e) => {
+      if (!e.matches) setOpen(false);
+    });
+  }
+
   /* ---------- Boot ---------- */
   initGa4();
+  wireMobileNav();
   mountSearch();
   wireFeedbackForms();
   wireVideos();
