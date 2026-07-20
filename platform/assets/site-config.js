@@ -25,6 +25,13 @@ window.SITE_CONFIG = {
    * "raw" → https://raw.githubusercontent.com/{org}/{repo}/{branch}/…
    */
   mediaCdn: "jsdelivr",
+  /**
+   * Where lab pages load video / slides / quiz from.
+   * "cdn"  — GitHub via mediaCdn (production / Pages)
+   * "local"— /course-media/<repo>/moduleNN-slug/… (see platform/scripts/link_course_media.py)
+   * "auto" — local on localhost / 127.0.0.1, otherwise cdn
+   */
+  mediaSource: "auto",
   /** localStorage namespace for lab progress */
   progressKey: "ddv.progress.v1",
 };

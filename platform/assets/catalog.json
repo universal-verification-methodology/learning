@@ -1127,17 +1127,323 @@
       "title": "SystemVerilog design",
       "focus": "IEEE 1800 design (not UVM)",
       "prereq": "learn_verilog",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to SV design",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "bit-vs-logic",
+          "kind": "lab",
+          "title": "bit vs logic",
+          "toolId": "bit-vs-logic",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "sv-always-procs",
+          "kind": "lab",
+          "title": "always_comb / ff / latch",
+          "toolId": "sv-always-procs",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "sv-typedefs",
+          "kind": "lab",
+          "title": "Typedef / enum / struct",
+          "toolId": "sv-typedefs",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "multi-dim-arrays",
+          "kind": "lab",
+          "title": "Multi-dimensional arrays",
+          "toolId": "multi-dim-arrays",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "signed-width",
+          "kind": "lab",
+          "title": "Signed / unsigned width",
+          "toolId": "signed-width",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "sv-interfaces",
+          "kind": "lab",
+          "title": "Interfaces & modports",
+          "toolId": "sv-interfaces",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "sv-packages",
+          "kind": "lab",
+          "title": "Packages & import",
+          "toolId": "sv-packages",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "sv-case-unique",
+          "kind": "lab",
+          "title": "unique / priority case",
+          "toolId": "sv-case-unique",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "sv-inside",
+          "kind": "lab",
+          "title": "inside / wildcards",
+          "toolId": "sv-inside",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "sv-checker",
+          "kind": "lab",
+          "title": "Checker / bind",
+          "toolId": "sv-checker",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "ieee-version-map",
+          "kind": "lab",
+          "title": "IEEE construct → version map",
+          "toolId": "ieee-version-map",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "sv-migration",
+          "kind": "lab",
+          "title": "1364 → 1800 migration",
+          "toolId": "sv-migration",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "SV design complete → UVM or protocols",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_systemverilog"
     },
     {
       "id": "learn_uvm2017",
-      "title": "UVM methodology",
-      "focus": "UVM methodology (SV)",
-      "prereq": "SystemVerilog + TB",
-      "status": "placeholder",
-      "labs": [],
+      "title": "UVM 2017 methodology",
+      "focus": "UVM 2017 (IEEE 1800.2) methodology literacy + offline practice",
+      "prereq": "SystemVerilog + TB (learn_systemverilog recommended)",
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to UVM",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "tb-layers",
+          "kind": "lab",
+          "title": "TB layers",
+          "toolId": "tb-layers",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "tb-vs-uvm-map",
+          "kind": "lab",
+          "title": "Basic TB vs UVM map",
+          "toolId": "tb-vs-uvm-map",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "tb-anatomy",
+          "kind": "lab",
+          "title": "TB anatomy refresh",
+          "toolId": "tb-anatomy",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "uvm-phases",
+          "kind": "lab",
+          "title": "UVM phases",
+          "toolId": "uvm-phases",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "uvm-factory",
+          "kind": "lab",
+          "title": "Factory",
+          "toolId": "uvm-factory",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "uvm-configdb",
+          "kind": "lab",
+          "title": "ConfigDB",
+          "toolId": "uvm-configdb",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "uvm-agent",
+          "kind": "lab",
+          "title": "Agent anatomy",
+          "toolId": "uvm-agent",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "uvm-tlm",
+          "kind": "lab",
+          "title": "TLM ports",
+          "toolId": "uvm-tlm",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "uvm-seq-flow",
+          "kind": "lab",
+          "title": "Sequence → driver",
+          "toolId": "uvm-seq-flow",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "uvm-objections",
+          "kind": "lab",
+          "title": "Objections",
+          "toolId": "uvm-objections",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "uvm-plusargs",
+          "kind": "lab",
+          "title": "Plusargs / testname",
+          "toolId": "uvm-plusargs",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "crv-lite",
+          "kind": "lab",
+          "title": "CRV lite",
+          "toolId": "crv-lite",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "uvm-scoreboard",
+          "kind": "lab",
+          "title": "Scoreboard",
+          "toolId": "uvm-scoreboard",
+          "status": "shipped"
+        },
+        {
+          "n": "14",
+          "slug": "ral-map",
+          "kind": "lab",
+          "title": "RAL map",
+          "toolId": "ral-map",
+          "status": "shipped"
+        },
+        {
+          "n": "15",
+          "slug": "sva-timeline",
+          "kind": "lab",
+          "title": "SVA timeline (lite)",
+          "toolId": "sva-timeline",
+          "status": "shipped"
+        },
+        {
+          "n": "16",
+          "slug": "uvm-multi-agent",
+          "kind": "lab",
+          "title": "Multi-agent env",
+          "toolId": "uvm-multi-agent",
+          "status": "shipped"
+        },
+        {
+          "n": "17",
+          "slug": "uvm-vseq",
+          "kind": "lab",
+          "title": "Virtual sequence",
+          "toolId": "uvm-vseq",
+          "status": "shipped"
+        },
+        {
+          "n": "18",
+          "slug": "uvm-callbacks",
+          "kind": "lab",
+          "title": "Callbacks",
+          "toolId": "uvm-callbacks",
+          "status": "shipped"
+        },
+        {
+          "n": "19",
+          "slug": "uvm-reporting",
+          "kind": "lab",
+          "title": "Reporting",
+          "toolId": "uvm-reporting",
+          "status": "shipped"
+        },
+        {
+          "n": "20",
+          "slug": "protocol-checker",
+          "kind": "lab",
+          "title": "Protocol checker",
+          "toolId": "protocol-checker",
+          "status": "shipped"
+        },
+        {
+          "n": "21",
+          "slug": "vip-anatomy",
+          "kind": "lab",
+          "title": "VIP anatomy",
+          "toolId": "vip-anatomy",
+          "status": "shipped"
+        },
+        {
+          "n": "22",
+          "slug": "offline-uvm-example",
+          "kind": "offline",
+          "title": "Run a course UVM example",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "23",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "UVM complete → planning or VIP work",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_uvm2017"
     },
     {
@@ -1145,8 +1451,105 @@
       "title": "Verilator",
       "focus": "Verilator as a tool",
       "prereq": "Verilog; C++ helpful",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to Verilator",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "iverilog-vs-verilator",
+          "kind": "lab",
+          "title": "iverilog vs Verilator",
+          "toolId": "iverilog-vs-verilator",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "sim-pipeline",
+          "kind": "lab",
+          "title": "Compile → elaborate → run",
+          "toolId": "sim-pipeline",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "verilator-lint-lab",
+          "kind": "lab",
+          "title": "Verilator lint",
+          "toolId": "verilator-lint-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "dpi-cpp-tb",
+          "kind": "lab",
+          "title": "C++ TB / DPI sketch",
+          "toolId": "dpi-cpp-tb",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "tb-clock-reset",
+          "kind": "lab",
+          "title": "TB clock + reset patterns",
+          "toolId": "tb-clock-reset",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "verilator-trace",
+          "kind": "lab",
+          "title": "Verilator trace",
+          "toolId": "verilator-trace",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "wave-dump",
+          "kind": "lab",
+          "title": "Wave dump literacy",
+          "toolId": "wave-dump",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "verilator-public",
+          "kind": "lab",
+          "title": "Verilator public",
+          "toolId": "verilator-public",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "verif-metrics",
+          "kind": "lab",
+          "title": "Verification metrics",
+          "toolId": "verif-metrics",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "offline-verilator-example",
+          "kind": "offline",
+          "title": "Build & run a Verilator example",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Verilator track complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_verilator"
     },
     {
@@ -1154,8 +1557,113 @@
       "title": "Icarus Verilog",
       "focus": "Icarus as a tool",
       "prereq": "Verilog",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to Icarus",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "sim-pipeline",
+          "kind": "lab",
+          "title": "Compile → elaborate → run",
+          "toolId": "sim-pipeline",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "iverilog-flags",
+          "kind": "lab",
+          "title": "iverilog flags",
+          "toolId": "iverilog-flags",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "iverilog-timescale",
+          "kind": "lab",
+          "title": "Timescale",
+          "toolId": "iverilog-timescale",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "delay-event-wait",
+          "kind": "lab",
+          "title": "Delay / event / wait",
+          "toolId": "delay-event-wait",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "task-vs-function",
+          "kind": "lab",
+          "title": "Task vs function",
+          "toolId": "task-vs-function",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "fork-join",
+          "kind": "lab",
+          "title": "Fork / join",
+          "toolId": "fork-join",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "vvp-plusargs",
+          "kind": "lab",
+          "title": "vvp plusargs",
+          "toolId": "vvp-plusargs",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "self-check-tb",
+          "kind": "lab",
+          "title": "Self-checking TB",
+          "toolId": "self-check-tb",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "waveform-lab",
+          "kind": "lab",
+          "title": "Wave dump + waveform lab",
+          "toolId": "wave-dump",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "gtkwave-cursors",
+          "kind": "lab",
+          "title": "GTKWave cursors",
+          "toolId": "gtkwave-cursors",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "offline-iverilog-example",
+          "kind": "offline",
+          "title": "Compile & dump a course example",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Icarus track complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_iverilog"
     },
     {
@@ -1163,8 +1671,97 @@
       "title": "HDL Simulator path",
       "focus": "Browser HDL Simulator guided path",
       "prereq": "Verilog helpful",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to the browser simulator",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "hdl-sim-tour",
+          "kind": "lab",
+          "title": "UI tour",
+          "toolId": "hdl-sim-tour",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "hdl-sim-hello-dut",
+          "kind": "lab",
+          "title": "Hello DUT",
+          "toolId": "hdl-sim-hello-dut",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "hdl-sim-step-continue",
+          "kind": "lab",
+          "title": "Step & continue",
+          "toolId": "hdl-sim-step-continue",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "hdl-sim-poke-force",
+          "kind": "lab",
+          "title": "Poke / force / release",
+          "toolId": "hdl-sim-poke-force",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "hdl-sim-waves",
+          "kind": "lab",
+          "title": "Full-sim waves",
+          "toolId": "hdl-sim-waves",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "hdl-sim-multi-file",
+          "kind": "lab",
+          "title": "Multi-file project",
+          "toolId": "hdl-sim-multi-file",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "hdl-sim-compare-golden",
+          "kind": "lab",
+          "title": "Golden compare",
+          "toolId": "hdl-sim-compare-golden",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "style-synth-bridge",
+          "kind": "bridge",
+          "title": "Style & synth hints in the IDE",
+          "toolId": "hdl-style",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "offline-public-sim",
+          "kind": "offline",
+          "title": "Open public simulator — free practice",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Simulator path complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_hdl_simulator"
     },
     {
@@ -1172,8 +1769,105 @@
       "title": "pyuvm",
       "focus": "cocotb → pyuvm",
       "prereq": "Python + Verilog + sim",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to pyuvm",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "python-async-tb",
+          "kind": "lab",
+          "title": "Python async TB",
+          "toolId": "python-async-tb",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "cocotb-triggers",
+          "kind": "lab",
+          "title": "cocotb triggers",
+          "toolId": "cocotb-triggers",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "cocotb-dut-handle",
+          "kind": "lab",
+          "title": "cocotb DUT handle",
+          "toolId": "cocotb-dut-handle",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "cocotb-uvm-map",
+          "kind": "lab",
+          "title": "cocotb ↔ UVM roles",
+          "toolId": "cocotb-uvm-map",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "uvm-phases",
+          "kind": "lab",
+          "title": "UVM phases (shared sketch)",
+          "toolId": "uvm-phases",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "uvm-factory",
+          "kind": "lab",
+          "title": "Factory (shared sketch)",
+          "toolId": "uvm-factory",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "uvm-agent",
+          "kind": "lab",
+          "title": "Agent / seq flow",
+          "toolId": "uvm-agent",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "uvm-configdb",
+          "kind": "lab",
+          "title": "ConfigDB & objections",
+          "toolId": "uvm-configdb",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "uvm-scoreboard",
+          "kind": "lab",
+          "title": "Scoreboard & multi-agent",
+          "toolId": "uvm-scoreboard",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "offline-pyuvm-example",
+          "kind": "offline",
+          "title": "Run a pyuvm example",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "pyuvm complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_pyuvm"
     },
     {
@@ -1181,26 +1875,317 @@
       "title": "UART",
       "focus": "UART spec → RTL → TB → VIP map",
       "prereq": "Verilog",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to UART",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "uart-frame",
+          "kind": "lab",
+          "title": "UART frame",
+          "toolId": "uart-frame",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "spec-to-rtl",
+          "kind": "lab",
+          "title": "Spec → RTL checklist",
+          "toolId": "spec-to-rtl",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "baud-divider",
+          "kind": "lab",
+          "title": "Baud / divider",
+          "toolId": "baud-divider",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "uart-oversample",
+          "kind": "lab",
+          "title": "Oversampling",
+          "toolId": "uart-oversample",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "uart-errors",
+          "kind": "lab",
+          "title": "UART errors",
+          "toolId": "uart-errors",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "fifo-lab",
+          "kind": "lab",
+          "title": "FIFO in the datapath",
+          "toolId": "fifo-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "handshake",
+          "kind": "lab",
+          "title": "Handshake",
+          "toolId": "handshake",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "self-check-tb",
+          "kind": "lab",
+          "title": "Self-check TB",
+          "toolId": "self-check-tb",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "tb-clock-reset",
+          "kind": "lab",
+          "title": "TB clock / reset",
+          "toolId": "tb-clock-reset",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "waveform-lab",
+          "kind": "lab",
+          "title": "Waves",
+          "toolId": "waveform-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "tb-vs-uvm-map",
+          "kind": "lab",
+          "title": "TB vs UVM map",
+          "toolId": "tb-vs-uvm-map",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "vip-anatomy",
+          "kind": "lab",
+          "title": "VIP anatomy",
+          "toolId": "vip-anatomy",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "UART complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_uart"
     },
     {
       "id": "learn_spi",
       "title": "SPI",
-      "focus": "SPI same arc",
+      "focus": "SPI wires & modes → RTL → TB → VIP map",
       "prereq": "Verilog",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to SPI",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "spi-step",
+          "kind": "lab",
+          "title": "SPI transaction step",
+          "toolId": "spi-step",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "spec-to-rtl",
+          "kind": "lab",
+          "title": "Spec → RTL",
+          "toolId": "spec-to-rtl",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "spi-cpol-cpha",
+          "kind": "lab",
+          "title": "CPOL/CPHA",
+          "toolId": "spi-cpol-cpha",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "spi-multi-cs",
+          "kind": "lab",
+          "title": "Multi-CS / daisy",
+          "toolId": "spi-multi-cs",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "shift-register-lab",
+          "kind": "lab",
+          "title": "Shift-register datapath",
+          "toolId": "shift-register-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "fsm-lab",
+          "kind": "lab",
+          "title": "FSM for CS",
+          "toolId": "fsm-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "self-check-tb",
+          "kind": "lab",
+          "title": "Self-check TB",
+          "toolId": "self-check-tb",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "waveform-lab",
+          "kind": "lab",
+          "title": "Waves",
+          "toolId": "waveform-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "tb-vs-uvm-map",
+          "kind": "lab",
+          "title": "TB vs UVM / VIP",
+          "toolId": "tb-vs-uvm-map",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "SPI complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_spi"
     },
     {
       "id": "learn_i2c",
       "title": "I²C",
-      "focus": "I²C same arc",
+      "focus": "I²C open-drain → RTL → TB → VIP map",
       "prereq": "Verilog",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to I²C",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "i2c-lab",
+          "kind": "lab",
+          "title": "I²C start/addr/ack",
+          "toolId": "i2c-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "spec-to-rtl",
+          "kind": "lab",
+          "title": "Spec → RTL",
+          "toolId": "spec-to-rtl",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "i2c-open-drain",
+          "kind": "lab",
+          "title": "Open-drain model",
+          "toolId": "i2c-open-drain",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "i2c-clock-stretch",
+          "kind": "lab",
+          "title": "Clock stretch",
+          "toolId": "i2c-clock-stretch",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "i2c-repeated-start",
+          "kind": "lab",
+          "title": "Repeated start",
+          "toolId": "i2c-repeated-start",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "fsm-lab",
+          "kind": "lab",
+          "title": "FSM bit/byte",
+          "toolId": "fsm-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "self-check-tb",
+          "kind": "lab",
+          "title": "Self-check TB",
+          "toolId": "self-check-tb",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "waveform-lab",
+          "kind": "lab",
+          "title": "Waves",
+          "toolId": "waveform-lab",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "tb-vs-uvm-map",
+          "kind": "lab",
+          "title": "TB vs UVM / VIP",
+          "toolId": "tb-vs-uvm-map",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "I²C complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_i2c"
     },
     {
@@ -1208,8 +2193,121 @@
       "title": "Verification planning",
       "focus": "Plan → coverage → CI → sign-off",
       "prereq": "Protocol or UVM helpful",
-      "status": "placeholder",
-      "labs": [],
+      "status": "ready",
+      "labs": [
+        {
+          "n": "00",
+          "slug": "intro",
+          "kind": "intro",
+          "title": "Welcome to verification planning",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "01",
+          "slug": "verif-plan-check",
+          "kind": "lab",
+          "title": "Coverage / plan checklist",
+          "toolId": "verif-plan-check",
+          "status": "shipped"
+        },
+        {
+          "n": "02",
+          "slug": "test-taxonomy",
+          "kind": "lab",
+          "title": "Test taxonomy",
+          "toolId": "test-taxonomy",
+          "status": "shipped"
+        },
+        {
+          "n": "03",
+          "slug": "feature-matrix",
+          "kind": "lab",
+          "title": "Feature × scenario matrix",
+          "toolId": "feature-matrix",
+          "status": "shipped"
+        },
+        {
+          "n": "04",
+          "slug": "cover-bins",
+          "kind": "lab",
+          "title": "Cover bins sketch",
+          "toolId": "cover-bins",
+          "status": "shipped"
+        },
+        {
+          "n": "05",
+          "slug": "coverage-closure",
+          "kind": "lab",
+          "title": "Coverage closure",
+          "toolId": "coverage-closure",
+          "status": "shipped"
+        },
+        {
+          "n": "06",
+          "slug": "risk-plan",
+          "kind": "lab",
+          "title": "Risk-based plan",
+          "toolId": "risk-plan",
+          "status": "shipped"
+        },
+        {
+          "n": "07",
+          "slug": "seed-tags",
+          "kind": "lab",
+          "title": "Seed / config / tags",
+          "toolId": "seed-tags",
+          "status": "shipped"
+        },
+        {
+          "n": "08",
+          "slug": "regression-triage",
+          "kind": "lab",
+          "title": "Regression triage",
+          "toolId": "regression-triage",
+          "status": "shipped"
+        },
+        {
+          "n": "09",
+          "slug": "verif-metrics",
+          "kind": "lab",
+          "title": "Verification metrics",
+          "toolId": "verif-metrics",
+          "status": "shipped"
+        },
+        {
+          "n": "10",
+          "slug": "ci-farm-flow",
+          "kind": "lab",
+          "title": "CI / farm flow",
+          "toolId": "ci-farm-flow",
+          "status": "shipped"
+        },
+        {
+          "n": "11",
+          "slug": "signoff-checklist",
+          "kind": "lab",
+          "title": "Sign-off checklist",
+          "toolId": "signoff-checklist",
+          "status": "shipped"
+        },
+        {
+          "n": "12",
+          "slug": "vip-handoff",
+          "kind": "lab",
+          "title": "VIP handoff",
+          "toolId": "vip-handoff",
+          "status": "shipped"
+        },
+        {
+          "n": "13",
+          "slug": "wrap",
+          "kind": "wrap",
+          "title": "Planning path complete",
+          "toolId": null,
+          "status": "shipped"
+        }
+      ],
       "repo": "learn_verification_planning_management"
     }
   ],

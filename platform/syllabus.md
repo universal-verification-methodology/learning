@@ -79,10 +79,10 @@ Canonical **target** syllabi for the learning monorepo (pass 3 · **lab-driven**
 |---|-----------|-------|--------|-------------------|
 | 1 | `learn_unix` | Shell → scripts → project hygiene | — | ~20 (intro + labs + wrap) |
 | 2 | `learn_git` | Model → commit → branch → remotes → deliver | Unix recommended | ~18 |
-| 3 | `learn_digital` | Logic & datapath concepts | — | ~22 |
+| 3 | `learn_digital` | Logic & datapath concepts | — | ~51 |
 | 4 | `learn_verilog` | IEEE 1364 RTL coding | Digital recommended | ~16 |
 | 5 | `learn_systemverilog` | IEEE 1800 design (not UVM) | Verilog | ~12 |
-| 6 | `learn_uvm2017` | UVM methodology (SV) | SystemVerilog + TB | ~16 |
+| 6 | `learn_uvm2017` | UVM 2017 methodology (IEEE 1800.2) | SystemVerilog + TB | ~16 |
 | 7 | `learn_verilator` | Verilator as a tool | Verilog; C++ helpful | ~10 |
 | 8 | `learn_iverilog` | Icarus as a tool | Verilog | ~10 |
 | 9 | `learn_hdl_simulator` | Browser HDL Simulator *(rename later)* | Verilog helpful | ~10 |
@@ -254,14 +254,16 @@ courses/<course_id>/
 | 42 | lab | RAM / ROM map | `mem-map` **(S)** |
 | 43 | lab | FIFO pointers | `fifo-lab` **(S)** |
 | 44 | lab | Cache walk | `cache-walk` **(S)** |
-| 45 | lab | Dual-port RAM | `dual-port-ram` |
-| 46 | lab | Byte-enable memory | `byte-enable-mem` |
-| 47 | lab | Async FIFO (Gray) | `async-fifo` |
+| 45 | lab | Dual-port RAM | `dual-port-ram` **(S)** |
+| 46 | lab | Byte-enable memory | `byte-enable-mem` **(S)** |
+| 47 | lab | Async FIFO (Gray) | `async-fifo` **(S)** |
 | 48 | lab | Handshake (valid/ready) | `handshake` **(S)** |
 | 49 | lab | Block-diagram integrator | `block-diagram` **(S)** |
 | 50 | wrap | Digital complete → Verilog | Recap; link `learn_verilog` |
 
 *Optional bridges:* after number systems (10), Boolean (16), sequential (29), FSM (34), datapath (41).
+
+**Media:** all **51** modules ship transcript, slides, video, and quiz (`module-slides`).
 
 ---
 
@@ -301,6 +303,7 @@ courses/<course_id>/
 
 **Goal:** SystemVerilog **design** constructs (IEEE 1800) — not UVM.  
 **Course tree:** [`courses/learn_systemverilog/`](courses/learn_systemverilog/) (dual track: real SV + browser labs).  
+**Platform:** [`courses/learn_systemverilog/`](courses/learn_systemverilog/) — **14 modules with clips/decks** (intro + 12 labs + wrap).  
 **Source legacy:** `learn_verilog_systemverilog` M4–8.
 
 | # | Kind | Module | Primary lab / activity |
@@ -324,7 +327,7 @@ courses/<course_id>/
 
 ## 6. `learn_uvm2017`
 
-**Goal:** UVM methodology literacy + offline practice.  
+**Goal:** UVM 2017 (IEEE 1800.2) methodology literacy + offline practice.  
 **Course tree:** [`courses/learn_uvm2017/`](courses/learn_uvm2017/) (dual track: real UVM + browser sketches).  
 **Source legacy:** `learn_uvm2017_sv_verilator`.  
 **Offline:** UVM library + Verilator (or commercial).
@@ -411,7 +414,9 @@ courses/<course_id>/
 
 **Working title** — rename later.  
 **Goal:** Guided path for the [HDL Simulator](https://universal-verification-methodology.github.io/systemverilog-simulator/).  
-**Practice surface:** full simulator IDE; `hdl-sim-*` labs teach workflow.
+**Course tree:** [`courses/learn_hdl_simulator/`](../courses/learn_hdl_simulator/) (dual track: public IDE + browser `hdl-sim-*` literacy).  
+**Practice surface:** full simulator IDE; `hdl-sim-*` labs teach workflow.  
+**Browser tools:** all `hdl-sim-*` labs **(S)**; module 09 is free practice in the public IDE.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
@@ -535,7 +540,9 @@ Do **not** re-teach full verification planning inside each protocol — point to
 ## 14. `learn_verification_planning_management`
 
 **Goal:** Plan → coverage → regression → sign-off.  
-**Source today:** `verification_planning_management`.
+**Course tree:** [`courses/learn_verification_planning_management/`](../courses/learn_verification_planning_management/) (dual track: written plans + browser boards).  
+**Source legacy:** `verification_planning_management`.  
+**Browser tools:** planning shelf labs 01–12 all **(S)**.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
@@ -587,13 +594,13 @@ Take modules in order inside a course; skip `bridge` when self-studying; never s
 | Existing folder | Maps to |
 |-----------------|---------|
 | `learn_unix_git` | `learn_unix` (**scaffolded** under `courses/learn_unix/`) + `learn_git` (**scaffolded** under `courses/learn_git/`; M6–7 labs, M8 → offline/wrap) |
-| `learn_digital_verilog` | `learn_digital` (**ready** on platform) + `learn_verilog` (**ready** under `courses/learn_verilog/`; 20 modules with media) |
-| `learn_verilog_systemverilog` | `learn_verilog` (**ready**) + `learn_systemverilog` (**scaffolded** under `courses/learn_systemverilog/`) |
+| `learn_digital_verilog` | `learn_digital` (**ready** on platform; **51 modules with media**) + `learn_verilog` (**ready** under `courses/learn_verilog/`; 20 modules with media) |
+| `learn_verilog_systemverilog` | `learn_verilog` (**ready**) + `learn_systemverilog` (**ready** under `courses/learn_systemverilog/`; 14 modules with media) |
 | `learn_verilator_iverilog` | `learn_verilator` + `learn_iverilog` (**both scaffolded** under `courses/`) |
-| `learn_uvm2017_sv_verilator` | `learn_uvm2017` (**scaffolded** under `courses/learn_uvm2017/`) |
+| `learn_uvm2017_sv_verilator` | `learn_uvm2017` (**ready** under `courses/learn_uvm2017/` — guided pages + module-slides) |
 | `learn_uvm_pyuvm` | `learn_pyuvm` (**scaffolded** under `courses/learn_pyuvm/`) |
 | `learn_uart_spi_i2c` | `learn_uart` + `learn_spi` + `learn_i2c` (**all scaffolded** under `courses/`) |
-| `verification_planning_management` | `learn_verification_planning_management` |
+| `verification_planning_management` | `learn_verification_planning_management` (**scaffolded** under `courses/learn_verification_planning_management/`) |
 
 **Repo layout later:** prefer `moduleNN-<lab-id>/` aligned to this table so media (`outline`, `slides`, `transcript`, `video`) stays 1:1 with labs.
 

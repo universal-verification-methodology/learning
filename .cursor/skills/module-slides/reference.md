@@ -250,3 +250,51 @@ done
 ### Spoken length (learn_git pass 2)
 
 Target **~2–3 min** for early concept labs (00–13), **~2.5–3 min** for remotes/submodules (14–20), **~2–2.5 min** for offline/wrap (21–22). All clips stayed under the 10-minute cap.
+
+## Course: learn_uvm2017 (pass 2 notes)
+
+**Path:** `courses/learn_uvm2017/module00-intro` … `module23-wrap` (24 clips).
+
+| Module kind | Track B lab snapshot | Track A real-shell | Notes |
+|-------------|---------------------|-------------------|-------|
+| `intro` (00) | tools index (`lab-tools-index.png`) | — | Course welcome |
+| `lab` (01–21) | `assets/lab-starter.png` | `assets/_demo_mNN.sh` → `real-shell.png` | Dual-track; sketch under `examples/*-sketch/` |
+| `offline` (22) | — | `assets/_demo_m22.sh` | Makefile rehearsal; Track A only |
+| `wrap` (23) | `assets/tools-index.png` (`--lab index`) | — | Recap + next courses |
+
+### Pass 2 checklist (done)
+
+- Bulk `verify_clip.py` + `verify_transcript_consistency.py` on all 24 modules
+- Harden `_demo_m*.sh` `grep | head` under `set -o pipefail` with `|| true`
+- Strip CRLF before WSL capture: `sed -i 's/\r$//' assets/_demo_mNN.sh`
+- Spoken length ~2.5–3.6 min (labs denser than git; all under 10-min cap)
+- Prefer “UVM twenty seventeen” in speech; avoid spelling IEEE clause numbers aloud
+- Course README Contents/media note updated once media ships
+
+### Spoken length (learn_uvm2017 pass 2)
+
+Target **~2.5–3.5 min** for labs 01–21, **~2.5–3 min** for intro/offline/wrap. Longest clips stayed ~3.6 min.
+
+## Course: learn_pyuvm (pass 2 notes)
+
+**Path:** `courses/learn_pyuvm/module00-intro` … `module11-wrap` (12 clips).
+
+| Module kind | Track B lab snapshot | Track A real-shell | Notes |
+|-------------|---------------------|-------------------|-------|
+| `intro` (00) | `lab-tools-index.png` | — | Course welcome |
+| `lab` (01–09) | `assets/lab-starter.png` | `assets/_demo_mNN.sh` → `real-shell.png` | Dual-track; sketches under `examples/*-sketch/` |
+| `offline` (10) | — | `assets/_demo_m10.sh` | Legacy `learn_uvm_pyuvm` Makefile; Track A only |
+| `wrap` (11) | `assets/tools-index.png` (`#pyuvm`) | — | Recap + next courses |
+
+### Pass 2 checklist
+
+- Bulk `verify_clip.py` + `verify_transcript_consistency.py` on all 12 modules
+- Expand Track A speech (pwd / ls -la / sed / python3 or make) to name each command’s purpose
+- Soften pitfalls cadence (vary openings; drop robotic “Do not… And remember…”)
+- Course README / `docs/TWO_TRACKS.md`: Track B marked **shipped** (not “mostly planned”)
+- Offline m10: harden PATH + cocotb 2.x Makefile (`VERILOG_SOURCES`); rewrite stale `.venv` shebangs if the tree moved
+- Prefer “UVM twenty seventeen” / “cocotb to UVM roles” in speech; avoid raw URLs and “module 0X”
+
+### Spoken length (learn_pyuvm pass 2)
+
+Target **~2.8–3.5 min** for labs 01–09, **~2.5–3.5 min** for intro/offline/wrap. All clips under the 10-minute cap.

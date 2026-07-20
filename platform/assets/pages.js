@@ -20,6 +20,16 @@
     return `module${lab.n}-${lab.slug}`;
   }
 
+  /** Prefer monorepo course media when authoring on localhost. */
+  function useLocalMedia(cfg) {
+    const mode = String(cfg.mediaSource || "cdn").toLowerCase();
+    if (mode === "local") return true;
+    if (mode === "cdn") return false;
+    // "auto" (default for local authoring): localhost only
+    const h = (location && location.hostname) || "";
+    return h === "localhost" || h === "127.0.0.1" || h === "[::1]";
+  }
+
   /** Media URLs from org course repos (video.mp4, slides.pptx, …). */
   function mediaUrls(course, lab) {
     const cfg = D.cfg || {};
@@ -27,8 +37,18 @@
     const branch = cfg.mediaBranch || "main";
     const repo = (course && course.repo) || (course && course.id) || "";
     const dir = moduleDir(lab);
+    const local = useLocalMedia(cfg);
     const cdn = (cfg.mediaCdn || "jsdelivr").toLowerCase();
     const fileUrl = (file) => {
+      if (local && repo) {
+        // Served from platform/course-media/<repo> → ../../courses/<repo>
+        // (create with: python platform/scripts/link_course_media.py)
+        const depth = document.querySelector("[data-asset-base]");
+        const assetBase = (depth && depth.getAttribute("data-asset-base")) || "../../assets/";
+        // asset-base is N×../assets/ ; course-media sits beside assets under platform/
+        const prefix = String(assetBase).replace(/assets\/?$/, "course-media/");
+        return `${prefix}${repo}/${dir}/${file}`;
+      }
       if (cdn === "raw") {
         return `https://raw.githubusercontent.com/${org}/${repo}/${branch}/${dir}/${file}`;
       }
@@ -39,6 +59,7 @@
       repo,
       branch,
       dir,
+      local,
       moduleGithub: `https://github.com/${org}/${repo}/tree/${branch}/${dir}`,
       repoGithub: `https://github.com/${org}/${repo}`,
       video: fileUrl("video.mp4"),
@@ -294,6 +315,27 @@
     });
   }
 
+  function normalizeQuiz(quiz) {
+    if (!quiz || typeof quiz !== "object") return quiz;
+    if (Array.isArray(quiz.items) && quiz.items.length) return quiz;
+    // Compact author form: { questions: [{ prompt, choices, answer }, …] }
+    if (Array.isArray(quiz.questions) && quiz.questions.length) {
+      return {
+        ...quiz,
+        title: quiz.title || "Check your understanding",
+        items: quiz.questions.map((q, i) => ({
+          id: q.id || `q${i + 1}`,
+          type: q.type || "multiple_choice",
+          prompt: q.prompt || "",
+          choices: q.choices || [],
+          answer: q.answer,
+          explain: q.explain,
+        })),
+      };
+    }
+    return quiz;
+  }
+
   function loadAndMountQuiz(quizUrl, quizRoot, opts) {
     if (!quizRoot) return;
     ensureQuizScript()
@@ -303,7 +345,7 @@
         return r.json();
       })
       .then((quiz) => {
-        window.DDVQuiz.mount(quizRoot, quiz, opts);
+        window.DDVQuiz.mount(quizRoot, normalizeQuiz(quiz), opts);
       })
       .catch(() => {
         quizRoot.className = "placeholder-panel";

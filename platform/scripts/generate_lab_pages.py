@@ -147,7 +147,7 @@ COURSE_META = {
     "learn_digital": {
         "lead": (
             "Digital logic foundations before deep HDL — numbers, gates, FSM, and datapath. "
-            "Media loads from "
+            "All <strong>51</strong> modules ship narrated clips, slides, and quizzes from "
             '<a href="https://github.com/universal-verification-methodology/learn_digital">learn_digital</a> '
             "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
         ),
@@ -168,6 +168,137 @@ COURSE_META = {
         "tools_label": "Verilog labs",
         "syllabus_anchor": "4-learn_verilog",
         "first_lab": "module-diagram",
+        "first_n": "01",
+    },
+    "learn_systemverilog": {
+        "lead": (
+            "SystemVerilog design constructs (IEEE 1800) — not UVM. "
+            "All <strong>14</strong> modules ship narrated clips, slides, and quizzes from "
+            '<a href="https://github.com/universal-verification-methodology/learn_systemverilog">learn_systemverilog</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#sv-design",
+        "tools_label": "SV design labs",
+        "syllabus_anchor": "5-learn_systemverilog",
+        "first_lab": "bit-vs-logic",
+        "first_n": "01",
+    },
+    "learn_uvm2017": {
+        "lead": (
+            "UVM 2017 methodology literacy (IEEE 1800.2) — dual track: browser sketches + offline Accellera UVM. "
+            "All <strong>24</strong> modules ship narrated clips, slides, and quizzes from "
+            '<a href="https://github.com/universal-verification-methodology/learn_uvm2017">learn_uvm2017</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching UVM sketch, then mark done; "
+            "module 22 is the offline Makefile run."
+        ),
+        "tools_href": "../../tools/index.html#uvm2017",
+        "tools_label": "UVM 2017 sketches",
+        "syllabus_anchor": "6-learn_uvm2017",
+        "first_lab": "tb-layers",
+        "first_n": "01",
+    },
+    "learn_verilator": {
+        "lead": (
+            "Verilator as a tool — lint, C++/DPI TB, traces, and metrics. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_verilator">learn_verilator</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#sim-literacy",
+        "tools_label": "Simulation labs",
+        "syllabus_anchor": "7-learn_verilator",
+        "first_lab": "iverilog-vs-verilator",
+        "first_n": "01",
+    },
+    "learn_iverilog": {
+        "lead": (
+            "Icarus Verilog as a tool — flags, timescale, TB timing, and waves. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_iverilog">learn_iverilog</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#sim-literacy",
+        "tools_label": "Simulation labs",
+        "syllabus_anchor": "8-learn_iverilog",
+        "first_lab": "sim-pipeline",
+        "first_n": "01",
+    },
+    "learn_pyuvm": {
+        "lead": (
+            "Python verification — cocotb → pyuvm, with shared UVM sketches. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_pyuvm">learn_pyuvm</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#pyuvm",
+        "tools_label": "pyuvm / cocotb labs",
+        "syllabus_anchor": "10-learn_pyuvm",
+        "first_lab": "python-async-tb",
+        "first_n": "01",
+    },
+    "learn_uart": {
+        "lead": (
+            "UART spec → RTL → TB → waves → VIP map. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_uart">learn_uart</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#protocols",
+        "tools_label": "Protocol labs",
+        "syllabus_anchor": "11-learn_uart",
+        "first_lab": "uart-frame",
+        "first_n": "01",
+    },
+    "learn_spi": {
+        "lead": (
+            "SPI wires & modes → RTL → TB → waves → VIP map. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_spi">learn_spi</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#protocols",
+        "tools_label": "Protocol labs",
+        "syllabus_anchor": "12-learn_spi",
+        "first_lab": "spi-step",
+        "first_n": "01",
+    },
+    "learn_i2c": {
+        "lead": (
+            "I²C open-drain → RTL → TB → waves → VIP map. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_i2c">learn_i2c</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#protocols",
+        "tools_label": "Protocol labs",
+        "syllabus_anchor": "13-learn_i2c",
+        "first_lab": "i2c-lab",
+        "first_n": "01",
+    },
+    "learn_hdl_simulator": {
+        "lead": (
+            "Guided path for the public HDL Simulator — browser <code>hdl-sim-*</code> literacy plus free IDE practice. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_hdl_simulator">learn_hdl_simulator</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching lab, then try the same idea in the live IDE."
+        ),
+        "tools_href": "../../tools/index.html#hdl-simulator",
+        "tools_label": "HDL simulator labs",
+        "syllabus_anchor": "9-learn_hdl_simulator",
+        "first_lab": "hdl-sim-tour",
+        "first_n": "01",
+    },
+    "learn_verification_planning_management": {
+        "lead": (
+            "Plan → coverage → regression → sign-off — interactive boards plus written plan practice. "
+            "Media loads from "
+            '<a href="https://github.com/universal-verification-methodology/learn_verification_planning_management">learn_verification_planning_management</a> '
+            "(<code>moduleNN-slug/video.mp4</code>). Open the matching browser lab, then mark done."
+        ),
+        "tools_href": "../../tools/index.html#verif-plan",
+        "tools_label": "Planning labs",
+        "syllabus_anchor": "14-learn_verification_planning_management",
+        "first_lab": "verif-plan-check",
         "first_n": "01",
     },
 }

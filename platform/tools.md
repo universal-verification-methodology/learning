@@ -175,7 +175,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 - [Coding standards & synthesizability](#coding-standards--synthesizability)
 - [Protocols (conceptual)](#protocols-conceptual)
 - [SV testbench & assertions (conceptual)](#sv-testbench--assertions-conceptual)
-- [UVM methodology (sketches)](#uvm-methodology-sketches)
+- [UVM 2017 methodology (sketches)](#uvm-2017-methodology-sketches)
 - [Verification planning (lightweight)](#verification-planning-lightweight)
 - [Simulation literacy (conceptual)](#simulation-literacy-conceptual)
 - [Browser HDL simulator (guided)](#browser-hdl-simulator-guided)
@@ -450,9 +450,9 @@ Literacy for `learn_verilator_iverilog` Modules 3â€“7 and SV TB intros. **N
 | TB clock + reset patterns | `tb-clock-reset` | **Shipped** | Clock gen + reset assert/deassert; 22 challenges |
 | File / vector I/O | `file-vector-io` | **Shipped** | `$readmemh` stim/exp → apply loop; 22 challenges |
 
-## UVM methodology (sketches)
+## UVM 2017 methodology (sketches)
 
-Concept diagrams for `learn_uvm2017_sv_verilator` / `learn_uvm_pyuvm`. **Not** a UVM library or Verilator UVM run.
+Concept diagrams for `learn_uvm2017` / `learn_uvm2017_sv_verilator` / `learn_uvm_pyuvm`. **Not** a UVM library or Verilator UVM run — sketches align with **IEEE 1800.2-2017** (UVM 2017).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
@@ -571,7 +571,7 @@ Courses **link** to domains; they do not own tools. Target syllabi (lab-driven m
 | `learn_digital` | Number systems, Boolean, Gates, Clocks, FSM, Arithmetic, Memory, Hierarchy |
 | `learn_verilog` | HDL structure, Combo hygiene, Clocks, Synth/style, FSM/datapath coding |
 | `learn_systemverilog` | **SV design constructs**, HDL structure (typedefs/arrays), migration map |
-| `learn_uvm2017` | **UVM sketches**, SV TB sketches, VIP / planning handoff |
+| `learn_uvm2017` | **UVM 2017 sketches**, SV TB sketches, VIP / planning handoff |
 | `learn_verilator` | **Simulation literacy** (Verilator), C++/DPI, waves, metrics |
 | `learn_iverilog` | **Simulation literacy** (Icarus), waves, self-check TB |
 | `learn_hdl_simulator` | **Browser HDL simulator**, waveforms, TB anatomy, synth/style hints |
@@ -593,18 +593,18 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 |---------------|----------------|--------------------|
 | `learn_unix` | vfs → scripting, archives, workflow, make/env labs **shipped** | — |
 | `learn_git` | Full Version control + template/submission labs (**all shipped**) | none for browser labs — module 21 stays offline (`unix-git-practice`) |
-| `learn_digital` | Numbers→Boolean→gates→clocks→FSM→datapath→mem (**48 shipped**) | — |
+| `learn_digital` | Numbers→Boolean→gates→clocks→FSM→datapath→mem (**49 labs shipped**; **51 modules with clips/decks**) | — |
 | `learn_verilog` | Full IEEE 1364 RTL browser path (**all 17 labs shipped**; **20 modules with clips/decks on platform**) | none for browser labs — module 18 is bridge (reuse digital labs) |
-| `learn_systemverilog` | (labs mostly planned) | `sv-always-procs` â†’ `sv-migration` set |
-| `learn_uvm2017` / `learn_pyuvm` | `tb-anatomy` / `tb-vs-uvm-map` / `tb-layers` / `uvm-phases` / `uvm-factory` / `uvm-configdb` / `uvm-objections` / `uvm-seq-flow` / `uvm-agent` / `uvm-tlm` / `uvm-scoreboard` / `ral-map` / `uvm-reporting` / `uvm-callbacks` / `uvm-vseq` / `uvm-multi-agent` / `protocol-checker` / `vip-anatomy` / `uvm-plusargs` (+ SV TB sketches) **shipped**; offline via legacy | remaining pyuvm/cocotb labs |
+| `learn_systemverilog` | Full SV design browser path (**all 12 labs shipped**; **14 modules with clips/decks on platform**) | none for browser labs — module 13 is wrap |
+| `learn_uvm2017` / `learn_pyuvm` | UVM + cocotb/pyuvm sketches (**all shipped**); courses scaffolded | offline fidelity via legacy / module offline |
 | `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**) | — |
 | `learn_verilator` | offline fidelity via legacy; course scaffolded; all syllabus browser labs (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | — |
 | `learn_iverilog` | shipped TB/wave labs + toolchain (`iverilog-flags` / `iverilog-timescale` / `vvp-plusargs`) + `sim-pipeline` / `wave-dump` / `self-check-tb` (**shipped**); course scaffolded; offline module 11 | — |
-| `learn_hdl_simulator` | waveform-lab, tb-anatomy, synth/style; all **`hdl-sim-*`** browser labs (**shipped**) | public simulator practice surface only |
+| `learn_hdl_simulator` | all **`hdl-sim-*`** + style/synth bridge (**shipped**); course scaffolded under `courses/learn_hdl_simulator/` | free practice = public IDE (module 09) |
 | `learn_uart` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `tb-clock-reset` / `vip-anatomy` (**shipped**); course scaffolded | — |
 | `learn_spi` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `protocol-checker` (**shipped**); course scaffolded | — |
 | `learn_i2c` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `vip-anatomy` (**shipped**); course scaffolded | — |
-| `learn_verification_planning_management` | planning shelf browser labs + `vip-handoff` / `verif-metrics` (**shipped**); course not fully scaffolded | — |
+| `learn_verification_planning_management` | planning shelf + `vip-handoff` / `verif-metrics` (**shipped**); course scaffolded under `courses/learn_verification_planning_management/` | — |
 
 Still **offline-only** (see Out of scope): installing toolchains, running course Makefiles, full UVM/CRV/SVA engines, commercial VIP, synthesis/P&R.
 

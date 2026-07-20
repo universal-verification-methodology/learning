@@ -55,14 +55,26 @@ Example ([learn_unix](https://github.com/universal-verification-methodology/lear
 
 `https://cdn.jsdelivr.net/gh/universal-verification-methodology/learn_unix@main/module01-vfs-terminal/video.mp4`
 
-Configure org / branch / CDN in [`assets/site-config.js`](assets/site-config.js) (`githubOrg`, `mediaBranch`, `mediaCdn`). Each course’s `repo` field is in [`assets/catalog.json`](assets/catalog.json).
+[learn_digital](https://github.com/universal-verification-methodology/learn_digital) ships **51** module clips (intro through wrap); [learn_verilog](https://github.com/universal-verification-methodology/learn_verilog) ships **20**; [learn_systemverilog](https://github.com/universal-verification-methodology/learn_systemverilog) ships **14**.
+
+Configure org / branch / CDN in [`assets/site-config.js`](assets/site-config.js) (`githubOrg`, `mediaBranch`, `mediaCdn`, `mediaSource`). Each course’s `repo` field is in [`assets/catalog.json`](assets/catalog.json).
+
+**Local authoring (see clips before they are pushed to the course repo):**
+
+```bash
+python platform/scripts/link_course_media.py          # or: … learn_spi
+# mediaSource: "auto" in site-config.js → on localhost, lab pages load
+# /course-media/<repo>/moduleNN-slug/video.mp4 (junction into courses/)
+```
+
+Until you push `video.mp4` / `quiz.json` to the public course repo, jsDelivr/CDN links 404 — that is expected.
 
 ## Site map
 
 | Path | Role |
 |------|------|
 | [`index.html`](index.html) | Home pillars |
-| [`courses/`](courses/index.html) | Course list; **learn_unix**, **learn_git**, **learn_digital**, **learn_verilog** have guided lab pages |
+| [`courses/`](courses/index.html) | Course list; **all 14 target courses ready** (guided lab pages from `MODULES.md`) |
 | [`tools/`](tools/index.html) | Concept lab shelf |
 | [`path/`](path/index.html) | Learning ladder + progress tint |
 | [`simulator/`](simulator/index.html) | HDL Simulator link + `core` datasets placeholder |
