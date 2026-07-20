@@ -1,0 +1,223 @@
+.idea-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .idea-grid { grid-template-columns: 1fr; }
+}
+
+.idea-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  font-size: 0.88rem;
+}
+
+.idea-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.ctrl-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.55rem;
+  font-size: 0.9rem;
+}
+
+.ctrl-row input,
+.ctrl-row select {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  width: 4.5rem;
+}
+
+.bits-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin: 0.55rem 0;
+  align-items: flex-end;
+}
+
+.bit-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.bit-cell .idx {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--muted);
+}
+
+.bit-cell button {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  cursor: pointer;
+  padding: 0;
+}
+
+.bit-cell button.is-one {
+  border-color: var(--accent);
+  background: var(--surface2);
+  font-weight: 600;
+}
+
+.bit-cell button.in-field {
+  outline: 2px solid #b45309;
+  outline-offset: 1px;
+}
+
+.meta-box,
+.trace-box,
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: #1a222c;
+  color: #e8eef4;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.meta-box { min-height: 4.5rem; margin-bottom: 0.55rem; }
+.trace-box { min-height: 5rem; margin-bottom: 0.55rem; }
+.log-box {
+  min-height: 6rem;
+  max-height: 10rem;
+  overflow: auto;
+}
+
+.meta-box .ok,
+.trace-box .ok,
+.log-box .ok { color: #8fd4a8; }
+.meta-box .warn,
+.trace-box .warn,
+.log-box .warn { color: #f0c674; }
+.meta-box .err,
+.trace-box .err,
+.log-box .err { color: #f5a8a8; }
+.meta-box .muted,
+.trace-box .muted,
+.log-box .muted { color: #7a8a9a; }
+.meta-box .hi,
+.trace-box .hi,
+.log-box .run { color: #9ecbff; }
+
+.action-grid {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.action-grid button {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.action-grid button:hover { border-color: var(--accent); }
+
+.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+.field-table th,
+.field-table td {
+  text-align: left;
+  padding: 0.35rem 0.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.field-table tr.is-active {
+  background: var(--surface2);
+}
+
+.field-table button {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cheat-table th,
+.cheat-table td {
+  text-align: left;
+  padding: 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.hint-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hint-list li { margin: 0.35rem 0; }
+
+.vals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin: 0.55rem 0;
+}
+
+@media (max-width: 520px) {
+  .vals-grid { grid-template-columns: 1fr; }
+}
+
+.val-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  background: var(--surface2);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.val-card .lbl {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-bottom: 0.15rem;
+  font-family: var(--sans, inherit);
+}

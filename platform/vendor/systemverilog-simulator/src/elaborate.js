@@ -12,6 +12,10 @@ import {
 } from "./value.js";
 import { createGateAssignLowering, isNetDeclKind } from "./elab-gates.js";
 import { createUdpLowering } from "./elab-udp.js";
+import { createSpecifyLowering } from "./elab-specify.js";
+import { createConfigResolver } from "./elab-config.js";
+import { createInterfaceLowering } from "./elab-interface.js";
+import { makeVifHandle } from "./interface.js";
 
 /** Re-export runtime eval for callers that historically imported from elaborate. */
 export { evalExpr, applyLValue, execBlocking } from "./eval-expr.js";
@@ -19,14 +23,9 @@ export { evalExpr, applyLValue, execBlocking } from "./eval-expr.js";
 /**
  * Elaborate a parsed design into a flat runnable netlist.
  * @param {{ type: 'Design', modules: object[] }} design
- * @param {{ top?: string }} [opts]
+ * @param {{ top?: string, config?: string }} [opts]
  */
 export function elaborate(design, opts = {}) {
-  const byName = new Map(design.modules.map((m) => [m.name, m]));
-  const topName = opts.top || design.modules[design.modules.length - 1].name;
-  const top = byName.get(topName);
-  if (!top) throw new Error(`Top module '${topName}' not found`);
-
   /** @type {Map<string, { width: number, kind: string, value: Value }>} */
   const signals = new Map();
   /** @type {object[]} */
@@ -56,6 +55,26 @@ export function elaborate(design, opts = {}) {
   const handleVars = new Map();
   /** @type {Map<string, object>} UDP name → compiled def */
   const udps = new Map();
+  /** @type {object[]} specify path delays (hierarchical src/dst) */
+  const pathDelays = [];
+  /** @type {Map<string, object>} interface type name → AST */
+  const ifaceTypes = new Map();
+  /** @type {Map<string, { type: string, modport?: string|null, aliasOf?: string }>} */
+  const ifaceInstances = new Map();
+  /** @type {Map<string, string>} vif signal → interface type name */
+  const vifVars = new Map();
+
+  const {
+    topName,
+    resolveModule,
+    resolveCell,
+    getTopModule,
+    workModulesByName,
+    config: activeConfig,
+  } = createConfigResolver({ design, opts, udps });
+
+  const byName = workModulesByName();
+  const top = getTopModule();
 
   function typesFor(path) {
     const key = path || "";
@@ -721,6 +740,31 @@ export function elaborate(design, opts = {}) {
             lo: { type: "Number", value: f.lo },
           };
         }
+        // J6: interface hierarchical access bif.req → Ident "bif.req"
+        {
+          const root = base.name;
+          const hier = [root, ...memberPath].join(".");
+          if (portMap && portMap.has(hier)) {
+            return { type: "Ident", name: portMap.get(hier) };
+          }
+          if (
+            ifaceInstances.has(root) ||
+            signals.has(`${root}.${memberPath[0]}`) ||
+            (portMap && portMap.has(root) && ifaceInstances.has(portMap.get(root)))
+          ) {
+            let prefix = root;
+            if (portMap && portMap.has(root) && ifaceInstances.has(portMap.get(root))) {
+              prefix = portMap.get(root);
+            } else if (ifaceInstances.get(root)?.aliasOf) {
+              prefix = ifaceInstances.get(root).aliasOf;
+            }
+            return { type: "Ident", name: [prefix, ...memberPath].join(".") };
+          }
+          if (vifVars.has(root) || (path && vifVars.has(fullName(path, root)))) {
+            const vifName = vifVars.has(root) ? root : fullName(path, root);
+            return { type: "VifAccess", vif: vifName, fields: memberPath.slice() };
+          }
+        }
         if (memberPath.length !== 1) {
           throw new Error(`Nested class field path not supported: ${memberPath.join(".")}`);
         }
@@ -747,6 +791,7 @@ export function elaborate(design, opts = {}) {
       case "Null":
       case "This":
       case "Super":
+      case "VifAccess":
         return expr;
       default:
         throw new Error(`Unknown expr ${expr.type}`);
@@ -802,6 +847,38 @@ export function elaborate(design, opts = {}) {
           lo: rewriteExpr(select.lo, path, portMap, params),
         };
         return { type: "LValue", name, select };
+      }
+      // J6: interface / vif lvalue
+      {
+        const hier = [name, ...members].join(".");
+        if (portMap && portMap.has(hier)) {
+          return { type: "LValue", name: portMap.get(hier), select: null };
+        }
+        if (
+          ifaceInstances.has(name) ||
+          signals.has(`${name}.${members[0]}`) ||
+          (portMap && portMap.has(lv.name) && ifaceInstances.has(portMap.get(lv.name)))
+        ) {
+          let prefix = name;
+          if (portMap && portMap.has(lv.name) && ifaceInstances.has(portMap.get(lv.name))) {
+            prefix = portMap.get(lv.name);
+          } else if (ifaceInstances.get(name)?.aliasOf) {
+            prefix = ifaceInstances.get(name).aliasOf;
+          }
+          return {
+            type: "LValue",
+            name: [prefix, ...members].join("."),
+            select: null,
+          };
+        }
+        if (vifVars.has(name)) {
+          return {
+            type: "LValue",
+            name,
+            vifFields: members.slice(),
+            select: null,
+          };
+        }
       }
       if (members.length !== 1) {
         throw new Error(`Nested class field path not supported: ${members.join(".")}`);
@@ -1117,51 +1194,20 @@ export function elaborate(design, opts = {}) {
       return;
     }
     if (item.type === "Instance") {
-      const child = byName.get(item.module);
+      const child =
+        item._resolvedModule ||
+        resolveModule(genPath, item.name, item.module);
       if (!child) throw new Error(`Unknown module '${item.module}'`);
       const childPath = fullName(genPath, item.name);
       /** @type {Map<string, string>} */
       const childPorts = new Map();
       const childParams = buildParams(child, item.params || [], params, childPath);
       for (const p of child.ports) {
+        if (p.interface || p.direction === "interface" || p.kind === "interface") continue;
         const w = resolveWidth(p.width, p.range, childParams);
         addSignal(childPath, p.name, w, p.kind || "wire");
       }
-      item.conns.forEach((c, idx) => {
-        let portName;
-        let expr;
-        if (c.type === "Named") {
-          portName = c.port;
-          expr = c.expr;
-        } else {
-          portName = child.ports[idx]?.name;
-          if (!portName) throw new Error(`Too many ports on ${item.name}`);
-          expr = c.expr;
-        }
-        if (!expr) return;
-        const childSig = fullName(childPath, portName);
-        const port = child.ports.find((p) => p.name === portName);
-        if (!port) throw new Error(`No port '${portName}' on ${item.module}`);
-        if (expr.type === "Ident" && !expr.select) {
-          const parentName = rewriteExpr(expr, modPath, portMap, params).name;
-          signals.delete(childSig);
-          childPorts.set(portName, parentName);
-        } else if (port.direction === "input") {
-          assigns.push({
-            lhs: { type: "LValue", name: childSig, select: null },
-            rhs: rewriteExpr(expr, modPath, portMap, params),
-          });
-        } else {
-          if (expr.type !== "Ident") {
-            throw new Error("Output port connection must be an identifier in v0");
-          }
-          const parentName = rewriteExpr(expr, modPath, portMap, params).name;
-          assigns.push({
-            lhs: { type: "LValue", name: parentName, select: null },
-            rhs: { type: "Ident", name: childSig },
-          });
-        }
-      });
+      connectInstancePorts(child, item, childPath, modPath, portMap, params, childPorts);
       elaborateModule(child, childPath, childPorts, item.params || [], params);
       return;
     }
@@ -1187,7 +1233,7 @@ export function elaborate(design, opts = {}) {
     resolveWidth,
   });
 
-  const { registerUdps, expandAndPushUdp } = createUdpLowering({
+  const { expandAndPushUdp } = createUdpLowering({
     assigns,
     udps,
     signals,
@@ -1197,44 +1243,158 @@ export function elaborate(design, opts = {}) {
     evalConstInt,
   });
 
-  function cellInstAsModuleInstances(item) {
-    /** @type {object[]} */
-    const out = [];
-    for (const inst of item.instances) {
-      if (!inst.name) {
-        throw new Error(`Module instance '${item.cell}' requires an instance name`);
+  const { pushSpecify, pushSpecparam, applyAllPathDelays } = createSpecifyLowering({
+    assigns,
+    pathDelays,
+    fullName,
+    evalConstInt,
+  });
+
+  const {
+    registerInterfaces,
+    expandIfaceInstance,
+    connectIfacePort,
+    applyDotStar,
+    isIfaceType,
+  } = createInterfaceLowering({
+    signals,
+    fullName,
+    addSignal,
+    resolveWidth,
+    evalConstInt,
+    ifaceTypes,
+    ifaceInstances,
+    vifVars,
+  });
+
+  function connectInstancePorts(child, item, childPath, refPath, portMap, params, childPorts) {
+    const connected = new Set();
+    let hasDotStar = false;
+    (item.conns || []).forEach((c, idx) => {
+      if (c.type === "DotStar") {
+        hasDotStar = true;
+        return;
       }
-      let params = item.params || [];
-      // Gate-style `#10 name` stored delay+params; modules use params
-      if (!params.length && item.delay != null && item.delay !== 0) {
-        const d = item.delay;
-        const n = typeof d === "number" ? d : d.typ ?? d.rise ?? 0;
-        params = [{ type: "Positional", expr: { type: "Number", value: n } }];
+      let portName;
+      let expr;
+      if (c.type === "Named") {
+        portName = c.port;
+        expr = c.expr;
+      } else {
+        portName = child.ports[idx]?.name;
+        if (!portName) throw new Error(`Too many ports on ${item.name}`);
+        expr = c.expr;
       }
-      out.push({
-        type: "Instance",
-        module: item.cell,
-        name: inst.name,
-        params,
-        conns: inst.conns,
-      });
+      if (!expr && c.type === "Named") {
+        // empty .port() — skip
+        connected.add(portName);
+        return;
+      }
+      if (!expr) return;
+      connected.add(portName);
+      const port = child.ports.find((p) => p.name === portName);
+      if (!port) throw new Error(`No port '${portName}' on ${item.module}`);
+      const childSig = fullName(childPath, portName);
+
+      if (port.interface || port.direction === "interface" || port.kind === "interface") {
+        if (expr.type !== "Ident" || expr.select) {
+          throw new Error(`Interface port '${portName}' must connect to an interface instance`);
+        }
+        const parentIface = rewriteExpr(expr, refPath, portMap, params).name;
+        if (!ifaceInstances.has(parentIface)) {
+          throw new Error(`'${parentIface}' is not an interface instance`);
+        }
+        const parentType = ifaceInstances.get(parentIface).type;
+        if (parentType !== port.interface) {
+          throw new Error(
+            `Interface type mismatch: port '${portName}' expects '${port.interface}', got '${parentType}'`
+          );
+        }
+        signals.delete(childSig);
+        const extra = connectIfacePort(port, parentIface, childPath);
+        for (const [k, v] of extra) childPorts.set(k, v);
+        return;
+      }
+
+      if (expr.type === "Ident" && !expr.select) {
+        const parentName = rewriteExpr(expr, refPath, portMap, params).name;
+        signals.delete(childSig);
+        childPorts.set(portName, parentName);
+      } else if (port.direction === "input" || port.ref) {
+        if (port.ref) {
+          throw new Error(`ref port '${portName}' must connect to an identifier`);
+        }
+        assigns.push({
+          lhs: { type: "LValue", name: childSig, select: null },
+          rhs: rewriteExpr(expr, refPath, portMap, params),
+        });
+      } else {
+        if (expr.type !== "Ident") {
+          throw new Error("Output port connection must be an identifier in v0");
+        }
+        const parentName = rewriteExpr(expr, refPath, portMap, params).name;
+        assigns.push({
+          lhs: { type: "LValue", name: parentName, select: null },
+          rhs: { type: "Ident", name: childSig },
+        });
+      }
+    });
+    if (hasDotStar) {
+      applyDotStar(child, childPath, childPorts, refPath, portMap, connected);
     }
-    return out;
   }
 
   function elaborateCellInst(item, declPath, refPath, portMap, params, genMode = false) {
-    if (udps.has(item.cell)) {
-      expandAndPushUdp(item, declPath, refPath, portMap, params);
-      return;
-    }
-    if (byName.has(item.cell)) {
-      for (const inst of cellInstAsModuleInstances(item)) {
-        if (genMode) elaborateGenItem(inst, declPath, refPath, portMap, params);
-        else elaborateItem(inst, declPath, portMap, params);
+    // J6: interface instance
+    if (isIfaceType(item.cell)) {
+      for (const inst of item.instances) {
+        if (!inst.name) {
+          throw new Error(`Interface instance of '${item.cell}' requires a name`);
+        }
+        expandIfaceInstance(item.cell, inst.name, declPath, params);
       }
       return;
     }
-    throw new Error(`Unknown cell '${item.cell}' (not a module or UDP)`);
+    for (const inst of item.instances) {
+      const hit = resolveCell(declPath, inst.name, item.cell);
+      if (hit.kind === "udp") {
+        if (inst.named) {
+          throw new Error(`UDP '${item.cell}' does not support named port connections yet`);
+        }
+        expandAndPushUdp(
+          {
+            ...item,
+            cell: hit.key,
+            instances: [inst],
+          },
+          declPath,
+          refPath,
+          portMap,
+          params
+        );
+        continue;
+      }
+      // module
+      if (!inst.name) {
+        throw new Error(`Module instance '${item.cell}' requires an instance name`);
+      }
+      let pms = item.params || [];
+      if (!pms.length && item.delay != null && item.delay !== 0) {
+        const d = item.delay;
+        const n = typeof d === "number" ? d : d.typ ?? d.rise ?? 0;
+        pms = [{ type: "Positional", expr: { type: "Number", value: n } }];
+      }
+      const modInst = {
+        type: "Instance",
+        module: item.cell,
+        name: inst.name,
+        params: pms,
+        conns: inst.conns,
+        _resolvedModule: hit.ast,
+      };
+      if (genMode) elaborateGenItem(modInst, declPath, refPath, portMap, params);
+      else elaborateItem(modInst, declPath, portMap, params);
+    }
   }
 
   function elaborateItem(item, path, portMap, params) {
@@ -1297,6 +1457,10 @@ export function elaborate(design, opts = {}) {
       expandAndPushGate(item, path, path, portMap, params);
     } else if (item.type === "CellInst") {
       elaborateCellInst(item, path, path, portMap, params, false);
+    } else if (item.type === "Specify") {
+      pushSpecify(item, path, portMap, params);
+    } else if (item.type === "Specparam") {
+      pushSpecparam(item, params);
     } else if (item.type === "Always" || item.type === "Initial") {
       const sens =
         item.type === "Always"
@@ -1310,7 +1474,9 @@ export function elaborate(design, opts = {}) {
         svKind: item.svKind || null,
       });
     } else if (item.type === "Instance") {
-      const child = byName.get(item.module);
+      const child =
+        item._resolvedModule ||
+        resolveModule(path, item.name, item.module);
       if (!child) throw new Error(`Unknown module '${item.module}'`);
       const childPath = fullName(path, item.name);
       /** @type {Map<string, string>} */
@@ -1318,48 +1484,29 @@ export function elaborate(design, opts = {}) {
       const childParams = buildParams(child, item.params || [], params, childPath);
 
       for (const p of child.ports) {
+        if (p.interface || p.direction === "interface" || p.kind === "interface") continue;
         const w = resolveWidth(p.width, p.range, childParams);
         addSignal(childPath, p.name, w, p.kind || "wire");
       }
 
-      item.conns.forEach((c, idx) => {
-        let portName;
-        let expr;
-        if (c.type === "Named") {
-          portName = c.port;
-          expr = c.expr;
-        } else {
-          portName = child.ports[idx]?.name;
-          if (!portName) throw new Error(`Too many ports on ${item.name}`);
-          expr = c.expr;
-        }
-        if (!expr) return;
-        const childSig = fullName(childPath, portName);
-        const port = child.ports.find((p) => p.name === portName);
-        if (!port) throw new Error(`No port '${portName}' on ${item.module}`);
-
-        if (expr.type === "Ident" && !expr.select) {
-          const parentName = rewriteExpr(expr, path, portMap, params).name;
-          signals.delete(childSig);
-          childPorts.set(portName, parentName);
-        } else if (port.direction === "input") {
-          assigns.push({
-            lhs: { type: "LValue", name: childSig, select: null },
-            rhs: rewriteExpr(expr, path, portMap, params),
-          });
-        } else {
-          if (expr.type !== "Ident") {
-            throw new Error("Output port connection must be an identifier in v0");
-          }
-          const parentName = rewriteExpr(expr, path, portMap, params).name;
-          assigns.push({
-            lhs: { type: "LValue", name: parentName, select: null },
-            rhs: { type: "Ident", name: childSig },
-          });
-        }
-      });
+      connectInstancePorts(child, item, childPath, path, portMap, params, childPorts);
 
       elaborateModule(child, childPath, childPorts, item.params || [], params);
+    } else if (item.type === "VifDecl") {
+      if (!ifaceTypes.has(item.interface)) {
+        throw new Error(`Unknown interface type '${item.interface}' for virtual interface`);
+      }
+      for (const d of item.decls) {
+        const key = fullName(path, d.name);
+        vifVars.set(key, item.interface);
+        signals.set(key, {
+          width: 0,
+          kind: "vif",
+          isVif: true,
+          ifaceType: item.interface,
+          value: makeVifHandle(null),
+        });
+      }
     } else if (item.type === "Generate") {
       for (const gi of item.items) elaborateGenItem(gi, path, path, portMap, params);
     } else if (item.type === "GenvarDecl") {
@@ -1789,6 +1936,7 @@ export function elaborate(design, opts = {}) {
     for (const p of mod.ports) {
       const key = fullName(path, p.name);
       if (portMap && portMap.has(p.name)) continue;
+      if (p.interface || p.direction === "interface" || p.kind === "interface") continue;
       const w = resolveWidth(p.width, p.range, params);
       addSignal(path, p.name, w, p.kind || "wire");
       if (!path) ports.push(key);
@@ -1863,8 +2011,9 @@ export function elaborate(design, opts = {}) {
     compilePackage(createStdPackageAst());
   }
   for (const pkg of userPkgs) compilePackage(pkg);
-  registerUdps(design.udps || []);
+  registerInterfaces(design.interfaces || []);
   elaborateModule(top, "", null, null, null);
+  applyAllPathDelays();
 
   return {
     top: topName,
@@ -1876,6 +2025,11 @@ export function elaborate(design, opts = {}) {
     functions,
     classes: classTable,
     udps,
+    pathDelays,
+    ifaceInstances,
+    vifVars,
+    config: activeConfig ? activeConfig.name : null,
+    celldefined: design.modules.filter((m) => m.celldefine).map((m) => m.name),
     timeCtx: normalizeTimeCtx(timeCtx),
     hierarchy: hierarchy.slice().sort(
       (a, b) => a.split(".").length - b.split(".").length || a.localeCompare(b)

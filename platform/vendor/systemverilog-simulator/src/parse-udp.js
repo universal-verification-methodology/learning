@@ -286,11 +286,16 @@ export function attachParseUdp(ctx) {
           named = true;
           do {
             eat(".");
-            const port = eat("id").value;
-            eat("(");
-            const expr = at(")") ? null : ctx.parseExpression();
-            eat(")");
-            conns.push({ type: "Named", port, expr });
+            if (match("*")) {
+              // J6b: .* implicit port connections
+              conns.push({ type: "DotStar" });
+            } else {
+              const port = eat("id").value;
+              eat("(");
+              const expr = at(")") ? null : ctx.parseExpression();
+              eat(")");
+              conns.push({ type: "Named", port, expr });
+            }
           } while (match(","));
         } else {
           do {

@@ -1,0 +1,188 @@
+.sh-preset-grid {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+@media (min-width: 720px) {
+  .sh-preset-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.sh-preset-grid button {
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  color: var(--ink);
+  font: inherit;
+}
+.sh-preset-grid button.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.sh-preset-grid .title {
+  display: block;
+  font-weight: 650;
+  font-size: 0.92rem;
+}
+.sh-preset-grid .meta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.sh-sliders {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0.75rem 0;
+}
+@media (min-width: 720px) {
+  .sh-sliders {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.sh-field label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+.sh-field label span {
+  font-family: var(--mono);
+  color: var(--ink);
+}
+.sh-field input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.rule-box {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  margin-bottom: 0.75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.verdicts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.verdict {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+}
+.verdict.ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+.verdict.fail {
+  background: var(--err-bg);
+  color: var(--err);
+}
+
+.diagram-wrap {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface2);
+  overflow: auto;
+  padding: 0.5rem;
+}
+.timing-svg {
+  display: block;
+  width: 100%;
+  min-width: 560px;
+  font-family: var(--mono);
+  user-select: none;
+}
+.timing-svg .rail {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.timing-svg .rail.clk { stroke: var(--signal); }
+.timing-svg .rail.data { stroke: var(--accent-hover); }
+.timing-svg .rail.q { stroke: #3a6ea5; }
+.timing-svg .edge {
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+.timing-svg .win-setup {
+  fill: color-mix(in srgb, var(--ok) 22%, transparent);
+  stroke: var(--ok);
+  stroke-width: 1.25;
+}
+.timing-svg .win-hold {
+  fill: color-mix(in srgb, var(--signal) 20%, transparent);
+  stroke: var(--signal);
+  stroke-width: 1.25;
+}
+.timing-svg .win-setup.bad,
+.timing-svg .win-hold.bad {
+  fill: color-mix(in srgb, var(--err) 22%, transparent);
+  stroke: var(--err);
+}
+.timing-svg .label {
+  fill: var(--ink);
+  font-size: 11px;
+  font-weight: 650;
+}
+.timing-svg .anno {
+  fill: var(--muted);
+  font-size: 10px;
+}
+.timing-svg .anno.ok { fill: var(--ok); font-weight: 700; }
+.timing-svg .anno.bad { fill: var(--err); font-weight: 700; }
+.timing-svg .axis { fill: var(--muted); font-size: 10px; }
+.timing-svg .hit {
+  fill: transparent;
+  cursor: ew-resize;
+}
+
+.sh-msg {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0.45rem 0 0;
+}
+.sh-msg.ok { color: var(--ok); }
+.sh-msg.err { color: var(--err); }
+.sh-hint {
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.metrics {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+.metrics div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.metrics strong { color: var(--ink); }

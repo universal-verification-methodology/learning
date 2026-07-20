@@ -6,10 +6,33 @@ export function attachParseModule(ctx) {
   const { eat, match, at, peek, error, tokens } = ctx;
 
 function parsePortDir() {
-  if (match("input") || match("output") || match("inout")) {
+  if (match("input") || match("output") || match("inout") || match("ref")) {
     return tokens[ctx.pos - 1].type;
   }
   return null;
+}
+
+/** virtual [interface] bus_if vif; */
+function tryParseVifDecl() {
+  if (!at("virtual")) return null;
+  const saved = ctx.pos;
+  eat("virtual");
+  match("interface");
+  if (!at("id")) {
+    ctx.pos = saved;
+    return null;
+  }
+  const iface = eat("id").value;
+  if (!at("id")) {
+    ctx.pos = saved;
+    return null;
+  }
+  const decls = [];
+  do {
+    decls.push({ name: eat("id").value });
+  } while (match(","));
+  eat(";");
+  return { type: "VifDecl", interface: iface, decls };
 }
 
 function parseParamDecls() {
@@ -43,9 +66,24 @@ function parseModule() {
   if (match("(")) {
     if (!at(")")) {
       do {
-        const dir = parsePortDir();
+        let dir = null;
+        if (match("ref")) dir = "ref";
+        else dir = parsePortDir();
+
+        // J6: interface port — [virtual] iface[.modport] name
+        {
+          const ip = ctx.tryParseInterfacePort?.(dir);
+          if (ip) {
+            if (dir === "ref") ip.ref = true;
+            ports.push(ip);
+            continue;
+          }
+        }
+
         let kind = null;
-        if (match("wire") || match("reg") || match("logic") || match("bit")) kind = tokens[ctx.pos - 1].type;
+        if (match("wire") || match("reg") || match("logic") || match("bit")) {
+          kind = tokens[ctx.pos - 1].type;
+        }
         const range = ctx.parseRange();
         const wr = ctx.parseWidthFromRange(range);
         const pname = eat("id").value;
@@ -55,6 +93,7 @@ function parseModule() {
           kind: kind || "wire",
           width: wr.width,
           range: wr.range || range,
+          ref: dir === "ref",
         });
       } while (match(","));
     }
@@ -82,6 +121,10 @@ function parseItem() {
   if (at("import")) return parseImport();
   if (at("typedef")) return ctx.parseTypedef();
   if (at("class")) return ctx.parseClass();
+  if (at("virtual")) {
+    const vif = tryParseVifDecl();
+    if (vif) return vif;
+  }
   if (at("timeunit") || at("timeprecision")) return parseTimeUnitsDecl();
   if (at("parameter") || at("localparam")) return parseParameterItem();
   if (at("genvar")) return parseGenvar();
@@ -112,6 +155,8 @@ function parseItem() {
     return parseVarDecl();
   if (at("event")) return parseEventDecl();
   if (at("defparam")) return parseDefParam();
+  if (at("specparam")) return ctx.parseSpecparamDecls();
+  if (at("specify")) return ctx.parseSpecify();
   if (at("assign")) return parseAssign();
   if (atGate()) return parseGate();
   if (atAlways()) return ctx.parseAlways();
@@ -841,11 +886,15 @@ function parseInstanceOrError() {
     if (at(".")) {
       do {
         eat(".");
-        const port = eat("id").value;
-        eat("(");
-        const expr = at(")") ? null : ctx.parseExpression();
-        eat(")");
-        conns.push({ type: "Named", port, expr });
+        if (match("*")) {
+          conns.push({ type: "DotStar" });
+        } else {
+          const port = eat("id").value;
+          eat("(");
+          const expr = at(")") ? null : ctx.parseExpression();
+          eat(")");
+          conns.push({ type: "Named", port, expr });
+        }
       } while (match(","));
     } else {
       do {

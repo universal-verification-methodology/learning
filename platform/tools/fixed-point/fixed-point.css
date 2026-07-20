@@ -1,0 +1,247 @@
+.idea-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .idea-grid { grid-template-columns: 1fr; }
+}
+
+.idea-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  font-size: 0.88rem;
+}
+
+.idea-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.ctrl-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.65rem;
+  font-size: 0.9rem;
+}
+
+.ctrl-row select,
+.ctrl-row input {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.bits-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: flex-end;
+  margin: 0.65rem 0;
+}
+
+.bit-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.bit-cell .idx {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+
+.bit-cell button {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.bit-cell button.is-one {
+  border-color: var(--accent);
+  background: var(--surface2);
+  font-weight: 600;
+}
+
+.bit-cell button.is-sign {
+  outline: 2px solid #c4b5fd;
+  outline-offset: 1px;
+}
+
+.bit-cell button.is-frac {
+  border-color: #b45309;
+}
+
+.bit-cell.point {
+  padding: 0 0.15rem 0.35rem;
+  font-family: var(--mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #b45309;
+}
+
+.vals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.55rem 0;
+}
+
+@media (max-width: 520px) {
+  .vals-grid { grid-template-columns: 1fr; }
+}
+
+.val-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  background: var(--surface2);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.val-card .lbl {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+  font-family: var(--sans, inherit);
+}
+
+.val-card.warn {
+  border-color: var(--err);
+}
+
+.range-bar {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  margin-bottom: 0.55rem;
+}
+
+.action-grid {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.action-grid button {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.action-grid button:hover { border-color: var(--accent); }
+
+.trace-box,
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: #1a222c;
+  color: #e8eef4;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.trace-box { min-height: 5rem; margin-bottom: 0.55rem; }
+.log-box {
+  min-height: 6rem;
+  max-height: 10rem;
+  overflow: auto;
+}
+
+.trace-box .ok,
+.log-box .ok { color: #8fd4a8; }
+.trace-box .warn,
+.log-box .warn { color: #f0c674; }
+.trace-box .err,
+.log-box .err { color: #f5a8a8; }
+.trace-box .muted,
+.log-box .muted { color: #7a8a9a; }
+.trace-box .hi,
+.log-box .run { color: #9ecbff; }
+
+.cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cheat-table th,
+.cheat-table td {
+  text-align: left;
+  padding: 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.hint-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hint-list li { margin: 0.35rem 0; }
+
+.scale-viz {
+  display: flex;
+  height: 0.55rem;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  margin: 0.5rem 0 0.75rem;
+}
+
+.scale-viz .int {
+  background: #c4b5fd;
+}
+
+.scale-viz .frac {
+  background: #fdba74;
+}
+
+.legend {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.legend span {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 2px;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+}
+
+.legend .int { background: #c4b5fd; }
+.legend .frac { background: #fdba74; }

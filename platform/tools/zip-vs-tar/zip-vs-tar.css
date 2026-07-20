@@ -1,0 +1,239 @@
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .compare-grid { grid-template-columns: 1fr; }
+}
+
+.format-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.85rem;
+  background: var(--surface2);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.format-card:hover { border-color: var(--accent); }
+.format-card.is-active {
+  border-color: var(--accent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.format-card h3 {
+  margin: 0 0 0.4rem;
+  font-family: var(--mono);
+  font-size: 1rem;
+}
+
+.format-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.format-card .cmd {
+  margin-top: 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text);
+}
+
+.tree-view {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  max-height: 16rem;
+  overflow: auto;
+}
+
+.tree-view .ex { color: var(--err); text-decoration: line-through; opacity: 0.75; }
+.tree-view .in { color: #047857; }
+.tree-view .dir { font-weight: 650; }
+
+.archive-list {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  background: #1a222c;
+  color: #e8eef4;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  min-height: 8rem;
+  max-height: 14rem;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.archive-list .muted { color: #7a8a9a; }
+.archive-list .ex-mark { color: #f5a8a8; }
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: end;
+  margin-bottom: 0.75rem;
+}
+
+.form-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.form-row input[type="text"] {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  min-width: 12rem;
+}
+
+.exclude-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  margin-bottom: 0.75rem;
+}
+
+.exclude-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.chooser {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.5rem;
+}
+
+.chooser button {
+  text-align: left;
+  font-size: 0.9rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.chooser button:hover { border-color: var(--accent); }
+.chooser button.is-pick {
+  border-color: #047857;
+  background: color-mix(in srgb, #047857 10%, var(--surface));
+}
+
+.cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cheat-table th,
+.cheat-table td {
+  text-align: left;
+  padding: 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.hint-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hint-list li { margin: 0.35rem 0; }
+
+.meta {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0.35rem 0 0;
+}
+
+.zt-term {
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  background: #1a222c;
+  color: #e8eef4;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  min-height: 7rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 0.65rem;
+}
+
+.zt-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 0.65rem 0.8rem;
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.zt-scroll .out { color: #b8c4d0; }
+.zt-scroll .err { color: #f5a8a8; }
+.zt-scroll .muted { color: #7a8a9a; }
+
+.zt-prompt-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.8rem;
+  border-top: 1px solid #2a3542;
+  background: #141b23;
+}
+
+.zt-prompt { color: #7dcea0; }
+.zt-line {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #e8eef4;
+  font: inherit;
+  outline: none;
+}
+
+.quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.quick-row button {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.28rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.quick-row button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

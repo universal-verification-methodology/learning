@@ -48,7 +48,10 @@ Set `HDL_ENGINE_SPEC.prefer = "public"` in `assets/hdl-engine.js` once Pages ser
 | `radix-converter` | `Value` / `parseLiteral` | **Done** |
 | `clock-stepper` | `createSession` (step / runToEdge / poke) | **Done** |
 | `blocking-vs-nonblocking` | twin `createSession` (`=` vs `<=`) | **Done** |
-| `waveform-mini` / `fsm-lab` | session + waves | Planned |
+| `fsm-lab` | teaching FSM (table stepper; not engine waves) | **Done** (UI lab) |
+| `waveform-lab` | `createSession` + wave dump → SVG viewer | **Done** |
+| `module-diagram` | `parse` → modules / ports / instances diagram | **Done** |
+| `reset-timelines` | twin `createSession` (sync vs async reset) | **Done** |
 | `synth-lint` | `lintSynthesizability` / `SYNTH_LINT_RULES` | **Done** |
 | `hdl-style` | `lintStyle` / `STYLE_LINT_RULES` | **Done** |
 

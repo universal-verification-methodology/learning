@@ -1,0 +1,226 @@
+.layers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 800px) {
+  .layers { grid-template-columns: 1fr; }
+}
+
+.layer {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface2);
+  padding: 0.55rem 0.65rem;
+  min-height: 7.5rem;
+}
+
+.layer h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  font-family: var(--mono);
+  font-weight: 650;
+}
+
+.layer .tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-family: var(--mono);
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.layer pre {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.layer.is-same { border-color: color-mix(in srgb, #047857 45%, var(--line)); }
+.layer.is-diff { border-color: color-mix(in srgb, #b45309 50%, var(--line)); }
+.layer.is-danger { border-color: color-mix(in srgb, var(--err) 55%, var(--line)); }
+
+.file-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.file-tabs button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.file-tabs button.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.file-tabs .badge {
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  color: #b45309;
+}
+
+.commit-row {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
+
+.commit-row strong { color: var(--text); }
+
+.zone-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+@media (max-width: 720px) {
+  .zone-grid { grid-template-columns: 1fr; }
+}
+
+.zone {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.7rem;
+  background: var(--surface2);
+}
+
+.zone h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+}
+
+.zone.safe h3 { color: #047857; }
+.zone.danger h3 { color: var(--err); }
+
+.zone p.zone-lead {
+  margin: 0 0 0.55rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.action-grid {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.action-grid button {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.action-grid button:hover { border-color: var(--accent); }
+.action-grid button.danger { color: var(--err); }
+.action-grid button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.confirm-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  margin: 0.55rem 0 0.35rem;
+  color: var(--muted);
+}
+
+.risk-meter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+.risk-meter span {
+  padding: 0.25rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.risk-meter .ok { color: #047857; border-color: #047857; }
+.risk-meter .warn { color: #b45309; border-color: #b45309; }
+.risk-meter .bad { color: var(--err); border-color: var(--err); }
+
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: #1a222c;
+  color: #e8eef4;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  min-height: 7rem;
+  max-height: 12rem;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.log-box .ok { color: #8fd4a8; }
+.log-box .warn { color: #f0c674; }
+.log-box .err { color: #f5a8a8; }
+.log-box .muted { color: #7a8a9a; }
+
+.cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cheat-table th,
+.cheat-table td {
+  text-align: left;
+  padding: 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.hint-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hint-list li { margin: 0.35rem 0; }
+
+.status-row {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0 0 0.65rem;
+  color: var(--muted);
+}
+
+.status-row strong { color: var(--text); }
+
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.55rem;
+}

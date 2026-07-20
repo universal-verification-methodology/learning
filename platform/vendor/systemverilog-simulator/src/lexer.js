@@ -132,6 +132,20 @@ const KEYWORDS = new Set([
   "endprimitive",
   "table",
   "endtable",
+  "specify",
+  "endspecify",
+  "specparam",
+  "library",
+  "config",
+  "endconfig",
+  "design",
+  "liblist",
+  "celldefine",
+  "endcelldefine",
+  "interface",
+  "endinterface",
+  "modport",
+  "ref",
 ]);
 
 /**
@@ -298,6 +312,10 @@ export function lex(source) {
       "~^",
       "^~",
       "->",
+      "=>",
+      "*>",
+      "+:",
+      "-:",
     ];
     if (multi.includes(three)) {
       advance();

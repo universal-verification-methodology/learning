@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SVA implication timeline — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="sva-timeline.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Tools</a>
+        <span class="here">SVA implication timeline</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Interactive tool</div>
+    <section class="hero">
+      <h1>SVA implication timeline</h1>
+      <p class="lead">
+        Sketch <code>a |-&gt; b</code> (overlap) and <code>a |=&gt; b</code> (next-cycle)
+        on a short wave — pass, fail, or <strong>vacuous</strong> success.
+        Not a full SVA engine. Starter: overlapping pass at cycle 2.
+      </p>
+    </section>
+    <div id="sva-root"></div>
+  </main>
+  <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
+  <script src="sva-timeline.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

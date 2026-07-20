@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HDL Simulator — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body data-asset-base="../assets/">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../index.html">Digital Design and Verification Platform</a></p>
+      <div class="site-header-tools">
+        <nav class="site-nav" aria-label="Site">
+          <a href="../index.html">Home</a>
+          <a href="../courses/index.html">Courses</a>
+          <a href="../tools/index.html">Tools</a>
+          <a href="index.html" class="is-active" aria-current="page">Simulator</a>
+          <a href="../path/index.html">Path</a>
+          <a href="../projects/index.html">Projects</a>
+          <a href="../community/index.html">Community</a>
+        </nav>
+        <div class="site-search" data-site-search></div>
+      </div>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="here">Simulator</span></nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Browser HDL</div>
+    <section class="hero">
+      <h1>HDL Simulator</h1>
+      <p class="lead">
+        Public browser simulator for teaching-scale HDL. Concept labs on this site use the same engine family;
+        the full IDE lives on its own Pages project.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" id="open-sim" href="https://universal-verification-methodology.github.io/systemverilog-simulator/">Open HDL Simulator</a>
+        <a class="btn btn-secondary" href="../tools/index.html#waveforms">Waveform tools</a>
+        <a class="btn btn-ghost" href="../courses/index.html">Courses</a>
+      </div>
+    </section>
+
+    <div class="placeholder-panel">
+      <h2>Datasets from <code>core</code> — placeholder</h2>
+      <p>
+        Planned: load example designs / testbenches from
+        <a href="https://github.com/universal-verification-methodology/core" rel="noopener">universal-verification-methodology/core</a>
+        (jsDelivr or vendored pin) into the simulator. Not wired yet.
+      </p>
+      <ul>
+        <li>Pick a dataset → open simulator with files prefilled</li>
+        <li>Deep-link from <code>learn_hdl_simulator</code> labs</li>
+        <li>Keep offline toolchains (iverilog / Verilator) in course repos</li>
+      </ul>
+    </div>
+
+    <div class="placeholder-panel">
+      <h2>Related</h2>
+      <p>
+        Engine plan: <a href="../simulator.md">simulator.md</a> ·
+        guided course (placeholder): <a href="../courses/index.html">learn_hdl_simulator</a> ·
+        tools: <a href="../tools/index.html#hdl-simulator">Browser HDL simulator section</a>
+      </p>
+    </div>
+  </main>
+  <footer class="site-footer">
+    Simulator URL comes from <code>SITE_CONFIG.simulatorUrl</code> when set.
+  </footer>
+  <script src="../assets/site-config.js"></script>
+  <script src="../assets/site.js"></script>
+  <script>
+    (function () {
+      var a = document.getElementById("open-sim");
+      var cfg = window.SITE_CONFIG || {};
+      if (a && cfg.simulatorUrl) a.href = cfg.simulatorUrl;
+    })();
+  </script>
+</body>
+</html>

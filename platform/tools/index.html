@@ -6,15 +6,23 @@
   <title>Tools — Digital Design and Verification Platform</title>
   <link rel="stylesheet" href="../assets/site.css">
 </head>
-<body>
+<body data-asset-base="../assets/">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="site-header-inner">
       <p class="brand"><a href="../index.html">Digital Design and Verification Platform</a></p>
-      <nav class="site-nav" aria-label="Site">
-        <a href="../index.html">Home</a>
-        <a href="index.html" class="is-active" aria-current="page">Tools</a>
-      </nav>
+      <div class="site-header-tools">
+        <nav class="site-nav" aria-label="Site">
+          <a href="../index.html">Home</a>
+          <a href="../courses/index.html">Courses</a>
+          <a href="index.html" class="is-active" aria-current="page">Tools</a>
+          <a href="../simulator/index.html">Simulator</a>
+          <a href="../path/index.html">Path</a>
+          <a href="../projects/index.html">Projects</a>
+          <a href="../community/index.html">Community</a>
+        </nav>
+        <div class="site-search" data-site-search></div>
+      </div>
     </div>
     <div class="site-header-crumb">
       <nav aria-label="Breadcrumb">
@@ -29,8 +37,9 @@
       <h1>Interactive labs</h1>
       <p class="lead">
         Concept labs in the browser — organized by idea, not by course or module.
-        Shipped tools are ready to use; planned tools are listed until they ship.
-        Spec: <a href="../tools.md">tools.md</a>.
+        Shipped tools are ready to use; planned tools show <span class="pill-soon">Coming soon</span> until they ship.
+        Catalog: <strong>151 shipped</strong>, <strong>51 planned</strong> (see <a href="../tools.md">tools.md</a>).
+        Target courses: <a href="../syllabus.md">syllabus.md</a>.
       </p>
     </section>
 
@@ -45,6 +54,34 @@
           <a href="permissions/index.html">Permissions, umask, PATH &amp; ownership</a>
           <div class="chapter-meta">rwx · umask · PATH · 22 challenges</div>
         </li>
+        <li>
+          <a href="shell-history/index.html">Shell history &amp; reverse-search</a>
+          <div class="chapter-meta">history · Ctrl+R · !! / !n / !$ · 22 challenges</div>
+        </li>
+        <li>
+          <a href="path-abs-rel/index.html">Absolute vs relative paths</a>
+          <div class="chapter-meta">/ · ~ · . / .. · resolve vs cwd · 22 challenges</div>
+        </li>
+        <li>
+          <a href="wildcards-globs/index.html">Glob / wildcard lab</a>
+          <div class="chapter-meta">* · ? · […] · expand before command · 22 challenges</div>
+        </li>
+        <li>
+          <a href="man-help-lab/index.html">man / --help discoverability</a>
+          <div class="chapter-meta">man · --help · whatis · apropos · 22 challenges</div>
+        </li>
+        <li>
+          <a href="file-types-lab/index.html">File types &amp; links</a>
+          <div class="chapter-meta">ls -l types · soft vs hard · broken links · 22 challenges</div>
+        </li>
+        <li>
+          <a href="realpath-resolve/index.html">realpath / readlink</a>
+          <div class="chapter-meta">readlink vs realpath · chains · broken links · 22 challenges</div>
+        </li>
+        <li>
+          <a href="dotfiles-lab/index.html">Dotfiles &amp; config homes</a>
+          <div class="chapter-meta">ls -a · ~/.bashrc · .gitignore · 22 challenges</div>
+        </li>
       </ul>
     </section>
 
@@ -54,6 +91,22 @@
         <li>
           <a href="pipes/index.html">Pipes, redirection, xargs &amp; jobs</a>
           <div class="chapter-meta">| · tee · xargs · 22 challenges</div>
+        </li>
+        <li>
+          <a href="ps-kill-lab/index.html">Process list &amp; signals</a>
+          <div class="chapter-meta">ps · kill · SIGINT / SIGTERM / SIGKILL · 22 challenges</div>
+        </li>
+        <li>
+          <a href="job-control-lab/index.html">Job control deep-dive</a>
+          <div class="chapter-meta">Ctrl+Z · jobs · fg / bg · &amp; · 22 challenges</div>
+        </li>
+        <li>
+          <a href="sort-uniq-cut/index.html">sort / uniq / cut</a>
+          <div class="chapter-meta">sort · uniq -c · cut -d/-f · log pipelines · 22 challenges</div>
+        </li>
+        <li>
+          <a href="here-doc-lab/index.html">Here-doc / here-string</a>
+          <div class="chapter-meta">&lt;&lt;EOF · &lt;&lt;'EOF' · &lt;&lt;&lt; · 22 challenges</div>
         </li>
       </ul>
     </section>
@@ -65,6 +118,18 @@
           <a href="scripting/index.html">Script exit codes &amp; control flow</a>
           <div class="chapter-meta">args · set -e · 23 challenges</div>
         </li>
+        <li>
+          <a href="exit-status-lab/index.html">Exit status &amp; &amp;&amp; / ||</a>
+          <div class="chapter-meta">$? · &amp;&amp; / || · set -e · 22 challenges</div>
+        </li>
+        <li>
+          <a href="alias-lab/index.html">Alias &amp; function lab</a>
+          <div class="chapter-meta">alias vs function · session vs .bashrc · 22 challenges</div>
+        </li>
+        <li>
+          <a href="safe-scripting/index.html">Safe scripting checklist</a>
+          <div class="chapter-meta">set -euo pipefail · quoting · --dry-run · 22 challenges</div>
+        </li>
       </ul>
     </section>
 
@@ -75,27 +140,96 @@
           <a href="project-archives/index.html">Project layout, archives, sed &amp; diff</a>
           <div class="chapter-meta">tree · find/grep · tar · sed · diff/patch · 22 challenges</div>
         </li>
+        <li>
+          <a href="zip-vs-tar/index.html">tar vs zip</a>
+          <div class="chapter-meta">tar.gz vs zip · exclude build/ · 22 challenges</div>
+        </li>
+        <li>
+          <a href="backup-clean/index.html">Backup &amp; clean-build</a>
+          <div class="chapter-meta">backup first · dry-run · safe deletes · 22 challenges</div>
+        </li>
+        <li>
+          <a href="link-relative/index.html">Relative symlink pitfalls</a>
+          <div class="chapter-meta">rel vs abs · tree moves · 22 challenges</div>
+        </li>
       </ul>
     </section>
 
     <section class="tools-stage" id="version-control">
       <h2>Version control</h2>
+      <p class="tools-stage-note">Ordered to match <code>learn_git</code> modules 01–18 (all shipped). Template / submission labs live under Workflow.</p>
       <ul class="chapter-list">
         <li>
+          <a href="git-mental-model/index.html">Git mental model</a>
+          <div class="chapter-meta">working tree ↔ index ↔ HEAD · 22 challenges · learn_git 01</div>
+        </li>
+        <li>
           <a href="git-graph/index.html">Git graph, staging, stash &amp; rebase</a>
-          <div class="chapter-meta">add/commit · merge/rebase · stash · tags · 22 challenges</div>
+          <div class="chapter-meta">add/commit · merge/rebase · stash · tags · 22 challenges · learn_git 02</div>
+        </li>
+        <li>
+          <a href="gitignore-lab/index.html">.gitignore pattern lab</a>
+          <div class="chapter-meta">build/ · *.log · *.vcd · negation · 22 challenges · learn_git 03</div>
+        </li>
+        <li>
+          <a href="commit-message-lab/index.html">Commit message lab</a>
+          <div class="chapter-meta">subject/body · why over what · 22 challenges · learn_git 04</div>
+        </li>
+        <li>
+          <a href="git-log-lab/index.html">git log options</a>
+          <div class="chapter-meta">--oneline · --graph · decorate · path · 22 challenges · learn_git 05</div>
+        </li>
+        <li>
+          <a href="git-undo-safe/index.html">Safe Git undo</a>
+          <div class="chapter-meta">unstage · restore · soft/mixed/hard · 22 challenges · learn_git 06</div>
+        </li>
+        <li>
+          <a href="git-stash-lab/index.html">Stash scenarios</a>
+          <div class="chapter-meta">push · pop · apply · drop · -u · 22 challenges · learn_git 07</div>
+        </li>
+        <li>
+          <a href="git-tags-lab/index.html">Tags (light vs annotated)</a>
+          <div class="chapter-meta">lightweight · annotated · push --tags · 22 challenges · learn_git 08</div>
+        </li>
+        <li>
+          <a href="branch-strategy/index.html">Branch naming strategy</a>
+          <div class="chapter-meta">feature/ · fix/ · hotfix/ · base from main · 22 challenges · learn_git 09</div>
         </li>
         <li>
           <a href="git-conflicts/index.html">Merge conflict resolver</a>
-          <div class="chapter-meta">markers · ours/theirs · 22 scenarios</div>
+          <div class="chapter-meta">markers · ours/theirs · 22 scenarios · learn_git 10</div>
+        </li>
+        <li>
+          <a href="git-rebase-merge/index.html">Rebase vs merge chooser</a>
+          <div class="chapter-meta">8 scenarios · linear vs shared · 22 challenges · learn_git 11</div>
+        </li>
+        <li>
+          <a href="git-cherry-pick-lab/index.html">Cherry-pick lab</a>
+          <div class="chapter-meta">clean pick · conflict · continue/abort · 22 challenges · learn_git 12</div>
+        </li>
+        <li>
+          <a href="git-reflog/index.html">Reflog recovery</a>
+          <div class="chapter-meta">HEAD@{n} · reset recover · branch recover · 22 challenges · learn_git 13</div>
         </li>
         <li>
           <a href="blame-bisect/index.html">Blame &amp; bisect</a>
-          <div class="chapter-meta">line attribution · bisect · 22 challenges</div>
+          <div class="chapter-meta">line attribution · bisect · 22 challenges · learn_git 14</div>
         </li>
         <li>
           <a href="remotes/index.html">Remotes, PRs &amp; submodules</a>
-          <div class="chapter-meta">22-question quiz · live GitHub checklist</div>
+          <div class="chapter-meta">22-question quiz · live GitHub checklist · learn_git 15</div>
+        </li>
+        <li>
+          <a href="remote-tracking/index.html">Remote-tracking branches</a>
+          <div class="chapter-meta">origin/main · fetch vs pull · ahead/behind · 22 challenges · learn_git 16</div>
+        </li>
+        <li>
+          <a href="pr-review-lab/index.html">PR review checklist</a>
+          <div class="chapter-meta">size · tests · hygiene · 8 PRs · 22 challenges · learn_git 17</div>
+        </li>
+        <li>
+          <a href="submodule-pitfalls/index.html">Submodule pitfalls</a>
+          <div class="chapter-meta">init · detached HEAD · pin bump · 22 challenges · learn_git 18</div>
         </li>
       </ul>
     </section>
@@ -107,19 +241,80 @@
           <a href="workflow/index.html">Pre-push checklist, Make &amp; env</a>
           <div class="chapter-meta">check_ready · make · .env · 22 challenges</div>
         </li>
+        <li>
+          <a href="log-triage/index.html">Log / failure triage</a>
+          <div class="chapter-meta">fail · env · flake · 12 cases · 22 challenges</div>
+        </li>
+        <li>
+          <a href="make-basics/index.html">Makefile basics</a>
+          <div class="chapter-meta">targets · deps · .PHONY · vars · 22 challenges</div>
+        </li>
+        <li>
+          <a href="env-file-lab/index.html">.env file literacy</a>
+          <div class="chapter-meta">load order · secrets vs commit · 22 challenges</div>
+        </li>
+        <li>
+          <a href="template-clone/index.html">Template-repo bootstrap</a>
+          <div class="chapter-meta">clone · layout · first status · 22 challenges · learn_git 19</div>
+        </li>
+        <li>
+          <a href="dry-run-lab/index.html">Dry-run mindset</a>
+          <div class="chapter-meta">--dry-run · echo-first · 22 challenges</div>
+        </li>
+        <li>
+          <a href="submission-repro/index.html">Submission reproducibility</a>
+          <div class="chapter-meta">clean tree · root scripts · logs · 22 challenges · learn_git 20</div>
+        </li>
       </ul>
     </section>
 
     <section class="tools-stage" id="number-systems">
       <h2>Number systems &amp; representation</h2>
+      <p class="tools-stage-note">Core path ordered to match <code>learn_digital</code> modules 01–10 (all shipped). <code>verilog-literals</code> is primarily <code>learn_verilog</code>.</p>
       <ul class="chapter-list">
         <li>
           <a href="radix-converter/index.html">Radix / bit-width converter</a>
-          <div class="chapter-meta">HDL Value · parseLiteral · overflow · 22 challenges</div>
+          <div class="chapter-meta">HDL Value · parseLiteral · overflow · 22 challenges · learn_digital 01</div>
+        </li>
+        <li>
+          <a href="twos-complement/index.html">Two’s complement lab</a>
+          <div class="chapter-meta">signed range · negate · wrap · 22 challenges · learn_digital 02</div>
+        </li>
+        <li>
+          <a href="overflow-wrap/index.html">Overflow / wrap-around</a>
+          <div class="chapter-meta">mod 2^w · signed ov · 22 challenges · learn_digital 03</div>
+        </li>
+        <li>
+          <a href="ascii-hex/index.html">ASCII / hex dump literacy</a>
+          <div class="chapter-meta">hex · ASCII gutter · 22 challenges · learn_digital 04</div>
+        </li>
+        <li>
+          <a href="gray-code/index.html">Gray code converter</a>
+          <div class="chapter-meta">binary ↔ Gray · FIFO · 22 challenges · learn_digital 05</div>
+        </li>
+        <li>
+          <a href="bcd-lab/index.html">BCD encode / decode</a>
+          <div class="chapter-meta">packed nibbles · invalid A–F · 22 challenges · learn_digital 06</div>
+        </li>
+        <li>
+          <a href="parity-checksum/index.html">Parity / XOR checksum</a>
+          <div class="chapter-meta">even/odd · reduce XOR · 22 challenges · learn_digital 07</div>
+        </li>
+        <li>
+          <a href="fixed-point/index.html">Fixed-point Qm.n</a>
+          <div class="chapter-meta">int vs frac · scale 2^-n · 22 challenges · learn_digital 08</div>
+        </li>
+        <li>
+          <a href="bit-fields/index.html">Bit-field extract / insert</a>
+          <div class="chapter-meta">slice · mask · pack · 22 challenges · learn_digital 09</div>
+        </li>
+        <li>
+          <a href="endian-lab/index.html">Endian packing</a>
+          <div class="chapter-meta">big vs little · pack/unpack · 22 challenges · learn_digital 10</div>
         </li>
         <li>
           <a href="verilog-literals/index.html">Verilog literal decoder</a>
-          <div class="chapter-meta">HDL parseLiteral · 28 challenges · b/o/d/h · 's · X/Z</div>
+          <div class="chapter-meta">HDL parseLiteral · 28 challenges · b/o/d/h · 's · X/Z · learn_verilog</div>
         </li>
       </ul>
     </section>
@@ -139,6 +334,18 @@
           <a href="boolean-laws/index.html">Boolean law playground</a>
           <div class="chapter-meta">De Morgan · absorption · step rewrites · 22 challenges</div>
         </li>
+        <li>
+          <a href="sop-pos/index.html">SOP ↔ POS converter</a>
+          <div class="chapter-meta">minterms · maxterms · 22 challenges</div>
+        </li>
+        <li>
+          <a href="dont-care-lab/index.html">Don’t-care minimization</a>
+          <div class="chapter-meta">ON · DC · OFF · 22 challenges</div>
+        </li>
+        <li>
+          <a href="logic-hazards/index.html">Static / dynamic hazards</a>
+          <div class="chapter-meta">static-1 · static-0 · dynamic · 22 challenges</div>
+        </li>
       </ul>
     </section>
 
@@ -157,23 +364,127 @@
           <a href="priority-compare/index.html">Priority encoder &amp; comparator</a>
           <div class="chapter-meta">high/low priority · EI/EO · signed vs unsigned · 22 challenges</div>
         </li>
+        <li>
+          <a href="half-full-adder/index.html">Half / full adder builder</a>
+          <div class="chapter-meta">HA · FA · 2×HA compose · ripple · 22 challenges</div>
+        </li>
+        <li>
+          <a href="xor-parity-tree/index.html">XOR parity tree</a>
+          <div class="chapter-meta">balanced reduce · log₂N vs N−1 · 22 challenges</div>
+        </li>
+        <li>
+          <a href="tri-state-bus/index.html">Tri-state / bus contention</a>
+          <div class="chapter-meta">high-Z · OE · contention X · 22 challenges</div>
+        </li>
+        <li>
+          <a href="barrel-shifter/index.html">Barrel shifter</a>
+          <div class="chapter-meta">SLL/SRL/SRA · rotate · mux stages · 22 challenges</div>
+        </li>
+        <li>
+          <a href="seven-segment/index.html">Seven-segment decoder</a>
+          <div class="chapter-meta">hex nibble · a–g · CC/CA · 22 challenges</div>
+        </li>
       </ul>
     </section>
 
     <section class="tools-stage" id="hdl-structure">
       <h2>HDL structure &amp; operators</h2>
+      <p class="tools-stage-note"><code>learn_verilog</code> path ordered first (modules 01–13). Remaining rows are primarily <code>learn_systemverilog</code>.</p>
       <ul class="chapter-list">
-        <li class="is-planned">
-          <span class="tool-title">Module / port diagram <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">hierarchy · named ports</div>
+        <li>
+          <a href="module-diagram/index.html">Module / port diagram</a>
+          <div class="chapter-meta">HDL parse · ports · instances · 22 challenges · learn_verilog 01</div>
+        </li>
+        <li>
+          <a href="verilog-literals/index.html">Verilog literal decoder</a>
+          <div class="chapter-meta">HDL parseLiteral · 28 challenges · b/o/d/h · X/Z · learn_verilog 02</div>
+        </li>
+        <li>
+          <a href="wire-vs-reg/index.html">Classic wire vs reg</a>
+          <div class="chapter-meta">IEEE 1364 · assign vs always · 22 challenges · learn_verilog 03</div>
+        </li>
+        <li>
+          <a href="ansi-ports/index.html">ANSI vs non-ANSI ports</a>
+          <div class="chapter-meta">1995 vs 2001 · side-by-side · 22 challenges · learn_verilog 04</div>
         </li>
         <li>
           <a href="sv-operators/index.html">Operator playground</a>
-          <div class="chapter-meta">bitwise vs logical · concat · reduce · shifts · 22 challenges</div>
+          <div class="chapter-meta">bitwise vs logical · concat · reduce · shifts · 22 challenges · learn_verilog 05</div>
         </li>
         <li>
           <a href="param-width/index.html">Parameter / width explorer</a>
-          <div class="chapter-meta">#(.WIDTH) · $clog2 · derived buses · 22 challenges</div>
+          <div class="chapter-meta">#(.WIDTH) · $clog2 · derived buses · 22 challenges · learn_verilog 09</div>
+        </li>
+        <li>
+          <a href="named-vs-positional/index.html">Named vs positional connections</a>
+          <div class="chapter-meta">.port(sig) · order hazards · 22 challenges · learn_verilog 10</div>
+        </li>
+        <li>
+          <a href="localparam-lab/index.html">localparam vs parameter</a>
+          <div class="chapter-meta">#() override · localparam · defparam · 22 challenges · learn_verilog 11</div>
+        </li>
+        <li>
+          <a href="sv-generate/index.html">Generate / replication explorer</a>
+          <div class="chapter-meta">for / if generate · genvar · 22 challenges · learn_verilog 12</div>
+        </li>
+        <li>
+          <a href="one-driver/index.html">One-driver / multi-driver</a>
+          <div class="chapter-meta">contested nets · single-driver RTL · 22 challenges · learn_verilog 13</div>
+        </li>
+        <li>
+          <a href="sv-typedefs/index.html">Typedef / enum / packed struct</a>
+          <div class="chapter-meta">typedef · enum · packed vs unpacked · 22 challenges · learn_systemverilog 03</div>
+        </li>
+        <li>
+          <a href="multi-dim-arrays/index.html">Multi-dimensional arrays</a>
+          <div class="chapter-meta">packed · unpacked · mixed mem · 22 challenges · learn_systemverilog 04</div>
+        </li>
+        <li>
+          <a href="bit-vs-logic/index.html">bit vs logic (2-state / 4-state)</a>
+          <div class="chapter-meta">X/Z · collapse · &amp;/| prop · 22 challenges · learn_systemverilog 01</div>
+        </li>
+        <li>
+          <a href="signed-width/index.html">Signed / unsigned width</a>
+          <div class="chapter-meta">$signed · extend · compare · 22 challenges · learn_systemverilog 05</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="sv-design">
+      <h2>SystemVerilog design constructs</h2>
+      <p class="tools-stage-note">Ordered to match <code>learn_systemverilog</code> modules 02, 06–12 (all shipped). Types / arrays live under HDL structure (modules 01, 03–05).</p>
+      <ul class="chapter-list">
+        <li>
+          <a href="sv-always-procs/index.html">always_comb / always_ff / always_latch</a>
+          <div class="chapter-meta">intent · latch cues · legacy @(*) · 22 challenges · learn_systemverilog 02</div>
+        </li>
+        <li>
+          <a href="sv-interfaces/index.html">Interface + modport sketch</a>
+          <div class="chapter-meta">bundle · src/dst · connect · 22 challenges · learn_systemverilog 06</div>
+        </li>
+        <li>
+          <a href="sv-packages/index.html">Package / import explorer</a>
+          <div class="chapter-meta">import * · :: · package vs module · 22 challenges · learn_systemverilog 07</div>
+        </li>
+        <li>
+          <a href="sv-case-unique/index.html">unique / priority case</a>
+          <div class="chapter-meta">overlap · incomplete · unique0 · 22 challenges · learn_systemverilog 08</div>
+        </li>
+        <li>
+          <a href="sv-inside/index.html">inside / wildcard equality</a>
+          <div class="chapter-meta">inside · ==? · !=? · 22 challenges · learn_systemverilog 09</div>
+        </li>
+        <li>
+          <a href="sv-checker/index.html">Checker / bind sketch</a>
+          <div class="chapter-meta">checker · bind · vs module · 22 challenges · learn_systemverilog 10</div>
+        </li>
+        <li>
+          <a href="ieee-version-map/index.html">IEEE construct → version map</a>
+          <div class="chapter-meta">1364 · 1800 · logic / always_ff · 22 challenges · learn_systemverilog 11</div>
+        </li>
+        <li>
+          <a href="sv-migration/index.html">1364 → 1800 migration quiz</a>
+          <div class="chapter-meta">wire/reg→logic · always_* · ANSI · 22 challenges · learn_systemverilog 12</div>
         </li>
       </ul>
     </section>
@@ -183,11 +494,11 @@
       <ul class="chapter-list">
         <li>
           <a href="latch-risk/index.html">Combo style / latch-risk checker</a>
-          <div class="chapter-meta">assign vs always/case · inferred latch · 22 challenges</div>
+          <div class="chapter-meta">assign vs always/case · inferred latch · 22 challenges · learn_verilog 07</div>
         </li>
         <li>
           <a href="sensitivity-list/index.html">Sensitivity-list explorer</a>
-          <div class="chapter-meta">@(*) · incomplete · posedge/async · 22 challenges</div>
+          <div class="chapter-meta">@(*) · incomplete · posedge/async · 22 challenges · learn_verilog 06</div>
         </li>
       </ul>
     </section>
@@ -201,29 +512,62 @@
         </li>
         <li>
           <a href="blocking-vs-nonblocking/index.html">Blocking vs non-blocking</a>
-          <div class="chapter-meta">side-by-side = vs &lt;= · 20 challenges</div>
+          <div class="chapter-meta">side-by-side = vs &lt;= · 20 challenges · learn_verilog 08</div>
         </li>
-        <li class="is-planned">
-          <span class="tool-title">Reset strategy timelines <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">sync vs async reset</div>
+        <li>
+          <a href="reset-timelines/index.html">Reset strategy timelines</a>
+          <div class="chapter-meta">sync vs async · mid-cycle · 22 challenges</div>
         </li>
-        <li class="is-planned">
-          <span class="tool-title">Setup / hold explainer <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">annotated timing (conceptual)</div>
+        <li>
+          <a href="setup-hold/index.html">Setup / hold explainer</a>
+          <div class="chapter-meta">tsu / th windows · drag DΔ · 22 challenges</div>
+        </li>
+        <li>
+          <a href="cdc-sync/index.html">CDC / 2-FF synchronizer</a>
+          <div class="chapter-meta">metastability · two-flop · 22 challenges</div>
+        </li>
+        <li>
+          <a href="clock-enable/index.html">Clock enable vs gated clock</a>
+          <div class="chapter-meta">CE · AND-gate risk · ICG · 22 challenges</div>
+        </li>
+        <li>
+          <a href="shift-register-lab/index.html">Shift-register lab</a>
+          <div class="chapter-meta">SISO · SIPO · PISO · PIPO · 22 challenges · learn_verilog 15 · learn_spi 05</div>
+        </li>
+        <li>
+          <a href="counter-lab/index.html">Counter lab</a>
+          <div class="chapter-meta">up · down · modulo · enable · Gray · 22 challenges · learn_verilog 14</div>
         </li>
       </ul>
     </section>
 
     <section class="tools-stage" id="waveforms">
       <h2>Waveforms &amp; debug literacy</h2>
+      <p class="tools-stage-note"><code>learn_iverilog</code> modules 04–06, 09–10 (shipped). Shared waves also used by protocol courses.</p>
       <ul class="chapter-list">
-        <li class="is-planned">
-          <span class="tool-title">Mini waveform viewer <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">synthetic / small VCD · signal naming</div>
+        <li>
+          <a href="waveform-lab/index.html">Waveform lab</a>
+          <div class="chapter-meta">HDL session waves · cursor · watch list · 22 challenges · learn_uart 10 · learn_spi 08 · learn_i2c 08 · learn_iverilog 09</div>
         </li>
-        <li class="is-planned">
-          <span class="tool-title">Testbench anatomy explorer <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">DUT vs tb · $display / $finish</div>
+        <li>
+          <a href="tb-anatomy/index.html">Testbench anatomy explorer</a>
+          <div class="chapter-meta">DUT vs tb · reg/wire · $display / $finish · 22 challenges · learn_uvm2017 03</div>
+        </li>
+        <li>
+          <a href="delay-event-wait/index.html">Delay / event / wait</a>
+          <div class="chapter-meta">#delay · @event · wait · 22 challenges · learn_iverilog 04</div>
+        </li>
+        <li>
+          <a href="task-vs-function/index.html">Task vs function vs always</a>
+          <div class="chapter-meta">task · function · always_ff/comb · 22 challenges · learn_iverilog 05</div>
+        </li>
+        <li>
+          <a href="fork-join/index.html">Fork / join sketch</a>
+          <div class="chapter-meta">join · join_any · join_none · 22 challenges · learn_iverilog 06</div>
+        </li>
+        <li>
+          <a href="gtkwave-cursors/index.html">GTKWave cursor literacy</a>
+          <div class="chapter-meta">markers · zoom · SST add · 22 challenges · learn_iverilog 10</div>
         </li>
       </ul>
     </section>
@@ -233,7 +577,7 @@
       <ul class="chapter-list">
         <li>
           <a href="fsm-lab/index.html">FSM designer + stepper</a>
-          <div class="chapter-meta">Moore/Mealy · editable table · step stream · 22 challenges</div>
+          <div class="chapter-meta">Moore/Mealy · editable table · step stream · 22 challenges · learn_spi 06 · learn_i2c 06</div>
         </li>
         <li>
           <a href="state-encoding/index.html">State encoding lab</a>
@@ -242,6 +586,14 @@
         <li>
           <a href="seq-detector/index.html">Sequence detector playground</a>
           <div class="chapter-meta">Mealy/Moore · overlap · step stream · 22 challenges</div>
+        </li>
+        <li>
+          <a href="ring-johnson/index.html">Ring / Johnson counter</a>
+          <div class="chapter-meta">one-hot ring · twisted-ring · 22 challenges · learn_digital 33</div>
+        </li>
+        <li>
+          <a href="lfsr-lab/index.html">LFSR / PRBS stepper</a>
+          <div class="chapter-meta">taps · PRBS · period 2ⁿ−1 · 22 challenges · learn_digital 34</div>
         </li>
       </ul>
     </section>
@@ -265,6 +617,18 @@
           <a href="alu-explorer/index.html">ALU operation explorer</a>
           <div class="chapter-meta">opcode · Y · Z/N/C/V · 4/8-bit · 22 challenges</div>
         </li>
+        <li>
+          <a href="carry-select-adder/index.html">Carry-select adder sketch</a>
+          <div class="chapter-meta">dual path · mux on C4 · 22 challenges · learn_digital 39</div>
+        </li>
+        <li>
+          <a href="booth-encode/index.html">Booth encode grid</a>
+          <div class="chapter-meta">radix-4 · digits 0,±1,±2 · 22 challenges · learn_digital 40</div>
+        </li>
+        <li>
+          <a href="signed-arith/index.html">Signed arithmetic / overflow</a>
+          <div class="chapter-meta">two’s complement · NZCV · 22 challenges · learn_digital 41</div>
+        </li>
       </ul>
     </section>
 
@@ -277,11 +641,23 @@
         </li>
         <li>
           <a href="fifo-lab/index.html">FIFO pointer &amp; flags</a>
-          <div class="chapter-meta">sync FIFO · wr/rd · empty/full · 22 challenges</div>
+          <div class="chapter-meta">sync FIFO · wr/rd · empty/full · 22 challenges · learn_uart 06</div>
         </li>
         <li>
           <a href="cache-walk/index.html">Cache hit/miss walkthrough</a>
           <div class="chapter-meta">direct-mapped · tag/index/offset · 22 challenges</div>
+        </li>
+        <li>
+          <a href="dual-port-ram/index.html">Dual-port RAM</a>
+          <div class="chapter-meta">independent ports · collisions · 22 challenges</div>
+        </li>
+        <li>
+          <a href="byte-enable-mem/index.html">Byte-enable memory</a>
+          <div class="chapter-meta">be[3:0] · partial store · 22 challenges</div>
+        </li>
+        <li>
+          <a href="async-fifo/index.html">Async FIFO (Gray pointers)</a>
+          <div class="chapter-meta">cross-clock · Gray sync · empty/full · 22 challenges</div>
         </li>
       </ul>
     </section>
@@ -289,13 +665,17 @@
     <section class="tools-stage" id="hierarchy">
       <h2>Hierarchy, buses &amp; integration</h2>
       <ul class="chapter-list">
-        <li class="is-planned">
-          <span class="tool-title">Block-diagram integrator <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">CPU / datapath / memory blocks</div>
+        <li>
+          <a href="block-diagram/index.html">Block-diagram integrator</a>
+          <div class="chapter-meta">typed ports · click-to-wire · 22 challenges</div>
         </li>
         <li>
           <a href="handshake/index.html">Bus handshake animator</a>
-          <div class="chapter-meta">valid/ready · stalls · 22 challenges</div>
+          <div class="chapter-meta">valid/ready · stalls · 22 challenges · learn_uart 07</div>
+        </li>
+        <li>
+          <a href="pipeline-hazards/index.html">Pipeline stall / forward</a>
+          <div class="chapter-meta">RAW hazard · stall or forward · 22 challenges</div>
         </li>
       </ul>
     </section>
@@ -305,29 +685,206 @@
       <ul class="chapter-list">
         <li>
           <a href="synth-lint/index.html">Synthesizability linter</a>
-          <div class="chapter-meta">HDL engine lint · #delay · latch · 22 challenges</div>
+          <div class="chapter-meta">HDL engine lint · #delay · latch · 22 challenges · learn_verilog 16</div>
         </li>
         <li>
           <a href="hdl-style/index.html">Naming / style checker</a>
-          <div class="chapter-meta">lintStyle · clk / rst_n · always_ff · 22 challenges</div>
+          <div class="chapter-meta">lintStyle · clk / rst_n · always_ff · 22 challenges · learn_verilog 17</div>
         </li>
       </ul>
     </section>
 
     <section class="tools-stage" id="protocols">
       <h2>Protocols (conceptual)</h2>
+      <p class="tools-stage-note"><code>learn_uart</code> / <code>learn_spi</code> / <code>learn_i2c</code> protocol labs mostly planned. Shared shipped: SPI shift-reg · FSM · waves (see course module tags).</p>
+      <ul class="chapter-list">
+        <li>
+          <a href="uart-frame/index.html">UART frame animator</a>
+          <div class="chapter-meta">start/data/parity/stop · 22 challenges · learn_uart 01</div>
+        </li>
+        <li>
+          <a href="spec-to-rtl/index.html">Spec → RTL checklist</a>
+          <div class="chapter-meta">ports/blocks → RTL skeleton · UART/SPI/I²C · 22 challenges · learn_uart/spi/i2c 02</div>
+        </li>
+        <li>
+          <a href="baud-divider/index.html">Baud / clock divider</a>
+          <div class="chapter-meta">sysclk → baud_tick / clk_div · 22 challenges · learn_uart 03</div>
+        </li>
+        <li>
+          <a href="uart-oversample/index.html">UART oversampling</a>
+          <div class="chapter-meta">16× mid-bit · majority · start center · 22 challenges · learn_uart 04</div>
+        </li>
+        <li>
+          <a href="uart-errors/index.html">UART error cases</a>
+          <div class="chapter-meta">framing · parity · overrun · 22 challenges · learn_uart 05</div>
+        </li>
+        <li>
+          <a href="spi-step/index.html">SPI transaction stepper</a>
+          <div class="chapter-meta">Mode 0 · CS/SCLK/MOSI/MISO · 22 challenges · learn_spi 01</div>
+        </li>
+        <li>
+          <a href="spi-cpol-cpha/index.html">SPI CPOL/CPHA modes</a>
+          <div class="chapter-meta">mode 0–3 edge matrix · 22 challenges · learn_spi 03</div>
+        </li>
+        <li>
+          <a href="spi-multi-cs/index.html">SPI multi-CS / daisy</a>
+          <div class="chapter-meta">independent CS vs daisy-chain · 22 challenges · learn_spi 04</div>
+        </li>
+        <li>
+          <a href="i2c-lab/index.html">I²C start/addr/ack explorer</a>
+          <div class="chapter-meta">START · addr+R/W · ACK/NACK · 22 challenges · learn_i2c 01</div>
+        </li>
+        <li>
+          <a href="i2c-open-drain/index.html">I²C open-drain model</a>
+          <div class="chapter-meta">open-drain vs push-pull · wired-AND · 22 challenges · learn_i2c 03</div>
+        </li>
+        <li>
+          <a href="i2c-clock-stretch/index.html">I²C clock stretch</a>
+          <div class="chapter-meta">slave holds SCL · master waits · 22 challenges · learn_i2c 04</div>
+        </li>
+        <li>
+          <a href="i2c-repeated-start/index.html">I²C repeated start</a>
+          <div class="chapter-meta">Sr vs Stop+Start · read-after-write · 22 challenges · learn_i2c 05</div>
+        </li>
+        <li>
+          <a href="tb-vs-uvm-map/index.html">Basic TB vs UVM map</a>
+          <div class="chapter-meta">wiggle-pins vs transaction/agent · 22 challenges · learn_uvm2017 02 · learn_uart 11 · learn_spi 09 · learn_i2c 09</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="sv-tb">
+      <h2>SV testbench &amp; assertions (conceptual)</h2>
+      <ul class="chapter-list">
+        <li>
+          <a href="sv-class-sketch/index.html">Class / inheritance sketch</a>
+          <div class="chapter-meta">object vs component · extends · 22 challenges · SV TB literacy</div>
+        </li>
+        <li>
+          <a href="crv-lite/index.html">Constraint / random lite</a>
+          <div class="chapter-meta">dice + constraint · randomize() · 22 challenges · learn_uvm2017 12</div>
+        </li>
+        <li>
+          <a href="cover-bins/index.html">Coverpoint / bins sketch</a>
+          <div class="chapter-meta">coverpoint → bins → holes · 22 challenges · learn_verification_planning_management 04</div>
+        </li>
+        <li>
+          <a href="sva-timeline/index.html">SVA implication timeline</a>
+          <div class="chapter-meta">a |-&gt; b / |=&gt; · pass/fail/vacuous · 22 challenges · learn_uvm2017 15</div>
+        </li>
+        <li>
+          <a href="vif-wiring/index.html">Virtual interface wiring</a>
+          <div class="chapter-meta">interface → DUT → virtual handle · 22 challenges · SV TB literacy</div>
+        </li>
+        <li>
+          <a href="self-check-tb/index.html">Self-checking TB pattern</a>
+          <div class="chapter-meta">stimulus → expect → pass/fail · 22 challenges · learn_uart 08 · learn_spi 07 · learn_i2c 07 · learn_iverilog 08</div>
+        </li>
+        <li>
+          <a href="tb-clock-reset/index.html">TB clock + reset patterns</a>
+          <div class="chapter-meta">clock gen · reset assert/deassert · 22 challenges · learn_uart 09 · learn_verilator 05</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">File / vector I/O <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">$readmemh · vector file stimulus</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="uvm">
+      <h2>UVM methodology (sketches)</h2>
+      <p class="tools-stage-note"><code>learn_uvm2017</code> browser sketches — most still planned. Shipped TB anatomy is under Waveforms. Fidelity is offline UVM (module 22).</p>
       <ul class="chapter-list">
         <li class="is-planned">
-          <span class="tool-title">UART frame animator <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">start/data/parity/stop</div>
+          <span class="tool-title">Testbench layer diagram <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">agent / env / scoreboard sketch · learn_uvm2017 01</div>
         </li>
         <li class="is-planned">
-          <span class="tool-title">SPI transaction stepper <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">SCLK · MOSI/MISO · CS</div>
+          <span class="tool-title">UVM phase timeline <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">build → connect → run → check → report · learn_uvm2017 04 · learn_pyuvm 05</div>
         </li>
         <li class="is-planned">
-          <span class="tool-title">I²C start/addr/ack explorer <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">start · address+R/W · ACK/NACK</div>
+          <span class="tool-title">Factory override sketch <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">type override · who gets constructed · learn_uvm2017 05 · learn_pyuvm 06</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">ConfigDB key path <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">set/get by path + field · learn_uvm2017 06 · learn_pyuvm 08</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Agent anatomy <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">driver / monitor / sequencer layout · learn_uvm2017 07 · learn_pyuvm 07</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">TLM port wiring <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">analysis / put / get ports · learn_uvm2017 08</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Sequence → driver flow <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">item → sequencer → driver → DUT · learn_uvm2017 09 · learn_pyuvm 07</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Objection raise/drop <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">who holds the run phase open · learn_uvm2017 10 · learn_pyuvm 08</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Plusargs / CLP <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">+UVM_TESTNAME · test knobs · learn_uvm2017 11</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Scoreboard expect/actual <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">predict vs observe compare · learn_uvm2017 13 · learn_pyuvm 09</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Register model map <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">front-door vs back-door · learn_uvm2017 14</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Multi-agent env <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">two+ agents · shared scoreboard · learn_uvm2017 16 · learn_pyuvm 09</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Virtual sequence <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">coordinate multiple sequencers · learn_uvm2017 17</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Callbacks sketch <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">pre/post hooks without subclassing · learn_uvm2017 18</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">UVM reporting ladder <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">verbosity · severity · ID filter · learn_uvm2017 19</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Protocol checker sketch <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">bus rules vs scoreboard roles · learn_uvm2017 20 · learn_spi 09</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">VIP anatomy <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">agent + checker + coverage + docs · learn_uvm2017 21 · learn_uart 12 · learn_i2c 09</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="pyuvm">
+      <h2>Python / cocotb / pyuvm (sketches)</h2>
+      <p class="tools-stage-note"><code>learn_pyuvm</code> modules 01–04 (all planned). Shared UVM sketches 05–09 live under UVM methodology. Fidelity is offline (module 10). Optional literacy: tb-anatomy / tb-vs-uvm-map.</p>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Python async TB sketch <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">async def test · await timeline · learn_pyuvm 01</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">cocotb triggers <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">RisingEdge · Timer · Combine · learn_pyuvm 02</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">cocotb DUT handle <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">hierarchical signal access from Python · learn_pyuvm 03</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">cocotb vs UVM map <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">pyuvm / cocotb ↔ SV UVM roles · learn_pyuvm 04</div>
         </li>
       </ul>
     </section>
@@ -340,15 +897,139 @@
           <div class="chapter-meta">feature → scenario → coverage item</div>
         </li>
         <li class="is-planned">
-          <span class="tool-title">Testbench layer diagram <span class="pill-soon">Coming soon</span></span>
-          <div class="chapter-meta">agent / env / scoreboard sketch</div>
+          <span class="tool-title">Feature × scenario matrix <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">traceability grid</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Coverage closure planner <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">hole → next test idea</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Regression triage board <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">fail / flake / new buckets</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Test taxonomy planner <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">directed / random / stress / corner</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Risk-based plan matrix <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">risk × impact → priority</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Sign-off criteria <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">coverage · bug bar · stability</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Seed / config / tags <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">test metadata for replay</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">CI / farm regression flow <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">local → CI → farm stages</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">VIP handoff checklist <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">docs + API + self-test</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="sim-literacy">
+      <h2>Simulation literacy (conceptual)</h2>
+      <p class="tools-stage-note"><code>learn_verilator</code> 01–09 and <code>learn_iverilog</code> toolchain labs (planned). Shipped TB/wave literacy lives under Waveforms. Offline: Verilator m10 · iverilog m11.</p>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">iverilog vs Verilator chooser <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">when to pick each tool · learn_verilator 01</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Compile → elaborate → run <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">iverilog / Verilator stage diagram · learn_verilator 02 · learn_iverilog 01</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Verilator lint lab <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">-Wall warning teaching · learn_verilator 03</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">C++ TB / DPI sketch <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">Verilator C++ TB vs SV TB · learn_verilator 04</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Verilator trace <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">--trace → VCD/FST roles · learn_verilator 06</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Wave dump literacy <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">VCD vs FST roles · learn_verilator 07 · learn_iverilog 09</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Verilator public <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">/*verilator public*/ · hierarchy · learn_verilator 08</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Verification metrics board <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">pass rate · coverage % · bug escape · learn_verilator 09</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">iverilog flags lab <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">-g2005/-g2012 · -Wall · -o · +incdir · learn_iverilog 02</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">iverilog timescale <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">`timescale vs timeunit pitfalls · learn_iverilog 03</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">vvp plusargs <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">$test$plusargs · runtime plusargs · learn_iverilog 07</div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tools-stage" id="hdl-simulator">
+      <h2>Browser HDL simulator (guided)</h2>
+      <p class="chapter-meta" style="margin:0 0 0.75rem">
+        Practice surface:
+        <a href="https://universal-verification-methodology.github.io/systemverilog-simulator/">HDL Simulator</a>
+        · syllabus: <a href="../syllabus.md#9-learn_hdl_simulator">learn_hdl_simulator</a>
+      </p>
+      <ul class="chapter-list">
+        <li class="is-planned">
+          <span class="tool-title">Simulator UI tour <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">Files · Hierarchy · Signals · Wave · Console</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Hello DUT in browser <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">tiny module → Run / Stop / Reset</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Step &amp; continue <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">Step · Continue · $stop / breakpoints</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Poke / force / release <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">live drive vs force hazards</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Full-sim waves <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">add signals · C1/C2 · radix</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Multi-file project <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">top · defines · +incdir · profiles</div>
+        </li>
+        <li class="is-planned">
+          <span class="tool-title">Golden compare <span class="pill-soon">Coming soon</span></span>
+          <div class="chapter-meta">Diff @ C1 · JSON/VCD export</div>
         </li>
       </ul>
     </section>
   </main>
   <footer class="site-footer">
     Digital Design and Verification Platform — client-side concept labs. Full catalog in <a href="../tools.md">tools.md</a>.
+    · <a href="../courses/index.html">Courses</a> · <a href="../SETUP.md">GA4 / Web3Forms setup</a>
   </footer>
+  <script src="../assets/site-config.js"></script>
   <script src="../assets/site.js"></script>
 </body>
 </html>

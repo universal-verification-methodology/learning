@@ -11,7 +11,7 @@ Canonical list of **browser labs** for the learning monorepo. Tools are organize
 | Rule | Meaning |
 |------|---------|
 | One shelf | All interactive labs live under `platform/tools/` |
-| Concept first | Catalog sections name ideas (gates, FSM, Git DAG) — never “Module N” or a course title |
+| Concept first | Catalog sections name ideas (gates, FSM, Git DAG) â€” never â€œModule Nâ€ or a course title |
 | Browser = hard-to-see | Visualize structures and timing intuition in-tab |
 | Offline = fidelity | Real iverilog, Verilator, GTKWave, UVM, synthesis stay in course repos / local toolchains |
 | Client-side only | No upload server; work stays in the browser (except links out to GitHub sandboxes) |
@@ -21,42 +21,73 @@ Canonical list of **browser labs** for the learning monorepo. Tools are organize
 
 When shipping or extending a tool, follow this pattern so learners see how it works immediately:
 
-1. **First visit** — load a concrete starter (not an empty canvas). Keep it tiny and correct (e.g. `F = A & B`, one AND gate, `8'h2A` / decimal 42).
-2. **Visible caption** — a short “Starter example: …” note at the top (shared class `.starter-note` in `assets/tools-shared.css`).
-3. **Reload button** — always offer **Load starter example** (even after `localStorage` restore).
-4. **Session restore** — returning visitors may get their last session; the starter button must still reset to the worked example.
-5. **Challenges** — **Start** / challenge cards may clear to a blank or constrained state; that is intentional. Do **not** auto-start a challenge on page load.
-6. **Document the starter** — when a tool ships, note its starter in the catalog “What it teaches” cell or a one-line comment in the tool JS (`loadStarter()`).
+1. **First visit** â€” load a concrete starter (not an empty canvas). Keep it tiny and correct (e.g. `F = A & B`, one AND gate, `8'h2A` / decimal 42).
+2. **Visible caption** â€” a short â€œStarter example: â€¦â€ note at the top (shared class `.starter-note` in `assets/tools-shared.css`).
+3. **Reload button** â€” always offer **Load starter example** (even after `localStorage` restore).
+4. **Session restore** â€” returning visitors may get their last session; the starter button must still reset to the worked example.
+5. **Challenges** â€” **Start** / challenge cards may clear to a blank or constrained state; that is intentional. Do **not** auto-start a challenge on page load.
+6. **Document the starter** â€” when a tool ships, note its starter in the catalog â€œWhat it teachesâ€ cell or a one-line comment in the tool JS (`loadStarter()`).
 
 | Tool | Starter (current) |
 |------|-------------------|
 | `truth-table` | 2 vars, expression `A & B` fills the table via HDL `createCombEvaluator` |
 | `gate-composer` | Single AND gate via HDL `createGateNetEvaluator` |
 | `radix-converter` | Width 8, value `42` / `0x2A` via HDL `Value` + `parseLiteral` |
-| `verilog-literals` | `8'h2A` → bits via HDL `parseLiteral` |
-| `clock-stepper` | D-FF starter; Step / ↗posedge / poke via `createSession` |
+| `verilog-literals` | `8'h2A` â†’ bits via HDL `parseLiteral` |
+| `clock-stepper` | D-FF starter; Step / â†—posedge / poke via `createSession` |
 | `blocking-vs-nonblocking` | Register-swap starter; side-by-side `=` vs `<=` via twin `createSession`s |
 | `kmap` | 2-var XOR (`A'B + AB'`) with two highlighted groups |
-| `mux-decoder` | 2:1 mux, S=0, D0=1, D1=0 → Y=1 |
-| `priority-compare` | 4-input high-first encoder, I0=I2=1 → winner I2 |
-| `boolean-laws` | `~(A·B)` → apply De Morgan → `A'+B'` |
-| `sv-operators` | `4'b1010 & 4'b1100` → `1000` (vs `&&` → `1`) |
-| `alu-explorer` | 4-bit ADD, A=5, B=3 → Y=8 with Z/N/C/V |
+| `mux-decoder` | 2:1 mux, S=0, D0=1, D1=0 â†’ Y=1 |
+| `priority-compare` | 4-input high-first encoder, I0=I2=1 â†’ winner I2 |
+| `boolean-laws` | `~(AÂ·B)` â†’ apply De Morgan â†’ `A'+B'` |
+| `sv-operators` | `4'b1010 & 4'b1100` â†’ `1000` (vs `&&` â†’ `1`) |
+| `alu-explorer` | 4-bit ADD, A=5, B=3 â†’ Y=8 with Z/N/C/V |
 | `latch-risk` | 2:1 mux as `assign` (OK) vs incomplete `if` (latch) |
-| `param-width` | `#(.WIDTH(8))` → `logic [7:0]` data ports |
-| `mem-map` | 16×8 RAM with `DE AD BE EF` via `$readmemh`-style dump |
-| `array-mult` | 4-bit unsigned `5 × 3` partial-product grid → 15 |
-| `sensitivity-list` | `Y = A & B` with `always @(A or B)` — both inputs wake the block |
+| `param-width` | `#(.WIDTH(8))` â†’ `logic [7:0]` data ports |
+| `mem-map` | 16Ã—8 RAM with `DE AD BE EF` via `$readmemh`-style dump |
+| `array-mult` | 4-bit unsigned `5 Ã— 3` partial-product grid â†’ 15 |
+| `sensitivity-list` | `Y = A & B` with `always @(A or B)` â€” both inputs wake the block |
 | `state-encoding` | 4 states, binary (2 FFs); compare one-hot / Gray Hamming on the ring |
-| `ripple-carry-adder-animator` | 4-bit `5 + 3` — step carry through full adders → 8 |
-| `carry-look-ahead-adder-propagate-and-generate` | 4-bit `5 + 3` — G/P table + expanded C₁…C₄ |
+| `ripple-carry-adder-animator` | 4-bit `5 + 3` â€” step carry through full adders â†’ 8 |
+| `carry-look-ahead-adder-propagate-and-generate` | 4-bit `5 + 3` â€” G/P table + expanded Câ‚â€¦Câ‚„ |
 | `synth-lint` | Clean `assign y = a & b`; engine `lintSynthesizability` |
 | `hdl-style` | Clean FF with `clk`/`rst_n`; engine `lintStyle` |
-| `cache-walk` | Cold cache, addr `0x14` → miss + install; second access → hit |
-| `fifo-lab` | Depth-4 empty FIFO — push `0xA5` → count=1, empty clears |
-| `seq-detector` | Mealy overlap detect `1011` — step stream → Z=`0001` |
-| `fsm-lab` | Moore toggle — step `1011`, Z follows S0/S1 |
-| `handshake` | valid∧ready on cycle 0 with data `0xA5` → one beat |
+| `cache-walk` | Cold cache, addr `0x14` â†’ miss + install; second access â†’ hit |
+| `fifo-lab` | Depth-4 empty FIFO â€” push `0xA5` â†’ count=1, empty clears |
+| `async-fifo` | Empty async FIFO; Gray=0; step wclk once â†’ write `0xA5`, empty sticky until sync |
+| `pipeline-hazards` | ALU→ALU RAW with forward — ADD then SUB; run → R3=8, R4=7, bubbles=0 |
+| `uart-frame` | 0xA5 as 8N1 — idle/start/data/stop timeline |
+| `uart-oversample` | 16× clean 0-bit — mid tick 8 sample |
+| `uart-errors` | Clean 0xA5 8E1 — framing/parity/overrun clear |
+| `spi-step` | Mode 0 — master 0xA5 ↔ slave 0x5A |
+| `spi-multi-cs` | Multi-CS CS0 ↔ 0x5A; compare daisy chain |
+| `i2c-lab` | START → 0x50 W → ACK → STOP |
+| `spec-to-rtl` | UART TX — ports + BAUD_DIV + block checklist |
+| `tb-vs-uvm-map` | UART TX — pin wiggle ↔ driver mapped |
+| `sv-class-sketch` | UartPacket extends Packet (object tree) |
+| `crv-lite` | data inside {[0:15]} — seed 42, one legal roll |
+| `cover-bins` | nibble mid hit — holes low/high/top |
+| `sva-timeline` | overlap pass @ cycle 2 (a=1, b=1) |
+| `vif-wiring` | UART uart_if — declare + instance + DUT wired |
+| `self-check-tb` | and2 a=1,b=1 expect y=1 — PASS |
+| `tb-clock-reset` | classic: rst_n low ×2 posedges, then sync release |
+| `i2c-open-drain` | ACK — slave pulls SDA low, master releases |
+| `i2c-clock-stretch` | ACK then SCL held low ×3 — master waits |
+| `i2c-repeated-start` | Sr write-pointer then read @ 0x50 |
+| `baud-divider` | DIV=4 pulse — tick every 4 sysclks |
+| `spi-cpol-cpha` | Mode 0 — sample ↑ change ↓ |
+| `seq-detector` | Mealy overlap detect `1011` â€” step stream â†’ Z=`0001` |
+| `fsm-lab` | Moore toggle â€” step `1011`, Z follows S0/S1 |
+| `handshake` | validâˆ§ready on cycle 0 with data `0xA5` â†’ one beat |
+| `tb-anatomy` | `and2` DUT + `reg a,b` / `wire y`; `$display` then `$finish` |
+| `waveform-lab` | D-FF session; poke `D=1` â†’ â†—posedge; click cursor on live waves |
+| `module-diagram` | `and2` ports `a`,`b`â†’`y`; hierarchy preset with instance `u0` |
+| `reset-timelines` | Twin sync/async FFs; mid-cycle `rst_n=0` â†’ async clears, sync holds |
+| `setup-hold` | Clean pass starter; drag DÎ”; green/red `tsu`/`th` windows |
+| `shell-history` | History already has a UART project session; Ctrl+R → `make` recalls `make test` |
+| `path-abs-rel` | Cwd `~/projects/uart_tx`; resolve `../spi_master/src` vs `~/…` vs absolute |
+| `wildcards-globs` | Pattern `*.txt`; try `data_?.log` vs `data_*.log`; `*` skips `.gitignore` |
+| `man-help-lab` | Run `man ls`, page with Space, `/recursive`, then `ls --help` / `apropos copy` |
 
 ### Status legend
 
@@ -83,6 +114,7 @@ Folder name under `platform/tools/` when built (kebab-case).
 - [Boolean algebra & minimization](#boolean-algebra--minimization)
 - [Gates & combinational blocks](#gates--combinational-blocks)
 - [HDL structure & operators](#hdl-structure--operators)
+- [SystemVerilog design constructs](#systemverilog-design-constructs)
 - [Combinational design hygiene](#combinational-design-hygiene)
 - [Clocks, registers & timing](#clocks-registers--timing)
 - [Waveforms & debug literacy](#waveforms--debug-literacy)
@@ -92,10 +124,15 @@ Folder name under `platform/tools/` when built (kebab-case).
 - [Hierarchy, buses & integration](#hierarchy-buses--integration)
 - [Coding standards & synthesizability](#coding-standards--synthesizability)
 - [Protocols (conceptual)](#protocols-conceptual)
+- [SV testbench & assertions (conceptual)](#sv-testbench--assertions-conceptual)
+- [UVM methodology (sketches)](#uvm-methodology-sketches)
 - [Verification planning (lightweight)](#verification-planning-lightweight)
+- [Simulation literacy (conceptual)](#simulation-literacy-conceptual)
+- [Browser HDL simulator (guided)](#browser-hdl-simulator-guided)
 - [Out of scope (offline only)](#out-of-scope-offline-only)
 - [Build phases](#build-phases)
-- [Cross-reference (courses → domains)](#cross-reference-courses--domains)
+- [Cross-reference (courses â†’ domains)](#cross-reference-courses--domains)
+- [Course-by-course gap notes](#course-by-course-gap-notes)
 
 ---
 
@@ -105,24 +142,41 @@ Folder name under `platform/tools/` when built (kebab-case).
 |------|---------|--------|-----------------|
 | Virtual filesystem terminal | `vfs-terminal` | **Shipped** | `pwd`, `ls`/`-a`, globs, `less`, `man`, `ln -s`, `head`/`tail`/`wc`; 22 challenges |
 | Permissions, umask, PATH & ownership | `permissions` | **Shipped** | Modes, umask, `which`/PATH, owner/group, `export`; 22 challenges |
+| Shell history & reverse-search | `shell-history` | **Shipped** | `history`, up/down arrows, Ctrl+R reverse-search, line-edit keys, `!!`/`!n`/`!$`; starter UART session; 22 challenges |
+| Absolute vs relative paths | `path-abs-rel` | **Shipped** | `/`, `~`, `.` / `..`; resolve against cwd; when relative breaks after `cd`; 22 challenges |
+| Glob / wildcard lab | `wildcards-globs` | **Shipped** | `*`, `?`, character classes; expand before command; leading-dot pitfall; 22 challenges |
+| man / --help discoverability | `man-help-lab` | **Shipped** | `man` pager (Space/b//q), `--help`, `whatis`, `apropos` / `man -k`; 22 challenges |
+| File types & links | `file-types-lab` | **Shipped** | `ls -l` type letters; soft vs hard links; broken symlink; starter design tree; 22 challenges |
+| realpath / readlink | `realpath-resolve` | **Shipped** | `readlink` vs `realpath` / `readlink -f`; relative link base; chains; broken links; 22 challenges |
+| Dotfiles & config homes | `dotfiles-lab` | **Shipped** | `ls` vs `ls -a`; `~` configs (`.bashrc`, `.gitconfig`, `.config/`); project `.gitignore`; 22 challenges |
 
 ## Processes & text
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Pipes, redirection, xargs & jobs | `pipes` | **Shipped** | `\|`, redirects, `tee`, `xargs`, jobs; 22 graded challenges |
+| Process list & signals | `ps-kill-lab` | **Shipped** | `ps`, Ctrl+C / `kill`, SIGINT vs SIGTERM vs SIGKILL; hung process needs `-9`; 22 challenges |
+| Job control deep-dive | `job-control-lab` | **Shipped** | Ctrl+Z (SIGTSTP), `jobs` / `fg` / `bg`, `&` background; state timeline; 22 challenges |
+| sort / uniq / cut | `sort-uniq-cut` | **Shipped** | `sort`/`-n`/`-u`, `uniq`/`-c`, `cut -d`/`-f`/`-c`; log pipelines; 22 challenges |
+| Here-doc / here-string | `here-doc-lab` | **Shipped** | `<<EOF` vs `<<'EOF'`; `<<<` here-string; cat/grep/wc/read; 22 challenges |
 
 ## Scripting
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Script exit codes & control flow | `scripting` | **Shipped** | Args, `if`/`for`/`case`, alias, functions, `read`, `set -e`; 23 challenges |
+| Exit status & `&&` / `\|\|` | `exit-status-lab` | **Shipped** | `$?`, `&&`/`\|\|` short-circuit, `A && B \|\| C` pitfall, `set -e` demo; 22 challenges |
+| Alias & function lab | `alias-lab` | **Shipped** | alias vs function; `type`; session vs pretend `.bashrc` (`save-rc` / `new-shell`); 22 challenges |
+| Safe scripting checklist | `safe-scripting` | **Shipped** | `set -euo pipefail`, quoting, `--dry-run`; interactive checklist + scenarios; 22 challenges |
 
 ## Projects & archives
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Project layout, archives, sed & diff | `project-archives` | **Shipped** | Tree, find/grep, tar, sed, diff/patch; 22 challenges |
+| tar vs zip | `zip-vs-tar` | **Shipped** | When to use tar.gz vs zip; exclude build/logs/.git; create/list; 22 challenges |
+| Backup & clean-build | `backup-clean` | **Shipped** | Timestamped backup before clean; safe vs keep paths; dry-run; 22 challenges |
+| Relative symlink pitfalls | `link-relative` | **Shipped** | Relative vs absolute when trees/links/targets move; 22 challenges |
 
 ## Version control
 
@@ -132,12 +186,32 @@ Folder name under `platform/tools/` when built (kebab-case).
 | Merge conflict resolver | `git-conflicts` | **Shipped** | Conflict markers; ours / theirs / manual; 22 scenarios |
 | Blame & bisect | `blame-bisect` | **Shipped** | Line attribution; binary search for first bad commit; 22 challenges |
 | Remotes, PRs & submodules | `remotes` | **Shipped** | 22-question concept quiz + live GitHub checklist (clone, Make, push, PR, submodule) |
+| `.gitignore` pattern lab | `gitignore-lab` | **Shipped** | Glob patterns vs build/sim/log artifacts; negation & root-anchor; 22 challenges |
+| Safe Git undo | `git-undo-safe` | **Shipped** | Unstage / restore / soft vs mixed vs hard; force-push risk; 22 challenges |
+| Git mental model | `git-mental-model` | **Shipped** | Working tree ↔ index ↔ HEAD diagram; add/commit/restore flows; 22 challenges |
+| `git log` options | `git-log-lab` | **Shipped** | `--oneline` / `--graph` / decorate / path / author / grep; 22 challenges |
+| Stash scenarios | `git-stash-lab` | **Shipped** | push / pop / apply / drop / -u / clear; dirty-tree saves; 22 challenges |
+| Tags (light vs annotated) | `git-tags-lab` | **Shipped** | Lightweight vs annotated; show/delete/push --tags; 22 challenges |
+| Reflog recovery | `git-reflog` | **Shipped** | Recover “lost” commits after reset; HEAD@{n}; recovery branch; 22 challenges |
+| Rebase vs merge chooser | `git-rebase-merge` | **Shipped** | When to rebase vs merge (no interactive); 8 scenarios; 22 challenges |
+| Cherry-pick lab | `git-cherry-pick-lab` | **Shipped** | Pick one commit across branches; clean vs conflict; continue/abort; 22 challenges |
+| Branch naming strategy | `branch-strategy` | **Shipped** | `feature/` / `fix/` / `hotfix/` conventions; base from main; 22 challenges |
+| Remote-tracking branches | `remote-tracking` | **Shipped** | `origin/main` vs local; fetch vs pull; ahead/behind; 22 challenges |
+| PR review checklist | `pr-review-lab` | **Shipped** | Review culture: size, tests, diff hygiene; 8 PRs; 22 challenges |
+| Submodule pitfalls | `submodule-pitfalls` | **Shipped** | Detached HEAD, forgotten init, pin updates; 22 challenges |
+| Commit message lab | `commit-message-lab` | **Shipped** | Subject/body; why over what; validate style; 22 challenges |
 
 ## Workflow & submission
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Pre-push checklist, Make & env | `workflow` | **Shipped** | `check_ready`, `make test`, `.env`, dry-run clean; 22 challenges |
+| Log / failure triage | `log-triage` | **Shipped** | Make/sim logs → fail vs env vs flake; 12 cases; 22 challenges |
+| Makefile basics | `make-basics` | **Shipped** | Targets, deps, `.PHONY`, variables; rebuild lab; 22 challenges |
+| `.env` file literacy | `env-file-lab` | **Shipped** | Load order; secrets vs committed config; 22 challenges |
+| Template-repo bootstrap | `template-clone` | **Shipped** | Clone template → inspect layout → first status; 22 challenges |
+| Dry-run mindset | `dry-run-lab` | **Shipped** | `--dry-run` / echo-first before destructive cmds; 22 challenges |
+| Submission reproducibility | `submission-repro` | **Shipped** | Clean tree, scripts from root, log capture; 22 challenges |
 
 ---
 
@@ -147,53 +221,103 @@ Folder name under `platform/tools/` when built (kebab-case).
 |------|---------|--------|-----------------|
 | Radix / bit-width converter | `radix-converter` | **Shipped** | HDL `Value` / `parseLiteral`; starter `0x2A`; overflow; 22 challenges |
 | Verilog literal decoder | `verilog-literals` | **Shipped** | HDL `parseLiteral`; starter `8'h2A`; 28 challenges; X/Z/? |
+| Two’s complement lab | `twos-complement` | **Shipped** | Signed range, negate, wrap intuition; 22 challenges |
+| Gray code converter | `gray-code` | **Shipped** | Binary ↔ Gray; why async FIFO uses it; 22 challenges |
+| BCD encode / decode | `bcd-lab` | **Shipped** | Binary-coded decimal packing; 22 challenges |
+| Parity / XOR checksum | `parity-checksum` | **Shipped** | Even/odd parity; reduction XOR; 22 challenges |
+| Fixed-point Qm.n | `fixed-point` | **Shipped** | Integer vs fractional bits; encode/decode; 22 challenges |
+| Bit-field extract / insert | `bit-fields` | **Shipped** | Slice, mask, pack fields into a word; 22 challenges |
+| Endian packing | `endian-lab` | **Shipped** | Big vs little byte order in words; 22 challenges |
+| Overflow / wrap-around | `overflow-wrap` | **Shipped** | Modular width arithmetic hazards; 22 challenges |
+| ASCII / hex dump literacy | `ascii-hex` | **Shipped** | Bytes as hex vs printable ASCII; 22 challenges |
 
 ## Boolean algebra & minimization
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Truth-table builder | `truth-table` | **Shipped** | Fills via public HDL `createCombEvaluator`; starter `A & B`; SOP/POS; 22 challenges |
-| K-map minimizer (2–6 vars) | `kmap` | **Shipped** | Gray-coded map; 5–6 var MSB planes; 0/1/X; auto groups + minimal SOP; 26 challenges |
-| Boolean law playground | `boolean-laws` | **Shipped** | Step-through De Morgan & algebra rewrites; starter `~(A·B)`; 22 challenges |
+| K-map minimizer (2â€“6 vars) | `kmap` | **Shipped** | Gray-coded map; 5â€“6 var MSB planes; 0/1/X; auto groups + minimal SOP; 26 challenges |
+| Boolean law playground | `boolean-laws` | **Shipped** | Step-through De Morgan & algebra rewrites; starter `~(AÂ·B)`; 22 challenges |
+| SOP ↔ POS converter | `sop-pos` | **Shipped** | Dual forms from the same table; 22 challenges |
+| Don’t-care minimization | `dont-care-lab` | **Shipped** | X entries that shrink cover; 22 challenges |
+| Static / dynamic hazards | `logic-hazards` | **Shipped** | Glitch intuition on multi-level logic; 22 challenges |
 
 ## Gates & combinational blocks
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Gate composer | `gate-composer` | **Shipped** | HDL `createGateNetEvaluator`; schematic; 29 challenges |
-| Mux / decoder / encoder explorer | `mux-decoder` | **Shipped** | Mux 2:1–16:1; decode 2→4–4→16; priority encode 4→2 / 8→3; 28 challenges |
+| Mux / decoder / encoder explorer | `mux-decoder` | **Shipped** | Mux 2:1â€“16:1; decode 2â†’4â€“4â†’16; priority encode 4â†’2 / 8â†’3; 28 challenges |
 | Priority encoder & comparator | `priority-compare` | **Shipped** | High/low priority + EI/EO cascade; unsigned vs signed compare flags; 22 challenges |
+| Half / full adder builder | `half-full-adder` | **Shipped** | HA → FA → ripple chain building blocks; 22 challenges |
+| XOR parity tree | `xor-parity-tree` | **Shipped** | Reduction tree / parity generator; 22 challenges |
+| Tri-state / bus contention | `tri-state-bus` | **Shipped** | High-Z, enable, multi-driver risk; 22 challenges |
+| Barrel shifter | `barrel-shifter` | **Shipped** | Shift/rotate by select amount; 22 challenges |
+| Seven-segment decoder | `seven-segment` | **Shipped** | Hex nibble → 7-seg pattern; 22 challenges |
 
 ## HDL structure & operators
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Module / port diagram | `module-diagram` | **Planned** | Template or paste → hierarchy and named ports |
+| Module / port diagram | `module-diagram` | **Shipped** | HDL `parse` â†’ modules, ports, instances; clickable port diagram; 22 challenges |
+| Classic `wire` vs `reg` | `wire-vs-reg` | **Shipped** | Net vs variable in IEEE 1364; when each is legal; 22 challenges |
 | Operator playground | `sv-operators` | **Shipped** | Bitwise vs logical, concat/replicate, reduction, shifts; HDL `parseLiteral`; 22 challenges |
 | Parameter / width explorer | `param-width` | **Shipped** | `#(.WIDTH(N))`, `$clog2(DEPTH)`, derived buses; 22 challenges |
+| Generate / replication explorer | `sv-generate` | **Shipped** | `for`/`if` generate, `genvar`, instance arrays; 22 challenges |
+| Typedef / enum / packed struct | `sv-typedefs` | **Shipped** | `typedef`, enum encodings, packed vs unpacked layouts; 22 challenges |
+| ANSI vs non-ANSI ports | `ansi-ports` | **Shipped** | 1995 port list vs 2001 ANSI header side-by-side; 22 challenges |
+| Named vs positional connections | `named-vs-positional` | **Shipped** | `.port(sig)` vs order — mismatch hazards; 22 challenges |
+| localparam vs parameter | `localparam-lab` | **Shipped** | Override rules; why `defparam` is deprecated; 22 challenges |
+| Multi-dimensional arrays | `multi-dim-arrays` | **Shipped** | Packed vs unpacked layout visualizer; 22 challenges |
+| bit vs logic (2-state / 4-state) | `bit-vs-logic` | **Shipped** | X/Z propagation vs TB 2-state choice; 22 challenges |
+| Signed / unsigned width | `signed-width` | **Shipped** | `$signed` / `$unsigned`, compare & extend pitfalls; 22 challenges |
+| One-driver / multi-driver | `one-driver` | **Shipped** | Contested nets; why single-driver RTL; 22 challenges |
+
+## SystemVerilog design constructs
+
+Browser literacy for SV **RTL** idioms from `learn_verilog_systemverilog` / digital courses. Not a full IEEE LRM or simulator.
+
+| Tool | Path id | Status | What it teaches |
+|------|---------|--------|-----------------|
+| always_comb / always_ff / always_latch | `sv-always-procs` | **Shipped** | Procedural intent vs legacy `always @`; latch vs FF cues; 22 challenges |
+| unique / priority case | `sv-case-unique` | **Shipped** | Overlap / incomplete case semantics; 22 challenges |
+| Interface + modport sketch | `sv-interfaces` | **Shipped** | Signal bundle + direction per role; 22 challenges |
+| Package / import explorer | `sv-packages` | **Shipped** | What belongs in `package` vs module; `import` scope; 22 challenges |
+| IEEE construct → version map | `ieee-version-map` | **Shipped** | Which IEEE adds `logic`, `always_ff`, interface, …; 22 challenges |
+| 1364 → 1800 migration quiz | `sv-migration` | **Shipped** | Side-by-side idiom checklist (wire/reg → logic, etc.); 22 challenges |
+| `inside` / wildcard equality | `sv-inside` | **Shipped** | `inside` sets and `==?` / `!=?`; 22 challenges |
+| Checker / bind sketch | `sv-checker` | **Shipped** | Reusable property block vs synthesizable module; 22 challenges |
 
 ## Combinational design hygiene
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
 | Combo style / latch-risk checker | `latch-risk` | **Shipped** | `assign` vs incomplete `always`/`case`; inferred latch verdict; 22 challenges |
-| Sensitivity-list explorer | `sensitivity-list` | **Shipped** | Teaching model: poke signals → run/skip log; `@(*)` vs incomplete vs posedge/async; 22 challenges |
+| Sensitivity-list explorer | `sensitivity-list` | **Shipped** | Teaching model: poke signals â†’ run/skip log; `@(*)` vs incomplete vs posedge/async; 22 challenges |
 
 ## Clocks, registers & timing
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Clock-edge stepper | `clock-stepper` | **Shipped** | 8 labs (D-FF · T-FF · enable · counters · shift · pipeline · load); signal trace; 22 challenges |
-| Blocking vs non-blocking | `blocking-vs-nonblocking` | **Shipped** | Side-by-side `=` vs `<=` (swap · pipeline · chain · RHS · 3-stage); 20 challenges |
-| Reset strategy timelines | `reset-timelines` | **Planned** | Sync vs async reset on a simple timeline |
-| Setup / hold explainer | `setup-hold` | **Planned** | Annotated timing diagram (conceptual; not SPICE) |
+| Clock-edge stepper | `clock-stepper` | **Shipped** | 8 labs (D-FF Â· T-FF Â· enable Â· counters Â· shift Â· pipeline Â· load); signal trace; 22 challenges |
+| Blocking vs non-blocking | `blocking-vs-nonblocking` | **Shipped** | Side-by-side `=` vs `<=` (swap Â· pipeline Â· chain Â· RHS Â· 3-stage); 20 challenges |
+| Reset strategy timelines | `reset-timelines` | **Shipped** | Sync vs async twin sessions; mid-cycle reset divergence; timeline waves; 22 challenges |
+| Setup / hold explainer | `setup-hold` | **Shipped** | Annotated tsu/th windows; drag data transition; violation presets; 22 challenges |
+| CDC / 2-FF synchronizer | `cdc-sync` | **Shipped** | Metastability concept + two-flop chain; 22 challenges |
+| Clock enable vs gated clock | `clock-enable` | **Shipped** | CE on D-path vs AND-on-clk risk; 22 challenges |
+| Shift-register lab | `shift-register-lab` | **Shipped** | SISO / SIPO / PISO / PIPO step-through; 22 challenges |
+| Counter lab | `counter-lab` | **Shipped** | Up / down / modulo / enable / Gray; 22 challenges |
 
 ## Waveforms & debug literacy
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Mini waveform viewer | `waveform-mini` | **Planned** | Small synthetic or JSON/VCD subset; signal naming & hierarchy |
-| Testbench anatomy explorer | `tb-anatomy` | **Planned** | DUT vs tb, `$display`/`$finish`, reg vs wire roles |
+| Waveform lab | `waveform-lab` | **Shipped** | HDL session waves; SVG viewer + cursor; signal watch list; D-FF starter; 22 challenges |
+| Testbench anatomy explorer | `tb-anatomy` | **Shipped** | DUT vs tb anatomy; reg/wire/logic roles; `$display`/`$finish` timeline; 22 challenges |
+| Task vs function vs always | `task-vs-function` | **Shipped** | Timing / return / synthesis roles; 22 challenges |
+| Fork / join sketch | `fork-join` | **Shipped** | join / join_any / join_none timeline; 22 challenges |
+| Delay / event / wait | `delay-event-wait` | **Shipped** | `#delay`, `@event`, `wait` timeline; 22 challenges |
+| GTKWave cursor literacy | `gtkwave-cursors` | **Shipped** | Markers, zoom, signal add (UI literacy — not GTKWave itself); 22 challenges |
 
 ## FSM & control
 
@@ -202,30 +326,39 @@ Folder name under `platform/tools/` when built (kebab-case).
 | FSM designer + stepper | `fsm-lab` | **Shipped** | Presets + editable table; Moore/Mealy; step stream; 22 challenges |
 | State encoding lab | `state-encoding` | **Shipped** | Binary / one-hot / Gray; FF count + transition Hamming; 22 challenges |
 | Sequence detector playground | `seq-detector` | **Shipped** | Step bit stream; Mealy/Moore; overlap; pattern `1011`; 22 challenges |
+| Ring / Johnson counter | `ring-johnson` | **Shipped** | Circulating one-hot / twisted-ring; 22 challenges |
+| LFSR / PRBS stepper | `lfsr-lab` | **Shipped** | Tap polynomial → sequence; period intuition; 22 challenges |
 
 ## Arithmetic & datapath
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Ripple-carry adder animator | `ripple-carry-adder-animator` | **Shipped** | FA chain, step carry LSB→MSB; 4/8-bit; 22 challenges |
-| Carry-lookahead generate & propagate | `carry-look-ahead-adder-propagate-and-generate` | **Shipped** | Gᵢ/Pᵢ table + expanded carries; 4/8-bit; 22 challenges |
-| Array multiplier grid | `array-mult` | **Shipped** | Partial-product AND grid + product; 3×3 / 4×4; 22 challenges |
-| ALU operation explorer | `alu-explorer` | **Shipped** | Opcode → Y plus flags Z/N/C/V; 4/8-bit; 22 challenges |
+| Ripple-carry adder animator | `ripple-carry-adder-animator` | **Shipped** | FA chain, step carry LSBâ†’MSB; 4/8-bit; 22 challenges |
+| Carry-lookahead generate & propagate | `carry-look-ahead-adder-propagate-and-generate` | **Shipped** | Gáµ¢/Páµ¢ table + expanded carries; 4/8-bit; 22 challenges |
+| Array multiplier grid | `array-mult` | **Shipped** | Partial-product AND grid + product; 3Ã—3 / 4Ã—4; 22 challenges |
+| ALU operation explorer | `alu-explorer` | **Shipped** | Opcode â†’ Y plus flags Z/N/C/V; 4/8-bit; 22 challenges |
+| Carry-select adder sketch | `carry-select-adder` | **Shipped** | Dual path + mux on carry-in; 22 challenges |
+| Booth encode grid | `booth-encode` | **Shipped** | Radix-4 Booth partial-product reduction; 22 challenges |
+| Signed arithmetic / overflow | `signed-arith` | **Shipped** | Two’s complement add/sub + overflow flags; 22 challenges |
 
 ## Memory, FIFO & cache
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| RAM / ROM address map | `mem-map` | **Shipped** | 16×8 map; R/W highlights; `$readmemh`-style load; 22 challenges |
+| RAM / ROM address map | `mem-map` | **Shipped** | 16Ã—8 map; R/W highlights; `$readmemh`-style load; 22 challenges |
 | FIFO pointer & flags | `fifo-lab` | **Shipped** | Sync FIFO: wr/rd pointers, count, empty/full; depth 4/8; 22 challenges |
 | Cache hit/miss walkthrough | `cache-walk` | **Shipped** | Direct-mapped tag/index/offset; hit/miss + install; 22 challenges |
+| Dual-port RAM | `dual-port-ram` | **Shipped** | Independent R/W addresses; collision cases; 22 challenges |
+| Byte-enable memory | `byte-enable-mem` | **Shipped** | Partial-word writes with byte enables; 22 challenges |
+| Async FIFO (Gray pointers) | `async-fifo` | **Shipped** | Cross-clock empty/full with Gray sync; 22 challenges |
 
 ## Hierarchy, buses & integration
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Block-diagram integrator | `block-diagram` | **Planned** | Connect CPU / datapath / memory-style blocks |
+| Block-diagram integrator | `block-diagram` | **Shipped** | Click-to-wire CPU/ALU/RegFile/Memory/Bus; typed ports; 22 challenges |
 | Bus handshake animator | `handshake` | **Shipped** | valid/ready fire; source/sink stall presets; 22 challenges |
+| Pipeline stall / forward | `pipeline-hazards` | **Shipped** | Data hazard → stall or forward; 22 challenges |
 
 ## Coding standards & synthesizability
 
@@ -238,16 +371,109 @@ Folder name under `platform/tools/` when built (kebab-case).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| UART frame animator | `uart-frame` | **Planned** | Start/data/parity/stop bit timeline |
-| SPI transaction stepper | `spi-step` | **Planned** | SCLK/MOSI/MISO/CS for a short transfer |
-| I²C start/addr/ack explorer | `i2c-lab` | **Planned** | Start, address+R/W, ACK/NACK sequence |
+| UART frame animator | `uart-frame` | **Shipped** | Start/data/parity/stop timeline; 22 challenges |
+| UART oversampling | `uart-oversample` | **Shipped** | 16× mid-bit sample / majority / start center; 22 challenges |
+| UART error cases | `uart-errors` | **Shipped** | Framing / parity / overrun; 22 challenges |
+| SPI transaction stepper | `spi-step` | **Shipped** | Mode 0 CS/SCLK/MOSI/MISO byte step; 22 challenges |
+| SPI multi-CS / daisy | `spi-multi-cs` | **Shipped** | Independent CS vs daisy-chain; 22 challenges |
+| I²C start/addr/ack explorer | `i2c-lab` | **Shipped** | Start, address+R/W, ACK/NACK; 22 challenges |
+| I²C clock stretch | `i2c-clock-stretch` | **Shipped** | Slave holds SCL low; master waits; 22 challenges |
+| I²C repeated start | `i2c-repeated-start` | **Shipped** | Sr vs Stop+Start; read-after-write; 22 challenges |
+| Baud / clock divider | `baud-divider` | **Shipped** | Sysclk → baud_tick / clk_div; 22 challenges |
+| SPI CPOL/CPHA modes | `spi-cpol-cpha` | **Shipped** | Mode 0–3 edge capture/change matrix; 22 challenges |
+| I²C open-drain model | `i2c-open-drain` | **Shipped** | Open-drain vs push-pull; wired-AND; 22 challenges |
+| Spec → RTL checklist | `spec-to-rtl` | **Shipped** | SPEC ports/blocks → RTL skeleton; 22 challenges |
+| Basic TB vs UVM map | `tb-vs-uvm-map` | **Shipped** | Wiggle-pins vs transaction/agent; 22 challenges |
+
+## SV testbench & assertions (conceptual)
+
+Literacy for `learn_verilator_iverilog` Modules 3â€“7 and SV TB intros. **Not** a class runtime, CRV engine, or SVA simulator.
+
+| Tool | Path id | Status | What it teaches |
+|------|---------|--------|-----------------|
+| Class / inheritance sketch | `sv-class-sketch` | **Shipped** | TB OOP roles (object vs component); 22 challenges |
+| Constraint / random lite | `crv-lite` | **Shipped** | Dice + simple constraint visualize; 22 challenges |
+| Coverpoint / bins sketch | `cover-bins` | **Shipped** | Coverpoint → bins → holes; 22 challenges |
+| SVA implication timeline | `sva-timeline` | **Shipped** | Overlap `|->` / next `|=>` on a short wave; 22 challenges |
+| Virtual interface wiring | `vif-wiring` | **Shipped** | Class TB to DUT via interface + virtual handle; 22 challenges |
+| Self-checking TB pattern | `self-check-tb` | **Shipped** | Stimulus → expect → pass/fail; 22 challenges |
+| TB clock + reset patterns | `tb-clock-reset` | **Shipped** | Clock gen + reset assert/deassert; 22 challenges |
+| File / vector I/O | `file-vector-io` | **Planned** | `$readmemh` / vector files as TB stimulus |
+
+## UVM methodology (sketches)
+
+Concept diagrams for `learn_uvm2017_sv_verilator` / `learn_uvm_pyuvm`. **Not** a UVM library or Verilator UVM run.
+
+| Tool | Path id | Status | What it teaches |
+|------|---------|--------|-----------------|
+| Testbench layer diagram | `tb-layers` | **Planned** | Agent / env / scoreboard roles as a block sketch |
+| UVM phase timeline | `uvm-phases` | **Planned** | build â†’ connect â†’ run â†’ check â†’ report |
+| Factory override sketch | `uvm-factory` | **Planned** | Type override concept (who gets constructed) |
+| ConfigDB key path | `uvm-configdb` | **Planned** | set/get by hierarchical path + field |
+| Objection raise/drop | `uvm-objections` | **Planned** | Who holds the run phase open |
+| Sequence â†’ driver flow | `uvm-seq-flow` | **Planned** | item â†’ sequencer â†’ driver â†’ DUT |
+| Agent anatomy | `uvm-agent` | **Planned** | driver / monitor / sequencer layout |
+| TLM port wiring | `uvm-tlm` | **Planned** | analysis / put / get port sketch |
+| Scoreboard expect/actual | `uvm-scoreboard` | **Planned** | Predict vs observe compare pipeline |
+| Register model map | `ral-map` | **Planned** | Front-door vs back-door access concept |
+| cocotb vs UVM map | `cocotb-uvm-map` | **Planned** | Role mapping pyuvm / cocotb â†” SV UVM |
+| UVM reporting ladder | `uvm-reporting` | **Planned** | Verbosity / severity / ID filtering |
+| Callbacks sketch | `uvm-callbacks` | **Planned** | Pre/post hooks without subclassing |
+| Virtual sequence | `uvm-vseq` | **Planned** | Coordinate multiple sequencers |
+| Multi-agent env | `uvm-multi-agent` | **Planned** | Two+ agents sharing a scoreboard/env |
+| Protocol checker sketch | `protocol-checker` | **Planned** | Bus rule checks vs scoreboard roles |
+| VIP anatomy | `vip-anatomy` | **Planned** | Agent + checker + coverage + docs package |
+| Plusargs / CLP | `uvm-plusargs` | **Planned** | `+UVM_TESTNAME` and test knobs |
+| cocotb triggers | `cocotb-triggers` | **Planned** | RisingEdge / Timer / Combine (pyuvm path) |
+| cocotb DUT handle | `cocotb-dut-handle` | **Planned** | Hierarchical signal access from Python |
+| Python async TB sketch | `python-async-tb` | **Planned** | `async def` test + await timeline (concept) |
 
 ## Verification planning (lightweight)
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
-| Coverage / plan checklist | `verif-plan-check` | **Planned** | Feature → scenario → coverage item mapping (document aid) |
-| Testbench layer diagram | `tb-layers` | **Planned** | Agent / env / scoreboard roles as a block sketch (not a UVM runtime) |
+| Coverage / plan checklist | `verif-plan-check` | **Planned** | Feature â†’ scenario â†’ coverage item mapping (document aid) |
+| Feature Ã— scenario matrix | `feature-matrix` | **Planned** | Traceability grid (plan doc aid) |
+| Coverage closure planner | `coverage-closure` | **Planned** | Hole â†’ next test idea |
+| Regression triage board | `regression-triage` | **Planned** | Fail / flake / new buckets (concept) |
+| Test taxonomy planner | `test-taxonomy` | **Planned** | Directed / random / stress / corner tiers |
+| Risk-based plan matrix | `risk-plan` | **Planned** | Risk Ã— impact â†’ test priority |
+| Sign-off criteria | `signoff-checklist` | **Planned** | Exit criteria: coverage, bug bar, stability |
+| Seed / config / tags | `seed-tags` | **Planned** | Test metadata for replay & triage |
+| CI / farm regression flow | `ci-farm-flow` | **Planned** | Local â†’ CI â†’ farm stages (sketch) |
+| VIP handoff checklist | `vip-handoff` | **Planned** | Docs + API + self-test deliverables |
+
+## Simulation literacy (conceptual)
+
+Flow literacy for `learn_iverilog` / `learn_verilator` â€” **not** a browser iverilog/Verilator.
+
+| Tool | Path id | Status | What it teaches |
+|------|---------|--------|-----------------|
+| Compile â†’ elaborate â†’ run | `sim-pipeline` | **Planned** | Toolchain stage diagram (iverilog / Verilator) |
+| Wave dump literacy | `wave-dump` | **Planned** | VCD vs FST roles (not GTKWave) |
+| C++ TB / DPI sketch | `dpi-cpp-tb` | **Planned** | Verilator C++ TB vs SV TB paradigms |
+| iverilog vs Verilator chooser | `iverilog-vs-verilator` | **Planned** | When to pick each tool (matrix quiz) |
+| Verification metrics board | `verif-metrics` | **Planned** | Pass rate, coverage %, bug escape concepts |
+| iverilog flags lab | `iverilog-flags` | **Planned** | `-g2005`/`-g2012`, `-Wall`, `-o`, `+incdir` |
+| iverilog timescale | `iverilog-timescale` | **Planned** | `` `timescale `` vs timeunit pitfalls |
+| vvp plusargs | `vvp-plusargs` | **Planned** | `$test$plusargs` / runtime plusargs |
+| Verilator lint lab | `verilator-lint-lab` | **Planned** | `-Wall` warning teaching (concept) |
+| Verilator trace | `verilator-trace` | **Planned** | `--trace` â†’ VCD/FST roles |
+| Verilator public | `verilator-public` | **Planned** | `/*verilator public*/` / hierarchy visibility |
+
+## Browser HDL simulator (guided)
+
+Guided literacy for [`learn_hdl_simulator`](../syllabus.md#9-learn_hdl_simulator) and the public [HDL Simulator](https://universal-verification-methodology.github.io/systemverilog-simulator/). Concept steps — **not** a second full IDE.
+
+| Tool | Path id | Status | What it teaches |
+|------|---------|--------|-----------------|
+| Simulator UI tour | `hdl-sim-tour` | **Planned** | Files / Hierarchy / Signals / Wave / Console map |
+| Hello DUT in browser | `hdl-sim-hello-dut` | **Planned** | Tiny module â†’ Run / Stop / Reset |
+| Step & continue | `hdl-sim-step-continue` | **Planned** | Step · Continue · `$stop` / breakpoints |
+| Poke / force / release | `hdl-sim-poke-force` | **Planned** | Live drive vs force hazards |
+| Full-sim waves | `hdl-sim-waves` | **Planned** | Add signals · C1/C2 · radix (simulator UI) |
+| Multi-file project | `hdl-sim-multi-file` | **Planned** | Top · defines · `+incdir` · profiles |
+| Golden compare | `hdl-sim-compare-golden` | **Planned** | Diff @ C1 · JSON/VCD export literacy |
 
 ---
 
@@ -258,12 +484,12 @@ Do **not** implement these as full browser replacements:
 - iverilog compile + `vvp` simulation of course examples  
 - Verilator `--cc` + C++ build  
 - Full GTKWave / large FST/VCD workflows  
-- Full SystemVerilog OOP / UVM / constrained-random / coverage databases  
+- Full SystemVerilog OOP runtime / UVM library / constrained-random engine / coverage databases  
 - Synthesis (Yosys, Vivado, DC) and P&R  
 - Cycle-accurate protocol VIPs and scoreboards  
 - Toolchain installers and CI Make flows  
 
-Those stay in course repos and local / WSL environments. Browser tools may **link** to sandboxes or docs.
+Those stay in course repos and local / WSL environments. Browser tools may ship **concept sketches** (phases, TLM wiring, cover bins as checklists) and **link** to sandboxes or docs.
 
 ---
 
@@ -274,29 +500,63 @@ Suggested delivery order (platform rebrand, then digital concepts):
 | Phase | Focus | Tools |
 |-------|--------|--------|
 | **A** | Unify hub branding & catalog UX | Rebrand home/tools index to concept domains; keep shipped Shell/Git tools |
-| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `state-encoding` (**shipped**), `seq-detector` (**shipped**), `fsm-lab` (**shipped**), `waveform-mini` |
-| **C** | Datapath & memory | `alu-explorer` (**shipped**), `mem-map` (**shipped**), `array-mult` (**shipped**), `ripple-carry-adder-animator` (**shipped**), `carry-look-ahead-adder-propagate-and-generate` (**shipped**), `cache-walk` (**shipped**), `fifo-lab` (**shipped**) |
-| **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint` (**shipped**), `hdl-style` (**shipped**), `handshake` (**shipped**), `uart-frame` / `spi-step` / `i2c-lab` (as needed) |
-| **E** | Verification literacy | `tb-anatomy`, `tb-layers`, `verif-plan-check` |
+| **B** | Digital logic core | `truth-table` (**shipped**), `gate-composer` (**shipped**), `radix-converter` (**shipped**), `verilog-literals` (**shipped**), `clock-stepper` (**shipped**), `blocking-vs-nonblocking` (**shipped**), `kmap` (**shipped**), `mux-decoder` (**shipped**), `state-encoding` (**shipped**), `seq-detector` (**shipped**), `fsm-lab` (**shipped**), `waveform-lab` (**shipped**) |
+| **C** | Datapath & memory | `alu-explorer` (**shipped**), `mem-map` (**shipped**), `array-mult` (**shipped**), `ripple-carry-adder-animator` (**shipped**), `carry-look-ahead-adder-propagate-and-generate` (**shipped**), `cache-walk` (**shipped**), `fifo-lab` (**shipped**), `dual-port-ram` (**shipped**), `byte-enable-mem` (**shipped**), `async-fifo` (**shipped**) |
+| **D** | HDL hygiene & protocols | `latch-risk` (**shipped**), `sensitivity-list` (**shipped**), `synth-lint` (**shipped**), `hdl-style` (**shipped**), `handshake` (**shipped**), `pipeline-hazards` (**shipped**), `uart-frame` (**shipped**), `uart-oversample` (**shipped**), `uart-errors` (**shipped**), `baud-divider` (**shipped**), `spec-to-rtl` (**shipped**), `spi-step` (**shipped**), `spi-multi-cs` (**shipped**), `spi-cpol-cpha` (**shipped**), `i2c-lab` (**shipped**), `i2c-clock-stretch` (**shipped**), `i2c-repeated-start` (**shipped**), `i2c-open-drain` (**shipped**) |
+| **E** | SV design constructs | `sv-always-procs`, `sv-case-unique`, `sv-interfaces`, `sv-packages`, `sv-generate`, `sv-typedefs`, `ieee-version-map`, `sv-migration` |
+| **F** | Verification literacy | `tb-anatomy` (**shipped**), `tb-vs-uvm-map` (**shipped**), `sv-class-sketch` (**shipped**), `crv-lite` (**shipped**), `cover-bins` (**shipped**), `sva-timeline` (**shipped**), `vif-wiring` (**shipped**), `self-check-tb` (**shipped**), `tb-clock-reset` (**shipped**), `tb-layers`, SV TB sketches, UVM sketches, `verif-plan-check`, sim literacy |
 
 Phases are planning aids only; the public catalog stays domain-based.
 
 ---
 
-## Cross-reference (courses → domains)
+## Cross-reference (courses â†’ domains)
 
-Courses **link** to domains; they do not own tools.
+Courses **link** to domains; they do not own tools. Target syllabi (lab-driven modules): [`../syllabus.md`](../syllabus.md) (site copy: [`syllabus.md`](syllabus.md)).
 
-| Course (under `courses/`) | Primary domains they typically use |
-|---------------------------|--------------------------------------|
-| `learn_unix_git` | Shell & filesystem, Processes & text, Scripting, Projects & archives, Version control, Workflow |
-| `learn_digital_verilog` | Number systems, Boolean, Gates, HDL structure, Combo hygiene, Clocks, Waveforms, FSM, Arithmetic, Memory, Hierarchy, Synth lint |
-| `learn_verilog_systemverilog` | Number systems, HDL structure & operators, Combo hygiene (language-evolution context) |
-| `learn_verilator_iverilog` | Waveforms & debug literacy, Testbench anatomy |
-| `learn_uart_spi_i2c` | FSM & control, Handshake, Protocols (conceptual); real VIP/UVM offline |
-| `learn_uvm_pyuvm` | TB layers (sketch only); methodology offline |
-| `learn_uvm2017_sv_verilator` | TB layers (sketch only); UVM offline |
-| `verification_planning_management` | Verification planning checklists |
+| Target course | Primary domains |
+|---------------|-----------------|
+| `learn_unix` | Shell, Processes, Scripting, Archives, Workflow |
+| `learn_git` | Version control, Workflow |
+| `learn_digital` | Number systems, Boolean, Gates, Clocks, FSM, Arithmetic, Memory, Hierarchy |
+| `learn_verilog` | HDL structure, Combo hygiene, Clocks, Synth/style, FSM/datapath coding |
+| `learn_systemverilog` | **SV design constructs**, HDL structure (typedefs/arrays), migration map |
+| `learn_uvm2017` | **UVM sketches**, SV TB sketches, VIP / planning handoff |
+| `learn_verilator` | **Simulation literacy** (Verilator), C++/DPI, waves, metrics |
+| `learn_iverilog` | **Simulation literacy** (Icarus), waves, self-check TB |
+| `learn_hdl_simulator` | **Browser HDL simulator**, waveforms, TB anatomy, synth/style hints |
+| `learn_pyuvm` | **UVM sketches**, cocotb triggers / DUT handle, Python async TB |
+| `learn_uart` | Protocols (UART+), Specâ†’RTL, TB vs UVM map |
+| `learn_spi` | Protocols (SPI+), Specâ†’RTL, TB vs UVM map |
+| `learn_i2c` | Protocols (IÂ²C+), Specâ†’RTL, TB vs UVM map |
+| `learn_verification_planning_management` | Verification planning, metrics, CI/farm, VIP handoff |
+
+Legacy folders (`learn_unix_git`, `learn_digital_verilog`, â€¦) map to the target ids above â€” see syllabus migration table.
+
+---
+
+## Course-by-course gap notes
+
+Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). One syllabus module â‰ˆ one primary lab (+ intro/wrap/offline extras). Browser tools stay **concept literacy**; full sim/UVM/VIP stays offline.
+
+| Target course | Already strong | Gaps (Planned ids) |
+|---------------|----------------|--------------------|
+| `learn_unix` | vfs â†’ scripting, archives, `backup-clean` **shipped**, workflow | `link-relative`, `make-basics`, `dry-run-lab`, `log-triage`, `env-file-lab` |
+| `learn_git` | Full Version control + template/submission labs (**all shipped**) | none for browser labs — module 21 stays offline (`unix-git-practice`) |
+| `learn_digital` | Numbers→Boolean→gates→clocks→FSM→datapath→mem (**48 shipped**) | — |
+| `learn_verilog` | Full IEEE 1364 RTL browser path (**all 17 labs shipped**) | none for browser labs — module 18 is bridge (reuse digital labs) |
+| `learn_systemverilog` | (labs mostly planned) | `sv-always-procs` â†’ `sv-migration` set |
+| `learn_uvm2017` / `learn_pyuvm` | `tb-anatomy` / `tb-vs-uvm-map` (+ SV TB sketches) **shipped**; offline via legacy | UVM sketches + **all** pyuvm/cocotb labs (`python-async-tb`, triggers, DUT handle, map) |
+| `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; **0** pyuvm-specific browser labs shipped | `python-async-tb`, `cocotb-triggers`, `cocotb-dut-handle`, `cocotb-uvm-map`, shared `uvm-*` sketches |
+| `learn_verilator` | offline fidelity via legacy; course scaffolded; `tb-clock-reset` (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | `iverilog-vs-verilator`, `sim-pipeline`, `verilator-lint-lab`, `dpi-cpp-tb`, `verilator-trace`, `wave-dump`, `verilator-public`, `verif-metrics` |
+| `learn_iverilog` | shipped TB/wave labs + `self-check-tb` (**shipped**); course scaffolded; offline module 11 | `sim-pipeline`, `iverilog-flags`, `iverilog-timescale`, `vvp-plusargs`, `wave-dump` |
+| `learn_hdl_simulator` | waveform-lab, tb-anatomy, synth/style | **`hdl-sim-*` guided set** + public simulator now |
+| `learn_uart` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `tb-clock-reset` (**shipped**); course scaffolded | `vip-anatomy` |
+| `learn_spi` | shared labs + `self-check-tb` / `tb-vs-uvm-map` (**shipped**); course scaffolded | `protocol-checker` |
+| `learn_i2c` | shared labs + `self-check-tb` / `tb-vs-uvm-map` (**shipped**); course scaffolded | `vip-anatomy` |
+| `learn_verification_planning_management` | `cover-bins` (**shipped**); plan/matrix/closure/triage planned | `verif-plan-check`, taxonomy, risk, signoff, seeds, CI, VIP handoff |
+
+Still **offline-only** (see Out of scope): installing toolchains, running course Makefiles, full UVM/CRV/SVA engines, commercial VIP, synthesis/P&R.
 
 ---
 
@@ -304,8 +564,8 @@ Courses **link** to domains; they do not own tools.
 
 | Status | Count |
 |--------|------:|
-| Shipped | 36 |
-| Planned | 10 |
-| **Total catalogued** | **46** |
+| Shipped | 152 |
+| Planned | 50 |
+| **Total catalogued** | **202** |
 
-Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).
+Update this file when a planned tool ships (status â†’ **Shipped**, path verified under `platform/tools/`).

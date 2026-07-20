@@ -1,0 +1,209 @@
+.nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.nav-row button {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.nav-row button.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.nav-row button.is-done {
+  background: color-mix(in srgb, #047857 10%, var(--surface));
+}
+
+.pr-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.85rem 0.95rem;
+  background: var(--surface2);
+  margin-bottom: 0.75rem;
+}
+
+.pr-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.pr-card .meta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.55rem;
+}
+
+.pr-card .desc {
+  margin: 0 0 0.65rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+
+.flag {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.flag.warn { color: #b45309; border-color: #b45309; }
+.flag.bad { color: var(--err); border-color: var(--err); }
+.flag.ok { color: #047857; border-color: #047857; }
+
+.diff-box,
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: #1a222c;
+  color: #e8eef4;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.diff-box { min-height: 8rem; max-height: 14rem; overflow: auto; }
+.log-box { min-height: 5.5rem; max-height: 9rem; overflow: auto; }
+
+.diff-box .add { color: #8fd4a8; }
+.diff-box .del { color: #f5a8a8; }
+.diff-box .path { color: #9ecbff; }
+.diff-box .noise { color: #f0c674; }
+
+.log-box .ok { color: #8fd4a8; }
+.log-box .warn { color: #f0c674; }
+.log-box .err { color: #f5a8a8; }
+.log-box .muted { color: #7a8a9a; }
+
+.check-list {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.check-list label {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.verdict-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.55rem;
+}
+
+.verdict-row button {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.verdict-row button:hover { border-color: var(--accent); }
+.verdict-row button.is-picked {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 650;
+}
+.verdict-row button.is-correct { border-color: #047857; color: #047857; }
+.verdict-row button.is-wrong { border-color: var(--err); color: var(--err); }
+
+.rubric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 800px) {
+  .rubric-grid { grid-template-columns: 1fr; }
+}
+
+.rubric-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  background: var(--surface2);
+  font-size: 0.85rem;
+}
+
+.rubric-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
+}
+
+.result-pill {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  display: inline-block;
+  margin-bottom: 0.55rem;
+}
+
+.result-pill.pass { color: #047857; border-color: #047857; }
+.result-pill.fail { color: var(--err); border-color: var(--err); }
+.result-pill.idle { color: var(--muted); }
+
+.cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cheat-table th,
+.cheat-table td {
+  text-align: left;
+  padding: 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.hint-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hint-list li { margin: 0.35rem 0; }
+
+.status-row {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0 0 0.55rem;
+  color: var(--muted);
+}
+
+.status-row strong { color: var(--text); }

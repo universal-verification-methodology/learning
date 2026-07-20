@@ -1,0 +1,217 @@
+.cwd-banner {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  margin: 0 0 0.65rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.cwd-banner span { color: var(--muted); font-size: 0.8rem; }
+.cwd-banner code {
+  background: var(--surface2);
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+}
+
+.df-term {
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  background: #1a222c;
+  color: #e8eef4;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  min-height: 10rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.df-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 0.7rem 0.9rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.45;
+}
+
+.df-scroll .out { color: #b8c4d0; }
+.df-scroll .err { color: #f5a8a8; }
+.df-scroll .muted { color: #7a8a9a; }
+.df-scroll .dot { color: #f0c674; }
+
+.df-prompt-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  border-top: 1px solid #2a3542;
+  background: #141b23;
+}
+
+.df-prompt { color: #7dcea0; }
+.df-line {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #e8eef4;
+  font: inherit;
+  outline: none;
+}
+
+.listing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.listing li {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.listing li:hover { border-color: var(--accent); }
+.listing li.is-dot {
+  border-color: #d4a017;
+  background: color-mix(in srgb, #d4a017 12%, var(--surface));
+}
+.listing li.is-dir { font-weight: 650; }
+.listing li.is-selected { outline: 2px solid var(--accent); }
+.listing li.is-hidden-note {
+  opacity: 0.45;
+  border-style: dashed;
+}
+
+.file-view {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  margin: 0;
+  padding: 0.75rem;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 8rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.file-view .empty { color: var(--muted); }
+
+.ignore-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.ignore-table th,
+.ignore-table td {
+  text-align: left;
+  padding: 0.35rem 0.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.ignore-table .yes { color: var(--err); font-weight: 650; }
+.ignore-table .no { color: #047857; }
+
+.homes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .homes-grid { grid-template-columns: 1fr; }
+}
+
+.home-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: var(--surface2);
+}
+
+.home-card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.home-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.home-card code { color: var(--text); }
+
+.quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+
+.quick-row button {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.28rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.quick-row button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.cheat-table th,
+.cheat-table td {
+  text-align: left;
+  padding: 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.hint-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hint-list li { margin: 0.35rem 0; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  margin-bottom: 0.55rem;
+  color: var(--muted);
+}
+
+.legend .dot-swatch {
+  color: #b45309;
+  font-weight: 700;
+}

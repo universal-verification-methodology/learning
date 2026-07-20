@@ -1,0 +1,55 @@
+# Platform site setup (GA4 + Web3Forms)
+
+Keys live in [`assets/site-config.js`](assets/site-config.js). Leave them empty to keep analytics off and feedback forms disabled (setup banner shown).
+
+## 1. Google Analytics 4 (GA4)
+
+1. Open [Google Analytics](https://analytics.google.com/) → **Admin** → create a **GA4** property (or use an existing one).
+2. Under **Data streams** → **Web**, add your site URL(s), for example:
+   - `https://universal-verification-methodology.github.io/learning/`
+   - `https://yongfu-li.github.io/digital-design-verification/` (if you mirror)
+3. Copy the **Measurement ID** (`G-XXXXXXXXXX`).
+4. In `platform/assets/site-config.js`, set:
+
+```js
+ga4MeasurementId: "G-XXXXXXXXXX",
+```
+
+5. Deploy / hard-refresh. The site loads `gtag` only when this id looks like `G-…`.
+6. Optional: confirm page views in GA4 **Reports → Realtime**.
+
+Video play / lab-complete events fire when GA4 is configured (`lab_complete`, `community_feedback`).
+
+## 2. Web3Forms (community feedback)
+
+1. Go to [https://web3forms.com](https://web3forms.com) and create a free access key (tied to your email).
+2. Confirm the email from Web3Forms.
+3. In `platform/assets/site-config.js`, set:
+
+```js
+web3formsAccessKey: "your-uuid-access-key",
+```
+
+4. Redeploy. Forms on [`community/feedback/`](community/feedback/index.html) enable and POST to Web3Forms.
+5. Send a test message; you should receive email. Approved testimonials can be pasted into [`community/stories/`](community/stories/index.html).
+
+**Privacy:** submissions are emailed only; this static site does not store them.
+
+## 3. Dual GitHub Pages (optional)
+
+Publish the same `platform/` tree to:
+
+| Site | Example URL |
+|------|-------------|
+| Org | `https://universal-verification-methodology.github.io/learning/` |
+| Personal | `https://yongfu-li.github.io/digital-design-verification/` |
+
+Use relative links (already the default). If a host uses a different base path, add a `<base href="…">` or a small `SITE_BASE` later — not required for same-folder deploy.
+
+## 4. Local preview
+
+```bash
+python -m http.server 8080 --directory platform
+```
+
+Open http://127.0.0.1:8080/

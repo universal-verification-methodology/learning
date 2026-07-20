@@ -1,0 +1,299 @@
+.md-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.md-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.md-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.md-field select {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 10rem;
+}
+
+.md-preset-grid {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+@media (min-width: 720px) {
+  .md-preset-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.md-preset-grid button {
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  color: var(--ink);
+  font: inherit;
+}
+.md-preset-grid button.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.md-preset-grid .title {
+  display: block;
+  font-weight: 650;
+  font-size: 0.92rem;
+}
+.md-preset-grid .meta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.md-source {
+  width: 100%;
+  min-height: 11rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.md-msg {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0.45rem 0 0.65rem;
+}
+.md-msg.ok { color: var(--ok); }
+.md-msg.err { color: var(--err); }
+.md-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.diagram-panel {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 5%, var(--surface2)), var(--surface2));
+  padding: 0.85rem;
+  overflow: auto;
+}
+
+.mod-card {
+  border: 2px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 0.75rem 0.85rem 1rem;
+  margin-bottom: 0.85rem;
+}
+.mod-card.is-focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.mod-card.child {
+  border-color: color-mix(in srgb, var(--signal) 50%, var(--line));
+  background: color-mix(in srgb, var(--signal) 6%, var(--surface));
+  margin: 0.65rem 0 0;
+}
+
+.mod-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 0.65rem;
+}
+.mod-name {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--accent);
+}
+.mod-card.child .mod-name { color: var(--signal); }
+.mod-kind {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.port-columns {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .port-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.port-col h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.port-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.port-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface2);
+  padding: 0.4rem 0.55rem;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+.port-btn:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+.port-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+.port-btn .dir {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.port-btn.dir-input .dir { color: var(--accent); }
+.port-btn.dir-output .dir { color: var(--signal); }
+.port-btn.dir-inout .dir { color: var(--warn); }
+
+.inst-block {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--line);
+}
+.inst-block h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.conn-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  margin-top: 0.45rem;
+}
+.conn-table th,
+.conn-table td {
+  border: 1px solid var(--line);
+  padding: 0.3rem 0.45rem;
+  text-align: left;
+}
+.conn-table th {
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+.conn-table tr.hl {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+}
+
+.param-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.35rem 0 0.55rem;
+}
+.param-chips span {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+}
+
+.hier-list {
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.hier-list li {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  margin-bottom: 0.3rem;
+}
+.hier-list li button {
+  all: unset;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 650;
+}
+.hier-list .path {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.detail-card {
+  margin-top: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.detail-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.92rem;
+}
+.detail-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}

@@ -6,65 +6,86 @@
   <title>Digital Design and Verification Platform — Open learning platform</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
+<body data-asset-base="assets/">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="site-header-inner">
       <p class="brand"><a href="index.html">Digital Design and Verification Platform</a></p>
-      <nav class="site-nav" aria-label="Site">
-        <a href="index.html" class="is-active" aria-current="page">Home</a>
-        <a href="tools/index.html">Tools</a>
-      </nav>
+      <div class="site-header-tools">
+        <nav class="site-nav" aria-label="Site">
+          <a href="index.html" class="is-active" aria-current="page">Home</a>
+          <a href="courses/index.html">Courses</a>
+          <a href="tools/index.html">Tools</a>
+          <a href="simulator/index.html">Simulator</a>
+          <a href="path/index.html">Path</a>
+          <a href="projects/index.html">Projects</a>
+          <a href="community/index.html">Community</a>
+        </nav>
+        <div class="site-search" data-site-search></div>
+      </div>
     </div>
   </header>
   <main id="main">
-    <div class="eyebrow">Digital design &amp; verification</div>
+    <div class="eyebrow">Open learning platform</div>
     <section class="hero">
       <h1>Digital Design and Verification Platform</h1>
       <p class="lead">
-        Browser labs for ideas that are hard to see — shell, Git, digital logic,
-        HDL concepts, protocols, and verification literacy. One shelf of tools;
-        courses link in when useful. Work stays in this tab.
+        Guided <strong>labs</strong>, a shared tools shelf, browser HDL simulation, and a learning path —
+        for shell, Git, digital logic, HDL, protocols, and verification literacy. Work stays in this tab.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="tools/index.html">Browse tools</a>
-        <a class="btn btn-secondary" href="tools/vfs-terminal/index.html">Start with filesystem</a>
+        <a class="btn btn-primary" href="courses/learn_unix/index.html">Start with Unix labs</a>
+        <a class="btn btn-secondary" href="path/index.html">View learning path</a>
+        <a class="btn btn-ghost" href="tools/index.html">Browse tools</a>
       </div>
     </section>
 
-    <section class="home-pillars" aria-label="Explore by concept">
+    <section class="home-pillars" aria-label="Explore the platform">
       <ul class="pillar-grid">
         <li>
-          <a class="pillar-card" href="tools/index.html#shell-filesystem">
-            <h2>Shell &amp; Git</h2>
-            <p>Filesystem, pipes, scripts, DAG, remotes.</p>
+          <a class="pillar-card" href="courses/index.html">
+            <h2>Courses</h2>
+            <p>Lab-by-lab paths with Open tool links, progress in this browser, and media placeholders.</p>
           </a>
         </li>
         <li>
-          <a class="pillar-card" href="tools/truth-table/index.html">
-            <h2>Digital logic</h2>
-            <p>Truth tables, gates, radix, Verilog literals — more soon.</p>
+          <a class="pillar-card" href="tools/index.html">
+            <h2>Tools</h2>
+            <p>Concept labs on one shelf — reusable across courses.</p>
           </a>
         </li>
         <li>
-          <a class="pillar-card" href="tools/index.html#waveforms">
-            <h2>HDL &amp; waveforms</h2>
-            <p>Structure, lint, mini waveforms — planned.</p>
+          <a class="pillar-card" href="simulator/index.html">
+            <h2>Simulator</h2>
+            <p>Browser HDL Simulator — datasets from core coming next.</p>
           </a>
         </li>
         <li>
-          <a class="pillar-card" href="tools/index.html#protocols">
-            <h2>Protocols</h2>
-            <p>UART / SPI / I²C conceptual labs — planned.</p>
+          <a class="pillar-card" href="path/index.html">
+            <h2>Path map</h2>
+            <p>Suggested ladder from Unix through protocols and UVM.</p>
+          </a>
+        </li>
+        <li>
+          <a class="pillar-card" href="projects/index.html">
+            <h2>Projects</h2>
+            <p>Guided RTL→TB kits — placeholder for later.</p>
+          </a>
+        </li>
+        <li>
+          <a class="pillar-card" href="community/index.html">
+            <h2>Community</h2>
+            <p>Stories and feedback (Web3Forms) — setup keys in site-config.</p>
           </a>
         </li>
       </ul>
     </section>
   </main>
   <footer class="site-footer">
-    Digital Design and Verification Platform — client-side labs for the learning
-    monorepo. Work stays in this browser tab.
+    Digital Design and Verification Platform — client-side labs for the learning monorepo.
+    <p class="site-footer-privacy">Optional GA4 analytics load only after you set <code>ga4MeasurementId</code> in <code>assets/site-config.js</code>.</p>
   </footer>
+  <script src="assets/site-config.js"></script>
   <script src="assets/site.js"></script>
 </body>
 </html>

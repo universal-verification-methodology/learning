@@ -1,0 +1,315 @@
+.tba-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.tba-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.tba-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tba-field select {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 12rem;
+}
+
+.tba-layout {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 900px) {
+  .tba-layout {
+    grid-template-columns: 1.05fr 1fr;
+    align-items: start;
+  }
+}
+
+.anatomy {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 6%, var(--surface2)), var(--surface2));
+  padding: 0.85rem;
+}
+
+.tb-shell {
+  border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-radius: 12px;
+  padding: 0.65rem 0.75rem 0.85rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+.tb-shell-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.55rem;
+}
+
+.anatomy-grid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.part {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  color: var(--ink);
+  font: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.part:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+.part.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 28%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+.part.risk {
+  border-color: color-mix(in srgb, var(--err) 55%, var(--line));
+}
+.part.risk.active {
+  background: color-mix(in srgb, var(--err) 10%, var(--surface));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--err) 22%, transparent);
+}
+
+.part-kicker {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.15rem;
+}
+.part-title {
+  display: block;
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+.part-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.dut-box {
+  border-style: solid;
+  border-width: 2px;
+  border-color: color-mix(in srgb, var(--signal) 55%, var(--line));
+  background: color-mix(in srgb, var(--signal) 8%, var(--surface));
+}
+.dut-box .part-kicker { color: var(--signal); }
+
+.signal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+.signal-chips button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.28rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--ink);
+}
+.signal-chips button.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+.signal-chips button.role-reg { border-left: 3px solid var(--accent); }
+.signal-chips button.role-wire { border-left: 3px solid var(--signal); }
+.signal-chips button.role-logic { border-left: 3px solid #3a6ea5; }
+.signal-chips button.role-bad { border-left: 3px solid var(--err); }
+
+.role-card {
+  margin-top: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.role-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.92rem;
+}
+.role-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.role-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  margin-bottom: 0.35rem;
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+}
+.role-badge.wire { background: var(--warn-bg); color: var(--signal); }
+.role-badge.logic { background: #e4eef8; color: #2a5580; }
+.role-badge.bad { background: var(--err-bg); color: var(--err); }
+
+.code-block {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface2);
+  overflow: auto;
+  white-space: pre;
+  max-height: 22rem;
+}
+
+.code-block .hl-part {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 3px;
+}
+.code-block .hl-risk {
+  background: color-mix(in srgb, var(--err) 22%, transparent);
+  border-radius: 3px;
+}
+
+.sim-panel {
+  margin-top: 0.85rem;
+}
+.sim-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+.sim-head h3 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.sim-time {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: var(--accent);
+}
+
+.timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+.timeline button {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--ink);
+}
+.timeline button.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+.timeline button.done {
+  opacity: 0.55;
+}
+
+.console {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: var(--term-bg);
+  color: var(--term-fg);
+  min-height: 5.5rem;
+  white-space: pre-wrap;
+}
+.console .muted { color: var(--term-muted); }
+.console .ok { color: var(--term-prompt); }
+.console .warn { color: #e0b34a; }
+.console .err { color: #e08a8a; }
+
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  margin-bottom: 0.65rem;
+}
+.verdict.ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+.verdict.warn {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.verdict.risk {
+  background: var(--err-bg);
+  color: var(--err);
+}
+
+.tba-meta {
+  margin: 0.55rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.rule-box {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  margin-bottom: 0.75rem;
+  color: var(--muted);
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I²C clock stretch — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="i2c-clock-stretch.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Tools</a>
+        <span class="here">I²C clock stretch</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Interactive tool</div>
+    <section class="hero">
+      <h1>I²C clock stretch</h1>
+      <p class="lead">
+        Open-drain SCL: the slave can <strong>hold SCL low</strong> after the master
+        releases it. The master must <strong>wait</strong> until the wire actually rises
+        before the next bit. Starter: stretch 3 ticks after address ACK.
+      </p>
+    </section>
+    <div id="ics-root"></div>
+  </main>
+  <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
+  <script src="i2c-clock-stretch.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

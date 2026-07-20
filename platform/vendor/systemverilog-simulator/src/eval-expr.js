@@ -31,6 +31,7 @@ import {
   compare,
 } from "./value.js";
 import { evalUdp, valueFromUdpBit, udpNormBit } from "./udp.js";
+import { isVifHandle, makeVifHandle } from "./interface.js";
 import {
   lookupMethod,
   checkMemberAccess,
@@ -155,10 +156,21 @@ export function evalExpr(expr, signals, ctx = {}) {
     case "SuperNew":
       return runSuperNew(expr.args || [], signals, ctx);
     case "Ident": {
+      if (ctx.ifaceInstances?.has(expr.name)) {
+        return makeVifHandle(expr.name);
+      }
       const s = lookup(expr.name);
       if (!s) throw new Error(`Unknown signal '${expr.name}'`);
       if (s.access && s.access !== "public") checkMemberAccess(s, expr.name, ctx);
       return slotGet(s);
+    }
+    case "VifAccess": {
+      const slot = lookup(expr.vif);
+      if (!slot || !slot.isVif) throw new Error(`'${expr.vif}' is not a virtual interface`);
+      const h = slot.value;
+      if (!isVifHandle(h) || !h.path) throw new Error(`virtual interface '${expr.vif}' is null`);
+      const hier = [h.path, ...(expr.fields || [])].join(".");
+      return evalExpr({ type: "Ident", name: hier }, signals, ctx);
     }
     case "PropAccess": {
       const h = resolveRecvHandle(expr.recv, signals, ctx);
@@ -589,6 +601,17 @@ export function applyLValue(lv, val, signals, ctxOrLocals = null) {
     return null;
   };
 
+  // J6: virtual interface field write — vif.req = …
+  if (lv.vifFields && lv.vifFields.length) {
+    const slot = lookupSlot(lv.name);
+    if (!slot || !slot.isVif) throw new Error(`'${lv.name}' is not a virtual interface`);
+    const h = slot.value;
+    if (!isVifHandle(h) || !h.path) throw new Error(`virtual interface '${lv.name}' is null`);
+    const hier = [h.path, ...lv.vifFields].join(".");
+    applyLValue({ type: "LValue", name: hier, select: lv.select || null }, val, signals, fullCtx);
+    return;
+  }
+
   // Class property: this.prop or handle.prop
   if (lv.prop) {
     let h;
@@ -646,6 +669,19 @@ export function applyLValue(lv, val, signals, ctxOrLocals = null) {
 
   const s = lookupSlot(lv.name);
   if (!s) throw new Error(`Unknown signal '${lv.name}'`);
+  if (s.isVif) {
+    if (lv.select) throw new Error(`Cannot bit-select virtual interface '${lv.name}'`);
+    if (isVifHandle(val)) {
+      s.value = val;
+      return;
+    }
+    // `null` (class Null → NULL_HANDLE) clears the virtual interface
+    if (val === null || (isHandle(val) && val.oid == null)) {
+      s.value = makeVifHandle(null);
+      return;
+    }
+    throw new Error(`'${lv.name}' expects a virtual interface`);
+  }
   if (s.isHandle) {
     if (lv.select) throw new Error(`Cannot bit-select class handle '${lv.name}'`);
     if (!isHandle(val)) throw new Error(`'${lv.name}' expects a class handle`);

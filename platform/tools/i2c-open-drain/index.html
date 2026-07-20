@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I²C open-drain model — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="i2c-open-drain.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Tools</a>
+        <span class="here">I²C open-drain model</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Interactive tool</div>
+    <section class="hero">
+      <h1>I²C open-drain model</h1>
+      <p class="lead">
+        I²C lines are <strong>open-drain</strong>: a device pulls low or <strong>releases</strong>
+        (Hi-Z); pull-ups create logic&nbsp;1. Compare with push-pull and see
+        <strong>wired-AND</strong> on SDA/SCL. Starter: slave <strong>ACK</strong> pulls SDA low
+        while the master releases.
+      </p>
+    </section>
+    <div id="iod-root"></div>
+  </main>
+  <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
+  <script src="i2c-open-drain.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

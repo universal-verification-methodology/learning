@@ -44,7 +44,7 @@ function toAst(input, opts = {}) {
  */
 export function simulate(source, opts = {}) {
   const ast = toAst(source, opts);
-  const net = elaborate(ast, { top: opts.top });
+  const net = elaborate(ast, { top: opts.top, config: opts.config });
   const sim = createSim(net, { memFiles: opts.memFiles });
   return sim.run({ maxTime: opts.maxTime ?? 1000 });
 }
@@ -52,11 +52,11 @@ export function simulate(source, opts = {}) {
 /**
  * Parse + elaborate without running (for UIs that step / poke).
  * @param {string|string[]|object} source
- * @param {{ top?: string, files?: Record<string, string>, entry?: string, memFiles?: Record<string, string> }} [opts]
+ * @param {{ top?: string, config?: string, files?: Record<string, string>, entry?: string, memFiles?: Record<string, string> }} [opts]
  */
 export function compile(source, opts = {}) {
   const ast = toAst(source, opts);
-  const net = elaborate(ast, { top: opts.top });
+  const net = elaborate(ast, { top: opts.top, config: opts.config });
   const sim = createSim(net, { memFiles: opts.memFiles });
   return { ast, net, sim };
 }

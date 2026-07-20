@@ -1,0 +1,272 @@
+.idea-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .idea-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+  .idea-grid { grid-template-columns: 1fr; }
+}
+
+.idea-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  font-size: 0.88rem;
+}
+
+.idea-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.sva-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.sva-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sva-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sva-field select {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 11rem;
+}
+
+.sva-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+  .sva-layout { grid-template-columns: 1fr; }
+}
+
+.panel-box {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: var(--surface2);
+}
+
+.panel-box h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+}
+
+.prop-code {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  margin: 0 0 0.55rem;
+}
+
+.wave {
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.wave-table {
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.wave-table th,
+.wave-table td {
+  border: 1px solid var(--line);
+  padding: 0.35rem 0.45rem;
+  text-align: center;
+  min-width: 2.2rem;
+}
+
+.wave-table th {
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.wave-table td.sig {
+  text-align: left;
+  font-weight: 700;
+  background: var(--surface);
+}
+
+.wave-table td.is-hi {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  font-weight: 700;
+}
+
+.wave-table td.is-cursor {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.wave-table td.is-ant {
+  box-shadow: inset 0 -3px 0 color-mix(in srgb, #c80 70%, transparent);
+}
+
+.wave-table td.is-cons {
+  box-shadow: inset 0 -3px 0 color-mix(in srgb, #2a7 70%, transparent);
+}
+
+.wave-table td.is-fail-mark {
+  box-shadow: inset 0 -3px 0 color-mix(in srgb, #c44 80%, transparent);
+}
+
+.eval-box {
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.eval-box.pass {
+  border-color: color-mix(in srgb, #2a7 50%, var(--line));
+  background: color-mix(in srgb, #2a7 12%, var(--surface));
+}
+
+.eval-box.fail {
+  border-color: color-mix(in srgb, #c44 50%, var(--line));
+  background: color-mix(in srgb, #c44 10%, var(--surface));
+}
+
+.eval-box.vacuous {
+  border-color: color-mix(in srgb, #c80 50%, var(--line));
+  background: color-mix(in srgb, #c80 10%, var(--surface));
+}
+
+.cell-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.cell-btns button {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  cursor: pointer;
+  color: inherit;
+}
+
+.cell-btns button.is-on {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+}
+
+.verdict {
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.55rem;
+}
+
+.verdict.idle {
+  background: var(--surface2);
+  border: 1px solid var(--line);
+}
+
+.verdict.yes {
+  background: color-mix(in srgb, #2a7 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, #2a7 45%, var(--line));
+}
+
+.verdict.no {
+  background: color-mix(in srgb, #c44 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, #c44 40%, var(--line));
+}
+
+.verdict.warn {
+  background: color-mix(in srgb, #c80 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, #c80 40%, var(--line));
+}
+
+.flag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.flag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  background: var(--surface2);
+}
+
+.flag.is-ok {
+  border-color: color-mix(in srgb, #2a7 50%, var(--line));
+  background: color-mix(in srgb, #2a7 12%, var(--surface));
+}
+
+.flag.is-on {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+
+.flag.is-bad {
+  border-color: color-mix(in srgb, #c44 50%, var(--line));
+  background: color-mix(in srgb, #c44 10%, var(--surface));
+}
+
+.flag.is-warn {
+  border-color: color-mix(in srgb, #c80 50%, var(--line));
+  background: color-mix(in srgb, #c80 10%, var(--surface));
+}
+
+.code-box,
+.trace-box,
+.log-box {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface2);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin: 0;
+  max-height: 14rem;
+}

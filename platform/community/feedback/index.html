@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Share feedback — Community</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body data-asset-base="../../assets/">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <div class="site-header-tools">
+        <nav class="site-nav" aria-label="Site">
+          <a href="../../index.html">Home</a>
+          <a href="../../courses/index.html">Courses</a>
+          <a href="../../tools/index.html">Tools</a>
+          <a href="../../simulator/index.html">Simulator</a>
+          <a href="../../path/index.html">Path</a>
+          <a href="../../projects/index.html">Projects</a>
+          <a href="../index.html" class="is-active" aria-current="page">Community</a>
+        </nav>
+        <div class="site-search" data-site-search></div>
+      </div>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Community</a>
+        <span class="here">Feedback</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Community</div>
+    <section class="hero">
+      <h1>Share feedback</h1>
+      <p class="lead">
+        Suggest tool improvements or send a testimonial. Submissions go to the authors by email (Web3Forms)
+        when an access key is configured.
+      </p>
+      <nav class="comm-nav" aria-label="On this page">
+        <a href="#tool-feedback">Tool feedback</a>
+        <a href="#share-testimonial">Testimonial</a>
+      </nav>
+    </section>
+
+    <div class="comm-setup" data-web3forms-setup hidden>
+      <strong>Setup required:</strong> create a free key at
+      <a href="https://web3forms.com" target="_blank" rel="noopener">web3forms.com</a>,
+      then set <code>web3formsAccessKey</code> in
+      <code>platform/assets/site-config.js</code>. Full steps: <a href="../../SETUP.md">SETUP.md</a>.
+      Until then, submit buttons stay disabled.
+    </div>
+
+    <section class="placeholder-panel" id="tool-feedback">
+      <h2>Suggest a tool improvement</h2>
+      <p>Missing feature? Confusing workflow? Tell us which tool and what would help.</p>
+      <form class="comm-form" data-web3forms novalidate>
+        <input type="hidden" name="subject" value="[DDV Platform] Tool feedback">
+        <input type="hidden" name="form_type" value="tool_feedback">
+        <label class="comm-hp" aria-hidden="true">Leave blank<input type="text" name="botcheck" tabindex="-1" autocomplete="off"></label>
+        <div class="comm-field">
+          <label for="tool-name">Tool / area</label>
+          <select id="tool-name" name="tool" required>
+            <option value="">Select…</option>
+            <option value="general">General / new tool idea</option>
+            <option value="courses">Courses / lab pages</option>
+            <option value="path">Path map / progress / search</option>
+            <option value="simulator">HDL Simulator</option>
+            <option value="vfs-terminal">vfs-terminal</option>
+            <option value="git-graph">git-graph</option>
+            <option value="truth-table">truth-table</option>
+            <option value="waveform-lab">waveform-lab</option>
+            <option value="uart-frame">uart-frame</option>
+            <option value="other">Other (describe in message)</option>
+          </select>
+        </div>
+        <div class="comm-field">
+          <label for="tool-name-input">Your name <span class="hint">(optional)</span></label>
+          <input id="tool-name-input" name="name" type="text" autocomplete="name">
+        </div>
+        <div class="comm-field">
+          <label for="tool-email">Email <span class="hint">(optional)</span></label>
+          <input id="tool-email" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="comm-field">
+          <label for="tool-kind">Feedback type</label>
+          <select id="tool-kind" name="feedback_type" required>
+            <option value="enhancement">Enhancement idea</option>
+            <option value="bug">Bug or confusing step</option>
+            <option value="new-tool">Proposal for a new tool</option>
+          </select>
+        </div>
+        <div class="comm-field">
+          <label for="tool-message">Message</label>
+          <textarea id="tool-message" name="message" required placeholder="What would help learners?"></textarea>
+        </div>
+        <div class="comm-actions">
+          <button type="submit" class="btn btn-primary">Send tool feedback</button>
+        </div>
+        <div class="comm-status" hidden role="status"></div>
+        <p class="comm-privacy">Sent by email via Web3Forms. Not stored on this static site.</p>
+      </form>
+    </section>
+
+    <section class="placeholder-panel" id="share-testimonial">
+      <h2>Share a testimonial</h2>
+      <p>Reviewed before appearing on <a href="../stories/index.html">Reader stories</a>.</p>
+      <form class="comm-form" data-web3forms novalidate>
+        <input type="hidden" name="subject" value="[DDV Platform] Testimonial">
+        <input type="hidden" name="form_type" value="testimonial">
+        <label class="comm-hp" aria-hidden="true">Leave blank<input type="text" name="botcheck" tabindex="-1" autocomplete="off"></label>
+        <div class="comm-field">
+          <label for="t-name">Name <span class="hint">(as you want it shown)</span></label>
+          <input id="t-name" name="name" type="text" required autocomplete="name">
+        </div>
+        <div class="comm-field">
+          <label for="t-role">Role <span class="hint">(optional)</span></label>
+          <input id="t-role" name="role" type="text" placeholder="Student, instructor, engineer…">
+        </div>
+        <div class="comm-field">
+          <label for="t-email">Email <span class="hint">(optional, not published)</span></label>
+          <input id="t-email" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="comm-field">
+          <label for="t-message">Testimonial</label>
+          <textarea id="t-message" name="message" required placeholder="How did you use the platform?"></textarea>
+        </div>
+        <div class="comm-actions">
+          <button type="submit" class="btn btn-primary">Send testimonial</button>
+        </div>
+        <div class="comm-status" hidden role="status"></div>
+        <p class="comm-privacy">Sent by email via Web3Forms for author review.</p>
+      </form>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <p class="site-footer-privacy">See <a href="../../SETUP.md">SETUP.md</a> for Web3Forms + GA4.</p>
+  </footer>
+  <script src="../../assets/site-config.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

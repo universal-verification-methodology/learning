@@ -7,12 +7,15 @@
 
 **Live site:** [https://universal-verification-methodology.github.io/learning/](https://universal-verification-methodology.github.io/learning/)
 
-Static companion site for the learning monorepo: **client-side** interactive tools (no server, no install), organized by **concept domain** — not by course or module. Courses link to tools when useful; real simulators and remotes stay in course repos / sandboxes.
+Static companion site for the learning monorepo: **courses (lab paths)**, **tools shelf**, **path map**, **simulator**, **projects** (placeholder), and **community**. Progress and search are client-side. Real simulators and remotes stay in course repos / sandboxes.
+
+**Author setup (GA4 + Web3Forms):** [`SETUP.md`](SETUP.md)
 
 ## Table of contents
 
 - [Live site](#live-site)
 - [Quick start](#quick-start)
+- [Site map](#site-map)
 - [Tool map (shipped)](#tool-map-shipped)
 - [Full tools catalog](#full-tools-catalog)
 - [GitHub sandbox](#github-sandbox)
@@ -31,9 +34,25 @@ Open **[https://universal-verification-methodology.github.io/learning/](https://
 python -m http.server 8080 --directory platform
 ```
 
-Open http://localhost:8080/ → **Tools**.
+Open http://localhost:8080/ → **Home** (Courses, Tools, Path, Simulator, Projects, Community).
 
-Opening `file://` HTML also works after a hard refresh when scripts change.
+Opening `file://` HTML also works after a hard refresh when scripts change (search/catalog need a local server because of `fetch`).
+
+## Site map
+
+| Path | Role |
+|------|------|
+| [`index.html`](index.html) | Home pillars |
+| [`courses/`](courses/index.html) | Course list; [`learn_unix`](courses/learn_unix/index.html) has full **lab** pages |
+| [`tools/`](tools/index.html) | Concept lab shelf |
+| [`path/`](path/index.html) | Learning ladder + progress tint |
+| [`simulator/`](simulator/index.html) | HDL Simulator link + `core` datasets placeholder |
+| [`projects/`](projects/index.html) | Placeholder |
+| [`community/`](community/index.html) | Stories + Web3Forms feedback |
+| [`assets/catalog.json`](assets/catalog.json) | Courses / labs / search index |
+| [`assets/site-config.js`](assets/site-config.js) | GA4 + Web3Forms keys |
+
+Regenerate Unix lab HTML stubs: `python platform/scripts/generate_lab_pages.py`
 
 ## Tool map (shipped)
 
@@ -59,6 +78,8 @@ Opening `file://` HTML also works after a hard refresh when scripts change.
 ## Full tools catalog
 
 Shipped **and** planned labs by concept domain: **[`tools.md`](tools.md)**. Browseable list (with “Coming soon”): [`tools/index.html`](tools/index.html).
+
+Target **14-course** syllabi (**lab-driven** modules, not fixed-7): **[`../syllabus.md`](../syllabus.md)** (site copy: [`syllabus.md`](syllabus.md)).
 
 HDL engine integration: **[`simulator.md`](simulator.md)** — public [`systemverilog-simulator`](https://github.com/universal-verification-methodology/systemverilog-simulator) `engine.mjs` (vendored under `vendor/`).
 
@@ -86,6 +107,7 @@ Course index: [`courses/learn_unix_git/SANDBOX.md`](../courses/learn_unix_git/SA
 ```text
 platform/
 ├── index.html
+├── syllabus.md       # site copy of repo-root ../syllabus.md (lab-driven pass 3)
 ├── tools.md          # canonical shipped + planned catalog
 ├── simulator.md      # HDL engine integration (public systemverilog-simulator)
 ├── vendor/           # pinned engine.mjs (refresh from public release)

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reset strategy timelines — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="reset-timelines.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Tools</a>
+        <span class="here">Reset timelines</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Interactive tool</div>
+    <section class="hero">
+      <h1>Reset strategy timelines</h1>
+      <p class="lead">
+        Compare <strong>synchronous</strong> vs <strong>asynchronous</strong> reset on the same
+        stimulus: assert <code>rst_n</code> between clock edges and watch when <code>q</code> clears.
+        Starter: both FFs hold <code>q=1</code>, then an async-style mid-cycle reset pulse.
+      </p>
+    </section>
+    <div id="rt-root"></div>
+  </main>
+  <footer class="site-footer">
+    Digital Design and Verification Platform — client-side concept labs.
+  </footer>
+  <script type="module" src="reset-timelines.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

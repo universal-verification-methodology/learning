@@ -11,6 +11,7 @@
  *   name?: string,
  *   stack?: string[],
  *   defines?: Record<string, string>,
+ *   incdirs?: string[],
  * }} [opts]
  * @returns {string}
  */
@@ -18,6 +19,7 @@ export function preprocess(text, opts = {}) {
   const files = opts.files || {};
   const name = opts.name || "<source>";
   const stack = opts.stack || [];
+  const incdirs = opts.incdirs || [];
   /** Shared across includes so defines persist */
   const defines = opts.defines || {};
   if (stack.includes(name)) {
@@ -99,7 +101,7 @@ export function preprocess(text, opts = {}) {
       const inc = trimmed.match(/^`include\s+(?:"([^"]+)"|<([^>]+)>)\s*$/);
       if (inc) {
         const path = inc[1] || inc[2];
-        const body = resolveInclude(path, files);
+        const body = resolveInclude(path, files, incdirs);
         if (body == null) {
           throw new Error(`\`include "${path}" not found at ${loc}`);
         }
@@ -108,12 +110,23 @@ export function preprocess(text, opts = {}) {
           name: path,
           stack: nextStack,
           defines,
+          incdirs,
         });
         out.push(expanded);
         continue;
       }
 
       if (/^`timescale\b/.test(trimmed)) {
+        continue;
+      }
+
+      // `celldefine / `endcelldefine → design-level keywords for the parser
+      if (/^`celldefine\s*$/.test(trimmed)) {
+        out.push("celldefine");
+        continue;
+      }
+      if (/^`endcelldefine\s*$/.test(trimmed)) {
+        out.push("endcelldefine");
         continue;
       }
 
@@ -194,8 +207,20 @@ function expandMacros(line, defines, file, lineNo, depth = 0) {
  * @param {string} path
  * @param {Record<string, string>} files
  */
-function resolveInclude(path, files) {
-  if (Object.prototype.hasOwnProperty.call(files, path)) return files[path];
+/**
+ * @param {string} path
+ * @param {Record<string, string>} files
+ * @param {string[]} [incdirs]
+ */
+function resolveInclude(path, files, incdirs = []) {
+  const candidates = [path];
+  for (const dir of incdirs) {
+    const d = String(dir || "").replace(/[/\\]+$/, "");
+    if (d) candidates.push(`${d}/${path}`, `${d}\\${path}`);
+  }
+  for (const c of candidates) {
+    if (Object.prototype.hasOwnProperty.call(files, c)) return files[c];
+  }
   const base = path.replace(/^.*[\\/]/, "");
   if (base !== path && Object.prototype.hasOwnProperty.call(files, base)) return files[base];
   for (const k of Object.keys(files)) {
@@ -207,6 +232,12 @@ function resolveInclude(path, files) {
     ) {
       return files[k];
     }
+    for (const dir of incdirs) {
+      const d = String(dir || "").replace(/[/\\]+$/, "");
+      if (d && (k === `${d}/${path}` || k === `${d}\\${path}` || k.endsWith(`/${base}`) || k.endsWith(`\\${base}`))) {
+        return files[k];
+      }
+    }
   }
   return null;
 }
@@ -215,7 +246,7 @@ function resolveInclude(path, files) {
  * Normalize engine/UI input into a single preprocessed source string.
  *
  * @param {string|string[]|object} input
- * @param {{ files?: Record<string, string>, entry?: string }} [opts]
+ * @param {{ files?: Record<string, string>, entry?: string, defines?: Record<string, string>, incdirs?: string[] }} [opts]
  * @returns {string}
  */
 export function materializeSources(input, opts = {}) {
@@ -223,10 +254,17 @@ export function materializeSources(input, opts = {}) {
   const fileMap = { ...(opts.files || {}) };
   /** @type {string[]} */
   let order = [];
+  const seedDefines = { ...(opts.defines || {}) };
+  const incdirs = [...(opts.incdirs || [])];
 
   if (typeof input === "string") {
     fileMap["<source>"] = fileMap["<source>"] ?? input;
-    return preprocess(input, { files: fileMap, name: opts.entry || "<source>", defines: {} });
+    return preprocess(input, {
+      files: fileMap,
+      name: opts.entry || "<source>",
+      defines: { ...seedDefines },
+      incdirs,
+    });
   }
 
   if (Array.isArray(input)) {
@@ -264,19 +302,28 @@ export function materializeSources(input, opts = {}) {
       throw new Error("materializeSources: expected string, array, or { files }");
     }
     if (input.entry) opts = { ...opts, entry: input.entry };
+    if (input.defines && typeof input.defines === "object") {
+      Object.assign(seedDefines, input.defines);
+    }
+    if (Array.isArray(input.incdirs)) incdirs.push(...input.incdirs);
   } else {
     throw new Error("materializeSources: invalid input");
   }
 
   const entry = opts.entry;
-  const defines = {};
+  const defines = { ...seedDefines };
   if (entry) {
     if (!Object.prototype.hasOwnProperty.call(fileMap, entry)) {
       throw new Error(`Entry file '${entry}' not found at ${entry}:1:1`);
     }
-    return preprocess(fileMap[entry], { files: fileMap, name: entry, defines });
+    return preprocess(fileMap[entry], { files: fileMap, name: entry, defines, incdirs });
   }
 
   const joined = order.map((n) => fileMap[n]).join("\n");
-  return preprocess(joined, { files: fileMap, name: order[0] || "<source>", defines });
+  return preprocess(joined, {
+    files: fileMap,
+    name: order[0] || "<source>",
+    defines,
+    incdirs,
+  });
 }

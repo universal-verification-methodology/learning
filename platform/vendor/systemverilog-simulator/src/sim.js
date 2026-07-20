@@ -52,6 +52,8 @@ export function createSim(netlist, opts = {}) {
   function reseed(s) {
     rngState = s >>> 0 || 1;
   }
+  const ifaceInstances = netlist.ifaceInstances || new Map();
+  const vifVars = netlist.vifVars || new Map();
   const evCtx = () => ({
     locals: localStack.length ? localStack[localStack.length - 1] : null,
     thisHandle: thisStack.length ? thisStack[thisStack.length - 1] : null,
@@ -64,6 +66,8 @@ export function createSim(netlist, opts = {}) {
     nextRandom,
     reseed,
     getTime: () => time,
+    ifaceInstances,
+    vifVars,
   });
   const ev = (expr) => evalExpr(expr, signals, evCtx());
   const {
@@ -90,6 +94,10 @@ export function createSim(netlist, opts = {}) {
   }
   let time = 0;
   let finished = false;
+  /** Soft pause from `$stop` (resumable); distinct from `$finish`. */
+  let paused = false;
+  /** @type {object|null} */
+  let pausedProc = null;
   /** @type {string[]} */
   const consoleOut = [];
   /** @type {{ time: number, name: string, value: string }[]} */
@@ -121,7 +129,7 @@ export function createSim(netlist, opts = {}) {
   function logSignal(name) {
     if (!dumping) return;
     const s = signals.get(name);
-    if (!s || s.isHandle) return;
+    if (!s || s.isHandle || s.isVif) return;
     const bits = s.value.bits;
     if (lastLogged.get(name) === bits) return;
     lastLogged.set(name, bits);
@@ -172,6 +180,7 @@ export function createSim(netlist, opts = {}) {
     const s = signals.get(name);
     if (!s) throw new Error(`Unknown signal '${name}'`);
     if (s.isHandle) throw new Error(`Cannot poke class handle '${name}' as bits`);
+    if (s.isVif) throw new Error(`Cannot poke virtual interface '${name}' as bits`);
     const next = value.resize(s.width);
     if (s.value.equals(next)) return false;
     s.value = next;
@@ -249,14 +258,14 @@ export function createSim(netlist, opts = {}) {
 
   function capturePrev() {
     for (const [name, s] of signals) {
-      if (s.isHandle) continue;
+      if (s.isHandle || s.isVif) continue;
       prevBits.set(name, s.value.bit(0));
     }
   }
 
   function edgeFired(item) {
     const s = signals.get(item.name);
-    if (!s || s.isHandle) return false;
+    if (!s || s.isHandle || s.isVif) return false;
     const cur = s.value.bit(0);
     const p = prevBits.has(item.name) ? prevBits.get(item.name) : "x";
     if (item.edge === "posedge") return p !== "1" && cur === "1";
@@ -269,7 +278,7 @@ export function createSim(netlist, opts = {}) {
   }
 
   function* stmtRunner(stmt) {
-    if (!stmt || finished || disabled()) return;
+    if (!stmt || finished || paused || disabled()) return;
     switch (stmt.type) {
       case "Block": {
         const bname = stmt.name || null;
@@ -307,9 +316,18 @@ export function createSim(netlist, opts = {}) {
         const v = ev(stmt.rhs);
         const slot = evCtx().locals?.get(stmt.lhs.name) || signals.get(stmt.lhs.name);
         const before =
-          slot && !slot.isHandle && !stmt.lhs.prop ? slot.value.bit(0) : undefined;
+          slot && !slot.isHandle && !slot.isVif && !stmt.lhs.prop && !stmt.lhs.vifFields
+            ? slot.value.bit(0)
+            : undefined;
         ap(stmt.lhs, v);
-        if (!evCtx().locals?.has(stmt.lhs.name) && !stmt.lhs.prop && slot && !slot.isHandle) {
+        if (
+          !evCtx().locals?.has(stmt.lhs.name) &&
+          !stmt.lhs.prop &&
+          !stmt.lhs.vifFields &&
+          slot &&
+          !slot.isHandle &&
+          !slot.isVif
+        ) {
           logSignal(stmt.lhs.name);
           const after = signals.get(stmt.lhs.name)?.value.bit(0);
           if (before !== after) {
@@ -321,7 +339,7 @@ export function createSim(netlist, opts = {}) {
       }
       case "NBA": {
         const v = ev(stmt.rhs);
-        if (isHandle(v)) {
+        if (isHandle(v) || (v && v.$vif === true)) {
           ap(stmt.lhs, v);
         } else {
           nbaBucket.push({ lhs: stmt.lhs, value: v.clone() });
@@ -712,9 +730,12 @@ export function createSim(netlist, opts = {}) {
         break;
       }
       case "SysTask": {
-        if (stmt.name === "$finish" || stmt.name === "$stop") {
+        if (stmt.name === "$finish") {
           finished = true;
-          consoleOut.push(`[${time}] ${stmt.name}`);
+          consoleOut.push(`[${time}] $finish`);
+        } else if (stmt.name === "$stop") {
+          consoleOut.push(`[${time}] $stop`);
+          yield { type: "stop" };
         } else if (stmt.name === "$display" || stmt.name === "$write") {
           consoleOut.push(formatDisplay(stmt.args));
         } else if (stmt.name === "$error" || stmt.name === "$fatal") {
@@ -839,19 +860,25 @@ export function createSim(netlist, opts = {}) {
   }
 
   function runProc(proc) {
-    if (finished || proc.dead || proc.running) return;
+    if (finished || paused || proc.dead || proc.running) return;
     proc.running = true;
     const prevActive = activeProc;
     activeProc = proc;
     try {
       if (!proc.stack) proc.stack = [stmtRunner(proc.body)];
 
-      while (proc.stack.length && !finished) {
+      while (proc.stack.length && !finished && !paused) {
         const frame = proc.stack[proc.stack.length - 1];
         const r = frame.next();
         if (r.done) {
           proc.stack.pop();
           continue;
+        }
+        if (r.value?.type === "stop") {
+          paused = true;
+          pausedProc = proc;
+          proc.suspended = true;
+          return;
         }
         if (r.value?.type === "delay") {
           proc.suspended = true;
@@ -915,7 +942,7 @@ export function createSim(netlist, opts = {}) {
       if (proc.kind === "Initial" || proc.kind === "ForkBranch") {
         proc.dead = true;
         if (proc.kind === "ForkBranch") noteForkBranchDone(proc);
-      } else if (proc.kind === "Always" && proc.sens.type === "Timed" && !finished) {
+      } else if (proc.kind === "Always" && proc.sens.type === "Timed" && !finished && !paused) {
         // Restart timed always
         proc.running = false;
         activeProc = prevActive;
@@ -1068,6 +1095,8 @@ export function createSim(netlist, opts = {}) {
     if (started) return getResult();
     started = true;
     finished = false;
+    paused = false;
+    pausedProc = null;
     capturePrev();
     settle();
     for (const proc of procState) {
@@ -1085,7 +1114,7 @@ export function createSim(netlist, opts = {}) {
    */
   function step(opts = {}) {
     if (!started) start();
-    if (finished) return getResult();
+    if (finished || paused) return getResult();
     if (!queue.length) return getResult();
 
     const maxTime = opts.maxTime ?? Number.POSITIVE_INFINITY;
@@ -1096,13 +1125,16 @@ export function createSim(netlist, opts = {}) {
     time = nextT;
     const batch = [];
     while (queue.length && queue[0].time === nextT) batch.push(queue.shift());
-    for (const ev of batch) ev.fn();
+    for (const ev of batch) {
+      if (paused) break;
+      ev.fn();
+    }
     settle();
     return getResult();
   }
 
   /**
-   * Drain the queue until $finish, empty queue, or maxTime.
+   * Drain the queue until $finish, $stop pause, empty queue, or maxTime.
    * @param {{ maxTime?: number, maxEvents?: number }} [opts]
    */
   function run(opts = {}) {
@@ -1110,7 +1142,7 @@ export function createSim(netlist, opts = {}) {
     const maxEvents = opts.maxEvents ?? 500000;
     let events = 0;
     if (!started) start();
-    while (!finished && queue.length) {
+    while (!finished && !paused && queue.length) {
       queue.sort((a, b) => a.time - b.time || a.id - b.id);
       const nextT = queue[0].time;
       if (nextT > maxTime) break;
@@ -1119,6 +1151,7 @@ export function createSim(netlist, opts = {}) {
       const batch = [];
       while (queue.length && queue[0].time === nextT) batch.push(queue.shift());
       for (const ev of batch) {
+        if (paused) break;
         if (++events > maxEvents) {
           throw new Error(
             `Simulation exceeded ${maxEvents} events (possible infinite loop; raise maxEvents or fix forever/#0)`
@@ -1131,12 +1164,12 @@ export function createSim(netlist, opts = {}) {
     return getResult();
   }
 
-  /** Run until sim time >= t (or finish / empty queue). */
+  /** Run until sim time >= t (or finish / pause / empty queue). */
   function runTo(t, opts = {}) {
     const cap = opts.maxTime ?? Number.POSITIVE_INFINITY;
     const target = Math.min(t, cap);
     if (!started) start();
-    while (!finished && queue.length) {
+    while (!finished && !paused && queue.length) {
       queue.sort((a, b) => a.time - b.time || a.id - b.id);
       const nextT = queue[0].time;
       if (nextT > target) break;
@@ -1144,7 +1177,10 @@ export function createSim(netlist, opts = {}) {
       time = nextT;
       const batch = [];
       while (queue.length && queue[0].time === nextT) batch.push(queue.shift());
-      for (const ev of batch) ev.fn();
+      for (const ev of batch) {
+        if (paused) break;
+        ev.fn();
+      }
       settle();
     }
     return getResult();
@@ -1161,7 +1197,7 @@ export function createSim(netlist, opts = {}) {
     const maxSteps = opts.maxSteps ?? 10000;
     if (!started) start();
     let steps = 0;
-    while (!finished && queue.length && steps < maxSteps) {
+    while (!finished && !paused && queue.length && steps < maxSteps) {
       const before = signals.get(name)?.value.bit(0) ?? "x";
       step({ maxTime });
       steps++;
@@ -1169,12 +1205,29 @@ export function createSim(netlist, opts = {}) {
       if (edge === "posedge" && before !== "1" && after === "1") break;
       if (edge === "negedge" && before !== "0" && after === "0") break;
       if (time >= maxTime) break;
+      if (paused) break;
+    }
+    return getResult();
+  }
+
+  /** Resume after `$stop`. */
+  function resume() {
+    if (!paused) return getResult();
+    paused = false;
+    const p = pausedProc;
+    pausedProc = null;
+    if (p && !p.dead) {
+      p.suspended = false;
+      runProc(p);
+      settle();
     }
     return getResult();
   }
 
   function stop() {
     finished = true;
+    paused = false;
+    pausedProc = null;
     return getResult();
   }
 
@@ -1190,7 +1243,72 @@ export function createSim(netlist, opts = {}) {
     const s = signals.get(name);
     if (!s) return null;
     if (s.isHandle) return s.handle;
+    if (s.isVif) return s.value;
     return s.value.clone();
+  }
+
+  /** @returns {string[]} */
+  function listMemories() {
+    return [...signals.entries()]
+      .filter(([, s]) => s.memory)
+      .map(([k]) => k)
+      .sort();
+  }
+
+  /**
+   * @param {string} name
+   * @param {{ start?: number, end?: number, maxWords?: number }} [opts]
+   */
+  function dumpMemory(name, opts = {}) {
+    const s = signals.get(name);
+    if (!s || !s.memory) return null;
+    const lo = Math.min(s.addrLeft, s.addrRight);
+    const hi = Math.max(s.addrLeft, s.addrRight);
+    const start = opts.start != null ? opts.start : lo;
+    const end = opts.end != null ? opts.end : hi;
+    const maxWords = opts.maxWords ?? 4096;
+    /** @type {{ addr: number, bits: string }[]} */
+    const words = [];
+    let n = 0;
+    for (let a = Math.min(start, end); a <= Math.max(start, end); a++) {
+      if (a < lo || a > hi) continue;
+      if (n++ >= maxWords) break;
+      const v = s.words.get(a) || Value.xxxx(s.width);
+      words.push({ addr: a, bits: v.bits });
+    }
+    return {
+      name,
+      width: s.width,
+      addrLeft: s.addrLeft,
+      addrRight: s.addrRight,
+      words,
+    };
+  }
+
+  /**
+   * @param {string} name
+   * @param {string} bits
+   */
+  function force(name, bits) {
+    const s = signals.get(name);
+    if (!s || s.isHandle || s.memory) throw new Error(`Cannot force '${name}'`);
+    const v = new Value(String(bits)).resize(s.width);
+    setForceOverlay({ name }, v);
+    ap({ type: "Ident", name }, v, { force: true });
+    settle();
+    return getResult();
+  }
+
+  /** @param {string} name */
+  function release(name) {
+    clearForceOverlay({ name });
+    settle();
+    return getResult();
+  }
+
+  /** @returns {string[]} */
+  function listForced() {
+    return [...forceBits.keys()].sort();
   }
 
   function getResult() {
@@ -1204,6 +1322,23 @@ export function createSim(netlist, opts = {}) {
           handle: formatHandle(s.handle),
           bits: formatHandle(s.handle),
         };
+      } else if (s.isVif) {
+        const path = s.value?.path ?? null;
+        sigs[k] = {
+          width: 0,
+          kind: "vif",
+          ifaceType: s.ifaceType,
+          path,
+          bits: path ? `vif:${path}` : "vif:null",
+        };
+      } else if (s.memory) {
+        sigs[k] = {
+          width: s.width,
+          kind: "memory",
+          bits: `mem[${s.addrLeft}:${s.addrRight}]`,
+          addrLeft: s.addrLeft,
+          addrRight: s.addrRight,
+        };
       } else {
         sigs[k] = { width: s.width, kind: s.kind, bits: s.value.bits };
       }
@@ -1211,12 +1346,14 @@ export function createSim(netlist, opts = {}) {
     return {
       time,
       finished,
+      paused,
       console: consoleOut.slice(),
       waves: waves.slice(),
       signals: sigs,
       hierarchy: netlist.hierarchy ? netlist.hierarchy.slice() : undefined,
       pending: queue.length,
       started,
+      forced: listForced(),
     };
   }
 
@@ -1226,9 +1363,15 @@ export function createSim(netlist, opts = {}) {
     run,
     runTo,
     runToEdge,
+    resume,
     stop,
     poke,
     peek,
+    force,
+    release,
+    listForced,
+    listMemories,
+    dumpMemory,
     getConsole: () => consoleOut.slice(),
     getWaves: () => waves.slice(),
     getTime: () => time,
@@ -1236,6 +1379,7 @@ export function createSim(netlist, opts = {}) {
     getResult,
     settle,
     isFinished: () => finished,
+    isPaused: () => paused,
     hasPending: () => queue.length > 0,
     isStarted: () => started,
   };

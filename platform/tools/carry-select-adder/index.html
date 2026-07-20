@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carry-select adder sketch — Digital Design and Verification Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="carry-select-adder.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Digital Design and Verification Platform</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html" class="is-active" aria-current="page">Tools</a>
+      </nav>
+    </div>
+    <div class="site-header-crumb">
+      <nav aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <a href="../index.html">Tools</a>
+        <span class="here">Carry-select adder sketch</span>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Interactive tool</div>
+    <section class="hero">
+      <h1>Carry-select adder sketch</h1>
+      <p class="lead">
+        Upper nibble runs <strong>two</strong> adders in parallel (Cin=0 and Cin=1);
+        a mux picks the right sum when the lower carry arrives.
+      </p>
+    </section>
+    <div id="csa-root"></div>
+  </main>
+  <footer class="site-footer">Digital Design and Verification Platform — client-side concept labs.</footer>
+  <script src="carry-select-adder.js"></script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>
