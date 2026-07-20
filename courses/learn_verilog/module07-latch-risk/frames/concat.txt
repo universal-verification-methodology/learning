@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module07-latch-risk/frames/slide-1.png'
+duration 23.328
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module07-latch-risk/frames/slide-2.png'
+duration 32.184
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module07-latch-risk/frames/slide-3.png'
+duration 30.84
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module07-latch-risk/frames/slide-4.png'
+duration 29.664
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module07-latch-risk/frames/slide-5.png'
+duration 25.056
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module07-latch-risk/frames/slide-6.png'
+duration 21.792
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module07-latch-risk/frames/slide-6.png'

@@ -1,0 +1,53 @@
+{
+  "module": "module07-latch-risk",
+  "title": "Latch risk check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "A latch in combinational RTL usually means…",
+      "choices": [
+        "The output can hold its previous value when inputs change",
+        "Every input combination drives the output every cycle",
+        "The module has no sensitivity list",
+        "assign statements are illegal"
+      ],
+      "answer": 0,
+      "explain": "Incomplete assignment paths let synthesis infer storage to keep the old value."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "assign Y = S ? D1 : D0; is latch-free because…",
+      "choices": [
+        "Every input combination has a defined Y",
+        "assign only works on reg outputs",
+        "S must be a clock",
+        "D0 and D1 must be constants"
+      ],
+      "answer": 0,
+      "explain": "Continuous assign is purely combinational—no path leaves Y unassigned."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "always @(*) if (S) Y = D1; with no else…",
+      "choices": [
+        "Y may not be assigned when S=0 → latch risk",
+        "Y is always combinational",
+        "@(*) prevents any latch",
+        "This is illegal Verilog"
+      ],
+      "answer": 0,
+      "explain": "When S is false, Y has no assignment path—tools may infer a latch."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "A case statement without default can infer a latch the same way a missing else can.",
+      "answer": true,
+      "explain": "Any uncovered input combination leaves outputs without a defined assignment."
+    }
+  ]
+}

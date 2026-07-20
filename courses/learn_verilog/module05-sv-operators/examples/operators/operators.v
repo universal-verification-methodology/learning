@@ -1,0 +1,14 @@
+// operators.v — bitwise vs logical, concat, reduction
+module operator_demo(
+  input  wire [3:0] a,
+  input  wire [3:0] b,
+  output wire [3:0] bw_and,
+  output wire       log_and,
+  output wire [7:0] cat_ab,
+  output wire       all_ones
+);
+  assign bw_and   = a & b;
+  assign log_and  = a && b;
+  assign cat_ab   = {a, b};
+  assign all_ones = &a;
+endmodule

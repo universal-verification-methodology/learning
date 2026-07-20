@@ -1,0 +1,53 @@
+﻿{
+  "module": "module14-counter-lab",
+  "title": "Counter patterns check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "A 4-bit up counter after 4'b1111 usually goes to…",
+      "choices": [
+        "4'b0000",
+        "4'b1111",
+        "4'b10000 stored in the same register",
+        "X automatically"
+      ],
+      "answer": 0,
+      "explain": "Fixed-width binary counters wrap on overflow."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "The preferred hold pattern for a counter is…",
+      "choices": [
+        "Use one always block with if (ce) count <= count + 1;",
+        "Drive count from two always blocks",
+        "Use blocking assignment in combinational logic only",
+        "Tie count to Z when idle"
+      ],
+      "answer": 0,
+      "explain": "Count enable keeps one sequential driver and clean hold behavior."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "A modulo-10 counter wraps when q reaches…",
+      "choices": [
+        "9, then next value becomes 0",
+        "10 stored in 4 bits",
+        "15, because all 4-bit counters do the same thing",
+        "1, because CE resets it"
+      ],
+      "answer": 0,
+      "explain": "Modulo counters add explicit wrap logic at the desired terminal count."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Gray counting is useful because adjacent output codes change only one bit at a time.",
+      "answer": true,
+      "explain": "That one-bit-change property is the key teaching point of Gray code sequences."
+    }
+  ]
+}

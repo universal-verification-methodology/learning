@@ -1,0 +1,53 @@
+{
+  "module": "module02-verilog-literals",
+  "title": "Verilog literals check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "In 8'hFF, the 8 means…",
+      "choices": [
+        "The literal is 8 bits wide",
+        "The base is octal",
+        "The value must be signed",
+        "The literal is unsized"
+      ],
+      "answer": 0,
+      "explain": "The leading number is the bit width; h selects hex digits after the apostrophe."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "8'sd-1 as an 8-bit signed literal represents…",
+      "choices": [
+        "−1",
+        "255 unsigned only",
+        "An illegal syntax error always",
+        "A floating-point value"
+      ],
+      "answer": 0,
+      "explain": "The s marks signed interpretation; all-one bits in 8 bits is −1."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "4'hFF decoded to four bits becomes…",
+      "choices": [
+        "1111 with a truncation warning",
+        "FFFF with no width change",
+        "Only valid in testbenches",
+        "The same as 32'hFF always"
+      ],
+      "answer": 0,
+      "explain": "Extra high bits are truncated when the literal is wider than the declared size."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Underscores inside a literal (e.g. 32'hDEAD_BEEF) change the numeric value.",
+      "answer": false,
+      "explain": "Underscores are separators for readability; the value is unchanged."
+    }
+  ]
+}

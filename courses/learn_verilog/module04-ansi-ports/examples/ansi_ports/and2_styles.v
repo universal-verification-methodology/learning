@@ -1,0 +1,14 @@
+// and2_styles.v — same AND, two port-list conventions
+module and2_nonansi(a, b, y);
+  input  a, b;
+  output y;
+  assign y = a & b;
+endmodule
+
+module and2_ansi(
+  input  wire a,
+  input  wire b,
+  output wire y
+);
+  assign y = a & b;
+endmodule

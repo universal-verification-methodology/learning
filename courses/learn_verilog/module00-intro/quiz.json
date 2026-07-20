@@ -1,0 +1,53 @@
+{
+  "module": "module00-intro",
+  "title": "Welcome check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Track A in this course means practice with…",
+      "choices": [
+        "Only the browser tools page",
+        "Real Verilog files in your editor (optional local simulator)",
+        "PowerPoint slides only",
+        "UVM testbenches only"
+      ],
+      "answer": 1,
+      "explain": "Track A is the real Verilog track—dot-v sketches you keep and optionally simulate."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Track B is mainly for…",
+      "choices": [
+        "Installing a full FPGA toolchain",
+        "Browser concept labs and quick feedback",
+        "Replacing real RTL forever",
+        "Editing the syllabus"
+      ],
+      "answer": 1,
+      "explain": "Track B builds intuition in the browser; it does not replace real Verilog you will commit."
+    },
+    {
+      "id": "q3",
+      "type": "true_false",
+      "prompt": "This course teaches full SystemVerilog classes and UVM agents.",
+      "answer": false,
+      "explain": "learn_verilog stays in the IEEE 1364 Verilog family; SystemVerilog and UVM are later courses."
+    },
+    {
+      "id": "q4",
+      "type": "multiple_choice",
+      "prompt": "A good first rhythm for a lab module is…",
+      "choices": [
+        "Skip the README and only watch video",
+        "Browser lab for the idea, then a tiny dot-v sketch",
+        "Only copy code without a checklist",
+        "Start with generate blocks and lint"
+      ],
+      "answer": 1,
+      "explain": "Browser first for intuition, then real Verilog for fidelity, is the recommended path."
+    }
+  ]
+}

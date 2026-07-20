@@ -1,0 +1,53 @@
+{
+  "module": "module12-sv-generate",
+  "title": "Generate and replication check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "{4{1'b1}} in an assign means…",
+      "choices": [
+        "Concatenate four copies of 1'b1 — bit width 4",
+        "Multiply 1'b1 by 4 at simulation time",
+        "Declare four separate modules",
+        "Illegal unless inside always"
+      ],
+      "answer": 0,
+      "explain": "Replication repeats the expression inside a concatenation; 4×1 bit → width 4."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "The loop index in generate for is declared as…",
+      "choices": [
+        "genvar",
+        "integer in always",
+        "wire",
+        "reg updated each clock"
+      ],
+      "answer": 0,
+      "explain": "genvar is elaboration-only; it builds hierarchy, not sequential simulation loops."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "generate if (WIDTH > 4) …",
+      "choices": [
+        "Keeps one branch at elaboration based on the constant WIDTH",
+        "Runs both branches every clock cycle",
+        "Requires a sensitivity list",
+        "Only works in testbenches"
+      ],
+      "answer": 0,
+      "explain": "Generate if is structural; the untaken branch is not elaborated."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "generate for is not the same as a for loop inside an always block at simulation time.",
+      "answer": true,
+      "explain": "Generate unrolls at elaboration; procedural for runs during simulation."
+    }
+  ]
+}

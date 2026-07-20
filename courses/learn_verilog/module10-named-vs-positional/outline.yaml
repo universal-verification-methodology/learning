@@ -1,0 +1,79 @@
+title: Named vs positional
+footer: learn_verilog — named vs positional
+slides:
+- type: title
+  title: Named vs positional
+  subtitle: When you instantiate a module, you must connect its ports to nets in your
+    design
+  notes: 'When you instantiate a module, you must connect its ports to nets in your
+    design. Positional connection lists signals in the same order as the module’s
+    port list—first port to first argument, and so on. Named connection uses dot-port-name
+    open-paren net close-paren for each port, so order does not matter. This module
+    is that choice: why positional miswires can compile silently, and why named ports
+    are the safer default for real RTL.'
+- type: bullets
+  title: Order matters for positional
+  bullets:
+  - A D flip-flop might declare ports clk, d, q in that order
+  - Positional dff u open-paren clk, din, qout close-paren wires them correctly
+  - Swap the last two arguments to clk
+  - Named dot-d open-paren din close-paren dot-q open-paren qout close-paren makes
+    the intent
+  - For a two-input AND gate, swapping a and b is harmless
+  notes: A D flip-flop might declare ports clk, d, q in that order. Positional dff
+    u open-paren clk, din, qout close-paren wires them correctly. Swap the last two
+    arguments to clk, qout, din and the file still parses—but d and q are crossed.
+    Named dot-d open-paren din close-paren dot-q open-paren qout close-paren makes
+    the intent obvious and survives port reordering in the child module. For a two-input
+    AND gate, swapping a and b is harmless; for control and data ports, it is not.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Named vs positional lab starter
+  notes: In the browser lab track, open the named-versus-positional lab from the tools
+    page. You will see a module picker, a style toggle between positional and named,
+    net selectors for each port, and a binding verdict that flags mismatches. The
+    starter loads a D flip-flop with a positional d-and-q swap. Try the fix buttons
+    or switch to named connections, then work the challenges—including an AND gate
+    swap that compiles but changes nothing useful.
+- type: image
+  title: Real Verilog practice
+  image: assets/real-shell.png
+  caption: Real Verilog — named instance connections
+  notes: "In the real Verilog track, open this module’s examples folder. You will\
+    \ see a small D flip-flop module and a top-level that instantiates it with named\
+    \ ports—dot-clk, dot-d, dot-q—so each connection is explicit. A commented positional\
+    \ miswire shows how easy it is to swap data and output without a syntax error.\
+    \ If Icarus is available, run a syntax-only compile on the named version.\n\n\
+    ```verilog\n// instance_conn.v — prefer named port connections\nmodule dff(\n\
+    \  input      clk,\n  input      d,\n  output reg q\n);\n  always @(posedge clk)\n\
+    \    q <= d;\nendmodule\n\nmodule top(\n  input  clk,\n  input  din,\n  output\
+    \ qout\n);\n  dff u_good (\n    .clk(clk),\n    .d  (din),\n    .q  (qout)\n \
+    \ );\n  // dff u_bad(clk, qout, din);  // positional swap — compiles, miswired\n\
+    endmodule\n\n// iverilog -t null instance_conn.v — syntax check only\n```"
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not assume positional order matches how you drew the schematic
+  - Do not mix named and positional on the same instance unless your style guide allows
+    it
+  - Do not rely on the compiler to catch swapped functional ports
+  - For generated or macro cells with dozens of ports
+  notes: Do not assume positional order matches how you drew the schematic—check the
+    child module’s port list. Do not mix named and positional on the same instance
+    unless your style guide allows it; prefer all-named. Do not rely on the compiler
+    to catch swapped functional ports—binding errors are often silent until simulation
+    or silicon. For generated or macro cells with dozens of ports, named connections
+    are not optional—they are how you stay sane.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser
+  - On real Verilog, rewrite one instance using named ports
+  - When you are ready, take the short quiz, then continue to localparam in the next
+    module
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    fix the starter D flip-flop miswire and explain why the broken version still compiled.
+    On real Verilog, rewrite one instance using named ports. When you are ready, take
+    the short quiz, then continue to localparam in the next module.

@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module04-ansi-ports/frames/slide-1.png'
+duration 24.936
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module04-ansi-ports/frames/slide-2.png'
+duration 36.888
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module04-ansi-ports/frames/slide-3.png'
+duration 32.568
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module04-ansi-ports/frames/slide-4.png'
+duration 32.088
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module04-ansi-ports/frames/slide-5.png'
+duration 26.808
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module04-ansi-ports/frames/slide-6.png'
+duration 21.312
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module04-ansi-ports/frames/slide-6.png'

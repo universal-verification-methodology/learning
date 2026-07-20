@@ -1,0 +1,53 @@
+{
+  "module": "module13-one-driver",
+  "title": "One-driver nets check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Two strong drivers on one wire: 1'b1 and 1'b0…",
+      "choices": [
+        "Resolve to X (contention) in simulation",
+        "Always resolve to 1",
+        "Are legal synthesizable RTL",
+        "Mean the wire is Z"
+      ],
+      "answer": 0,
+      "explain": "Conflicting strong values produce X unless tri-state rules apply."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "assign y = sel ? b : a; is considered safe because…",
+      "choices": [
+        "One continuous assign structurally selects one source",
+        "sel must be a clock",
+        "a and b must be constants",
+        "It uses non-blocking assignment"
+      ],
+      "answer": 0,
+      "explain": "A single assign with a mux expression is one driver on y."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Tri-state drivers are acceptable when…",
+      "choices": [
+        "At most one driver is not Z at a time",
+        "Every driver is always enabled",
+        "The net is a clock",
+        "You use blocking assignment"
+      ],
+      "answer": 0,
+      "explain": "Multiple assigns are OK on a bus only if enables are mutually exclusive."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Two always blocks driving the same reg is a multi-driver mistake like two assigns on a wire.",
+      "answer": true,
+      "explain": "Only one procedural/continuous source should drive a given net or variable."
+    }
+  ]
+}

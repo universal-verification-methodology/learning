@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module14-counter-lab/frames/slide-1.png'
+duration 25.944
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module14-counter-lab/frames/slide-2.png'
+duration 31.872
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module14-counter-lab/frames/slide-3.png'
+duration 31.488
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module14-counter-lab/frames/slide-4.png'
+duration 22.44
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module14-counter-lab/frames/slide-5.png'
+duration 22.584
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module14-counter-lab/frames/slide-6.png'
+duration 21.432
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module14-counter-lab/frames/slide-6.png'

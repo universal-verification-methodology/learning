@@ -1,0 +1,53 @@
+# Module 13 — One-driver nets
+
+**Module id:** module13-one-driver  
+**Lab:** one-driver  
+**Tracks:** A · B
+
+## Slide 1 — One-driver nets
+
+A wire or logic net should have at most one active driver in ordinary RTL—one continuous assign, one procedural source, or one muxed path. When two sources both drive strong zero and strong one at once, simulation resolves the net to X for unknown contention. Z means high impedance—released, not driving. This module is that rule: why duplicate assigns are a bug, and how muxes or tri-state enables keep a single winner.
+
+## Slide 2 — Fight, mux, or tri-state
+
+Two assigns on the same net both pushing one and zero is the classic fight—net becomes X. A mux assign net equals sel question-mark b colon a is still one driver structurally; only one branch reaches the wire. Tri-state uses enables: when off, the driver outputs Z so another may drive. That is fine on a bus if enables are mutually exclusive—but in coursework you usually prefer an explicit mux over a multi-driven wire. Two always blocks writing the same reg is the procedural version of the same mistake.
+
+## Slide 3 — Browser lab
+
+![One-driver lab starter](assets/lab-starter.png)
+
+In the browser lab track, open the one-driver explorer from the tools page. The starter loads two continuous assigns fighting—A equals one, B equals zero, net resolves to X. Toggle driver pills, switch style to mux or tri-state, and hit Resolve to read the net value. Try releasing one side to Z, or preset the safe mux. Work the challenges, then use Check when you can predict X versus one versus Z.
+
+## Slide 4 — Real Verilog practice
+
+![Real Verilog - mux as one driver](assets/real-shell.png)
+
+In the real Verilog track, open this module's examples folder. One sketch shows the safe pattern: a single assign with a mux expression picking A or B. A commented fight pattern shows two assigns on the same net—do not use that in real RTL. If Icarus is available, run a syntax-only compile on the mux module.
+
+```verilog
+// one_driver.v - one structural driver
+module mux_one_driver(
+  input  sel,
+  input  a,
+  input  b,
+  output y
+);
+  assign y = sel ? b : a;
+endmodule
+
+// fight_bad - two assigns (commented; sim -> X)
+// module fight_bad(output wire net);
+//   assign net = 1'b1;
+//   assign net = 1'b0;
+// endmodule
+
+// iverilog -t null one_driver.v - syntax check only
+```
+
+## Slide 5 — Pitfalls to watch
+
+Do not wire two outputs onto the same net without tri-state discipline. Do not assume synthesis will merge conflicting assigns—it may not match your intent. Do not use tri-state on internal FPGA fabric when a mux is clearer. Do not let two clocked always blocks drive the same variable—pick one driver or mux inside one block.
+
+## Slide 6 — Your turn
+
+Complete the checklist for at least one track—preferably both. In the browser, fix the starter fight so exactly one driver is active and state the resolved net. On real Verilog, rewrite a contested net using one assign with a mux. When you are ready, take the short quiz, then continue to counter patterns in the next module.

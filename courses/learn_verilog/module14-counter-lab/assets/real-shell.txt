@@ -1,0 +1,30 @@
+# real Verilog session (Track A)
+
+$ cat examples/counter_demo/counter_demo.v
+// counter_demo.v - up and modulo counters
+module up_counter4(
+  input        clk,
+  input        rst,
+  input        ce,
+  output reg [3:0] q
+);
+  always @(posedge clk) begin
+    if (rst) q <= 4'd0;
+    else if (ce) q <= q + 4'd1;
+  end
+endmodule
+
+module mod10_counter(
+  input        clk,
+  input        rst,
+  output reg [3:0] q
+);
+  always @(posedge clk) begin
+    if (rst) q <= 4'd0;
+    else if (q == 4'd9) q <= 4'd0;
+    else q <= q + 4'd1;
+  end
+endmodule
+
+$ iverilog -t null examples/counter_demo/counter_demo.v
+(syntax check passed)

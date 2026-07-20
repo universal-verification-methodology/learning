@@ -1,0 +1,13 @@
+# real Verilog session (Track A)
+
+$ cat examples/and2/and2.v
+module and2(
+  input  a,
+  input  b,
+  output y
+);
+  assign y = a & b;
+endmodule
+
+$ iverilog -t null examples/and2/and2.v
+(syntax check passed)

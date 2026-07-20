@@ -1,0 +1,53 @@
+{
+  "module": "module01-module-diagram",
+  "title": "Module / port diagram check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "A Verilog module is best described as…",
+      "choices": [
+        "A named design unit with ports (and optional internal logic)",
+        "Only a testbench $finish call",
+        "A simulator waveform viewer",
+        "Something that cannot be instantiated"
+      ],
+      "answer": 0,
+      "explain": "Modules are the reusable RTL boundaries you instantiate in a hierarchy."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "An input port on a module…",
+      "choices": [
+        "Is driven from outside into the module",
+        "Must always drive the parent",
+        "Is the same as a parameter",
+        "Cannot appear on a gate like and2"
+      ],
+      "answer": 0,
+      "explain": "Inputs are driven by the parent or testbench toward the child module."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Named port connection `.y(y)` means…",
+      "choices": [
+        "Connect formal port y to actual wire y",
+        "Delete port y from the module",
+        "Declare a new module named y",
+        "Set a parameter named y only"
+      ],
+      "answer": 0,
+      "explain": "Named association ties a child port name to a parent-side expression."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "The browser lab replaces writing real Verilog you will commit.",
+      "answer": false,
+      "explain": "Track B builds literacy; Track A dot-v sketches are what you keep and synthesize."
+    }
+  ]
+}

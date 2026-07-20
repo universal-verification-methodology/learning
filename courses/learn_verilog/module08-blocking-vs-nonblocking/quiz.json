@@ -1,0 +1,53 @@
+{
+  "module": "module08-blocking-vs-nonblocking",
+  "title": "Blocking vs non-blocking check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "In a clocked always block, non-blocking (<=) means…",
+      "choices": [
+        "All RHS values are sampled first, then LHS updates happen together",
+        "Statements never run on a clock edge",
+        "Only wire outputs are allowed",
+        "The block is combinational"
+      ],
+      "answer": 0,
+      "explain": "NBA uses pre-edge values for every RHS, then applies all updates at once."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "q1 = d; q2 = q1; on one posedge (blocking) typically…",
+      "choices": [
+        "Both q1 and q2 get d in the same edge",
+        "q2 gets the old q1 from the previous cycle only",
+        "Simulation is illegal",
+        "q1 and q2 never change"
+      ],
+      "answer": 0,
+      "explain": "Blocking runs in order—q2 sees the new q1 after q1 = d in the same edge."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "a <= b; b <= a; on one posedge (non-blocking) with a=1, b=0 before the edge…",
+      "choices": [
+        "a becomes 0 and b becomes 1 — a real swap",
+        "Both stay unchanged",
+        "Both become 0",
+        "Both become 1"
+      ],
+      "answer": 0,
+      "explain": "Both RHS values are sampled before any update, so a and b trade."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Flip-flop RTL in always @(posedge clk) should normally use <= for register updates.",
+      "answer": true,
+      "explain": "Non-blocking is the standard sequential style; blocking can infer unexpected combo paths."
+    }
+  ]
+}

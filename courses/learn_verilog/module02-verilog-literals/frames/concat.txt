@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module02-verilog-literals/frames/slide-1.png'
+duration 24.816
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module02-verilog-literals/frames/slide-2.png'
+duration 35.52
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module02-verilog-literals/frames/slide-3.png'
+duration 34.752
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module02-verilog-literals/frames/slide-4.png'
+duration 28.464
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module02-verilog-literals/frames/slide-5.png'
+duration 29.856
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module02-verilog-literals/frames/slide-6.png'
+duration 20.136
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module02-verilog-literals/frames/slide-6.png'

@@ -1,0 +1,53 @@
+{
+  "module": "module05-sv-operators",
+  "title": "Operators check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "For multi-bit vectors, & is _____ while && is _____.",
+      "choices": [
+        "bitwise per bit / logical (1-bit result)",
+        "logical / bitwise",
+        "identical always",
+        "only for testbenches"
+      ],
+      "answer": 0,
+      "explain": "& works per bit; && tests nonzero truth and yields one bit."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "&4'b1101 (reduction AND) equals…",
+      "choices": [
+        "0",
+        "1",
+        "4'b1101",
+        "4'b1111"
+      ],
+      "answer": 0,
+      "explain": "Reduction AND is 1 only if every bit is 1; here bit 1 is 0."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "{2'b10, 2'b01} equals…",
+      "choices": [
+        "4'b1001",
+        "4'b0110",
+        "2'b11",
+        "4'b1010"
+      ],
+      "answer": 0,
+      "explain": "Concatenation places the left operand in the more significant bits."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "~A and !A always produce the same bit pattern.",
+      "answer": false,
+      "explain": "~ inverts each bit; ! yields a single bit that is 1 only if A is all zeros."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "module": "module10-named-vs-positional",
+  "title": "Named vs positional check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Positional instance dff u(clk, din, qout) connects nets by…",
+      "choices": [
+        "Port declaration order in the module",
+        "Alphabetical port name",
+        "Simulation time only",
+        "Parameter hash-dot list"
+      ],
+      "answer": 0,
+      "explain": "First argument → first port in the module’s port list, and so on."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Named connection .d(din) means…",
+      "choices": [
+        "Port d is wired to net din",
+        "Net din is renamed to d",
+        "Only parameters are set",
+        "d and din must be the same width"
+      ],
+      "answer": 0,
+      "explain": ".port(net) binds that port to that net; order on the line does not matter."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "dff u(clk, qout, din) when ports are (clk, d, q)…",
+      "choices": [
+        "Often compiles but swaps d and q — silent miswire",
+        "Is a syntax error in all tools",
+        "Is equivalent to named connections",
+        "Only works for AND gates"
+      ],
+      "answer": 0,
+      "explain": "Positional swaps of unlike ports compile; wrong wires show up in behavior."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Named port connections are generally preferred for multi-port modules in maintainable RTL.",
+      "answer": true,
+      "explain": "Named ports document intent and survive harmless reordering in the child module."
+    }
+  ]
+}

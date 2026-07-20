@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module13-one-driver/frames/slide-1.png'
+duration 29.064
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module13-one-driver/frames/slide-2.png'
+duration 33.384
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module13-one-driver/frames/slide-3.png'
+duration 27.504
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module13-one-driver/frames/slide-4.png'
+duration 21.456
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module13-one-driver/frames/slide-5.png'
+duration 21.84
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module13-one-driver/frames/slide-6.png'
+duration 21.84
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module13-one-driver/frames/slide-6.png'

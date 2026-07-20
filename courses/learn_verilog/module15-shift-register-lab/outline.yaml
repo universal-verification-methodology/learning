@@ -1,0 +1,86 @@
+title: Shift-register patterns
+footer: learn_verilog — shift register lab
+slides:
+- type: title
+  title: Shift-register patterns
+  subtitle: A shift register is a chain of flip-flops where each stage passes its
+    value to the next one on every clock edge
+  notes: 'A shift register is a chain of flip-flops where each stage passes its value
+    to the next one on every clock edge. That simple idea is used everywhere: serial-to-parallel
+    conversion, parallel-to-serial output, pipeline delay lines, and pattern detectors.
+    This module walks through the main patterns — serial-in serial-out, serial-in
+    parallel-out, parallel-in serial-out, and the ring variant — so you can recognize
+    and write each one.'
+- type: bullets
+  title: How shifting works
+  bullets:
+  - On each rising edge, each flip-flop captures the output of the flip-flop to its
+    left
+  - The leftmost stage captures the serial input
+  - After N clock cycles an N-bit shift register has moved each bit N positions to
+    the right
+  - For parallel output, you read all stages at once
+  - For parallel load
+  - The ring version connects the last stage back to the first
+  notes: On each rising edge, each flip-flop captures the output of the flip-flop
+    to its left. The leftmost stage captures the serial input. After N clock cycles
+    an N-bit shift register has moved each bit N positions to the right. For parallel
+    output, you read all stages at once. For parallel load, you latch external data
+    into every stage simultaneously and then clock bits out one at a time. The ring
+    version connects the last stage back to the first, so the bit pattern circulates
+    indefinitely.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Shift-register lab starter
+  notes: In the browser lab track, open the shift-register lab from the tools page.
+    The starter shows an eight-bit shift register with a serial input, a clock step
+    button, and a row of output bits. Click serial input on or off, step the clock
+    a few times, and watch your bit move right through the chain. Then try parallel
+    load to fill all stages at once, and switch to ring mode to watch bits cycle.
+    The challenges ask you to trace specific sequences and explain what you observe.
+- type: image
+  title: Real Verilog practice
+  image: assets/real-shell.png
+  caption: Real Verilog - shift register demo
+  notes: "In the real Verilog track, open this module's examples folder. One sketch\
+    \ is an eight-bit serial-in parallel-out shift register with synchronous reset.\
+    \ The second is a parallel-in serial-out variant with a load signal. Notice that\
+    \ both use non-blocking assignment in the always block, and the SIPO just chains\
+    \ the concatenation operator to shift in one bit per cycle. If Icarus is available,\
+    \ run a syntax-only compile to confirm the module structure.\n\n```verilog\n//\
+    \ shift_demo.v - SIPO and PISO shift registers\nmodule sipo8(\n  input       \
+    \ clk,\n  input        rst,\n  input        si,\n  output reg [7:0] q\n);\n  always\
+    \ @(posedge clk) begin\n    if (rst) q <= 8'd0;\n    else     q <= {q[6:0], si};\n\
+    \  end\nendmodule\n\nmodule piso8(\n  input        clk,\n  input        rst,\n\
+    \  input        load,\n  input  [7:0] d,\n  output reg   so,\n  output reg [7:0]\
+    \ shreg\n);\n  always @(posedge clk) begin\n    if (rst)       shreg <= 8'd0;\n\
+    \    else if (load) shreg <= d;\n    else           shreg <= {1'b0, shreg[7:1]};\n\
+    \  end\n  always @(posedge clk)\n    so <= shreg[0];\nendmodule\n\n// iverilog\
+    \ -t null shift_demo.v - syntax check only\n```"
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not use blocking assignment inside a clocked shift register
+  - Do not forget to account for the latency
+  - When connecting stages manually instead of using a concatenation
+  - And when using a ring, verify the feedback path or you may lose bits silently
+  notes: 'Do not use blocking assignment inside a clocked shift register; you will
+    get combinational ripple instead of registered delay. Do not forget to account
+    for the latency: an N-stage shift register introduces N clock cycles of delay,
+    which can cause timing surprises in larger designs. When connecting stages manually
+    instead of using a concatenation, make sure you reference the old value, not the
+    already-updated one — that is exactly the non-blocking assignment guarantee. And
+    when using a ring, verify the feedback path or you may lose bits silently.'
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, ideally both
+  - In the browser lab
+  - In real Verilog
+  - When you finish, take the short quiz
+  notes: Complete the checklist for at least one track, ideally both. In the browser
+    lab, step a ring register long enough to see your starting pattern return to stage
+    zero. In real Verilog, extend the SIPO to sixteen bits and verify it still synthesizes
+    cleanly with a null compile. When you finish, take the short quiz, and then move
+    on to synthesizability lint in the next module.

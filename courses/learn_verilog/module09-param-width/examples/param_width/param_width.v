@@ -1,0 +1,19 @@
+// param_width.v — parameter drives port ranges
+module bus_slice #(
+  parameter WIDTH = 8
+)(
+  input  [WIDTH-1:0] data_in,
+  output [WIDTH-1:0] data_out
+);
+  assign data_out = data_in;
+endmodule
+
+module add_wide #(
+  parameter WIDTH = 4
+)(
+  input  [WIDTH-1:0] a,
+  input  [WIDTH-1:0] b,
+  output [WIDTH:0]   sum
+);
+  assign sum = {1'b0, a} + {1'b0, b};
+endmodule

@@ -1,0 +1,53 @@
+{
+  "module": "module15-shift-register-lab",
+  "title": "Shift-register patterns check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "After 3 clock cycles, a bit entered at the serial input of an 8-bit shift register is at…",
+      "choices": [
+        "Stage 2 (zero-indexed from input end)",
+        "Stage 7",
+        "Stage 0 still",
+        "Overwritten and lost"
+      ],
+      "answer": 0,
+      "explain": "Each clock moves the bit one stage to the right; after 3 clocks it is 3 positions from the input, which is stage index 2."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "The Verilog expression that shifts in a new serial bit 'si' to the MSB of an 8-bit register q is…",
+      "choices": [
+        "q <= {q[6:0], si};",
+        "q <= {si, q[7:1]};",
+        "q <= q >> 1;",
+        "q <= q + si;"
+      ],
+      "answer": 0,
+      "explain": "Concatenating q[6:0] with si shifts existing bits left and inserts si at bit 0 — a right-shift-in pattern for serial input at LSB. (Invert to shift in at MSB.)"
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "A parallel-in serial-out register with a 'load' signal…",
+      "choices": [
+        "Captures all input bits at once when load is high, then shifts out one bit per clock",
+        "Shifts in one bit per clock until full, then outputs all bits in one cycle",
+        "Only shifts, never loads in parallel",
+        "Requires blocking assignment to work correctly"
+      ],
+      "answer": 0,
+      "explain": "PISO latches the parallel word on the load cycle, then shifts out MSB or LSB first on each subsequent clock."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Using blocking assignment (=) instead of non-blocking (<=) in a clocked shift register produces registered pipeline delay.",
+      "answer": false,
+      "explain": "Blocking assignments update immediately within the always block, causing combinational ripple rather than staged flip-flop delay."
+    }
+  ]
+}

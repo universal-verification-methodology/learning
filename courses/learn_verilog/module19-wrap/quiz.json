@@ -1,0 +1,53 @@
+{
+  "module": "module19-wrap",
+  "title": "Verilog path complete check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "This wrap module mainly…",
+      "choices": [
+        "Recaps what you can do and points to the next courses",
+        "Introduces a brand-new browser lab",
+        "Replaces Track A forever",
+        "Teaches UVM sequences in depth"
+      ],
+      "answer": 0,
+      "explain": "Wrap modules summarize outcomes and link the syllabus next step."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "If you mostly used browser labs, a good next step is…",
+      "choices": [
+        "Write small .v sketches for key modules like latch risk and counters",
+        "Never open an editor again",
+        "Skip all real Verilog practice",
+        "Only read the syllabus"
+      ],
+      "answer": 0,
+      "explain": "Closing Track A gaps makes ports and always blocks feel natural."
+    },
+    {
+      "id": "q3",
+      "type": "true_false",
+      "prompt": "Non-blocking assignment (<=) is the usual choice for clocked register updates in this course.",
+      "answer": true,
+      "explain": "Modules 08 and sequential labs reinforce <= in clocked always blocks."
+    },
+    {
+      "id": "q4",
+      "type": "multiple_choice",
+      "prompt": "A natural next course after learn_verilog is…",
+      "choices": [
+        "learn_systemverilog or a simulator course (Icarus, Verilator, HDL simulator)",
+        "learn_unix from module zero again",
+        "Only browser labs with no RTL",
+        "Industrial place-and-route only"
+      ],
+      "answer": 0,
+      "explain": "The README and syllabus point to SV design constructs and simulator toolchains next."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "module": "module18-fsm-datapath-bridge",
+  "title": "FSM & datapath in RTL check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "This bridge module's main job is to…",
+      "choices": [
+        "connect learn_digital FSM/datapath/memory concepts to Verilog coding practice",
+        "introduce a brand-new browser lab id",
+        "replace learn_digital entirely",
+        "teach only testbench $display usage"
+      ],
+      "answer": 0,
+      "explain": "Module 18 is a bridge: reuse concept labs as prompts, then write matching .v sketches."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "In RTL, the FSM (control) usually lives in…",
+      "choices": [
+        "a clocked always block with state and case",
+        "only continuous assign statements",
+        "an initial block",
+        "a #delay loop"
+      ],
+      "answer": 0,
+      "explain": "State registers and transitions are sequential; they belong in clocked always logic."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "The datapath in a processor sketch is mostly…",
+      "choices": [
+        "combinational logic (mux, ALU, etc.) between registers",
+        "only the reset wire",
+        "the testbench file",
+        "synthesis constraints"
+      ],
+      "answer": 0,
+      "explain": "Datapath computes from current operands; registers capture results on the clock edge."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "A Moore machine output depends only on the current state, not the current input.",
+      "answer": true,
+      "explain": "Moore outputs are a function of state; Mealy outputs can also depend on inputs."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+title: Parameter and width
+footer: learn_verilog — param width
+slides:
+- type: title
+  title: Parameter and width
+  subtitle: Reusable RTL names its bus widths once and threads them through ports,
+    locals, and instances
+  notes: 'Reusable RTL names its bus widths once and threads them through ports, locals,
+    and instances. A parameter is a compile-time constant you can override per instance
+    with hash-dot syntax. Width minus one down to zero is how you declare an N-bit
+    vector—WIDTH eight becomes bracket seven colon zero. This module is that pattern:
+    parameterized buses, depth driving address width with clog-two, and when sums
+    need one extra bit for carry.'
+- type: bullets
+  title: One knob, many places
+  bullets:
+  - Declare parameter WIDTH equals eight
+  - No hand-editing every bracket
+  - For memory, DEPTH sets how many words you have; address width tracks clog-two
+    of depth
+  - For an adder, operands stay WIDTH wide but the sum is often WIDTH plus one to
+    hold carry
+  - Localparam is the same idea but fixed inside the module
+  notes: Declare parameter WIDTH equals eight, then use WIDTH minus one colon zero
+    on every data port. Instantiate with bus slice hash-dot WIDTH open-paren sixteen
+    close-paren and both ports widen together—no hand-editing every bracket. For memory,
+    DEPTH sets how many words you have; address width tracks clog-two of depth. For
+    an adder, operands stay WIDTH wide but the sum is often WIDTH plus one to hold
+    carry. Localparam is the same idea but fixed inside the module—you derive ADDR_W
+    from DEPTH instead of exposing every helper constant at the boundary.
+- type: image
+  title: Browser lab
+  image: assets/lab-starter.png
+  caption: Parameter width lab starter
+  notes: 'In the browser lab track, open the param-width lab from the tools page.
+    Pick a template—parameterized bus, memory with depth, wide adder, or FIFO pointers.
+    Drag the WIDTH or DEPTH sliders and watch the derived chips update: MSB index,
+    bracket notation, clog-two, pointer width. Load the starter example, try a few
+    parameter values, then work the quiz-style challenges and use Check when your
+    bracket range matches the prompt.'
+- type: image
+  title: Real Verilog practice
+  image: assets/real-shell.png
+  caption: Real Verilog — parameterized bus and adder
+  notes: "In the real Verilog track, open this module’s examples folder. One sketch\
+    \ is a parameterized bus slice—data in and data out share the same WIDTH. The\
+    \ other is a wide adder: operands are WIDTH bits, sum is WIDTH plus one for carry.\
+    \ If Icarus is available, run a syntax-only compile; the lesson is declaring and\
+    \ overriding parameters, not simulating full memory behavior.\n\n```verilog\n\
+    // param_width.v — parameter drives port ranges\nmodule bus_slice #(\n  parameter\
+    \ WIDTH = 8\n)(\n  input  [WIDTH-1:0] data_in,\n  output [WIDTH-1:0] data_out\n\
+    );\n  assign data_out = data_in;\nendmodule\n\nmodule add_wide #(\n  parameter\
+    \ WIDTH = 4\n)(\n  input  [WIDTH-1:0] a,\n  input  [WIDTH-1:0] b,\n  output [WIDTH:0]\
+    \   sum\n);\n  assign sum = {1'b0, a} + {1'b0, b};\nendmodule\n\n// iverilog -t\
+    \ null param_width.v — syntax check only\n```"
+- type: bullets
+  title: Pitfalls to watch
+  bullets:
+  - Do not hard-code bracket seven colon zero everywhere when WIDTH might change
+  - Do not forget sum needs WIDTH plus one when adding two WIDTH-bit values
+  - Do not assume clog-two of depth is always at least one
+  - Do not confuse parameter overrides at instantiation with port wiring
+  notes: Do not hard-code bracket seven colon zero everywhere when WIDTH might change—use
+    WIDTH minus one colon zero. Do not forget sum needs WIDTH plus one when adding
+    two WIDTH-bit values. Do not assume clog-two of depth is always at least one—depth
+    one is a special case in real designs. Do not confuse parameter overrides at instantiation
+    with port wiring—they are different hash-dot lists.
+- type: bullets
+  title: Your turn
+  bullets:
+  - Complete the checklist for at least one track, preferably both
+  - In the browser, set WIDTH to sixteen and state the MSB index and bracket range
+  - On real Verilog, add a parameter to a module and override it in one instance
+  - When you are ready
+  notes: Complete the checklist for at least one track—preferably both. In the browser,
+    set WIDTH to sixteen and state the MSB index and bracket range. On real Verilog,
+    add a parameter to a module and override it in one instance. When you are ready,
+    take the short quiz, then continue to named versus positional port connections
+    in the next module.

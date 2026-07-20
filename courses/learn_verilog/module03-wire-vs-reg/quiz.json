@@ -1,0 +1,53 @@
+{
+  "module": "module03-wire-vs-reg",
+  "title": "wire vs reg check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "In classic Verilog, continuous assign drives…",
+      "choices": [
+        "A net (wire)",
+        "Only a reg",
+        "Only module parameters",
+        "Nothing — assign is illegal"
+      ],
+      "answer": 0,
+      "explain": "Continuous assign is for nets; procedural blocks drive variables (reg)."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "always @(*) y = a & b requires y to be declared as…",
+      "choices": [
+        "reg (a variable)",
+        "wire only",
+        "input",
+        "inout always"
+      ],
+      "answer": 0,
+      "explain": "Procedural assignment targets a variable — reg in classic Verilog."
+    },
+    {
+      "id": "q3",
+      "type": "true_false",
+      "prompt": "reg always means a flip-flop in hardware.",
+      "answer": false,
+      "explain": "Combo always @(*) also uses reg; clocked always may infer a FF."
+    },
+    {
+      "id": "q4",
+      "type": "multiple_choice",
+      "prompt": "assign y = a & b with y declared reg is…",
+      "choices": [
+        "Illegal in classic Verilog",
+        "Required for synthesis",
+        "Only illegal in testbenches",
+        "The same as always @(*) "
+      ],
+      "answer": 0,
+      "explain": "You cannot continuous-assign a reg — use wire or switch to always."
+    }
+  ]
+}

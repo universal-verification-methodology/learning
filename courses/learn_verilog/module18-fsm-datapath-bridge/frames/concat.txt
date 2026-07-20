@@ -1,0 +1,13 @@
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module18-fsm-datapath-bridge/frames/slide-1.png'
+duration 31.68
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module18-fsm-datapath-bridge/frames/slide-2.png'
+duration 34.344
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module18-fsm-datapath-bridge/frames/slide-3.png'
+duration 33.648
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module18-fsm-datapath-bridge/frames/slide-4.png'
+duration 25.08
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module18-fsm-datapath-bridge/frames/slide-5.png'
+duration 30.12
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module18-fsm-datapath-bridge/frames/slide-6.png'
+duration 23.376
+file '/mnt/d/proj/designs/learning/courses/learn_verilog/module18-fsm-datapath-bridge/frames/slide-6.png'
