@@ -1,0 +1,53 @@
+{
+  "module": "module08-verilator-public",
+  "title": "Verilator public",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "The public comment pragma is for…",
+      "choices": [
+        "Exposing selected internal signals to the C++ host",
+        "Replacing all ports",
+        "Disabling lint",
+        "Generating FST automatically"
+      ],
+      "answer": 0,
+      "explain": "Public marks intentional internal visibility."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Top-level ports are…",
+      "choices": [
+        "Already part of the boundary—no public pragma needed for normal access",
+        "Always invisible to any host",
+        "Only visible in the browser lab",
+        "Only accessible via DPI"
+      ],
+      "answer": 0,
+      "explain": "Ports are the natural contract."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Unmarked internal signals are…",
+      "choices": [
+        "Hidden from the host unless you over-expose with pragmas",
+        "Always visible to any C++ code automatically",
+        "Only visible in synthesis",
+        "Illegal in Verilator"
+      ],
+      "answer": 0,
+      "explain": "Internals default to hidden."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Marking every internal net public is discouraged—it couples testbench to implementation and can slow builds.",
+      "answer": true,
+      "explain": "Minimal exposure is the engineering habit."
+    }
+  ]
+}

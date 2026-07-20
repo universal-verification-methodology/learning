@@ -1,0 +1,53 @@
+{
+  "module": "module07-wave-dump",
+  "title": "Wave dump literacy",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "For long farm runs, the better default is often…",
+      "choices": [
+        "FST for smaller files at scale",
+        "No dump at all",
+        "Only printf in C++ with no waves",
+        "A schematic PDF"
+      ],
+      "answer": 0,
+      "explain": "FST scales better for long runs."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "For quick debug on a tiny design, VCD is…",
+      "choices": [
+        "Often fine and widely portable",
+        "Never usable in any viewer",
+        "Forbidden by Verilator",
+        "Only for synthesis"
+      ],
+      "answer": 0,
+      "explain": "VCD remains a quick-debug workhorse."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Dump must be on means…",
+      "choices": [
+        "Compile flags and host dump calls actually record cycles",
+        "You only type a filename in a comment",
+        "Lint passes",
+        "Reset is deasserted"
+      ],
+      "answer": 0,
+      "explain": "Recording requires active dump, not just naming."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Choosing FST without enabling the matching trace-fst compile path can yield broken or empty results.",
+      "answer": true,
+      "explain": "Format choice and compile flags must align."
+    }
+  ]
+}

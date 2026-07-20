@@ -1,0 +1,53 @@
+{
+  "module": "module05-tb-clock-reset",
+  "title": "TB clock + reset patterns",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "A common clock generator pattern uses…",
+      "choices": [
+        "Forever loop with half-period delays between toggles",
+        "No clock at all in the host",
+        "Only a one-shot eval with no timing",
+        "Only asynchronous random delays with no structure"
+      ],
+      "answer": 0,
+      "explain": "Half-period forever loops are the literacy pattern."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Reset should typically…",
+      "choices": [
+        "Assert for N posedges then release synchronously",
+        "Stay asserted forever for every test",
+        "Release before the first clock edge always with no plan",
+        "Only exist in the wave viewer, not the host"
+      ],
+      "answer": 0,
+      "explain": "Counted assert plus synchronous release."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "If reset is held forever, the DUT often…",
+      "choices": [
+        "Never reaches normal operation—you are testing stuck reset",
+        "Runs at double speed",
+        "Automatically passes lint",
+        "Exports FST files without flags"
+      ],
+      "answer": 0,
+      "explain": "Forever reset masks functional behavior."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "After reset deasserts, the host should continue stepping clock and eval—not stop immediately unless the test ends.",
+      "answer": true,
+      "explain": "Release is the start of real exercising, not the end."
+    }
+  ]
+}

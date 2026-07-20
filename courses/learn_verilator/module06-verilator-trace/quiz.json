@@ -1,0 +1,53 @@
+{
+  "module": "module06-verilator-trace",
+  "title": "Verilator trace",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "OPEN trace status means…",
+      "choices": [
+        "Trace was enabled but dump calls never recorded cycles",
+        "The compile failed entirely",
+        "Reset was held forever",
+        "DPI imported twice"
+      ],
+      "answer": 0,
+      "explain": "Flag without dump = OPEN."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "BLIND trace status means…",
+      "choices": [
+        "Dump ran but compile never enabled trace instrumentation",
+        "Everything is perfect",
+        "Only lint ran",
+        "Coverage hit one hundred percent automatically"
+      ],
+      "answer": 0,
+      "explain": "Dump without flag = BLIND."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "A complete trace flow includes…",
+      "choices": [
+        "Compile flag plus open, dump in the loop, and close",
+        "Only opening a viewer with no sim",
+        "Only git commit",
+        "Only a C++ main with no eval"
+      ],
+      "answer": 0,
+      "explain": "Both compile and host cooperation are required."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "You should call dump in the eval loop for cycles you want visible in the wave file.",
+      "answer": true,
+      "explain": "Dump per stepped cycle is the usual pattern."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "module": "module11-wrap",
+  "title": "Verilator track complete",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "After this course you should be able to…",
+      "choices": [
+        "Run lint, C++ host sim, trace, and read basic metrics",
+        "Skip compile and only view blank waves",
+        "Replace all protocol verification",
+        "Ignore escapes if pass rate is fifty percent"
+      ],
+      "answer": 0,
+      "explain": "Core Verilator tool outcomes."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "A sensible sibling course for event-delay teaching is…",
+      "choices": [
+        "learn_iverilog",
+        "Only PCB layout",
+        "Only Git hooks",
+        "Only place-and-route"
+      ],
+      "answer": 0,
+      "explain": "Icarus path complements Verilator."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "If you mostly did browser labs, a good wrap action is…",
+      "choices": [
+        "Reproduce one compile-run-trace cycle in Track A",
+        "Delete the legacy examples tree",
+        "Disable all warnings forever",
+        "Never run Verilator offline"
+      ],
+      "answer": 0,
+      "explain": "Transfer literacy into real runs."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Minimal public markers and active dump calls are lasting Verilator engineering habits.",
+      "answer": true,
+      "explain": "Exposure discipline and trace pairing stick."
+    }
+  ]
+}

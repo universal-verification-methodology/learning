@@ -1,0 +1,53 @@
+{
+  "module": "module02-sim-pipeline",
+  "title": "Compile → elaborate → run",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "A complete sim pipeline includes…",
+      "choices": [
+        "Compile, elaborate, and run stages",
+        "Only waveform viewing with no compile",
+        "Only git push",
+        "Only lint with no execution"
+      ],
+      "answer": 0,
+      "explain": "All three stages must succeed for READY."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Verilator’s typical Track A artifact after --cc is…",
+      "choices": [
+        "Generated C++ model plus a host binary you execute",
+        "Only a PDF report",
+        "Only a synthesized netlist for tapeout",
+        "An Icarus vvp file with no host"
+      ],
+      "answer": 0,
+      "explain": "Verilator commonly emits C++ you compile and run."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "If compile failed, the first debug surface is…",
+      "choices": [
+        "Compile/elaboration logs—not the wave viewer",
+        "The wave viewer only",
+        "Git blame only",
+        "Coverage database only"
+      ],
+      "answer": 0,
+      "explain": "Fix the stage that failed first."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "READY in the pipeline lab means every stage completed, not just that one command ran.",
+      "answer": true,
+      "explain": "Partial pipelines are not READY."
+    }
+  ]
+}

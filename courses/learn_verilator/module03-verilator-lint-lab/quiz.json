@@ -1,0 +1,53 @@
+{
+  "module": "module03-verilator-lint-lab",
+  "title": "Verilator lint",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "CASEINCOMPLETE usually means…",
+      "choices": [
+        "A case statement does not cover all inputs or lacks a default",
+        "The Makefile is missing",
+        "The wave file is too large",
+        "DPI is enabled twice"
+      ],
+      "answer": 0,
+      "explain": "Incomplete case coverage is a common lint family."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "BLIND lint mode means…",
+      "choices": [
+        "Problems may be hidden—you are not seeing warnings",
+        "Every warning is fixed automatically",
+        "Only synthesis runs",
+        "Tracing is enabled"
+      ],
+      "answer": 0,
+      "explain": "BLIND hides issues; CLEAN surfaces them."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "The preferred response to a WIDTH warning is…",
+      "choices": [
+        "Fix the RTL width or casting—not only blanket -Wno",
+        "Delete the module",
+        "Disable all lint forever",
+        "Force signals in the wave viewer"
+      ],
+      "answer": 0,
+      "explain": "Fix root cause before silencing."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Warnings-as-errors is a policy choice that only works if the tree is actually clean.",
+      "answer": true,
+      "explain": "Werror forces zero tolerance once you can sustain it."
+    }
+  ]
+}

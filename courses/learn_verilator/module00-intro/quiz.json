@@ -1,0 +1,53 @@
+{
+  "module": "module00-intro",
+  "title": "Welcome to Verilator",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "This course primarily teaches Verilator as…",
+      "choices": [
+        "A daily tool flow: lint, C++/DPI TB, trace, metrics",
+        "A full UVM methodology replacement",
+        "Place-and-route for ASIC tapeout only",
+        "Git branching and code review only"
+      ],
+      "answer": 0,
+      "explain": "The arc is tool literacy, not UVM depth."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Track A means practice with…",
+      "choices": [
+        "Local Verilator, C++, and Makefile examples",
+        "Only paper worksheets with no simulator",
+        "Only browser games unrelated to HDL",
+        "Only synthesis timing reports"
+      ],
+      "answer": 0,
+      "explain": "Track A is the real toolchain."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Track B browser labs are best for…",
+      "choices": [
+        "Conceptual literacy before or alongside real runs",
+        "Replacing every offline compile forever",
+        "Teaching PCB layout",
+        "Skipping lint entirely"
+      ],
+      "answer": 0,
+      "explain": "Labs teach ideas; Track A proves fidelity."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Deep UVM and VIP construction belong in sibling courses, not this Verilator tool path.",
+      "answer": true,
+      "explain": "This path stays focused on Verilator as a simulator tool."
+    }
+  ]
+}

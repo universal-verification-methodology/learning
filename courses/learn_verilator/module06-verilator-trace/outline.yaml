@@ -1,0 +1,12 @@
+# Module 06 outline
+title: "Verilator trace"
+kind: lab
+lab: verilator-trace
+slides:
+  - Course context / when Verilator wins
+  - Core idea (1 concept)
+  - Track B: show lab starter if shipped (else diagram)
+  - Track A: real command-line cue
+  - Common pitfalls
+  - Your turn + quiz prompt
+duration_minutes: 8

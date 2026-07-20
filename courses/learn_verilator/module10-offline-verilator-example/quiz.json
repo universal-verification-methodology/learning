@@ -1,0 +1,53 @@
+{
+  "module": "module10-offline-verilator-example",
+  "title": "Build & run a Verilator example",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Module ten’s required practice surface is…",
+      "choices": [
+        "Track A offline build and run in the legacy Verilator tree",
+        "Only a browser chooser lab",
+        "Only reading slides with no commands",
+        "Only UVM sequences"
+      ],
+      "answer": 0,
+      "explain": "Offline capstone is Track A only."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "You should capture in notes…",
+      "choices": [
+        "Commands used and pass/fail result",
+        "Only the wallpaper color",
+        "Only git remote names",
+        "Nothing—memory is enough"
+      ],
+      "answer": 0,
+      "explain": "Replayable commands and outcomes matter."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "If compile failed, first check…",
+      "choices": [
+        "Compile or elaboration logs before re-running waves",
+        "Only the wave viewer palette",
+        "Only coverage color",
+        "Only browser cookies"
+      ],
+      "answer": 0,
+      "explain": "Fix the failing stage first."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Browser literacy labs do not replace the offline Verilator run required in this module.",
+      "answer": true,
+      "explain": "Fidelity proof is offline."
+    }
+  ]
+}

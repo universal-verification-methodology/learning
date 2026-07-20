@@ -1,0 +1,53 @@
+{
+  "module": "module09-verif-metrics",
+  "title": "Verification metrics",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Bug escapes refer to…",
+      "choices": [
+        "Defects that slipped past your verification and were found later",
+        "Only syntax errors caught by lint",
+        "Only Makefile typos",
+        "Wave files that are too large"
+      ],
+      "answer": 0,
+      "explain": "Escapes are missed defects despite testing."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "BLOCKED program status often means…",
+      "choices": [
+        "Escapes or critical gaps prevent moving forward",
+        "Every metric is perfect",
+        "Lint is disabled",
+        "Tracing is off"
+      ],
+      "answer": 0,
+      "explain": "Escapes can block even with green pass rate."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "HEALTHY in the literacy lab implies…",
+      "choices": [
+        "Pass rate and coverage are acceptable and escapes are controlled",
+        "No tests were run",
+        "Only browser UI was opened",
+        "Reset is asserted forever"
+      ],
+      "answer": 0,
+      "explain": "HEALTHY is a balanced green picture."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "High pass rate alone does not guarantee adequate coverage or zero escape risk.",
+      "answer": true,
+      "explain": "Pass rate is necessary but not sufficient."
+    }
+  ]
+}

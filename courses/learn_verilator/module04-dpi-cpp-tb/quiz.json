@@ -1,0 +1,53 @@
+{
+  "module": "module04-dpi-cpp-tb",
+  "title": "C++ TB / DPI sketch",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Verilator’s native testbench paradigm is…",
+      "choices": [
+        "A C++ host with a model pointer and an eval loop",
+        "Only a SystemVerilog initial block with no host",
+        "Only a spreadsheet",
+        "Only a synthesis constraint file"
+      ],
+      "answer": 0,
+      "explain": "C++ host + eval loop is the core pattern."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "DPI in this context is…",
+      "choices": [
+        "Optional glue to C functions—not the whole TB story",
+        "Required for every Verilator design",
+        "A replacement for compile",
+        "A wave format"
+      ],
+      "answer": 0,
+      "explain": "DPI is optional bridging."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Mixing paradigms without intent means…",
+      "choices": [
+        "Pasting classic SV TB styles into a C++ main and hoping",
+        "Always faster simulation",
+        "Automatic UVM scoreboards",
+        "Lint becomes unnecessary"
+      ],
+      "answer": 0,
+      "explain": "Keep SV TB and C++ host roles clear."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Calling eval once does not substitute for a loop that steps time across many cycles.",
+      "answer": true,
+      "explain": "The host must drive cycles deliberately."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+# Module 08 outline
+title: "Verilator public"
+kind: lab
+lab: verilator-public
+slides:
+  - Course context / when Verilator wins
+  - Core idea (1 concept)
+  - Track B: show lab starter if shipped (else diagram)
+  - Track A: real command-line cue
+  - Common pitfalls
+  - Your turn + quiz prompt
+duration_minutes: 8

@@ -1,0 +1,53 @@
+{
+  "module": "module01-iverilog-vs-verilator",
+  "title": "iverilog vs Verilator",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Icarus Verilog is often the better fit when…",
+      "choices": [
+        "You need event scheduling, delays, and classic SV TB teaching",
+        "You need only C++ cosim at farm scale with no TB",
+        "You never elaborate anything",
+        "You only lint without compiling"
+      ],
+      "answer": 0,
+      "explain": "Icarus fits event/delay-centric teaching."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Verilator is often the better fit when…",
+      "choices": [
+        "Long regressions, speed, and C++ host cosim matter",
+        "The lesson requires hash delays in every block",
+        "You refuse to use a Makefile",
+        "You only need a one-line hello world in bash"
+      ],
+      "answer": 0,
+      "explain": "Verilator targets fast cycle-accurate runs."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "The browser chooser lab uses…",
+      "choices": [
+        "Matched scenarios so you pick the tool for the job",
+        "Only random tool names with no context",
+        "Only synthesis reports",
+        "Only UVM factory overrides"
+      ],
+      "answer": 0,
+      "explain": "Matched scenarios train job-first thinking."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Choosing Verilator for a delay-teaching lab can waste time because Verilator is not an event-delay teaching simulator.",
+      "answer": true,
+      "explain": "Tool fit beats habit."
+    }
+  ]
+}
