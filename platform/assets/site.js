@@ -326,8 +326,7 @@
     btn.setAttribute("aria-controls", nav.id);
     btn.setAttribute("aria-label", "Open menu");
     btn.innerHTML =
-      '<span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>' +
-      "<span>Menu</span>";
+      '<span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>';
 
     const brand = headerInner.querySelector(".brand");
     if (brand && brand.nextSibling) {
@@ -340,10 +339,6 @@
       nav.classList.toggle("is-open", open);
       btn.setAttribute("aria-expanded", open ? "true" : "false");
       btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-      const label = btn.querySelector("span:last-child");
-      if (label && !label.classList.contains("nav-toggle-bars")) {
-        label.textContent = open ? "Close" : "Menu";
-      }
     };
 
     btn.addEventListener("click", () => {
