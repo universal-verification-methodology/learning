@@ -1,0 +1,11 @@
+# Combined course trees — not in the active 18-course path.
+# Prefer catalog learn_* courses (see courses/IGNORED_TREES.md).
+
+courses/learn_digital_verilog/
+courses/learn_uvm2017_sv_verilator/
+courses/learn_verilog_systemverilog/
+courses/learn_verilator_iverilog/
+courses/learn_unix_git/
+courses/learn_uart_spi_i2c/
+courses/learn_uvm_pyuvm/
+courses/verification_planning_management/
