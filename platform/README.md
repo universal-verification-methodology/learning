@@ -128,7 +128,7 @@ HDL engine integration: **[`simulator.md`](simulator.md)** — public [`systemve
 
 Config for the remotes lab: [`tools/remotes/config.js`](tools/remotes/config.js)  
 Publish / About blurbs: [`sandbox/PUBLISH.md`](sandbox/PUBLISH.md), [`sandbox/GITHUB_ABOUT.md`](sandbox/GITHUB_ABOUT.md)  
-Course sandbox notes: [`courses/learn_unix/docs/TWO_TRACKS.md`](../courses/learn_unix/docs/TWO_TRACKS.md) · legacy combined tree (ignored): see [`courses/LEGACY.md`](../courses/LEGACY.md)
+Course sandbox notes: [`courses/learn_unix/docs/TWO_TRACKS.md`](../courses/learn_unix/docs/TWO_TRACKS.md)
 
 ## How this splits with courses
 

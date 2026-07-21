@@ -464,7 +464,7 @@ Literacy for `learn_verilator_iverilog` Modules 3â€“7 and SV TB intros. **N
 
 ## UVM 2017 methodology (sketches)
 
-Concept diagrams for `learn_uvm2017` / `learn_pyuvm` (legacy sources ignored — see `courses/LEGACY.md`). **Not** a UVM library or Verilator UVM run — sketches align with **IEEE 1800.2-2017** (UVM 2017).
+Concept diagrams for `learn_uvm2017` / `learn_pyuvm`. **Not** a UVM library or Verilator UVM run — sketches align with **IEEE 1800.2-2017** (UVM 2017).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
@@ -622,7 +622,6 @@ Courses **link** to domains; they do not own tools. Target syllabi (lab-driven m
 | `learn_cocotb` | cocotb triggers / Clock / BinaryValue / scoreboard / DUT, Python async |
 | `learn_formal` | **Formal sketches**, SVA timeline, cover, synth/style; SymbiYosys offline |
 
-Legacy folders (`learn_unix_git`, `learn_digital_verilog`, …) are **ignored** archives — see [`courses/LEGACY.md`](../courses/LEGACY.md). Use the pass-3 target ids above.
 
 ---
 
@@ -637,9 +636,9 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 | `learn_digital` | Numbers→Boolean→gates→clocks→FSM→datapath→mem (**49 labs shipped**; **51 modules with clips/decks**) | — |
 | `learn_verilog` | Full IEEE 1364 RTL browser path (**all 17 labs shipped**; **20 modules with clips/decks on platform**) | none for browser labs — module 18 is bridge (reuse digital labs) |
 | `learn_systemverilog` | Full SV design browser path (**all 12 labs shipped**; **14 modules with clips/decks on platform**) | none for browser labs — module 13 is wrap |
-| `learn_uvm2017` / `learn_pyuvm` | UVM + cocotb/pyuvm sketches (**all shipped**); courses scaffolded | offline fidelity via legacy / module offline |
-| `learn_pyuvm` | modules + media ready; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**); legacy `learn_uvm_pyuvm` ignored | — |
-| `learn_verilator` | offline fidelity via legacy; course scaffolded; all syllabus browser labs (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | — |
+| `learn_uvm2017` / `learn_pyuvm` | UVM + cocotb/pyuvm sketches (**all shipped**); courses scaffolded | offline fidelity via in-course hellos / module offline |
+| `learn_pyuvm` | modules + media ready; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**) | — |
+| `learn_verilator` | offline fidelity via in-course hello; course scaffolded; all syllabus browser labs (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | — |
 | `learn_iverilog` | shipped TB/wave labs + toolchain (`iverilog-flags` / `iverilog-timescale` / `vvp-plusargs`) + `sim-pipeline` / `wave-dump` / `self-check-tb` (**shipped**); course scaffolded; offline module 11 | — |
 | `learn_hdl_simulator` | all **`hdl-sim-*`** + style/synth bridge (**shipped**); course scaffolded under `courses/learn_hdl_simulator/` | free practice = public IDE (module 09) |
 | `learn_uart` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `tb-clock-reset` / `vip-anatomy` (**shipped**); course scaffolded | — |

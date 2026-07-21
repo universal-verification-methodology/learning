@@ -71,7 +71,6 @@ Canonical **target** syllabi for the learning monorepo (pass 3 · **lab-driven**
 19. [learn_cocotb](#17-learn_cocotb)
 20. [learn_formal](#18-learn_formal)
 21. [Suggested learning ladder](#suggested-learning-ladder)
-22. [Migration from existing courses](#migration-from-existing-courses)
 
 ---
 
@@ -133,7 +132,6 @@ courses/<course_id>/
 
 **Goal:** Shell fluency for digital design students.  
 **Course tree:** [`courses/learn_unix/`](courses/learn_unix/) (dual track: real Unix + browser labs).  
-**Source legacy:** `learn_unix_git` M1–5 (+ workflow from M8).  
 **Offline:** local shell; `./scripts/scaffold.sh` / `./scripts/module.sh NN`.
 
 | # | Kind | Module | Primary lab / activity |
@@ -176,7 +174,6 @@ courses/<course_id>/
 
 **Goal:** Git for coursework through delivery.  
 **Course tree:** [`courses/learn_git/`](courses/learn_git/) (dual track: real Git + browser labs).  
-**Source legacy:** `learn_unix_git` M6–7 (+ submit from M8).  
 **Offline:** [`unix-git-practice`](https://github.com/universal-verification-methodology/unix-git-practice) ([`SANDBOX.md`](courses/learn_git/SANDBOX.md)).
 
 | # | Kind | Module | Primary lab / activity |
@@ -211,7 +208,6 @@ courses/<course_id>/
 
 **Goal:** Digital logic foundations without deep HDL syntax.  
 **Course tree:** [`courses/learn_digital/`](courses/learn_digital/) (dual track: workbook + browser labs).  
-**Source legacy:** `learn_digital_verilog` theory (M1, M3–7).
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
@@ -277,7 +273,6 @@ courses/<course_id>/
 
 **Goal:** RTL coding in the IEEE 1364 family.  
 **Course tree:** [`courses/learn_verilog/`](courses/learn_verilog/) (dual track: real Verilog + browser labs).  
-**Source legacy:** digital M2 + RTL of M3–7; `learn_verilog_systemverilog` M1–3.  
 **Run checks:** `learn_hdl_simulator` and/or `learn_iverilog`.
 
 | # | Kind | Module | Primary lab / activity |
@@ -310,7 +305,6 @@ courses/<course_id>/
 **Goal:** SystemVerilog **design** constructs (IEEE 1800) — not UVM.  
 **Course tree:** [`courses/learn_systemverilog/`](courses/learn_systemverilog/) (dual track: real SV + browser labs).  
 **Platform:** [`platform/courses/learn_systemverilog/`](platform/courses/learn_systemverilog/) — **14 modules with clips/decks**.  
-**Source legacy:** `learn_verilog_systemverilog` M4–8.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
@@ -335,7 +329,6 @@ courses/<course_id>/
 
 **Goal:** UVM methodology literacy + offline practice.  
 **Course tree:** [`courses/learn_uvm2017/`](courses/learn_uvm2017/) (dual track: real UVM + browser sketches).  
-**Source legacy:** `learn_uvm2017_sv_verilator`.  
 **Offline:** UVM library + Verilator (or commercial).
 
 | # | Kind | Module | Primary lab / activity |
@@ -373,7 +366,6 @@ courses/<course_id>/
 
 **Goal:** Verilator as a **tool**.  
 **Course tree:** [`courses/learn_verilator/`](courses/learn_verilator/) (dual track: real Verilator + browser literacy).  
-**Source legacy:** `learn_verilator_iverilog` Verilator lane.  
 **Offline:** real Verilator installs (module 10).
 
 | # | Kind | Module | Primary lab / activity |
@@ -397,7 +389,6 @@ courses/<course_id>/
 
 **Goal:** Icarus Verilog as a **tool**.  
 **Course tree:** [`courses/learn_iverilog/`](courses/learn_iverilog/) (dual track: real iverilog + browser labs).  
-**Source legacy:** `learn_verilator_iverilog` iverilog lane.  
 **Offline:** real iverilog + GTKWave (module 11).
 
 | # | Kind | Module | Primary lab / activity |
@@ -446,7 +437,6 @@ courses/<course_id>/
 
 **Goal:** Python verification — cocotb → pyuvm.  
 **Course tree:** [`courses/learn_pyuvm/`](courses/learn_pyuvm/) (dual track: real cocotb/pyuvm + browser sketches).  
-**Source legacy:** `learn_uvm_pyuvm`.  
 **Offline:** cocotb + pyuvm + Verilator (or other) — module 10.  
 **Browser tools:** pyuvm/cocotb labs 01–04 and shared UVM sketches 05–09 all **(S)**; fidelity offline via module 10. Optional literacy: `tb-anatomy` / `tb-vs-uvm-map`.
 
@@ -480,7 +470,6 @@ Do **not** re-teach full verification planning inside each protocol — point to
 
 **Goal:** UART spec → RTL → TB → waves → VIP map.  
 **Course tree:** [`courses/learn_uart/`](courses/learn_uart/) (dual track: real RTL/TB + browser labs).  
-**Source legacy:** `learn_uart_spi_i2c` UART lane.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
@@ -505,7 +494,6 @@ Do **not** re-teach full verification planning inside each protocol — point to
 
 **Goal:** SPI wires & modes → RTL → TB → waves → VIP map.  
 **Course tree:** [`courses/learn_spi/`](courses/learn_spi/) (dual track: real RTL/TB + browser labs).  
-**Source legacy:** `learn_uart_spi_i2c` SPI lane.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
@@ -527,7 +515,6 @@ Do **not** re-teach full verification planning inside each protocol — point to
 
 **Goal:** I²C open-drain → RTL → TB → waves → VIP map.  
 **Course tree:** [`courses/learn_i2c/`](courses/learn_i2c/) (dual track: real RTL/TB + browser labs).  
-**Source legacy:** `learn_uart_spi_i2c` I²C lane.
 
 | # | Kind | Module | Primary lab / activity |
 |---|------|--------|-------------------------|
@@ -549,7 +536,6 @@ Do **not** re-teach full verification planning inside each protocol — point to
 
 **Goal:** Plan → coverage → regression → sign-off.  
 **Course tree:** [`courses/learn_verification_planning_management/`](courses/learn_verification_planning_management/) (dual track: written plans + browser boards).  
-**Source legacy:** `verification_planning_management`.  
 **Browser tools:** planning shelf labs 01–12 all **(S)**.
 
 | # | Kind | Module | Primary lab / activity |
@@ -691,24 +677,6 @@ learn_python_hw ──► learn_cocotb ──► learn_pyuvm
 ```
 
 Take modules in order inside a course; skip `bridge` when self-studying; never skip required **(S)** labs if you want the certificate-style path later.
-
----
-
-## Migration from existing courses
-
-| Existing folder | Maps to |
-|-----------------|---------|
-| `learn_unix_git` | `learn_unix` (**scaffolded** under `courses/learn_unix/`) + `learn_git` (**scaffolded** under `courses/learn_git/`; M6–7 labs, M8 → offline/wrap) |
-| `learn_digital_verilog` | `learn_digital` (**ready** on platform; **51 modules with media**) + `learn_verilog` (**ready** under `courses/learn_verilog/`; 20 modules with media) |
-| `learn_verilog_systemverilog` | `learn_verilog` (**ready**) + `learn_systemverilog` (**ready** under `courses/learn_systemverilog/`; 14 modules with media) |
-| `learn_verilator_iverilog` | `learn_verilator` + `learn_iverilog` (**both scaffolded** under `courses/`) |
-| `learn_uvm2017_sv_verilator` | `learn_uvm2017` (**ready** under `courses/learn_uvm2017/` — guided pages + module-slides) |
-| `learn_uvm_pyuvm` | `learn_pyuvm` (**scaffolded** under `courses/learn_pyuvm/`) + cocotb lane also in **`learn_cocotb`** / on-ramp **`learn_python_hw`** |
-| `learn_uart_spi_i2c` | `learn_uart` + `learn_spi` + `learn_i2c` (**all scaffolded** under `courses/`) |
-| `verification_planning_management` | `learn_verification_planning_management` (**scaffolded** under `courses/learn_verification_planning_management/`) |
-| *(new)* | `learn_python_hw`, `learn_sv_tb`, `learn_cocotb`, `learn_formal` (**scaffolded** under `courses/`) |
-
-**Repo layout later:** prefer `moduleNN-<lab-id>/` aligned to this table so media (`outline`, `slides`, `transcript`, `video`) stays 1:1 with labs.
 
 ---
 
