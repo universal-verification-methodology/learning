@@ -1459,14 +1459,30 @@
         },
         {
           "n": "22",
-          "slug": "offline-uvm-example",
-          "kind": "offline",
-          "title": "Run a course UVM example",
+          "slug": "verilator-uvm-host",
+          "kind": "bridge",
+          "title": "Verilator as a UVM host",
           "toolId": null,
           "status": "shipped"
         },
         {
           "n": "23",
+          "slug": "verilator-uvm-makefile",
+          "kind": "offline",
+          "title": "Verilator + UVM Makefile knobs",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "24",
+          "slug": "offline-uvm-verilator-run",
+          "kind": "offline",
+          "title": "Run UVM on Verilator",
+          "toolId": null,
+          "status": "shipped"
+        },
+        {
+          "n": "25",
           "slug": "wrap",
           "kind": "wrap",
           "title": "UVM complete → planning or VIP work",

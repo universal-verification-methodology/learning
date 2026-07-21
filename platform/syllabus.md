@@ -84,7 +84,7 @@ Canonical **target** syllabi for the learning monorepo (pass 3 · **lab-driven**
 | 3 | `learn_digital` | Logic & datapath concepts | — | ~51 |
 | 4 | `learn_verilog` | IEEE 1364 RTL coding | Digital recommended | ~16 |
 | 5 | `learn_systemverilog` | IEEE 1800 design (not UVM) | Verilog | ~12 |
-| 6 | `learn_uvm2017` | UVM 2017 methodology (IEEE 1800.2) | SystemVerilog + TB | ~16 |
+| 6 | `learn_uvm2017` | UVM 2017 methodology (IEEE 1800.2) + Verilator host path | SystemVerilog + TB | ~26 |
 | 7 | `learn_verilator` | Verilator as a tool | Verilog; C++ helpful | ~10 |
 | 8 | `learn_iverilog` | Icarus as a tool | Verilog | ~10 |
 | 9 | `learn_hdl_simulator` | Browser HDL Simulator *(rename later)* | Verilog helpful | ~10 |
@@ -362,8 +362,10 @@ courses/<course_id>/
 | 19 | lab | Reporting | `uvm-reporting` |
 | 20 | lab | Protocol checker | `protocol-checker` |
 | 21 | lab | VIP anatomy | `vip-anatomy` |
-| 22 | offline | Run a course UVM example | Course Makefile / Verilator |
-| 23 | wrap | UVM complete → planning or VIP work | Recap |
+| 22 | bridge | Verilator as a UVM host | Limits vs event-driven SV; when Verilator fits |
+| 23 | offline | Verilator + UVM Makefile knobs | `UVM_HOME` · `SIM=verilator` · `TEST` / plusargs |
+| 24 | offline | Run UVM on Verilator | Small Accellera UVM test via Verilator |
+| 25 | wrap | UVM complete → planning or VIP work | Recap |
 
 ---
 
