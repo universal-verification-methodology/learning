@@ -2765,93 +2765,1058 @@
     },
     {
       "id": "permissions",
-      "title": "Permissions, umask, PATH",
+      "title": "Permissions, umask, PATH &amp; ownership",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "shell-history",
+      "title": "Shell history &amp; reverse-search",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "path-abs-rel",
+      "title": "Absolute vs relative paths",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "wildcards-globs",
+      "title": "Glob / wildcard lab",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "man-help-lab",
+      "title": "man / --help discoverability",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "file-types-lab",
+      "title": "File types &amp; links",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "realpath-resolve",
+      "title": "realpath / readlink",
+      "section": "Shell & filesystem"
+    },
+    {
+      "id": "dotfiles-lab",
+      "title": "Dotfiles &amp; config homes",
       "section": "Shell & filesystem"
     },
     {
       "id": "pipes",
-      "title": "Pipes, redirection, xargs",
-      "section": "Shell & filesystem"
+      "title": "Pipes, redirection, xargs &amp; jobs",
+      "section": "Processes & text"
+    },
+    {
+      "id": "ps-kill-lab",
+      "title": "Process list &amp; signals",
+      "section": "Processes & text"
+    },
+    {
+      "id": "job-control-lab",
+      "title": "Job control deep-dive",
+      "section": "Processes & text"
+    },
+    {
+      "id": "sort-uniq-cut",
+      "title": "sort / uniq / cut",
+      "section": "Processes & text"
+    },
+    {
+      "id": "here-doc-lab",
+      "title": "Here-doc / here-string",
+      "section": "Processes & text"
     },
     {
       "id": "scripting",
-      "title": "Script exit codes & control flow",
-      "section": "Shell & filesystem"
+      "title": "Script exit codes &amp; control flow",
+      "section": "Scripting"
+    },
+    {
+      "id": "exit-status-lab",
+      "title": "Exit status &amp; &amp;&amp; / ||",
+      "section": "Scripting"
+    },
+    {
+      "id": "alias-lab",
+      "title": "Alias &amp; function lab",
+      "section": "Scripting"
+    },
+    {
+      "id": "safe-scripting",
+      "title": "Safe scripting checklist",
+      "section": "Scripting"
     },
     {
       "id": "project-archives",
-      "title": "Project layout, archives, sed & diff",
-      "section": "Shell & filesystem"
+      "title": "Project layout, archives, sed &amp; diff",
+      "section": "Projects & archives"
+    },
+    {
+      "id": "zip-vs-tar",
+      "title": "tar vs zip",
+      "section": "Projects & archives"
+    },
+    {
+      "id": "backup-clean",
+      "title": "Backup &amp; clean-build",
+      "section": "Projects & archives"
+    },
+    {
+      "id": "link-relative",
+      "title": "Relative symlink pitfalls",
+      "section": "Projects & archives"
+    },
+    {
+      "id": "git-mental-model",
+      "title": "Git mental model",
+      "section": "Version control"
     },
     {
       "id": "git-graph",
-      "title": "Git graph, staging, stash & rebase",
-      "section": "Git"
+      "title": "Git graph, staging, stash &amp; rebase",
+      "section": "Version control"
+    },
+    {
+      "id": "gitignore-lab",
+      "title": ".gitignore pattern lab",
+      "section": "Version control"
+    },
+    {
+      "id": "commit-message-lab",
+      "title": "Commit message lab",
+      "section": "Version control"
+    },
+    {
+      "id": "git-log-lab",
+      "title": "git log options",
+      "section": "Version control"
+    },
+    {
+      "id": "git-undo-safe",
+      "title": "Safe Git undo",
+      "section": "Version control"
+    },
+    {
+      "id": "git-stash-lab",
+      "title": "Stash scenarios",
+      "section": "Version control"
+    },
+    {
+      "id": "git-tags-lab",
+      "title": "Tags (light vs annotated)",
+      "section": "Version control"
+    },
+    {
+      "id": "branch-strategy",
+      "title": "Branch naming strategy",
+      "section": "Version control"
+    },
+    {
+      "id": "git-conflicts",
+      "title": "Merge conflict resolver",
+      "section": "Version control"
+    },
+    {
+      "id": "git-rebase-merge",
+      "title": "Rebase vs merge chooser",
+      "section": "Version control"
+    },
+    {
+      "id": "git-cherry-pick-lab",
+      "title": "Cherry-pick lab",
+      "section": "Version control"
+    },
+    {
+      "id": "git-reflog",
+      "title": "Reflog recovery",
+      "section": "Version control"
+    },
+    {
+      "id": "blame-bisect",
+      "title": "Blame &amp; bisect",
+      "section": "Version control"
+    },
+    {
+      "id": "remotes",
+      "title": "Remotes, PRs &amp; submodules",
+      "section": "Version control"
+    },
+    {
+      "id": "remote-tracking",
+      "title": "Remote-tracking branches",
+      "section": "Version control"
+    },
+    {
+      "id": "pr-review-lab",
+      "title": "PR review checklist",
+      "section": "Version control"
+    },
+    {
+      "id": "submodule-pitfalls",
+      "title": "Submodule pitfalls",
+      "section": "Version control"
+    },
+    {
+      "id": "workflow",
+      "title": "Pre-push checklist, Make &amp; env",
+      "section": "Workflow & submission"
+    },
+    {
+      "id": "log-triage",
+      "title": "Log / failure triage",
+      "section": "Workflow & submission"
+    },
+    {
+      "id": "make-basics",
+      "title": "Makefile basics",
+      "section": "Workflow & submission"
+    },
+    {
+      "id": "env-file-lab",
+      "title": ".env file literacy",
+      "section": "Workflow & submission"
+    },
+    {
+      "id": "template-clone",
+      "title": "Template-repo bootstrap",
+      "section": "Workflow & submission"
+    },
+    {
+      "id": "dry-run-lab",
+      "title": "Dry-run mindset",
+      "section": "Workflow & submission"
+    },
+    {
+      "id": "submission-repro",
+      "title": "Submission reproducibility",
+      "section": "Workflow & submission"
+    },
+    {
+      "id": "radix-converter",
+      "title": "Radix / bit-width converter",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "twos-complement",
+      "title": "Two’s complement lab",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "overflow-wrap",
+      "title": "Overflow / wrap-around",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "ascii-hex",
+      "title": "ASCII / hex dump literacy",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "gray-code",
+      "title": "Gray code converter",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "bcd-lab",
+      "title": "BCD encode / decode",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "parity-checksum",
+      "title": "Parity / XOR checksum",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "fixed-point",
+      "title": "Fixed-point Qm.n",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "bit-fields",
+      "title": "Bit-field extract / insert",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "endian-lab",
+      "title": "Endian packing",
+      "section": "Number systems & representation"
+    },
+    {
+      "id": "verilog-literals",
+      "title": "Verilog literal decoder",
+      "section": "Number systems & representation"
     },
     {
       "id": "truth-table",
       "title": "Truth-table builder",
-      "section": "Digital logic"
+      "section": "Boolean algebra & minimization"
+    },
+    {
+      "id": "kmap",
+      "title": "K-map minimizer (2–6 vars)",
+      "section": "Boolean algebra & minimization"
+    },
+    {
+      "id": "boolean-laws",
+      "title": "Boolean law playground",
+      "section": "Boolean algebra & minimization"
+    },
+    {
+      "id": "sop-pos",
+      "title": "SOP ↔ POS converter",
+      "section": "Boolean algebra & minimization"
+    },
+    {
+      "id": "dont-care-lab",
+      "title": "Don’t-care minimization",
+      "section": "Boolean algebra & minimization"
+    },
+    {
+      "id": "logic-hazards",
+      "title": "Static / dynamic hazards",
+      "section": "Boolean algebra & minimization"
+    },
+    {
+      "id": "gate-composer",
+      "title": "Gate composer",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "mux-decoder",
+      "title": "Mux / decoder / encoder explorer",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "priority-compare",
+      "title": "Priority encoder &amp; comparator",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "half-full-adder",
+      "title": "Half / full adder builder",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "xor-parity-tree",
+      "title": "XOR parity tree",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "tri-state-bus",
+      "title": "Tri-state / bus contention",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "barrel-shifter",
+      "title": "Barrel shifter",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "seven-segment",
+      "title": "Seven-segment decoder",
+      "section": "Gates & combinational blocks"
+    },
+    {
+      "id": "module-diagram",
+      "title": "Module / port diagram",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "wire-vs-reg",
+      "title": "Classic wire vs reg",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "ansi-ports",
+      "title": "ANSI vs non-ANSI ports",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "sv-operators",
+      "title": "Operator playground",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "param-width",
+      "title": "Parameter / width explorer",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "named-vs-positional",
+      "title": "Named vs positional connections",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "localparam-lab",
+      "title": "localparam vs parameter",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "sv-generate",
+      "title": "Generate / replication explorer",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "one-driver",
+      "title": "One-driver / multi-driver",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "sv-typedefs",
+      "title": "Typedef / enum / packed struct",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "multi-dim-arrays",
+      "title": "Multi-dimensional arrays",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "bit-vs-logic",
+      "title": "bit vs logic (2-state / 4-state)",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "signed-width",
+      "title": "Signed / unsigned width",
+      "section": "HDL structure & operators"
+    },
+    {
+      "id": "sv-always-procs",
+      "title": "always_comb / always_ff / always_latch",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "sv-interfaces",
+      "title": "Interface + modport sketch",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "sv-packages",
+      "title": "Package / import explorer",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "sv-case-unique",
+      "title": "unique / priority case",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "sv-inside",
+      "title": "inside / wildcard equality",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "sv-checker",
+      "title": "Checker / bind sketch",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "ieee-version-map",
+      "title": "IEEE construct → version map",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "sv-migration",
+      "title": "1364 → 1800 migration quiz",
+      "section": "SystemVerilog design constructs"
+    },
+    {
+      "id": "latch-risk",
+      "title": "Combo style / latch-risk checker",
+      "section": "Combinational design hygiene"
+    },
+    {
+      "id": "sensitivity-list",
+      "title": "Sensitivity-list explorer",
+      "section": "Combinational design hygiene"
+    },
+    {
+      "id": "clock-stepper",
+      "title": "Clock-edge stepper",
+      "section": "Clocks, registers & timing"
+    },
+    {
+      "id": "blocking-vs-nonblocking",
+      "title": "Blocking vs non-blocking",
+      "section": "Clocks, registers & timing"
+    },
+    {
+      "id": "reset-timelines",
+      "title": "Reset strategy timelines",
+      "section": "Clocks, registers & timing"
+    },
+    {
+      "id": "setup-hold",
+      "title": "Setup / hold explainer",
+      "section": "Clocks, registers & timing"
+    },
+    {
+      "id": "cdc-sync",
+      "title": "CDC / 2-FF synchronizer",
+      "section": "Clocks, registers & timing"
+    },
+    {
+      "id": "clock-enable",
+      "title": "Clock enable vs gated clock",
+      "section": "Clocks, registers & timing"
+    },
+    {
+      "id": "shift-register-lab",
+      "title": "Shift-register lab",
+      "section": "Clocks, registers & timing"
+    },
+    {
+      "id": "counter-lab",
+      "title": "Counter lab",
+      "section": "Clocks, registers & timing"
     },
     {
       "id": "waveform-lab",
       "title": "Waveform lab",
-      "section": "HDL & waveforms"
+      "section": "Waveforms & debug literacy"
+    },
+    {
+      "id": "tb-anatomy",
+      "title": "Testbench anatomy explorer",
+      "section": "Waveforms & debug literacy"
+    },
+    {
+      "id": "delay-event-wait",
+      "title": "Delay / event / wait",
+      "section": "Waveforms & debug literacy"
+    },
+    {
+      "id": "task-vs-function",
+      "title": "Task vs function vs always",
+      "section": "Waveforms & debug literacy"
+    },
+    {
+      "id": "fork-join",
+      "title": "Fork / join sketch",
+      "section": "Waveforms & debug literacy"
+    },
+    {
+      "id": "gtkwave-cursors",
+      "title": "GTKWave cursor literacy",
+      "section": "Waveforms & debug literacy"
+    },
+    {
+      "id": "fsm-lab",
+      "title": "FSM designer + stepper",
+      "section": "FSM & control"
+    },
+    {
+      "id": "state-encoding",
+      "title": "State encoding lab",
+      "section": "FSM & control"
+    },
+    {
+      "id": "seq-detector",
+      "title": "Sequence detector playground",
+      "section": "FSM & control"
+    },
+    {
+      "id": "ring-johnson",
+      "title": "Ring / Johnson counter",
+      "section": "FSM & control"
+    },
+    {
+      "id": "lfsr-lab",
+      "title": "LFSR / PRBS stepper",
+      "section": "FSM & control"
+    },
+    {
+      "id": "ripple-carry-adder-animator",
+      "title": "Ripple-carry adder animator",
+      "section": "Arithmetic & datapath"
+    },
+    {
+      "id": "carry-look-ahead-adder-propagate-and-generate",
+      "title": "Carry-lookahead generate &amp; propagate",
+      "section": "Arithmetic & datapath"
+    },
+    {
+      "id": "array-mult",
+      "title": "Array multiplier grid",
+      "section": "Arithmetic & datapath"
+    },
+    {
+      "id": "alu-explorer",
+      "title": "ALU operation explorer",
+      "section": "Arithmetic & datapath"
+    },
+    {
+      "id": "carry-select-adder",
+      "title": "Carry-select adder sketch",
+      "section": "Arithmetic & datapath"
+    },
+    {
+      "id": "booth-encode",
+      "title": "Booth encode grid",
+      "section": "Arithmetic & datapath"
+    },
+    {
+      "id": "signed-arith",
+      "title": "Signed arithmetic / overflow",
+      "section": "Arithmetic & datapath"
+    },
+    {
+      "id": "mem-map",
+      "title": "RAM / ROM address map",
+      "section": "Memory, FIFO & cache"
+    },
+    {
+      "id": "fifo-lab",
+      "title": "FIFO pointer &amp; flags",
+      "section": "Memory, FIFO & cache"
+    },
+    {
+      "id": "cache-walk",
+      "title": "Cache hit/miss walkthrough",
+      "section": "Memory, FIFO & cache"
+    },
+    {
+      "id": "dual-port-ram",
+      "title": "Dual-port RAM",
+      "section": "Memory, FIFO & cache"
+    },
+    {
+      "id": "byte-enable-mem",
+      "title": "Byte-enable memory",
+      "section": "Memory, FIFO & cache"
+    },
+    {
+      "id": "async-fifo",
+      "title": "Async FIFO (Gray pointers)",
+      "section": "Memory, FIFO & cache"
+    },
+    {
+      "id": "block-diagram",
+      "title": "Block-diagram integrator",
+      "section": "Hierarchy, buses & integration"
+    },
+    {
+      "id": "handshake",
+      "title": "Bus handshake animator",
+      "section": "Hierarchy, buses & integration"
+    },
+    {
+      "id": "pipeline-hazards",
+      "title": "Pipeline stall / forward",
+      "section": "Hierarchy, buses & integration"
+    },
+    {
+      "id": "synth-lint",
+      "title": "Synthesizability linter",
+      "section": "Coding standards & synthesizability"
+    },
+    {
+      "id": "hdl-style",
+      "title": "Naming / style checker",
+      "section": "Coding standards & synthesizability"
     },
     {
       "id": "uart-frame",
-      "title": "UART frame",
-      "section": "Protocols"
+      "title": "UART frame animator",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "spec-to-rtl",
+      "title": "Spec → RTL checklist",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "baud-divider",
+      "title": "Baud / clock divider",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "uart-oversample",
+      "title": "UART oversampling",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "uart-errors",
+      "title": "UART error cases",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "spi-step",
+      "title": "SPI transaction stepper",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "spi-cpol-cpha",
+      "title": "SPI CPOL/CPHA modes",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "spi-multi-cs",
+      "title": "SPI multi-CS / daisy",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "i2c-lab",
+      "title": "I²C start/addr/ack explorer",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "i2c-open-drain",
+      "title": "I²C open-drain model",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "i2c-clock-stretch",
+      "title": "I²C clock stretch",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "i2c-repeated-start",
+      "title": "I²C repeated start",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "tb-vs-uvm-map",
+      "title": "Basic TB vs UVM map",
+      "section": "Protocols (conceptual)"
+    },
+    {
+      "id": "sv-class-sketch",
+      "title": "Class / inheritance sketch",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "crv-lite",
+      "title": "Constraint / random lite",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "cover-bins",
+      "title": "Coverpoint / bins sketch",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "sva-timeline",
+      "title": "SVA implication timeline",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "vif-wiring",
+      "title": "Virtual interface wiring",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "self-check-tb",
+      "title": "Self-checking TB pattern",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "tb-clock-reset",
+      "title": "TB clock + reset patterns",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "file-vector-io",
+      "title": "File / vector I/O",
+      "section": "SV testbench & assertions (conceptual)"
+    },
+    {
+      "id": "tb-layers",
+      "title": "Testbench layer diagram",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-phases",
+      "title": "UVM phase timeline",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-factory",
+      "title": "Factory override sketch",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-configdb",
+      "title": "ConfigDB key path",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-agent",
+      "title": "Agent anatomy",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-tlm",
+      "title": "TLM port wiring",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-seq-flow",
+      "title": "Sequence → driver flow",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-objections",
+      "title": "Objection raise/drop",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-plusargs",
+      "title": "Plusargs / CLP",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-scoreboard",
+      "title": "Scoreboard expect/actual",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "ral-map",
+      "title": "Register model map",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-multi-agent",
+      "title": "Multi-agent env",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-vseq",
+      "title": "Virtual sequence",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-callbacks",
+      "title": "Callbacks sketch",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "uvm-reporting",
+      "title": "UVM reporting ladder",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "protocol-checker",
+      "title": "Protocol checker sketch",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "vip-anatomy",
+      "title": "VIP anatomy",
+      "section": "UVM 2017 methodology (sketches)"
+    },
+    {
+      "id": "python-async-tb",
+      "title": "Python async TB sketch",
+      "section": "Python / cocotb / pyuvm (sketches)"
+    },
+    {
+      "id": "cocotb-triggers",
+      "title": "cocotb triggers",
+      "section": "Python / cocotb / pyuvm (sketches)"
+    },
+    {
+      "id": "cocotb-dut-handle",
+      "title": "cocotb DUT handle",
+      "section": "Python / cocotb / pyuvm (sketches)"
+    },
+    {
+      "id": "cocotb-uvm-map",
+      "title": "cocotb vs UVM map",
+      "section": "Python / cocotb / pyuvm (sketches)"
     },
     {
       "id": "pytest-assert-lab",
       "title": "pytest assert / golden",
-      "section": "Python / cocotb / pyuvm"
+      "section": "Python / cocotb / pyuvm (sketches)"
     },
     {
       "id": "stim-as-data",
       "title": "Stimulus as data",
-      "section": "Python / cocotb / pyuvm"
+      "section": "Python / cocotb / pyuvm (sketches)"
     },
     {
       "id": "cocotb-clock-helper",
       "title": "cocotb Clock helper",
-      "section": "Python / cocotb / pyuvm"
+      "section": "Python / cocotb / pyuvm (sketches)"
     },
     {
       "id": "cocotb-binary-value",
       "title": "cocotb BinaryValue",
-      "section": "Python / cocotb / pyuvm"
+      "section": "Python / cocotb / pyuvm (sketches)"
     },
     {
       "id": "cocotb-scoreboard",
       "title": "cocotb scoreboard sketch",
-      "section": "Python / cocotb / pyuvm"
+      "section": "Python / cocotb / pyuvm (sketches)"
     },
     {
       "id": "assert-assume-cover",
       "title": "Assert / assume / cover",
-      "section": "Formal verification"
+      "section": "Formal verification (conceptual)"
     },
     {
       "id": "formal-bmc-bound",
       "title": "Formal BMC bound",
-      "section": "Formal verification"
+      "section": "Formal verification (conceptual)"
     },
     {
       "id": "formal-counterexample",
       "title": "Formal counterexample",
-      "section": "Formal verification"
+      "section": "Formal verification (conceptual)"
     },
     {
       "id": "formal-induction",
       "title": "Formal induction sketch",
-      "section": "Formal verification"
+      "section": "Formal verification (conceptual)"
     },
     {
       "id": "formal-vacuity",
       "title": "Formal vacuity",
-      "section": "Formal verification"
+      "section": "Formal verification (conceptual)"
+    },
+    {
+      "id": "verif-plan-check",
+      "title": "Coverage / plan checklist",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "feature-matrix",
+      "title": "Feature × scenario matrix",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "coverage-closure",
+      "title": "Coverage closure planner",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "regression-triage",
+      "title": "Regression triage board",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "test-taxonomy",
+      "title": "Test taxonomy planner",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "risk-plan",
+      "title": "Risk-based plan matrix",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "signoff-checklist",
+      "title": "Sign-off criteria",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "seed-tags",
+      "title": "Seed / config / tags",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "ci-farm-flow",
+      "title": "CI / farm regression flow",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "vip-handoff",
+      "title": "VIP handoff checklist",
+      "section": "Verification planning (lightweight)"
+    },
+    {
+      "id": "iverilog-vs-verilator",
+      "title": "iverilog vs Verilator chooser",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "sim-pipeline",
+      "title": "Compile → elaborate → run",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "verilator-lint-lab",
+      "title": "Verilator lint lab",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "dpi-cpp-tb",
+      "title": "C++ TB / DPI sketch",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "verilator-trace",
+      "title": "Verilator trace",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "wave-dump",
+      "title": "Wave dump literacy",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "verilator-public",
+      "title": "Verilator public",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "verif-metrics",
+      "title": "Verification metrics board",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "iverilog-flags",
+      "title": "iverilog flags lab",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "iverilog-timescale",
+      "title": "iverilog timescale",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "vvp-plusargs",
+      "title": "vvp plusargs",
+      "section": "Simulation literacy (conceptual)"
+    },
+    {
+      "id": "hdl-sim-tour",
+      "title": "Simulator UI tour",
+      "section": "Browser HDL simulator (guided)"
+    },
+    {
+      "id": "hdl-sim-hello-dut",
+      "title": "Hello DUT in browser",
+      "section": "Browser HDL simulator (guided)"
+    },
+    {
+      "id": "hdl-sim-step-continue",
+      "title": "Step &amp; continue",
+      "section": "Browser HDL simulator (guided)"
+    },
+    {
+      "id": "hdl-sim-poke-force",
+      "title": "Poke / force / release",
+      "section": "Browser HDL simulator (guided)"
+    },
+    {
+      "id": "hdl-sim-waves",
+      "title": "Full-sim waves",
+      "section": "Browser HDL simulator (guided)"
+    },
+    {
+      "id": "hdl-sim-multi-file",
+      "title": "Multi-file project",
+      "section": "Browser HDL simulator (guided)"
+    },
+    {
+      "id": "hdl-sim-compare-golden",
+      "title": "Golden compare",
+      "section": "Browser HDL simulator (guided)"
     }
   ]
 }

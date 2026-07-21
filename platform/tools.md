@@ -186,6 +186,8 @@ Folder name under `platform/tools/` when built (kebab-case).
 - [Protocols (conceptual)](#protocols-conceptual)
 - [SV testbench & assertions (conceptual)](#sv-testbench--assertions-conceptual)
 - [UVM 2017 methodology (sketches)](#uvm-2017-methodology-sketches)
+- [Python & cocotb (conceptual)](#python--cocotb-conceptual)
+- [Formal verification (conceptual)](#formal-verification-conceptual)
 - [Verification planning (lightweight)](#verification-planning-lightweight)
 - [Simulation literacy (conceptual)](#simulation-literacy-conceptual)
 - [Browser HDL simulator (guided)](#browser-hdl-simulator-guided)
@@ -462,7 +464,7 @@ Literacy for `learn_verilator_iverilog` Modules 3â€“7 and SV TB intros. **N
 
 ## UVM 2017 methodology (sketches)
 
-Concept diagrams for `learn_uvm2017` / `learn_uvm2017_sv_verilator` / `learn_uvm_pyuvm`. **Not** a UVM library or Verilator UVM run — sketches align with **IEEE 1800.2-2017** (UVM 2017).
+Concept diagrams for `learn_uvm2017` / `learn_pyuvm` (legacy sources ignored — see `courses/LEGACY.md`). **Not** a UVM library or Verilator UVM run — sketches align with **IEEE 1800.2-2017** (UVM 2017).
 
 | Tool | Path id | Status | What it teaches |
 |------|---------|--------|-----------------|
@@ -486,18 +488,19 @@ Concept diagrams for `learn_uvm2017` / `learn_uvm2017_sv_verilator` / `learn_uvm
 | Plusargs / CLP | `uvm-plusargs` | **Shipped** | `+UVM_TESTNAME` and test knobs; 22 challenges |
 | cocotb triggers | `cocotb-triggers` | **Shipped** | RisingEdge / Timer / First / Combine; 22 challenges |
 | cocotb DUT handle | `cocotb-dut-handle` | **Shipped** | hierarchical dut.path · .value peek/poke; 22 challenges |
-| Python async TB sketch | `pytest-assert-lab` | expect `0xA5` == actual → PASS |
-| `stim-as-data` | 4 AND vectors — Apply all PASS |
-| `cocotb-clock-helper` | period 10 → edges 10/20/30 |
-| `cocotb-binary-value` | 8-bit `0xA5` → `10100101` |
-| `cocotb-scoreboard` | expect `0xA5`, observe match → PASS |
-| `assert-assume-cover` | 3 statements correctly tagged |
-| `formal-bmc-bound` | bug@3, k=5 → CEX |
-| `formal-counterexample` | cursor on failing cycle |
-| `formal-induction` | base+step hold → proved sketch |
-| `formal-vacuity` | `a|->b` with a always 0 → vacuous |
-| `python-async-tb` | **Shipped** | `async def` test + await timeline; 22 challenges |
 
+### Python & cocotb (conceptual)
+
+Literacy for `learn_python_hw` / `learn_cocotb`. **Not** a full simulator or cocotb runner.
+
+| Tool | Path id | Status | What it teaches |
+|------|---------|--------|-----------------|
+| Python async TB sketch | `python-async-tb` | **Shipped** | `async def` test + await timeline; 22 challenges |
+| Stimulus as data | `stim-as-data` | **Shipped** | Vector table rows / Apply all; 22 challenges |
+| pytest assert / golden | `pytest-assert-lab` | **Shipped** | expect vs actual / golden compare; 22 challenges |
+| cocotb Clock helper | `cocotb-clock-helper` | **Shipped** | Clock.start edge timeline; 22 challenges |
+| cocotb BinaryValue | `cocotb-binary-value` | **Shipped** | width + value → bits; 22 challenges |
+| cocotb scoreboard | `cocotb-scoreboard` | **Shipped** | expect queue vs observe; 22 challenges |
 
 ## Formal verification (conceptual)
 
@@ -619,7 +622,7 @@ Courses **link** to domains; they do not own tools. Target syllabi (lab-driven m
 | `learn_cocotb` | cocotb triggers / Clock / BinaryValue / scoreboard / DUT, Python async |
 | `learn_formal` | **Formal sketches**, SVA timeline, cover, synth/style; SymbiYosys offline |
 
-Legacy folders (`learn_unix_git`, `learn_digital_verilog`, â€¦) map to the target ids above â€” see syllabus migration table.
+Legacy folders (`learn_unix_git`, `learn_digital_verilog`, …) are **ignored** archives — see [`courses/LEGACY.md`](../courses/LEGACY.md). Use the pass-3 target ids above.
 
 ---
 
@@ -635,7 +638,7 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 | `learn_verilog` | Full IEEE 1364 RTL browser path (**all 17 labs shipped**; **20 modules with clips/decks on platform**) | none for browser labs — module 18 is bridge (reuse digital labs) |
 | `learn_systemverilog` | Full SV design browser path (**all 12 labs shipped**; **14 modules with clips/decks on platform**) | none for browser labs — module 13 is wrap |
 | `learn_uvm2017` / `learn_pyuvm` | UVM + cocotb/pyuvm sketches (**all shipped**); courses scaffolded | offline fidelity via legacy / module offline |
-| `learn_pyuvm` | course scaffolded; fidelity = `learn_uvm_pyuvm`; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**) | — |
+| `learn_pyuvm` | modules + media ready; pyuvm/cocotb labs + shared `uvm-*` sketches (**all shipped**); legacy `learn_uvm_pyuvm` ignored | — |
 | `learn_verilator` | offline fidelity via legacy; course scaffolded; all syllabus browser labs (**shipped**); optional shared `waveform-lab` / `tb-anatomy` | — |
 | `learn_iverilog` | shipped TB/wave labs + toolchain (`iverilog-flags` / `iverilog-timescale` / `vvp-plusargs`) + `sim-pipeline` / `wave-dump` / `self-check-tb` (**shipped**); course scaffolded; offline module 11 | — |
 | `learn_hdl_simulator` | all **`hdl-sim-*`** + style/synth bridge (**shipped**); course scaffolded under `courses/learn_hdl_simulator/` | free practice = public IDE (module 09) |
@@ -643,10 +646,10 @@ Audit vs [`../syllabus.md`](../syllabus.md) **pass 3** (lab-driven; 2026-07). On
 | `learn_spi` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `protocol-checker` (**shipped**); course scaffolded | — |
 | `learn_i2c` | shared labs + `self-check-tb` / `tb-vs-uvm-map` / `vip-anatomy` (**shipped**); course scaffolded | — |
 | `learn_verification_planning_management` | planning shelf + `vip-handoff` / `verif-metrics` (**shipped**); course scaffolded under `courses/learn_verification_planning_management/` | — |
-| `learn_python_hw` | `python-async-tb` / `stim-as-data` / `pytest-assert-lab` / `file-vector-io` (**shipped**); course scaffolded | offline venv / deps |
-| `learn_sv_tb` | SV TB path + `task-vs-function` / `fork-join` (**all shipped**); course scaffolded | — |
-| `learn_cocotb` | cocotb triggers/clock/DUT/BinaryValue/scoreboard + async (**shipped**); course scaffolded | offline cocotb example |
-| `learn_formal` | assert/assume/cover + BMC/CEX/induction/vacuity + SVA/cover/synth (**shipped**); course scaffolded | SymbiYosys offline hello |
+| `learn_python_hw` | `python-async-tb` / `stim-as-data` / `pytest-assert-lab` / `file-vector-io` (**shipped**); modules + media ready | offline venv / deps |
+| `learn_sv_tb` | SV TB path + `task-vs-function` / `fork-join` (**all shipped**); modules + media ready | — |
+| `learn_cocotb` | cocotb triggers/clock/DUT/BinaryValue/scoreboard + async (**shipped**); modules + media ready | offline cocotb example |
+| `learn_formal` | assert/assume/cover + BMC/CEX/induction/vacuity + SVA/cover/synth (**shipped**); modules + media ready | SymbiYosys offline hello |
 
 Still **offline-only** (see Out of scope): installing toolchains, running course Makefiles, full UVM/CRV/SVA engines, commercial VIP, synthesis/P&R.
 
@@ -660,4 +663,4 @@ Still **offline-only** (see Out of scope): installing toolchains, running course
 | Planned | 0 |
 | **Total catalogued** | **212** |
 
-Update this file when a planned tool ships (status â†’ **Shipped**, path verified under `platform/tools/`).
+Update this file when a planned tool ships (status → **Shipped**, path verified under `platform/tools/`).

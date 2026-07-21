@@ -203,6 +203,59 @@ def parse_modules(path: Path, course_root: Path) -> list[dict]:
     return labs
 
 
+def rebuild_tools_index(cat: dict) -> int:
+    """Populate toolsIndex from platform/tools/index.html (section + link list)."""
+    index_html = ROOT / "platform" / "tools" / "index.html"
+    text = index_html.read_text(encoding="utf-8")
+    tools: list[dict] = []
+    section = "Tools"
+    # Match <section ...> <h2>...</h2> then list items with tool links
+    for block in re.split(r"(?=<section\b)", text):
+        hm = re.search(r"<h2>(.*?)</h2>", block, re.S)
+        if hm:
+            section = re.sub(r"<[^>]+>", "", hm.group(1))
+            section = (
+                section.replace("&amp;", "&")
+                .replace("&nbsp;", " ")
+                .strip()
+            )
+        for m in re.finditer(
+            r'<a href="([a-z0-9][a-z0-9-]*)/index\.html">([^<]+)</a>',
+            block,
+        ):
+            tool_id, title = m.group(1), m.group(2).strip()
+            if tool_id == "index":
+                continue
+            tools.append({"id": tool_id, "title": title, "section": section})
+    # De-dupe by id, keep first
+    seen: set[str] = set()
+    uniq: list[dict] = []
+    for t in tools:
+        if t["id"] in seen:
+            continue
+        seen.add(t["id"])
+        uniq.append(t)
+    # Also include any tool dir with index.html missing from the shelf list
+    tools_root = ROOT / "platform" / "tools"
+    for child in sorted(tools_root.iterdir()):
+        if not child.is_dir() or child.name.startswith("."):
+            continue
+        if not (child / "index.html").is_file():
+            continue
+        if child.name in seen:
+            continue
+        title = child.name
+        html = (child / "index.html").read_text(encoding="utf-8", errors="ignore")
+        tm = re.search(r"<title>([^|<]+)", html)
+        if tm:
+            title = tm.group(1).strip()
+            title = re.sub(r"\s*[—–|-].*$", "", title).strip() or child.name
+        uniq.append({"id": child.name, "title": title, "section": "Other"})
+        seen.add(child.name)
+    cat["toolsIndex"] = uniq
+    return len(uniq)
+
+
 def main() -> None:
     cat = json.loads(CATALOG.read_text(encoding="utf-8"))
     by_id = {c["id"]: c for c in cat["courses"]}
@@ -224,6 +277,9 @@ def main() -> None:
         if "repo" not in course:
             course["repo"] = course_id
         print(f"{course_id}: {len(labs)} labs")
+
+    n_tools = rebuild_tools_index(cat)
+    print(f"toolsIndex: {n_tools} tools")
 
     CATALOG.write_text(json.dumps(cat, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"updated {CATALOG.relative_to(ROOT)}")

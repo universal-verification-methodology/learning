@@ -362,8 +362,10 @@ courses/<course_id>/
 | 19 | lab | Reporting | `uvm-reporting` |
 | 20 | lab | Protocol checker | `protocol-checker` |
 | 21 | lab | VIP anatomy | `vip-anatomy` |
-| 22 | offline | Run a course UVM example | Course Makefile / Verilator |
-| 23 | wrap | UVM complete → planning or VIP work | Recap |
+| 22 | bridge | Verilator as a UVM host | Limits vs event-driven SV; when Verilator fits |
+| 23 | offline | Verilator + UVM Makefile knobs | `UVM_HOME` · `SIM=verilator` · `TEST` / plusargs |
+| 24 | offline | Run UVM on Verilator | Small Accellera UVM test via Verilator |
+| 25 | wrap | UVM complete → planning or VIP work | Recap |
 
 ---
 

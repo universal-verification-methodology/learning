@@ -113,9 +113,9 @@ python platform/scripts/generate_lab_pages.py
 
 ## Full tools catalog
 
-Shipped **and** planned labs by concept domain: **[`tools.md`](tools.md)**. Browseable list (with “Coming soon”): [`tools/index.html`](tools/index.html).
+Shipped labs by concept domain: **[`tools.md`](tools.md)** (**212 shipped**, **0 planned**). Browseable shelf: [`tools/index.html`](tools/index.html).
 
-Target **14-course** syllabi (**lab-driven** modules, not fixed-7): **[`../syllabus.md`](../syllabus.md)** (site copy: [`syllabus.md`](syllabus.md)).
+Target **18-course** syllabi (**lab-driven** modules): **[`../syllabus.md`](../syllabus.md)** (site copy: [`syllabus.md`](syllabus.md)).
 
 HDL engine integration: **[`simulator.md`](simulator.md)** — public [`systemverilog-simulator`](https://github.com/universal-verification-methodology/systemverilog-simulator) `engine.mjs` (vendored under `vendor/`).
 
@@ -128,7 +128,7 @@ HDL engine integration: **[`simulator.md`](simulator.md)** — public [`systemve
 
 Config for the remotes lab: [`tools/remotes/config.js`](tools/remotes/config.js)  
 Publish / About blurbs: [`sandbox/PUBLISH.md`](sandbox/PUBLISH.md), [`sandbox/GITHUB_ABOUT.md`](sandbox/GITHUB_ABOUT.md)  
-Course index: [`courses/learn_unix_git/SANDBOX.md`](../courses/learn_unix_git/SANDBOX.md)
+Course sandbox notes: [`courses/learn_unix/docs/TWO_TRACKS.md`](../courses/learn_unix/docs/TWO_TRACKS.md) · legacy combined tree (ignored): see [`courses/LEGACY.md`](../courses/LEGACY.md)
 
 ## How this splits with courses
 
